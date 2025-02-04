@@ -362,12 +362,19 @@ function MainPage() {
         const newSelectedSchedules = {};
         schedules.forEach(schedule => {
             const key = `${schedule.scheduleId}-${schedule.date}`;
-            newSelectedSchedules[key] = selectAll; // 전체 선택 상태에 따라 업데이트
+            newSelectedSchedules[key] = selectAll; 
         });
         setSelectedSchedules(newSelectedSchedules);
     }, [selectAll, schedules]);
 
-    
+    const handleScheduleDeleted = (deletedScheduleId, deletedDate) => {
+        setSchedules((prevSchedules) => 
+            prevSchedules.filter(schedule => 
+                !(schedule.scheduleId === deletedScheduleId && schedule.date.toISOString() === deletedDate.toISOString())
+            )
+        );
+        setIsScheduleDetailModalOpen(false); 
+    };
 
     return (
         <div className="main-page">
@@ -539,6 +546,7 @@ function MainPage() {
                 onRequestClose={closeScheduleDetailModal} 
                 scheduleId={selectedScheduleId} 
                 selectedDate={selectedDate}
+                onScheduleDeleted={handleScheduleDeleted} 
             />
         </div>
     );
