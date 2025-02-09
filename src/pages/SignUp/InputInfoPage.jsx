@@ -67,7 +67,7 @@ function InputInfo() {
       // 성공적으로 회원가입 후 메인 페이지로 이동
       navigate('/mainPage');
     } catch (error) {
-      console.error('서버 전송 실패:', error); // 에러 로그
+      console.error('서버 전송 실패:', error); 
     }
   };
   
