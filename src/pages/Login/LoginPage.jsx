@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import '../../styles/Login/LoginPage.css'; 
 import KakaoLogin from '../../utils/KakaoLogin.jsx'; 
+import careImage from '../../assets/images/dogpaw.png';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL; 
 
@@ -58,43 +59,52 @@ function LoginPage() {
     };
 
     return (
-        <div className="loginContainer">
-            <KakaoLogin /> {/* 카카오 로그인 버튼 컴포넌트 */}
-            <h1>펫토리</h1>
-            <p>로그인 페이지임</p> 
-            <div className='loginFull'>
-                <form onSubmit={handleSubmit}>
-                    <div className="loginFormGroup">
-                        <label htmlFor="e-mail">E-mail</label> {/* 이메일 입력 필드의 레이블 */}
-                        <input
-                            type="text"
-                            id="e-mail"
-                            name="e-mail"
-                            value={email} // 이메일 상태값
-                            onChange={(e) => setEmail(e.target.value)} // 입력 값 변경 시 상태 업데이트
-                            required // 필수 입력 필드
-                        />
-                    </div>
-                    <div className="loginFormGroup">
-                        <label htmlFor="password">Password</label> {/* 비밀번호 입력 필드의 레이블 */}
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            value={password} // 비밀번호 상태값
-                            onChange={(e) => setPassword(e.target.value)} // 입력 값 변경 시 상태 업데이트
-                            required // 필수 입력 필드
-                        />
-                    </div>
-                    {error && <p className="error">{error}</p>} 
-                    <div className="loginButtonGroup">
-                        <button type="button" onClick={handleHomeClick}>취소</button> 
-                        <button type="submit">확인</button> 
-                    </div>
-                </form>
+        <div className="loginPage">
+            <div className="loginPageContainer">
+                <div className="loginLeftSection">
+                    <img src={careImage} alt="Login Illustration" className="loginImage" />
+                </div>
+                <div className="loginRightSection">
+                    <form className= "fullGroup" onSubmit={handleSubmit}>
+                        <div className="loginFormGroup">
+                            <label htmlFor="email">이메일</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="abc123@naver.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="loginFormGroup">
+                            <label htmlFor="password">비밀번호</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="비밀번호"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="kakaoWithGuest">
+                        <KakaoLogin/>
+                        <button className="guestLoginButton" >게스트 로그인</button>
+                        </div>
+                        {error && <p className="loginError">{error}</p>}
+                        <div className="loginButtonGroup">
+                            <button type="button" onClick={handleHomeClick} className="loginCancelButton">취소</button>
+                            <button type="submit" className="loginConfirmButton">확인</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );
 }
+
 
 export default LoginPage;

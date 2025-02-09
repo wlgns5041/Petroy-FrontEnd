@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import kakaoSymbol from '../assets/icons/kakao_login_medium_wide.png' 
 
 function KakaoLogin() {
   const KAKAO_KEY = process.env.REACT_APP_KAKAO_KEY;
@@ -46,15 +47,9 @@ function KakaoLogin() {
   
 
   return (
-    <div>
-      <button id="kakao-login-btn" onClick={loginWithKakao} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}>
-        <img 
-          src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" 
-          width="222" 
-          alt="Kakao login button" 
-        />
-      </button>
-    </div>
+    <button className="kakaoLoginButton" onClick={loginWithKakao}>
+      <img src={kakaoSymbol} alt="Kakao Login" className="kakaoSymbol" />
+    </button>
   );
 }
 

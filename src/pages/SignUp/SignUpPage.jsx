@@ -67,15 +67,14 @@ function SignUpPage() {
     };
 
     useEffect(() => {
-        const validateForm = () => {
-            const nameValid = formData.name.length > 0 && formData.name.length <= 10;
-            const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email);
-            const passwordValid = Object.values(passwordCriteria).every(Boolean);
-            const phoneValid = /^\d{3}-\d{4}-\d{4}$/.test(formData.phone);
-            setIsFormValid(nameValid && emailValid && passwordValid && phoneValid && emailChecked && nameChecked);
-        };
-        validateForm();
-    }, [formData, emailChecked, nameChecked, passwordCriteria]);
+        const isValid = 
+            nameChecked &&
+            emailChecked &&
+            Object.values(passwordCriteria).every(Boolean) &&
+            /^\d{3}-\d{4}-\d{4}$/.test(formData.phone);
+        
+        setIsFormValid(isValid);
+    }, [nameChecked, emailChecked, passwordCriteria, formData.phone]);
 
     const checkEmailDuplicate = async () => {
         if (formData.email.trim() === '') {
@@ -142,8 +141,21 @@ function SignUpPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!isFormValid) {
-            alert('모든 필드를 올바르게 입력해 주세요.');
+
+        if (!nameChecked) {
+            alert('이름 중복여부를 확인해주세요.');
+            return;
+        }
+        if (!emailChecked) {
+            alert('이메일 중복여부를 확인해주세요.');
+            return;
+        }
+        if (!Object.values(passwordCriteria).every(Boolean)) {
+            alert('비밀번호 양식을 확인해주세요.');
+            return;
+        }
+        if (!/^\d{3}-\d{4}-\d{4}$/.test(formData.phone)) {
+            alert('휴대폰 번호 양식을 확인해주세요.');
             return;
         }
 
@@ -172,14 +184,14 @@ function SignUpPage() {
     return (
         <div className="signUpPage">
         <div className="signUpPageContainer">
-            <div className="leftSection">
+            <div className="signUpLeftSection">
                 <img
                     src={careImage}
                     alt="Signup Illustration"
                     className="signupImage"
                 />
             </div>
-            <div className="rightSection">
+            <div className="signUpRightSection">
                 <form onSubmit={handleSubmit}>
                     <div className="signUpFormGroup">
                         <label htmlFor="name">이름</label>
@@ -259,7 +271,7 @@ function SignUpPage() {
                         <button type="button" onClick={handleHomeClick}>
                             홈으로
                         </button>
-                        <button type="submit" disabled={!isFormValid}>
+                        <button type="submit">
                             확인
                         </button>
                     </div>

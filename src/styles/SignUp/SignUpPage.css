@@ -1,5 +1,5 @@
 .signUpPage {
-    background-image: url('../../assets/images/9.jpg'); 
+    background-color: #F2F2F2;
     background-size: 100% 100%;
     background-position: center; 
     background-repeat: no-repeat; 
@@ -36,9 +36,9 @@
     animation: fadeIn 0.8s ease forwards;
 }
 
-.leftSection {
+.signUpLeftSection {
     flex: 1;
-    background-color: rgba(209, 209, 209, 0.775); 
+    background-color: #bfbfbf;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,7 +52,7 @@
     object-fit: cover;
 }
 
-.rightSection {
+.signUpRightSection {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -93,30 +93,30 @@
     padding: 0.5rem;
     border-radius: 5px;
     border: none;
-    background-color: #edeaea;
+    background-color: #e8e8e8;
     font-size: 10px;
     box-sizing: border-box; 
 }
 
 .checkButton {
     flex: 0.2;
-    width: 4vw;
+    width: 6vw;
     margin-left: 0.5rem; 
     padding: 0.5rem 1rem; 
     border: none;
     border-radius: 3px;
-    color: #000000;
+    color: #ffffff;
     font-size: 10px;
     font-weight: 500;
     cursor: pointer;
-    background-color: #61636650;
+    background-color: #5c5c5c;
     transition: background-color 0.5s ease;
     box-sizing: border-box;
     align-self: stretch;
 }
 
 .checkButton:hover {
-    background-color: #414243;
+    background-color: #333333;
     color: #ffffff;
 }
 
@@ -126,7 +126,7 @@
     border: none;
     border-radius: 2px;
     font-size: 10px;
-    background-color: #edeaea;
+    background-color: #e8e8e8;
     box-sizing: border-box;
 }
 
@@ -147,26 +147,29 @@
     border-radius: 5px;
     font-size: 0.8rem;
     cursor: pointer;
-    background-color: #61636650;
+    background-color: #5c5c5c;
     transition: background-color 0.5s ease;
     margin: 0;
-    font-weight: 500;
-    color: #000000;
+    font-weight: 700;
+    color: #ffffff;
+    height: 4vh;
 }
 
 .signUpButtonGroup button:hover {
-    background-color: #414243;
+    background-color: #333333;
     color: #ffffff;
 }
 
 .signUpButtonGroup button[type="submit"] {
-    background-color:  #e59f70;
-    color: #000000; 
+    background-color:  #57687c;
+    color: #ffffff; 
     transition: background-color 0.5s ease; 
+    font-weight: 700;
 }
 
 .signUpButtonGroup button[type="submit"]:hover {
-    background-color: #ed7125;
+    background-color: #2C3E50;
+    font-weight: 700;
 }
 
 .name-error {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import '../../styles/SignUp/InputInfoPage.css';
 
 function InputInfo() {
   const [userData, setUserData] = useState({ email: '', phone: '' }); // 사용자 데이터 관리
@@ -71,30 +72,38 @@ function InputInfo() {
   };
   
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <label>
-          이메일 :
-          <input 
-            type="email" 
-            value={userData.email}
-            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
-            required // 이메일 입력 필수
-          />
-        </label>
-        <br />
-        <label>
-          전화번호 :
-          <input 
-            type="tel" 
-            value={userData.phone}
-            onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
-            required // 전화번호 입력 필수
-          />
-        </label>
-        <br />
-        <button type="submit">완료</button> {/* 폼 제출 버튼 */}
-      </form>
+    <div className="inputInfoPage" >
+      <div className="inputInfoPageContainer" >
+      <h2 className="inputInfoTitle">카카오 로그인을 위해 추가 정보를 입력해주세요</h2>
+      <form onSubmit={handleSubmit} className="inputInfoForm">
+  <div className="inputInfoGroup">
+    <label className="inputInfoLabel">이메일 :</label>
+    <input 
+      type="email" 
+      value={userData.email}
+      onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+      required
+      className="inputInfoInput"
+    />
+  </div>
+
+  <div className="inputInfoGroup">
+    <label className="inputInfoLabel">전화번호 :</label>
+    <input 
+      type="tel" 
+      value={userData.phone}
+      onChange={(e) => setUserData({ ...userData, phone: e.target.value })}
+      required
+      className="inputInfoInput"
+    />
+  </div>
+
+<div className="inputInfoButtonGroup">
+    <button type="button" className="inputInfoCancelButton" onClick={() => navigate('/')}>홈으로 이동</button>
+    <button type="submit" className="inputInfoSubmitButton">완료</button>
+  </div>
+</form>
+      </div>
     </div>
   );
 }
