@@ -15,7 +15,6 @@ function SignUpPage() {
         password: '',
         phone: ''
     });
-    const [isFormValid, setIsFormValid] = useState(false);
     const [emailError, setEmailError] = useState('');
     const [nameError, setNameError] = useState('');
     const [emailChecked, setEmailChecked] = useState(false);
@@ -65,16 +64,6 @@ function SignUpPage() {
             specialChar: /[@$!%*?&]/.test(password)
         });
     };
-
-    useEffect(() => {
-        const isValid = 
-            nameChecked &&
-            emailChecked &&
-            Object.values(passwordCriteria).every(Boolean) &&
-            /^\d{3}-\d{4}-\d{4}$/.test(formData.phone);
-        
-        setIsFormValid(isValid);
-    }, [nameChecked, emailChecked, passwordCriteria, formData.phone]);
 
     const checkEmailDuplicate = async () => {
         if (formData.email.trim() === '') {
