@@ -7,7 +7,7 @@ const categories = ['전체', '친구', '일정', '커뮤니티'];
 const mockData = {
   친구: [
     { id: 1, type: '친구 요청', message: '연경수님이 친구 요청을 보냈습니다.', time: '2시간 전' },
-    { id: 3, type: '친구 확인', message: '신석호님이 친구 요청을 수락했습니다.', time: '2일 전' },
+    { id: 3, type: '친구 확인', message: '신석호님이 친구 요청을 수락했습니다.', time: '3일 전' },
   ],
   일정: [
     { id: 2, type: '일정 알림', message: '산책 일정이 곧 시작돼요!', time: '3시간 전' },
