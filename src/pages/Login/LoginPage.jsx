@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import { subscribeNotification } from '../../services/SubscribeNotification.jsx';
 import '../../styles/Login/LoginPage.css'; 
 import KakaoLogin from '../../utils/KakaoLogin.jsx'; 
 import careImage from '../../assets/images/dogpaw.png';
@@ -50,6 +51,9 @@ function LoginPage() {
             const data = await response.json();
             localStorage.setItem('accessToken', data.accessToken); // accessToken을 로컬 저장소에 저장
             localStorage.setItem('refreshToken', data.refreshToken); // refreshToken을 로컬 저장소에 저장
+
+            subscribeNotification(); // 알림 구독 서비스 get 요청
+
             navigate('/mainPage'); // 메인 페이지로 이동
             
         } catch (error) {
@@ -92,12 +96,12 @@ function LoginPage() {
                         </div>
                         <div className="kakaoWithGuest">
                         <KakaoLogin/>
-                        <button className="guestLoginButton" >게스트 로그인</button>
+                        <button type="button" className="guestLoginButton">게스트 로그인</button>
                         </div>
                         {error && <p className="loginError">{error}</p>}
                         <div className="loginButtonGroup">
                             <button type="button" onClick={handleHomeClick} className="loginCancelButton">취소</button>
-                            <button type="submit" className="loginConfirmButton">확인</button>
+                            <button type="submit" className="loginConfirmButton">로그인</button>
                         </div>
                     </form>
                 </div>

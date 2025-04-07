@@ -47,7 +47,7 @@ function KakaoLogin() {
   
 
   return (
-    <button className="kakaoLoginButton" onClick={loginWithKakao}>
+    <button type="button" className="kakaoLoginButton" onClick={loginWithKakao}>
       <img src={kakaoSymbol} alt="Kakao Login" className="kakaoSymbol" />
     </button>
   );

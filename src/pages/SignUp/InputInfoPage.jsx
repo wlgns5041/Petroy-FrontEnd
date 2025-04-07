@@ -14,7 +14,6 @@ function InputInfo() {
     const token = urlParams.get('token');
 
     if (token) {
-      console.log('쿼리 파라미터에서 가져온 토큰:', token);
       
       // 토큰을 로컬 스토리지에 저장하고 상태 업데이트
       localStorage.setItem('accessToken', token);
@@ -23,7 +22,6 @@ function InputInfo() {
       // 로컬 스토리지에서 액세스 토큰을 가져오기
       const storedToken = localStorage.getItem('accessToken');
       if (storedToken) {
-        console.log('로컬 스토리지에서 가져온 토큰:', storedToken);
         setAccessToken(storedToken);
       } else {
         console.error('로컬 스토리지에서 액세스 토큰을 찾을 수 없습니다.');

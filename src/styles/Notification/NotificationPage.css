@@ -1,0 +1,98 @@
+.notification-page {
+    width: 40% ;
+    height: 80vh; 
+    margin: 120px auto 0 auto; 
+    padding: 30px;
+    font-family: 'Pretendard', sans-serif;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .notification-page-Navbar {
+    margin-bottom: 32px;
+  }
+  
+  .title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  
+  .category-tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .tab-button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    padding: 12px 8px;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    color: #888;
+  }
+  
+  .tab-button.active {
+    color: #ff4e50;
+    font-weight: bold;
+    border-bottom: 3px solid #ff4e50;
+  }
+  
+  .notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .notification-item {
+    background-color: #fafafa;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+  
+  .notice-type {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 4px;
+  }
+  
+  .notice-message {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .notice-time {
+    font-size: 13px;
+    color: #aaa;
+    margin-top: 6px;
+    text-align: right;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 60px 0;
+    color: #aaa;
+  }
+  
+  .empty-state .icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+  }
+  
+  .empty-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .empty-subtitle {
+    font-size: 14px;
+    margin-top: 8px;
+  }

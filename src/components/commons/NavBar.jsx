@@ -285,58 +285,34 @@ export default function NavBar({ title }) {
         </List>
         <Divider />
         <List>
-          {['알림', '설정'].map((text) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                onClick={() => {
-                }}
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: 'initial',
-                      }
-                    : {
-                        justifyContent: 'center',
-                      },
-                ]}
-              >
-                <ListItemIcon
-                  sx={[
-                    {
-                      minWidth: 0,
-                      justifyContent: 'center',
-                    },
-                    open
-                      ? {
-                          mr: 3,
-                        }
-                      : {
-                          mr: 'auto',
-                        },
-                  ]}
-                >
-                  {text === '알림' && <NotificationsIcon />}
-                  {text === '설정' && <SettingsIcon />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
+        {['알림', '설정'].map((text) => (
+  <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+    <ListItemButton
+      onClick={() => {
+        if (text === '알림') navigate('/notificationPage'); 
+        if (text === '설정') navigate('/settingsPage'); 
+      }}
+      sx={[
+        { minHeight: 48, px: 2.5 },
+        open ? { justifyContent: 'initial' } : { justifyContent: 'center' },
+      ]}
+    >
+      <ListItemIcon
+        sx={[
+          { minWidth: 0, justifyContent: 'center' },
+          open ? { mr: 3 } : { mr: 'auto' },
+        ]}
+      >
+        {text === '알림' && <NotificationsIcon />}
+        {text === '설정' && <SettingsIcon />}
+      </ListItemIcon>
+      <ListItemText
+        primary={text}
+        sx={[open ? { opacity: 1 } : { opacity: 0 }]}
+      />
+    </ListItemButton>
+  </ListItem>
+))}
         </List>
       </Drawer>
     </Box>
