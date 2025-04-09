@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect  } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import { subscribeNotification } from '../../services/SubscribeNotification.jsx';
 import '../../styles/Login/LoginPage.css'; 
@@ -12,6 +12,14 @@ function LoginPage() {
     const [email, setEmail] = useState(''); // 이메일 상태
     const [password, setPassword] = useState(''); // 비밀번호 상태
     const [error, setError] = useState(null); // 에러 메시지 상태
+
+    useEffect(() => {
+        const subscribe = subscribeNotification();
+      
+        return () => {
+          if (subscribe) subscribe.close(); // 컴포넌트 언마운트 시 연결 종료
+        };
+      }, []);
 
     // 홈 버튼 클릭 시 홈 페이지로 이동
     const handleHomeClick = () => {
