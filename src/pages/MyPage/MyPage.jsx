@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchCurrentMember, fetchMemberPets, fetchMemberPosts } from '../../services/TokenService.jsx';
 import '../../styles/MyPage/MyPage.css'; 
 import NavBar from '../../components/commons/NavBar.jsx'; 
 import defaultProfilePic from '../../assets/images/DefaultImage.png';
+import NameEditModal from '../../components/MyPage/NameEditModal.jsx';
+import ImageEditModal from '../../components/MyPage/ImageEditModal.jsx';
+
 
 const API_BASE_URL = process.env.REACT_APP_API_URL; 
 
 const MyPage = () => {
+    const navigate = useNavigate(); // 리다이렉트 핸들러 함수
     const [userInfo, setUserInfo] = useState({}); // 사용자 정보
     const [pets, setPets] = useState([]); // 펫 목록
     const [posts, setPosts] = useState([]); // 작성 글 목록
-    const [newName, setNewName] = useState(''); // 새로운 이름
     const [loading, setLoading] = useState(true); // 로딩 상태
-    const [selectedImage, setSelectedImage] = useState(null); // 새로운 이미지
+    const [showNameModal, setShowNameModal] = useState(false);
+    const [showImageModal, setShowImageModal] = useState(false);
 
     // 컴포넌트가 마운트될 때 실행
     useEffect(() => {
@@ -47,34 +52,50 @@ const MyPage = () => {
     }, []); // 빈 배열을 의존성으로 설정하여 컴포넌트 마운트 시 처음에 한 번만 실행
 
     // 이름 변경 처리 함수
-    const handleNameChange = async () => {
-        const token = localStorage.getItem('accessToken'); // 로컬 저장소에서 토큰 가져오기
+    const handleNameChange = (newName) => {
+        const token = localStorage.getItem('accessToken');
         if (token) {
-            try {
-                // 사용자 이름을 수정하는 PATCH 요청
-                const response = await fetch(`${API_BASE_URL}/members`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `${token}`, 
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ name: newName }) // 변경할 이름을 JSON 형태로 전송
-                });
+          fetch(`${API_BASE_URL}/members`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: newName }),
+          })
+            .then((response) => {
+              if (response.ok) {
+                setUserInfo((prev) => ({ ...prev, name: newName }));
+              } else {
+                console.error('이름 수정 실패');
+              }
+            })
+            .catch((error) => console.error('이름 수정 중 오류 발생:', error));
+      }
+      };
 
-                if (!response.ok) {
-                    // 응답이 성공적이지 않을 경우 에러 처리
-                    const errorText = await response.text();
-                    console.error('이름을 수정하는 중 오류 발생:', errorText); // 에러 로그
-                } else {
-                    // 상태 업데이트 및 입력 필드 초기화
-                    setUserInfo((prev) => ({ ...prev, name: newName }));
-                    setNewName('');
-                }
-            } catch (error) {
-                console.error('이름을 수정하는 중 오류 발생:', error); // 에러 로그
-            }
+      const handleImageUpload = (newImage) => {
+        const token = localStorage.getItem('accessToken');
+        const formData = new FormData();
+        formData.append('image', newImage);
+    
+        if (token) {
+          fetch(`${API_BASE_URL}/members/image`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `${token}`,
+            },
+            body: formData,
+          })
+            .then((response) => response.text())
+            .then((imageUrl) => {
+              setUserInfo((prev) => ({ ...prev, image: imageUrl }));
+            })
+            .catch((error) => console.error('이미지 업로드 실패:', error));
         }
-    };
+      };
+    
+      if (loading) return <p>잠시만 기다려주세요...</p>;
 
     // 계정 삭제 처리 함수
     const handleAccountDelete = async () => {
@@ -106,119 +127,118 @@ const MyPage = () => {
         }
     };
 
-    // 이미지 업로드 처리 함수
-    const handleImageUpload = async () => {
-        const token = localStorage.getItem('accessToken'); // 로컬 저장소에서 토큰 가져오기
-        if (token && selectedImage) {
-            const formData = new FormData();
-            formData.append('image', selectedImage); // 선택된 이미지를 FormData에 추가
-    
-            try {
-                // 이미지 업로드를 위한 PATCH 요청
-                const response = await fetch(`${API_BASE_URL}/members/image`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `${token}`, // 인증 헤더 설정
-                    },
-                    body: formData // FormData를 요청 본문으로 전송
-                });
-    
-                if (!response.ok) {
-                    // 응답이 성공적이지 않을 경우 에러 처리
-                    const errorText = await response.text();
-                    console.error('이미지 업로드 중 오류 발생:', errorText); // 에러 로그
-                } else {
-                    const resultText = await response.text(); // 서버로부터의 응답을 텍스트로 읽기
-                    const result = {
-                        success: true,
-                        imageUrl: resultText
-                    };
-
-                    if (result.success) {
-                        // 상태 업데이트 및 성공 메시지 표시
-                        setUserInfo((prev) => ({ ...prev, image: result.imageUrl }));
-                        alert('이미지 업로드 성공');
-                    } else {
-                        alert(result.message || '이미지 업로드 실패'); // 실패 메시지 표시
-                    }
-                }
-            } catch (error) {
-                console.error('이미지 업로드 중 오류 발생:', error); // 에러 로그
-            }
-        }
-    }
-
     // 로그아웃 처리 함수
     const handleLogout = () => {
-        localStorage.removeItem('accessToken'); // 로컬 저장소에서 토큰 제거
-        localStorage.removeItem('refreshToken'); // 로컬 저장소에서 리프레시 토큰 제거
-        alert('로그아웃되었습니다.'); // 로그아웃 메시지 표시
-        window.location.href = '/login'; // 로그인 페이지로 리디렉션
-    };
+        // 토큰 제거
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+      
+        // SSE 연결 해제
+        if (window.__eventSourceInstance) {
+          window.__eventSourceInstance.close();
+          window.__eventSourceInstance = null;
+          console.log('👋 SSE 연결 종료됨');
+        }
+      
+        alert('로그아웃되었습니다.');
+      
+        // 로그인 페이지로 리디렉션
+        window.location.href = '/login';
+      };
 
     // 로딩 중일 때 메시지 표시
     if (loading) return <p>잠시만 기다려주세요...</p>;
 
+    const handleNavigation = (path) => {
+        navigate(path);
+      };
+
     return (
         <div className="myPage">
-            <NavBar title="마이페이지" /> 
-            <div className="userInfo">
-                <h2>내 정보</h2>
-                <p><strong>이름 :</strong> {userInfo.name}</p>
-                <p><strong>전화번호 :</strong> {userInfo.phone}</p>
-                <p><strong>회원 사진 :</strong> 
-                    {userInfo.image 
-                        ? <img src={userInfo.image} alt="Profile" className="myPage-img" />
-                        : <img src={defaultProfilePic} alt="Default Profile" className="myPage-img" />
-                    }
-                </p>
-                
-                <input
-                    type="text"
-                    placeholder="변경 이름"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    className="myPage-input"
-                />
-                <button onClick={handleNameChange} className="myPage-button">이름 수정</button>
-
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setSelectedImage(e.target.files[0])}
-                    className="myPage-input"
-                />
-                <button onClick={handleImageUpload} className="myPage-button">이미지 수정</button>
-
-                <button onClick={handleAccountDelete} className="myPage-button">회원 탈퇴</button>
-                <button onClick={handleLogout} className="myPage-button">로그아웃</button> {/* 로그아웃 버튼 추가 */}
-            </div>
-
-            <div className="pets">
-                <h2>My Pets</h2>
-                <ul>
-                    {pets.map((pet) => (
-                        <li key={pet.petId}>
-                            <p><strong>펫 이름 :</strong> {pet.name}</p>
-                            <p><strong>펫 사진 :</strong> {pet.image ? <img src={pet.image} alt={pet.name} className="myPage-img" /> : '등록된 사진이 없어요'}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-
-            <div className="posts">
-                <h2>내 작성 글</h2>
-                <ul>
-                    {posts.map((post) => (
-                        <li key={post.postId}>
-                            <p><strong>제목 :</strong> {post.title}</p>
-                            <p><strong>내용 :</strong> {post.content}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+          <NavBar title="마이페이지" />
+          
+          <div className="profile-card">
+  <div className="profile-card-content">
+    <img src={userInfo.image || defaultProfilePic} alt="profile" className="profile-image" />
+    <div className="profile-info">
+      <div className="name">{userInfo.name}</div>
+      <div className="phone">{userInfo.phone}</div>
+      <div className="counts">
+        <div>
+          <span className="text" onClick={() => handleNavigation('/friendPage')}>친구</span>
+          <span>{userInfo.friendsCount || 0}</span>
         </div>
-    );
-};
+        <div>
+          <span className="text" onClick={() => handleNavigation('/petPage')}>등록된 돌보미</span>
+          <span>{userInfo.caregiverCount || 0}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-export default MyPage;
+  <div className="myPage-button-group">
+    <button className="myPage-button" onClick={() => setShowNameModal(true)}>이름 수정</button>
+    <button className="myPage-button" onClick={() => setShowImageModal(true)}>이미지 수정</button>
+    <button className="myPage-button gray" onClick={handleLogout}>로그아웃</button>
+    <button className="myPage-button gray" onClick={handleAccountDelete}>회원 탈퇴</button>
+  </div>
+</div>
+    
+          <div className="section-card-pets">
+            <h3>내 펫 <span 
+            className="link"
+            onClick={() => handleNavigation('/petPage')}
+          >
+            펫 바로가기
+          </span></h3>
+            <ul>
+                {pets.length === 0 ? (
+                    <li>등록된 펫이 없습니다.</li>
+                ) : (
+                    pets.map((pet) => (
+                        <li key={pet.petId}>
+                            <img src={pet.image || defaultProfilePic} alt={pet.name} />
+                            <div className="info">
+                                <div className="name">{pet.name}</div>
+                                <div className="species">{pet.breed || '종 미등록'}</div>
+                     </div>
+                    </li>
+                    ))
+                )}
+            </ul>
+        </div>
+    
+          <div className="section-card-posts">
+            <h3>작성 글</h3>
+            <ul>
+              {posts.length === 0 ? (
+                <li>작성한 글이 없습니다.</li>
+              ) : (
+                posts.map((post) => (
+                  <li key={post.postId}>
+                    <strong>{post.title}</strong><br />
+                    {post.content}
+                  </li>
+                ))
+              )}
+            </ul>
+          </div>
+    
+          {showNameModal && (
+            <NameEditModal 
+              currentName={userInfo.name} 
+              onSave={handleNameChange} 
+              onClose={() => setShowNameModal(false)} 
+            />
+          )}
+          {showImageModal && (
+            <ImageEditModal 
+              onSave={handleImageUpload} 
+              onClose={() => setShowImageModal(false)} 
+            />
+          )}
+        </div>
+      );
+    };
+    
+    export default MyPage;

@@ -55,47 +55,6 @@ function NotificationPage() {
     fetchNotifications();
   }, []);
 
-  // SSE 실시간 알림 수신
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) return;
-
-    const eventSource = new EventSource(`${API_BASE_URL}/notification/subscribe?token=${token}`);
-
-    const handleEvent = (e) => {
-      const data = JSON.parse(e.data);
-      console.log(`📩 실시간 알림 수신 [${e.type}]`, data);
-
-      // 알림 객체 구성
-      const newNotification = {
-        noticeId: Date.now(), // 임시 ID (중복 방지용, 실제로는 서버에서 받아야 안전)
-        noticeType: data.noticeType,
-        isRead: false,
-        createdAt: new Date().toISOString(),
-      };
-
-      setNotifications((prev) => [newNotification, ...prev]);
-
-      // 예시: 알림 팝업 표시
-      if (data.noticeType === 'FRIEND_REQUEST') {
-        alert(`${data.sendMemberName}님이 친구 요청을 보냈습니다.`);
-      }
-    };
-
-    // 이벤트 타입 별 리스너 등록
-    ['FRIEND_REQUEST', 'FRIEND_ACCEPTED', 'FRIEND_REJECTED', 'SCHEDULE', 'POST'].forEach((type) => {
-      eventSource.addEventListener(type, handleEvent);
-    });
-
-    eventSource.onerror = (err) => {
-      console.error('❌ SSE 오류:', err);
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  }, []);
 
   // 카테고리 필터링
   const filteredNotifications =

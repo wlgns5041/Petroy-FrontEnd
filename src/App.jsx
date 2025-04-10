@@ -3,21 +3,26 @@ import { useEffect } from 'react';
 import Routing from './routes/Routing';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { subscribeNotification } from './services/SubscribeNotification.jsx'; 
-
+import { subscribeNotification } from './services/SubscribeNotification.jsx';
 
 function App() {
   useEffect(() => {
-    subscribeNotification(); 
-  }, []);
+    const token = localStorage.getItem('accessToken');
 
+    if (!token) return; 
+
+    subscribeNotification(); 
+
+    return () => {
+    };
+  }, []);
 
   return (
     <div className="App">
       <main>
-				<Routing />
+        <Routing />
         <ToastContainer position="top-right" autoClose={5000} />
-			</main>
+      </main>
     </div>
   );
 }

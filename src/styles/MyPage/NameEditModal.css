@@ -1,0 +1,65 @@
+
+.nameEdit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden; 
+  }
+  
+  .nameEdit-modal.show {
+    visibility: visible; 
+  }
+  
+  .nameEdit-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 60vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .nameEdit-modal-header {
+    display: flex;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    align-items: flex-start;
+  }
+
+  .nameEdit-myPage-input {
+    padding: 6px;
+  }
+  
+  .nameEdit-modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .nameEdit-modal-footer {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .nameEdit-modal-footer button {
+    background-color: #ff4e50;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
+  .nameEdit-modal-footer button:hover {
+    background-color: #e94345;
+  }
