@@ -6,6 +6,8 @@ import NavBar from '../../components/commons/NavBar.jsx';
 import defaultProfilePic from '../../assets/images/DefaultImage.png';
 import NameEditModal from '../../components/MyPage/NameEditModal.jsx';
 import ImageEditModal from '../../components/MyPage/ImageEditModal.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaw, faPen} from '@fortawesome/free-solid-svg-icons';
 
 
 const API_BASE_URL = process.env.REACT_APP_API_URL; 
@@ -185,12 +187,13 @@ const MyPage = () => {
 </div>
     
           <div className="section-card-pets">
-            <h3>내 펫 <span 
-            className="link"
-            onClick={() => handleNavigation('/petPage')}
-          >
-            펫 바로가기
-          </span></h3>
+          <h3 className="pet-section-title">
+            <div className="left-group">
+              <FontAwesomeIcon icon={faPaw}/>
+              내 펫
+            </div>
+            <span className="link" onClick={() => handleNavigation('/petPage')}>펫 바로가기</span>
+          </h3>
             <ul>
                 {pets.length === 0 ? (
                     <li>등록된 펫이 없습니다.</li>
@@ -207,9 +210,14 @@ const MyPage = () => {
                 )}
             </ul>
         </div>
-    
           <div className="section-card-posts">
-            <h3>작성 글</h3>
+          <h3 className="pet-section-title">
+            <div className="left-group">
+              <FontAwesomeIcon icon={faPen}/>
+              내 글
+            </div>
+            <span className="link" onClick={() => handleNavigation('/communityPage')}>커뮤니티 바로가기</span>
+          </h3>
             <ul>
               {posts.length === 0 ? (
                 <li>작성한 글이 없습니다.</li>

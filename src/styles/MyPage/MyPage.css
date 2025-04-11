@@ -17,7 +17,8 @@
     background: white;
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+    transition: box-shadow 0.3s ease;
     margin-bottom: 40px;
   }
   
@@ -72,6 +73,14 @@
     color: #000;
     margin-right: 5px;
   }
+
+  .profile-info .counts span:last-child {
+    background-color: #e0e0e0;
+    color: #333;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
   
   .profile-info .counts .text {
     font-weight: normal;
@@ -102,6 +111,12 @@
     background-color: #ff4e50;
     color: white;
     text-align: center;
+    transition: all 0.3s ease;
+  }
+
+  .myPage-button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
   }
   
   .myPage-button.gray {
@@ -118,7 +133,8 @@
     background: white;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+    transition: box-shadow 0.3s ease;
     margin-bottom: 40px;
   }
 
@@ -129,6 +145,12 @@
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 16px;
+  }
+
+  .left-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   }
   
   .section-card-pets h3 .link {
@@ -156,13 +178,20 @@
     display: flex;
     align-items: center; 
     justify-content: space-between;
-    flex: 1 1 calc(50% - 16px); 
+    flex: 0 0 calc(50% - 8px); /* 수치 조정 */
+    max-width: calc(50% - 8px); /* 추가: li가 100% 차지 못하게 */
     background: #fafafa;
     border: 1px solid #eee;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 16px;
     font-size: 14px;
+  }
+
+  .section-card-pets li:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
   }
   
   .section-card-pets li img {
@@ -191,15 +220,30 @@
     background: white;
     border-radius: 16px;
     padding: 20px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+    transition: box-shadow 0.3s ease;
   }
   
   .section-card-posts h3 {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 12px;
     display: flex;
-    align-items: flex-start;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .section-card-posts h3 .link {
+    color: #888;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .section-card-posts h3 .link:hover {
+    color: #ff4e50;
+    font-weight: bold;
   }
 
   .section-card-posts ul {
