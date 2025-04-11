@@ -91,16 +91,16 @@ function LoginPage() {
                                 required
                             />
                         </div>
-                        <div className="kakaoWithGuest">
-                        <KakaoLogin/>
-                        <button type="button" className="guestLoginButton">게스트 로그인</button>
-                        </div>
                         {error && <p className="loginError">{error}</p>}
                         <div className="loginButtonGroup">
                             <button type="button" onClick={handleHomeClick} className="loginCancelButton">취소</button>
                             <button type="submit" className="loginConfirmButton">로그인</button>
                         </div>
                     </form>
+                    <div className="kakaoWithGuest">
+                        <KakaoLogin/>
+                        <button type="button" className="guestLoginButton">게스트 로그인</button>
+                        </div>
                 </div>
             </div>
         </div>
