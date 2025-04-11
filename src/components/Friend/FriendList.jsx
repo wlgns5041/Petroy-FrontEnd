@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FriendCard from './FriendCard.jsx'; 
-import '../../styles/Friend/FriendsList.css'; 
+import '../../styles/Friend/FriendList.css'; 
 
 const FriendList = ({ friends, onAccept, onReject, title }) => {
     return (

@@ -25,6 +25,8 @@
   
   .category-tabs {
     display: flex;
+    justify-content: space-around;
+    margin-top: 16px;
     gap: 16px;
     margin-bottom: 32px;
     border-bottom: 1px solid #ddd;

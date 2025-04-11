@@ -11,7 +11,6 @@ const FriendRequestsList = ({ requests, onRequestAction }) => {
             friends={requests} // FriendList에 요청 목록을 전달
             onAccept={handleAccept} // 수락 버튼 클릭 시 호출될 함수
             onReject={handleReject} // 거절 버튼 클릭 시 호출될 함수
-            title="친구 요청 목록" // FriendList에 제목 전달
         />
     );
 };
