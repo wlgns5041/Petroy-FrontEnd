@@ -14,7 +14,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
     content: '',
     repeatYn: true, 
     noticeYn: false,
-    noticeAt: 1,
+    noticeAt: 0,
     priority: 'LOW',
     petId: [],
     selectedDates: [], 
@@ -120,7 +120,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: type === 'checkbox' ? checked : value,
+        [name]: type === 'checkbox' ? checked : name === 'noticeAt' ? Number(value) : value,
       }));
     }
   };
