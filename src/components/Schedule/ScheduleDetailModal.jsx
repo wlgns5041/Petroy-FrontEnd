@@ -29,15 +29,6 @@ function ScheduleDetailModal({ isOpen, onRequestClose, scheduleId, selectedDate,
         }
     };
 
-    const getStatusLabel = (status) => {
-        switch (status) {
-            case 'ONGOING': return '진행중';
-            case 'DONE': return '완료';
-            case 'DELETED': return '삭제됨';
-            default: return '미지정';
-        }
-    };
-
     const handleClose = (e) => {
         e.stopPropagation(); 
         onRequestClose();
@@ -126,35 +117,33 @@ function ScheduleDetailModal({ isOpen, onRequestClose, scheduleId, selectedDate,
     if (!isOpen) return null;
 
     return (
-        <div className="schedule-detail-modal">
-            <div className="schedule-detail-modal-header">
-                <h2>일정 상세 정보</h2>
-            </div>
-            <div className="schedule-detail-modal-body">
-                {loading && <p>로딩 중...</p>}
-                {error && <p>{error}</p>}
-                {!loading && !error && !scheduleDetail.title && <p>일정 정보가 없습니다.</p>}
-                {!loading && !error && (
-                    <>
-                        <h3>{scheduleDetail.title}</h3>
-                        <p>내용 : {scheduleDetail.content}</p>
-                        <p>우선순위 : {getPriorityLabel(scheduleDetail.priority)}</p>
-                        <p>반려동물 : {scheduleDetail.petName.join(', ')}</p>
-                        <p>카테고리 : {scheduleDetail.categoryName || '정보 없음'}</p>
-                        <p>상태 : {getStatusLabel(scheduleDetail.status)}</p>
-                        <p>알림 여부 : {scheduleDetail.noticeYn ? '예' : '아니오'}</p>
-                        <p>하루종일 : {scheduleDetail.allDay ? '예' : '아니오'}</p>
-                        <p>반복 여부 : {scheduleDetail.repeatYn ? '예' : '아니오'}</p>
-                        <p>일정 시간 : {new Date(scheduleDetail.scheduleAt).toLocaleString()}</p>
-                    </>
-                )}
-            </div>
-            <div className="schedule-detail-modal-footer">
-                <button onClick={handleDelete} className="schedule-delete-button">일정 삭제</button>
-                <button onClick={handleClose} className="schedule-detail-modal-close-button">닫기</button>
-            </div>
+        <div className="schedule-detail-modal-overlay">
+        <div className="schedule-detail-modal-wrapper">
+          <h2 className="schedule-detail-title">일정 상세 정보</h2>
+      
+          {loading && <p className="loading-text">로딩 중...</p>}
+          {error && <p className="error-text">{error}</p>}
+      
+          {!loading && !error && (
+           <div className="schedule-detail-section">
+            <div className="form-label">카테고리</div><div className="form-value">{scheduleDetail.categoryName}</div>
+           <div className="form-label">제목</div><div className="form-value">{scheduleDetail.title}</div>
+           <div className="form-label">내용</div><div className="form-value">{scheduleDetail.content}</div>
+           <div className="form-label">우선순위</div><div className="form-value">{getPriorityLabel(scheduleDetail.priority)}</div>
+           <div className="form-label">반려동물</div><div className="form-value">{scheduleDetail.petName.join(', ')}</div>
+           <div className="form-label">알림 여부</div><div className="form-value">{scheduleDetail.noticeYn ? '예' : '아니오'}</div>
+           <div className="form-label">하루종일</div><div className="form-value">{scheduleDetail.allDay ? '예' : '아니오'}</div>
+           <div className="form-label">일정 시간</div><div className="form-value">{new Date(scheduleDetail.scheduleAt).toLocaleString()}</div>
+         </div>
+          )}
+      
+          <div className="button-container">
+            <button onClick={handleDelete} className="submit-btn delete">일정 삭제</button>
+            <button onClick={handleClose} className="cancel-btn">닫기</button>
+          </div>
         </div>
-    );
+      </div>
+    )
 }
 
 export default ScheduleDetailModal;

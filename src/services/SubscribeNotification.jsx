@@ -21,7 +21,6 @@ export const subscribeNotification = () => {
     console.log('📩 수신된 메시지:', event.data);
   };
 
-  // 이벤트별 알림 처리
   eventSource.addEventListener("FRIEND_REQUEST", (e) => {
     const data = JSON.parse(e.data);
     toast.info(`${data.sendMemberName}님이 친구 요청을 보냈습니다!`, {
@@ -60,19 +59,7 @@ export const subscribeNotification = () => {
 
   eventSource.addEventListener("SCHEDULE", (e) => {
     const data = JSON.parse(e.data);
-    toast.info(`새로운 일정이 추가되었습니다: ${data.scheduleTitle}`, {
-      autoClose: 200000,
-      style: {
-        backgroundColor: '#fafafa',
-        color: 'black',
-        fontWeight: 600,
-      }
-    });
-  });
-
-  eventSource.addEventListener("POST", (e) => {
-    const data = JSON.parse(e.data);
-    toast.info(`새로운 커뮤니티 알림: ${data.postTitle}`, {
+    toast.info(`${data.entityId}에 대한 알림이 도착했습니다.`, {
       autoClose: 200000,
       style: {
         backgroundColor: '#fafafa',

@@ -198,22 +198,6 @@ const handleDayClick = (day) => {
       }
     });
   };
-  
-  
-
-//   const handleTimeChange = (date, time) => {
-//     const formattedDate = new Date(date).toISOString().slice(0, 10);
-//     const updatedDates = formData.selectedDates.map((d) => {
-//       if (d.date === formattedDate) {
-//         return { date: formattedDate, time: time };
-//       }
-//       return d;
-//     });
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       selectedDates: updatedDates,
-//     }));
-// };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -508,7 +492,7 @@ const handleDayClick = (day) => {
               <div className="selected-dates-title">날짜 선택</div>
                 <Calendar
                   onChange={handleDateChange}
-                  value={formData.selectedDates.map((date) => new Date(date.date))}
+                  value={null}
                   className="custom-small-calendar"
                   tileClassName={({ date }) => {
                     const localDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
@@ -547,7 +531,8 @@ const handleDayClick = (day) => {
             <div className="tooltip-container">
               <FiInfo className="info-icon" />
               <span className="tooltip-text">
-                시간 설정 없이 일정을 <br /><span style={{ fontWeight: '600', color: '#ff5a3c' }}>하루 전체 </span>로 간주됩니다
+                시간 설정 없이 일정을 <span style={{ fontWeight: '600', color: '#ff5a3c' }}>하루 전체</span>로 간주됩니다
+                <br />알림 설정 시 해당 날짜 자정 기준으로 설정됩니다
               </span>
             </div>
             </span>
@@ -635,7 +620,7 @@ const handleDayClick = (day) => {
           </div>
   
           <div className="button-container">
-            <button type="submit" className="submit-btn">저장</button>
+            <button type="submit" className="submit-btn">일정 생성</button>
             <button type="button" className="cancel-btn" onClick={onClose}>취소</button>
           </div>
   

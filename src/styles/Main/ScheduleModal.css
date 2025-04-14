@@ -19,12 +19,18 @@
   border-radius: 20px;
   width: 95%;
   max-width: 600px;
-  max-height: 90vh;
+  max-height: 80vh;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 24px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   font-family: 'SUIT', sans-serif;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.schedule-modal-content::-webkit-scrollbar {
+  display: none;
 }
 
 .schedule-modal-content h2 {
@@ -180,7 +186,7 @@ textarea {
 .schedule-pet-select-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 50px;
   flex: 0 0 calc(50% - 8px);
   max-width: calc(50% - 8px);
   background: #fafafa;
