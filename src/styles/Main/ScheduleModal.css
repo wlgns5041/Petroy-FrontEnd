@@ -1,232 +1,470 @@
+/* 전체 모달 배경 */
 .schedule-modal-container {
+  background-color: rgba(0, 0, 0, 0.3);
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); 
-  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  z-index: 1000; 
+  z-index: 1000;
+  margin-top: 30px;
 }
-  
-  .schedule-modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 600px;
-    max-width: 100%;
-    position: relative;
-    height: 85%; 
-    overflow-y: auto; 
-    margin-top: 50px;
-  }
-  
-  .schedule-modal-content h2 {
-    margin: 0 0 15px 0;
-  }
-  
-  .schedule-modal-content label {
-    display: block;
-    margin: 10px 0;
-  }
-  
-  .schedule-modal-content input,
-  .schedule-modal-content select,
-  .schedule-modal-content textarea {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  .schedule-modal-content textarea {
-    resize: vertical;
-  }
-  
-  .schedule-modal-save-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .schedule-modal-close-button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .day-buttons-container {
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    overflow: auto; 
-    max-height: 300px; 
-  }
-  
-  .day-button {
-    padding: 8px 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    cursor: pointer;
-  }
-  
-  .day-button.selected {
-    background-color: #007bff;
-    color: #fff;
-  }
 
-  .month-container {
-    margin-bottom: 20px;
-  }
-  
-  .day-button {
-    padding: 5px 10px;
-    margin: 2px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #fff;
-  }
-  
-  .day-button.selected {
-    background-color: #4caf50;
-    color: #fff;
-  }
-  
-  .month-container h3 {
-    margin: 0;
-  }
-  
+/* 모달 내용 박스 */
+.schedule-modal-content {
+  background-color: #f7f7f7;
+  border-radius: 20px;
+  width: 95%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'SUIT', sans-serif;
+}
 
-.pets-container {
+.schedule-modal-content h2 {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* 각 섹션 카드 */
+.schedule-section-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* 폼 라벨과 값 가로 배치 */
+.form-row.between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.schedule-section-card .form-row.between:last-child {
+  margin-bottom: 0;
+}
+
+.form-label,
+.form-label-with-info {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-label-with-info {
+  display: flex;
+  align-items: center;
+}
+
+.form-label-with-info i {
+  margin-left: 6px;
+  font-size: 12px;
+  color: #aaa;
+  cursor: help;
+}
+
+/* info 아이콘 */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.info-icon {
+  font-size: 14px;
+  color: #999;
+  cursor: pointer;
+  margin-left: 6px;
+  margin-top: 6px;
+
+}
+
+/* 툴팁 텍스트 */
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 8px;
+  position: absolute;
+  z-index: 100;
+  bottom: 125%;
+  left: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: normal; 
+  min-width: 300px;    
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s ease;
+}
+
+/* hover 시 툴팁 활성화 */
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* 인풋, 셀렉트 스타일 */
+input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fafafa;
+  min-width: 140px;
+}
+
+select {
+  appearance: none;           
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px 36px 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  font-size: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20,50 70,100 120,50' stroke='%23000' stroke-width='20' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center; 
+  background-size: 12px;
+}
+
+textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fafafa;
+  width: 100%;
+  resize: none;
+  min-height: 100px;
+}
+
+.input-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+.schedule-pet-select-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 5px;
+  gap: 16px;
+  padding: 0;
+  margin: 12px 0 0 0;
+  list-style: none;
 }
 
-.pet-card {
-  background-color: #fff;
+.schedule-pet-select-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 0 0 calc(50% - 8px);
+  max-width: calc(50% - 8px);
+  background: #fafafa;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  width: 150px;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+  padding: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.pet-card:hover {
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.schedule-pet-select-card:hover {
+  transform: scale(1.03);
 }
 
-.pet-card img {
-  width: 100%;
-  height: auto;
+.schedule-pet-select-card.selected {
+  border: 2px solid #ff5a3c;
+  background-color: #fff0ec;
+}
+
+.schedule-pet-select-card img {
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  object-fit: cover;
+}
+
+.schedule-pet-select-card .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.schedule-pet-select-card .name {
+  font-weight: 600;
+  font-size: 14px;
+  color: #111;
+}
+
+.schedule-pet-select-card .species {
+  font-size: 13px;
+  color: #777;
+}
+
+/* 스위치 토글 */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #ff5a3c;
+}
+
+input:checked + .slider:before {
+  transform: translateX(18px);
+}
+
+/* 요일/날짜 선택 버튼 */
+.repeat-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 4px;
+  justify-content: center; 
+}
+
+.day-button {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  background-color: #f9f9f9;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.day-button.selected {
+  background-color: #ff5a3c;
+  color: white;
+  border-color: #ff5a3c;
+}
+
+/* 캘린더 선택 날짜 */
+/* 캘린더 컴포넌트 스타일 개선 (깔끔하고 현대적인 느낌) */
+
+.custom-small-calendar {
+  border: none;
+  width: 100%;
+  font-family: 'SUIT', sans-serif;
+}
+
+/* 헤더 */
+.custom-small-calendar .react-calendar__navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.custom-small-calendar .react-calendar__navigation button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+/* 요일 라벨 */
+.custom-small-calendar .react-calendar__month-view__weekdays {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #999;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #eee;
   margin-bottom: 8px;
 }
 
-.pet-card label {
-  display: block;
-  font-size: 14px;
-  color: #333;
-  margin: 0;
+.custom-small-calendar abbr {
+  text-decoration: none;
 }
 
-.custom-small-calendar {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  font-size: 14px;
-  width: 100%; 
-  height: 445px;
-  display: grid; 
-  grid-template-rows: repeat(6, 1fr);
-}
-
+/* 날짜 셀 */
 .custom-small-calendar .react-calendar__tile {
-  padding: 10px;
-  box-sizing: border-box;
-  height: 60px; 
-  border: none; 
-  background-color: transparent; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
+  border: none;
+  background: none;
+  text-align: center;
+  padding: 16px 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10%;
+  transition: background-color 0.2s;
+  position: relative;
 }
 
-.custom-small-calendar .react-calendar__month-view__days__day {
-  flex: 0 0 14.2857%; 
+.custom-small-calendar .react-calendar__tile:enabled:hover {
+  background-color: #f0f0f0;
 }
 
-.custom-schedule-list {
+/* 오늘 날짜 스타일 */
+.custom-small-calendar .react-calendar__tile--now {
+  color: #ff5a3c;
+  font-weight: 800;
+}
+
+/* 선택된 날짜 스타일 */
+.custom-small-calendar .selected-date,
+.custom-small-calendar .react-calendar__tile--active {
+  background-color: #ce6553 !important;
+  color: white !important;
+  font-weight: 700;
+}
+
+/* 선택된 날짜 목록 스타일 */
+.selected-dates {
+  margin-top: 10px;
+  padding: 18px 16px;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  padding: 5px;
-  width: 70%; 
-  justify-content: flex-start;
-  text-align: center;
-  overflow-y: auto;
-  height: 120px; 
-  margin: 0 auto;
-  background-color: #e7e4e4;
-  border: 1px solid #e7e4e4;
-  border-radius: 5px;
+  align-items: center;
 }
 
-.custom-schedule-container {
-  margin-top: 20px;
-  padding: 10px;
+.selected-dates-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.selected-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.date-time-selection {
+  background-color: white;
   border: 1px solid #ddd;
   border-radius: 10px;
-  width: 100%;
-  height: 200px; 
-  background: #e7e4e4;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
   text-align: center;
+  padding: 10px 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.custom-schedule-item {
-  padding: 5px; 
-  margin: 5px auto; 
-  background-color: #FFFFFF; 
-  margin-bottom: 10px;
+/* 버튼 영역 */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.button-container button {
+  flex: 1;
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.submit-btn {
+  background-color: #ff5a3c;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #eee;
+  color: #333;
+}
+
+.priority-select {
+  min-width: 120px;              
+  max-width: 100%;
+  padding: 10px 36px 10px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #fafafa;
+  font-size: 14px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20,50 70,100 120,50' stroke='%23000' stroke-width='20' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
+
+.notice-select {
+  padding: 8px 12px;
   border-radius: 10px;
-  width: 70%;
-}
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fafafa;
+  min-width: 140px;
+  appearance: none;
 
-.selected-day {
-  background-color: #6c9f6e !important; /* 원하는 배경색 */
-  color: #fff; /* 글자색 */
-}
-
-.selected-date {
-  background-color: #6c9f6e !important; /* 원하는 배경색 */
-  color: #fff; /* 글자색 */
-}
-
-.react-calendar__tile--active {
-  background: none; /* 배경을 제거 */
-  color: inherit; /* 기본 색상으로 설정 */
-}
-
-.react-calendar__tile--now {
-  color: #1708eb; /* 글자색 변경 */
-}
-
-.selected-date {
-  background-color: #4caf50; /* 원하는 배경색으로 변경 */
-  color: white; /* 텍스트 색상 변경 (선택사항) */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20,50 70,100 120,50' stroke='%23000' stroke-width='20' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
 }

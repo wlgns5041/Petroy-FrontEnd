@@ -3,6 +3,7 @@ import '../../styles/Main/ScheduleModal.css';
 import defaultPetPic from '../../assets/images/DefaultImage.png';
 import Calendar from 'react-calendar';  
 import axios from 'axios';
+import { FiInfo } from 'react-icons/fi';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -327,228 +328,317 @@ const handleDayClick = (day) => {
   return (
     <div className="schedule-modal-container">
       <div className="schedule-modal-content">
-        <h2>일정 생성</h2>
         <form onSubmit={handleSubmit}>
-          <label>카테고리
-            <select
-              name="categoryId"
-              value={formData.categoryId}
-              onChange={handleChange}
-              required
-            >
-              <option value="" disabled>카테고리 선택</option>
-              {categories.map((category) => (
-                <option key={category.categoryId} value={category.categoryId}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label>제목
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>내용
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-            />
-          </label>
-          <label>반려동물
-            <div className="pets-container">
-              {pets.map((pet) => (
-                <div key={pet.petId} className="pet-card">
-                  <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
-                  <div className="pet-info">
-                    <input
-                      type="checkbox"
-                      id={`pet-${pet.petId}`}
-                      checked={formData.petId.includes(pet.petId)}
-                      onChange={() => handlePetSelectionChange(pet.petId)}
-                    />
-                    <label htmlFor={`pet-${pet.petId}`}>
-                      {pet.name} ({pet.species}, {pet.breed})
-                    </label>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </label>
-          <label>반복 유무
-            <input
-              type="checkbox"
-              name="repeatYn"
-              checked={formData.repeatYn}
-              onChange={handleChange}
-            />
-          </label>
-
-          {formData.repeatYn ? (
-            <>
-              <label>반복 주기
+  
+          <div className="schedule-section-card">
+            <div className="input-group">
+              <label>카테고리</label>
               <select
-                  name="repeatPattern.frequency"
-                  value={formData.repeatPattern.frequency}
-                  onChange={handleChange}
-                >
-                  <option value="DAY">일일</option>
-                  <option value="WEEK">주간</option>
-                  <option value="MONTH">월간</option>
-                </select>
-              </label>
-              <label>반복 간격
+                name="categoryId"
+                value={formData.categoryId}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>카테고리 선택</option>
+                {categories.map((category) => (
+                  <option key={category.categoryId} value={category.categoryId}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+  
+            <div className="input-group">
+              <label>제목</label>
               <input
-                  type="number"
-                  name="repeatPattern.interval"
-                  value={formData.repeatPattern.interval}
-                  min="1"
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+            </div>
+  
+            <div className="input-group">
+              <label>내용</label>
+              <textarea
+                name="content"
+                value={formData.content}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+  
+          <div className="schedule-section-card">
+  <label className="form-label">반려동물</label>
+  <ul className="schedule-pet-select-container">
+    {pets.map((pet) => (
+      <li
+        key={pet.petId}
+        className={`schedule-pet-select-card ${formData.petId.includes(pet.petId) ? 'selected' : ''}`}
+        onClick={() => handlePetSelectionChange(pet.petId)}
+      >
+        <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
+        <div className="info">
+          <div className="name">{pet.name}</div>
+          <div className="species">{pet.breed}</div>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>
+  
+          <div className="schedule-section-card">
+            <div className="form-row between">
+            <span className="form-label-with-info">
+              반복 유무
+              <div className="tooltip-container">
+                <FiInfo className="info-icon" />
+                <span className="tooltip-text"><span style={{ color: '#ff5a3c' }}>설정 시</span> 시작과 종료 날짜 사이에 선택한<br />
+                                               주기와 간격으로 일정이 자동 생성합니다<br />
+                                               <span style={{ color: '#ff5a3c' }}>설정 해제 시</span> 일정 날짜를 직접 선택합니다</span>
+              </div>
+            </span>
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  name="repeatYn"
+                  checked={formData.repeatYn}
                   onChange={handleChange}
                 />
+                <span className="slider round"></span>
               </label>
-
-              {formData.repeatPattern.frequency === 'WEEK' && (
-    <div className="days-of-week">
-        {['일', '월', '화', '수', '목', '금', '토'].map(day => (
-            <button
-                key={day}
-                type="button"
-                className={`day-button ${formData.repeatPattern.daysOfWeek.includes(dayMapping[day]) ? 'selected' : ''}`}
-                onClick={() => handleDayClick(day)}
-            >
-                {day}
-            </button>
-        ))}
-    </div>
-)}
-
-
-              {formData.repeatPattern.frequency === 'MONTH' && (
-                <div className="days-of-month">
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-                    <button
-                      key={day}
-                      type="button"
-                      className={`day-button ${formData.repeatPattern.daysOfMonth.includes(day) ? 'selected' : ''}`}
-                      onClick={() => handleDayOfMonthClick(day)}
-                    >
-                      {day}
-                    </button>
-                  ))}
+            </div>
+  
+            {formData.repeatYn && (
+              <>
+                <div className="form-row between">
+                  <span className="form-label">반복 주기</span>
+                  <select
+                    name="repeatPattern.frequency"
+                    value={formData.repeatPattern.frequency}
+                    onChange={handleChange}
+                  >
+                    <option value="DAY">일일</option>
+                    <option value="WEEK">주간</option>
+                    <option value="MONTH">월간</option>
+                  </select>
                 </div>
-              )}  
-            <label>일정 반복 시작
-            <input
-              type="datetime-local"
-              name="repeatPattern.startDate"
-              value={formData.repeatPattern.startDate}
-              onChange={handleChange}
-              required
-            />
-          </label>
-              <label>일정 반복 종료 
+  
+                <div className="form-row between">
+                  <span className="form-label-with-info">
+                    반복 간격
+                  <div className="tooltip-container">
+                    <FiInfo className="info-icon" />
+                    <span className="tooltip-text">
+                    반복 주기마다 건너뛰는 간격을 의미하며<br /><span style={{ fontWeight: '600', color: '#ff5a3c' }}>주간(월간)</span>
+                    으로 선택 시 <span style={{ fontWeight: '600', color: '#ff5a3c' }}>선택한 요일(날짜)</span>마다 <br /> 선택한 간격으로 반복합니다
+                    </span>
+                  </div>
+                  </span>
+                    <input
+                      type="number"
+                      name="repeatPattern.interval"
+                      value={formData.repeatPattern.interval}
+                      min="1"
+                      onChange={handleChange}
+                    />
+                </div>
+  
+                {formData.repeatPattern.frequency === 'WEEK' && (
+                  <div className="repeat-buttons">
+                    {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+                      <button
+                        key={day}
+                        type="button"
+                        className={`day-button ${formData.repeatPattern.daysOfWeek.includes(dayMapping[day]) ? 'selected' : ''}`}
+                        onClick={() => handleDayClick(day)}
+                      >
+                        {day}
+                      </button>
+                    ))}
+                  </div>
+                )}
+  
+                {formData.repeatPattern.frequency === 'MONTH' && (
+                  <div className="repeat-buttons">
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                      <button
+                        key={day}
+                        type="button"
+                        className={`day-button ${formData.repeatPattern.daysOfMonth.includes(day) ? 'selected' : ''}`}
+                        onClick={() => handleDayOfMonthClick(day)}
+                      >
+                        {day}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+  
+          {formData.repeatYn && (
+            <div className="schedule-section-card">
+              <div className="form-row between">
+                <span className="form-label">일정 반복 시작</span>
+                <input
+                  type="datetime-local"
+                  name="repeatPattern.startDate"
+                  value={formData.repeatPattern.startDate}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-row between">
+                <span className="form-label">일정 반복 종료</span>
                 <input
                   type="datetime-local"
                   name="repeatPattern.endDate"
                   value={formData.repeatPattern.endDate}
                   onChange={handleChange}
                 />
-          </label>
-            </>
-          ) : (
-            <>
-              <label>날짜 선택</label>
-              <Calendar
-  onChange={handleDateChange}
-  value={formData.selectedDates.map((date) => new Date(date.date))}
-  className="custom-small-calendar"
-  tileClassName={({ date }) => {
-    const localDate = new Date(date.getTime() + (9 * 60 * 60 * 1000)); // UTC +9시간
-    const formattedDate = localDate.toISOString().slice(0, 10); // yyyy-mm-dd 형식
-    return formData.selectedDates.some(selected => selected.date === formattedDate)
-      ? 'selected-date'
-      : '';
-  }}
-  selectRange={false}
-/>
-
-
-
-               <div>
-              <label>선택된 날짜</label>
-              {formData.selectedDates.length > 0 && (
-                <div className="selected-dates">
-                  {formData.selectedDates.map((dateObj, index) => (
-                    <div key={index} className="date-time-selection">
-                      <span>{dateObj.date}</span> 
-                    </div>
-                  ))}
-                </div>
-              )}
+              </div>
             </div>
-            </>
           )}
-          <label>하루종일 (시간 설정 X, 모든 일정 일괄적용)
-          <input
-            type="checkbox"
-            name="isAllDay"
-            checked={formData.isAllDay}
-            onChange={handleChange}
-          />
-          </label>
-          {!formData.isAllDay && (
-          <div>
-            <label>시간 설정
-              <input
-                type="time"
-                value={formData.scheduleTime || '00:00'}
-                onChange={(e) => setFormData({ ...formData, scheduleTime: e.target.value })}
-              />
-            </label>
-          </div>
-        )}
-          <label>우선순위
-            <select
-              name="priority"
-              value={formData.priority}
-              onChange={handleChange}
-            >
-              <option value="LOW">낮음</option>
-              <option value="MEDIUM">보통</option>
-              <option value="HIGH">높음</option>
-            </select>
-          </label>
-          
-          <label>알림 설정
-            <input
-              type="checkbox"
-              name="noticeYn"
-              checked={formData.noticeYn}
-              onChange={handleChange}
-            />
-          </label>
-          {formData.noticeYn && (
-            <label>알림 시간 (분 전)
-              <input
-                type="number"
-                name="noticeAt"
-                value={formData.noticeAt}
-                onChange={handleChange}
-                min="1"
-                required
-              />
-            </label>
+  
+          {!formData.repeatYn && (
+            <div className="schedule-section-card">
+              <div className="form-row">
+              <div className="selected-dates-title">날짜 선택</div>
+                <Calendar
+                  onChange={handleDateChange}
+                  value={formData.selectedDates.map((date) => new Date(date.date))}
+                  className="custom-small-calendar"
+                  tileClassName={({ date }) => {
+                    const localDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+                    const formattedDate = localDate.toISOString().slice(0, 10);
+                    return formData.selectedDates.some(selected => selected.date === formattedDate)
+                      ? 'selected-date'
+                      : '';
+                  }}
+                  selectRange={false}
+                />
+              </div>
+  
+              <div className="form-row">
+              {formData.selectedDates.length > 0 && (
+                <div className="form-row">
+                  <div className="selected-dates">
+                    <div className="selected-dates-title">선택된 날짜</div>
+                    <div className="selected-dates-grid">
+                      {formData.selectedDates.map((dateObj, index) => (
+                        <div key={index} className="date-time-selection">
+                          <span>{dateObj.date}</span>
+                        </div>
+                      ))}
+                    </div>
+                     </div>
+                  </div>
+                )}
+              </div>
+            </div>
           )}
+  
+          <div className="schedule-section-card">
+            <div className="form-row between">
+            <span className="form-label-with-info">
+            하루종일
+            <div className="tooltip-container">
+              <FiInfo className="info-icon" />
+              <span className="tooltip-text">
+                시간 설정 없이 일정을 <br /><span style={{ fontWeight: '600', color: '#ff5a3c' }}>하루 전체 </span>로 간주됩니다
+              </span>
+            </div>
+            </span>
 
-          <div className="button-container">
-            <button type="submit">저장</button>
-            <button type="button" onClick={onClose}>취소</button>
+            <label className="switch">
+              <input
+               type="checkbox"
+               name="isAllDay"
+               checked={formData.isAllDay}
+               onChange={handleChange}
+              />
+              <span className="slider round"></span>
+            </label>
           </div>
+  
+            {!formData.isAllDay && (
+              <div className="form-row between">
+                <span className="form-label">시간 설정</span>
+                <input
+                  type="time"
+                  value={formData.scheduleTime || '00:00'}
+                  onChange={(e) => setFormData({ ...formData, scheduleTime: e.target.value })}
+                />
+              </div>
+            )}
+          </div>
+  
+          <div className="schedule-section-card">
+            <div className="form-row between">
+              <span className="form-label">우선순위</span>
+              <select
+                name="priority"
+                className="priority-select"
+                value={formData.priority}
+                onChange={handleChange}
+              >
+                <option value="LOW">낮음</option>
+                <option value="MEDIUM">보통</option>
+                <option value="HIGH">높음</option>
+              </select>
+            </div>
+          </div>
+  
+          <div className="schedule-section-card">
+          <div className="form-row between">
+            <span className="form-label-with-info">
+              알림 설정
+              <div className="tooltip-container">
+                <FiInfo className="info-icon" />
+                <span className="tooltip-text">
+                  <span style={{ fontWeight: '600', color: '#ff5a3c' }}>설정한 시간 전</span>에 일정 시작 알림을 받을 수 있습니다
+                </span>
+              </div>
+            </span>
+
+            <label className="switch">
+              <input
+                type="checkbox"
+                name="noticeYn"
+                checked={formData.noticeYn}
+               onChange={handleChange}
+              />
+              <span className="slider round"></span>
+            </label>
+           </div>
+  
+            {formData.noticeYn && (
+              <div className="form-row between">
+                <span className="form-label">알림 시간</span>
+                <select
+                  name="noticeAt"
+                  value={formData.noticeAt}
+                  onChange={handleChange}
+                  className="notice-select"
+                  required
+                  >
+                  <option value={0}>시작 시 알림</option>
+                  <option value={5}>5분 전</option>
+                  <option value={10}>10분 전</option>
+                  <option value={30}>30분 전</option>
+                  <option value={60}>1시간 전</option>
+                </select>
+              </div>
+            )}
+          </div>
+  
+          <div className="button-container">
+            <button type="submit" className="submit-btn">저장</button>
+            <button type="button" className="cancel-btn" onClick={onClose}>취소</button>
+          </div>
+  
         </form>
       </div>
     </div>
