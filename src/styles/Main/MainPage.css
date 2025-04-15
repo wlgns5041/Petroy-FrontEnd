@@ -1,244 +1,296 @@
 .main-page {
     display: flex;
-    justify-content: space-between; 
-    align-items: flex-start;
-    padding: 20px;
-    padding-top: 80px;
-}
-
-.left-section {
+    flex-direction: column;
+    padding-left: 60px;
+    padding-top: 60px;
+  }
+  
+  .calendar-layout {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 30%; 
-    height: 850px;
-    background-color: #e7e4e4; 
-    border-radius: 10px; 
-    padding-bottom: 20px;
-    margin-right: 2%;
-}
-
-.button-container {
-    display: flex;
-    justify-content: center; 
-    gap: 10px; 
-    margin-bottom: 20px; 
-    margin-top: 20px;
-}
-
-.right-section {
-    width: 60%; 
-}
-
-.calendar-wrapper {
-    width: 100%; 
-    display: flex;
-    justify-content: center; 
-}
-
-.create-category-button,
-.create-schedule-button {
-    background-color: #484848; 
-    color: white; 
-    border: none; 
-    padding: 10px 20px; 
-    text-align: center; 
-    text-decoration: none; 
-    display: inline-block; 
-    font-size: 16px; 
-    cursor: pointer; 
-    border-radius: 5px; 
-}
-
-.create-category-button:hover,
-.create-schedule-button:hover {
-    background-color: #8a8a8a; 
-}
-
-/* 내 반려동물 섹션 */
-.my-pets-section {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    width: 90%;
-}
-
-.my-pets-section h3 {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-}
-
-.pet-info-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    width: 90%;
-}
-
-/* 돌보미 반려동물 섹션 */
-.care-giver-pets-section {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    width: 90%;
-}
-
-.care-giver-pets-section h3 {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-}
-
-.care-giver-pet-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    width: 90%;
-}
-
-.pet-info-content {
-    flex-grow: 1; 
-}
-
-.pet-info-list p {
-    margin: 5px 0;
-}
-
-.pet-checkbox {
-    width: 20px; 
-    height: 20px; 
-    margin-right: 10px; 
-    cursor: pointer; 
-    accent-color: #007bff; 
-}
-
-.pet-checkbox:hover {
-    background-color: #e0e0e0; 
-}
-
-
-/* 일정 리스트 */
-.schedule-list {
+    gap: 20px;
+    padding: 32px;
+    background-color: #f8f9fb;
+    border-radius: 12px;
+  }
+  
+  .calendar-body {
+    display: grid;
+    grid-template-columns: 500px 1fr;
+    gap: 24px;
+  }
+  
+  .calendar-sidebar {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    width: 20%; 
-    height: 850px;
-    background-color: #e7e4e4; 
-    border-radius: 10px; 
-    padding-bottom: 20px;
-    margin-right: 2%;
+    gap: 16px;
+    width: 500px;
+  }
+  
+  .calendar-main {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    min-height: 700px;
+    width: 100%;
+  }
+  
+  .calendar-buttons-sidebar {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .calendar-add-btn {
+    flex: 1;
+    background-color: #5C5C5C;
+    color: white;
+    font-weight: bold;
+    padding: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .calendar-add-btn:hover {
+    background-color: #333333;
+  }
+  
+  .filter-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
+    max-height: 200px;
     overflow-y: auto;
-}
-
-.schedule-list::-webkit-scrollbar {
-    width: 0px; /* 스크롤바의 너비를 0으로 설정하여 숨깁니다 */
-    background: transparent; /* 배경색을 투명으로 설정하여 보이지 않게 함 */
+    scrollbar-width: none;
+  }
+  
+  .filter-card::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .filter-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    margin-top: 0;
+    border-bottom: none;
   }
 
-.schedule-list-content {
+  .filter-title-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .filter-title-row h4.filter-title {
+    border-bottom: none !important;
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .select-all-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+  }
+
+  .select-all-button.below {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 12px;
+    color: #888;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .filter-item.selected {
+    background-color: #cac9c9 !important;
+    color: #000 !important;
+    transition: background-color 0.3s;
+  }
+  
+  .fixed-title {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: 90%;
-}
+    height: 200px;
+    padding: 0;
+  }
 
-.schedule-item {
-    background-color: #fff;
-    border: 1px solid #ffffff;
-    border-radius: 3px;
-    padding: 10px; /* 패딩 추가 */
-    position: relative; /* 펼치기 기능을 위한 위치 설정 */
-    transition: box-shadow 0.2s; /* 마우스 오버 시 부드러운 그림자 효과 */
-}
-
-.schedule-item:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 마우스 오버 시 그림자 효과 */
-}
-
-.schedule-item p {
-    margin: 5px;
-}
-
-.schedule-checkbox {
-    width: 20px; 
-    height: 20px; 
-    margin-top: 20px; 
-    cursor: pointer; 
-    accent-color: #007bff; 
-}
-
-.schedule-checkbox:hover {
-    background-color: #e0e0e0; 
-}
-
-.error {
-    color: red;
-}
-
-.schedule-dates {
-    margin-top: 5px;
-    color: #555; /* 날짜 텍스트 색상 */
-}
-
-.toggle-arrow {
-    cursor: pointer; /* 클릭 가능한 요소 */
-    margin-left: 10px; /* 제목과 아이콘 사이의 간격 */
-}
-
-.schedule-title {
-    cursor: pointer; /* 클릭 가능한 요소 */
-}
-
-.category-section {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  .item-count {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+    margin-left: 2px;
+  }
+  
+  .fixed-title .filter-title {
+    padding: 16px;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  
+  .filter-scroll-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 12px;
+    scrollbar-width: none;
+    font-size: 13px;
+  }
+  
+  .filter-scroll-area::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .category-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .category-grid .filter-item {
     background-color: #f9f9f9;
-    width: 90%;
-}
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .pets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .pets-grid .filter-card {
+    height: 200px;
+    overflow: hidden;
+  }
+  
+  .pets-grid .filter-scroll-area {
+    overflow-y: auto;
+    padding: 0px 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    scrollbar-width: none;
+  }
+  
+  .pets-grid .filter-scroll-area::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .schedule-list {
+    min-height: 320px;
+  }
+  
+  .schedule-scroll-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .schedule-list-item {
+    position: relative;
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
 
-.category-section h3 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-}
+  .schedule-list-item p {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  .schedule-list-item:hover {
+    background-color: #e5e7eb;
+  }
 
-.category-item {
+  .schedule-list-item.selected {
+    background-color: #cac9c9 !important;
+    color: #000 !important;
+    transition: background-color 0.3s;
+  }
+  
+  .schedule-checkbox {
+    accent-color: #3b82f6;
+  }
+
+  .detail-icon-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+  }
+  
+  .detail-icon-button:hover {
+    color: #ff6a3c;
+  }
+  
+  .filter-item {
     display: flex;
-    align-items: center; /* 수직 정렬 */
-    justify-content: space-between; /* 좌우 공간 배분 */
-    margin-bottom: 10px;
-    width: 90%;
-}
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center;     /* 수직 가운데 정렬 */
+    text-align: center;      /* 텍스트 가운데 정렬 */
+    gap: 8px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background-color: #f6f6f6;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    min-height: 36px; /* 높이 맞추기 위해 추가 */   
+    font-weight: 500;
+    font-size: 12px;
+  }
 
-.category-info-content {
-    flex-grow: 1; /* 남은 공간을 차지 */
-}
-
-.category-checkbox {
-    width: 20px; 
-    height: 20px; 
-    cursor: pointer; 
-    accent-color: #007bff; 
-}
-
-.category-checkbox:hover {
-    background-color: #e0e0e0; 
-}
-
-.sort-select{
-    margin-bottom: 20px;
-}
-
-.all-select {
-    margin-bottom: 20px;
-    cursor: pointer; 
-}
+  .category-name {
+    flex: 1;
+    text-align: center;
+    font-weight: 500;
+  }
+  
+  .delete-icon {
+    color: #999;
+    cursor: pointer;
+  }
+  
+  .delete-icon:hover {
+    color: red;
+  }

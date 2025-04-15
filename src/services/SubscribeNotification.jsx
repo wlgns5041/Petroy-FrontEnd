@@ -2,7 +2,7 @@ import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-export const subscribeNotification = () => {
+export const subscribeNotification = (onUnReadCount) => {
   const token = localStorage.getItem('accessToken');
 
   if (window.__eventSourceInstance && window.__eventSourceInstance.readyState !== 2) {
@@ -17,8 +17,21 @@ export const subscribeNotification = () => {
     console.log('✅ SSE 연결 성공');
   };
 
+  eventSource.addEventListener("unReadCount", (e) => {
+    const count = parseInt(e.data, 10);
+    if (!isNaN(count) && typeof onUnReadCount === 'function') {
+      onUnReadCount(count);
+    }
+  });
+
   eventSource.onmessage = (event) => {
     console.log('📩 수신된 메시지:', event.data);
+  };
+
+  const handleUnreadCount = (data) => {
+    if (data.unReadCount !== undefined && typeof onUnReadCount === 'function') {
+      onUnReadCount(data.unReadCount);
+    }
   };
 
   eventSource.addEventListener("FRIEND_REQUEST", (e) => {
@@ -31,6 +44,7 @@ export const subscribeNotification = () => {
         fontWeight: 600,
       }
     });
+    handleUnreadCount(data);
   });
 
   eventSource.addEventListener("FRIEND_ACCEPTED", (e) => {
@@ -43,6 +57,7 @@ export const subscribeNotification = () => {
         fontWeight: 600,
       }
     });
+    handleUnreadCount(data);
   });
 
   eventSource.addEventListener("FRIEND_REJECTED", (e) => {
@@ -55,6 +70,7 @@ export const subscribeNotification = () => {
         fontWeight: 600,
       }
     });
+    handleUnreadCount(data);
   });
 
   eventSource.addEventListener("SCHEDULE", (e) => {
@@ -67,6 +83,7 @@ export const subscribeNotification = () => {
         fontWeight: 600,
       }
     });
+    handleUnreadCount(data);
   });
 
   eventSource.onerror = (error) => {

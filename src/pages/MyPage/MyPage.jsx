@@ -20,7 +20,28 @@ const MyPage = () => {
     const [loading, setLoading] = useState(true); // 로딩 상태
     const [showNameModal, setShowNameModal] = useState(false);
     const [showImageModal, setShowImageModal] = useState(false);
+    const [friendsCount, setFriendsCount] = useState(0);
 
+    const fetchFriendCount = async (token) => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/friends/count`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `${token}`,
+          },
+        });
+    
+        if (response.ok) {
+          const count = await response.text(); 
+          setFriendsCount(Number(count));
+        } else {
+          console.error('친구 수 조회 실패');
+        }
+      } catch (error) {
+        console.error('친구 수 조회 중 오류 발생:', error);
+      }
+    };
+    
     // 컴포넌트가 마운트될 때 실행
     useEffect(() => {
         const token = localStorage.getItem('accessToken'); // 로컬 저장소에서 토큰 가져오기
@@ -39,7 +60,10 @@ const MyPage = () => {
                     // 가져온 데이터를 상태에 저장
                     setUserInfo(userResponse);
                     setPets(petsResponse?.content || []); // 펫 목록이 없을 경우 빈 배열로 초기화
-                    setPosts(postsResponse?.content || []); // 포스트 목록이 없을 경우 빈 배열로 초기화
+                    setPosts(postsResponse?.content || []); // 포스트 목록이 없을 경우 빈 배열로 초기화\
+
+                    await fetchFriendCount(token);
+
                 } catch (error) {
                     console.error('데이터를 불러오는데 실패했습니다:', error); // 에러 처리
                 } finally {
@@ -168,11 +192,7 @@ const MyPage = () => {
       <div className="counts">
         <div>
           <span className="text" onClick={() => handleNavigation('/friendPage')}>친구</span>
-          <span>{userInfo.friendsCount || 0}</span>
-        </div>
-        <div>
-          <span className="text" onClick={() => handleNavigation('/petPage')}>등록된 돌보미</span>
-          <span>{userInfo.caregiverCount || 0}</span>
+          <span>{friendsCount}</span>
         </div>
       </div>
     </div>

@@ -137,7 +137,7 @@ function ScheduleDetailModal({ isOpen, onRequestClose, scheduleId, selectedDate,
          </div>
           )}
       
-          <div className="button-container">
+          <div className="schedule-detail-button-container">
             <button onClick={handleDelete} className="submit-btn delete">일정 삭제</button>
             <button onClick={handleClose} className="cancel-btn">닫기</button>
           </div>

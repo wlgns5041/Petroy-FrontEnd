@@ -354,23 +354,23 @@ const handleDayClick = (day) => {
           </div>
   
           <div className="schedule-section-card">
-  <label className="form-label">반려동물</label>
-  <ul className="schedule-pet-select-container">
-    {pets.map((pet) => (
-      <li
-        key={pet.petId}
-        className={`schedule-pet-select-card ${formData.petId.includes(pet.petId) ? 'selected' : ''}`}
-        onClick={() => handlePetSelectionChange(pet.petId)}
-      >
-        <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
-        <div className="info">
-          <div className="name">{pet.name}</div>
-          <div className="species">{pet.breed}</div>
-        </div>
-      </li>
-    ))}
-  </ul>
-</div>
+            <label className="form-label">반려동물</label>
+              <ul className="schedule-pet-select-container">
+                {pets.map((pet) => (
+                  <li
+                    key={pet.petId}
+                    className={`schedule-pet-select-card ${formData.petId.includes(pet.petId) ? 'selected' : ''}`}
+                    onClick={() => handlePetSelectionChange(pet.petId)}
+                  >
+                    <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
+                    <div className="info">
+                      <div className="name">{pet.name}</div>
+                      <div className="species">{pet.breed}</div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+          </div>
   
           <div className="schedule-section-card">
             <div className="form-row between">

@@ -3,6 +3,7 @@ import NavBar from '../../components/commons/NavBar.jsx';
 import '../../styles/Notification/NotificationPage.css';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { subscribeNotification } from '../../services/SubscribeNotification.jsx';
 
 const categories = ['전체', '친구', '일정', '커뮤니티'];
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -20,6 +21,22 @@ function NotificationPage() {
   const [activeCategory, setActiveCategory] = useState('전체');
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
+  const [unreadCount, setUnreadCount] = useState(0); 
+
+  useEffect(() => {
+    const eventSource = subscribeNotification();
+  
+    eventSource.addEventListener("unReadCount", (event) => {
+      console.log("📩 수신한 unreadCount:", event.data);
+      const unreadCount = parseInt(event.data, 10);
+      setUnreadCount(unreadCount); 
+    });
+  
+    return () => {
+      eventSource.close();
+      window.__eventSourceInstance = null;
+    };
+  }, []);
 
   // 기존 알림 목록 불러오기
   useEffect(() => {
@@ -44,7 +61,6 @@ function NotificationPage() {
           data = { content: [] };
         }
 
-        console.log('✅ 알림 수신:', data.content);
         setNotifications(data.content || []);
       } catch (err) {
         console.error('❌ 알림 로딩 실패:', err);
@@ -55,12 +71,41 @@ function NotificationPage() {
     fetchNotifications();
   }, []);
 
+  // 읽음 처리 함수
+  const markAsRead = async (noticeId) => {
+    const token = localStorage.getItem('accessToken');
+    try {
+      const response = await fetch(`${API_BASE_URL}/notification/${noticeId}`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('읽음 처리 실패');
+      }
+  
+      setNotifications((prev) =>
+        prev.map((n) =>
+          n.noticeId === noticeId ? { ...n, read: true } : n
+        )
+      );
+    } catch (err) {
+      console.error('❌ 읽음 처리 중 오류 발생:', err);
+    }
+  };
 
+  // 목록 최신순 정렬
+  const sortedNotifications = [...notifications].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  
   // 카테고리 필터링
   const filteredNotifications =
     activeCategory === '전체'
-      ? notifications
-      : notifications.filter((n) => {
+      ? sortedNotifications
+      : sortedNotifications.filter((n) => {
           if (activeCategory === '친구') {
             return ['FRIEND_REQUEST', 'FRIEND_ACCEPTED', 'FRIEND_REJECTED'].includes(n.noticeType);
           }
@@ -69,9 +114,19 @@ function NotificationPage() {
           return false;
         });
 
+  // 탭 별 알림 수 
+  const categoryCounts = {
+    전체: notifications.filter(n => !n.read).length,
+    친구: notifications.filter(n =>
+      ['FRIEND_REQUEST', 'FRIEND_ACCEPTED', 'FRIEND_REJECTED'].includes(n.noticeType) && !n.read
+    ).length,
+    일정: notifications.filter(n => n.noticeType === 'SCHEDULE' && !n.read).length,
+    커뮤니티: notifications.filter(n => n.noticeType === 'POST' && !n.read).length,
+  };
+
   return (
     <div className="notification-page">
-      <NavBar className="notification-page-Navbar" title="알림" />
+      <NavBar title="알림" unreadCount={unreadCount} />
       <h2 className="notification-title">알림</h2>
 
       <div className="category-tabs">
@@ -82,6 +137,11 @@ function NotificationPage() {
             onClick={() => setActiveCategory(cat)}
           >
             {cat}
+            {categoryCounts[cat] > 0 && (
+              <span style={{ color: '#ff4e50', marginLeft: '4px' }}>
+                ({categoryCounts[cat]})
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -97,18 +157,32 @@ function NotificationPage() {
           </div>
         ) : (
           filteredNotifications.map((notice) => (
-            <div key={notice.noticeId} className="notification-item">
-              <div className="notice-type">{typeMap[notice.noticeType]}</div>
-              <div className="notice-message">
-                {typeMap[notice.noticeType]} 알림이 도착했습니다.
+            <div key={notice.noticeId} className={`notification-item ${notice.read ? 'read' : 'unread'}`}>
+            <div className="notification-content">
+              <div className="notification-left">
+                <div className="notice-type">{typeMap[notice.noticeType]}</div>
+                <div className="notice-message">
+                  {typeMap[notice.noticeType]} 알림이 도착했습니다.
+                </div>
+                <div className="notice-time">
+                  {formatDistanceToNow(new Date(notice.createdAt), {
+                    addSuffix: true,
+                    locale: ko,
+                  })}
+                </div>
               </div>
-              <div className="notice-time">
-                {formatDistanceToNow(new Date(notice.createdAt), {
-                  addSuffix: true,
-                  locale: ko,
-                })}
-              </div>
+              {!notice.read && (
+                <div className="notification-right">
+                  <button
+                    className="mark-read-button"
+                    onClick={() => markAsRead(notice.noticeId)}
+                  >
+                    읽음
+                  </button>
+                </div>
+              )}
             </div>
+          </div>
           ))
         )}
       </div>
