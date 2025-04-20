@@ -42,12 +42,14 @@ export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [memberName, setMemberName] = useState('');
-  const [localUnreadCount, setLocalUnreadCount] = useState(0); 
+  const [localUnreadCount, setLocalUnreadCount] = useState(() => {
+    const saved = localStorage.getItem('unreadCount');
+    return saved ? parseInt(saved, 10) : 0;
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    console.log('📦 accessToken from NavBar:', token); // ✅ 로그 추가
 
     if (token) {
       // 기본 멤버 정보 가져오기
@@ -59,7 +61,7 @@ export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
   
       // ✅ SSE 연결 + unReadCount 수신 처리
       const sse = subscribeNotification((count) => {
-        console.log('🛎️ NavBar 수신된 unreadCount:', count); 
+        localStorage.setItem('unreadCount', count); 
         setLocalUnreadCount(count);
       });
   
@@ -68,6 +70,20 @@ export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
         window.__eventSourceInstance = null;
       };
     }
+  }, []);
+
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === 'unreadCount') {
+        setLocalUnreadCount(parseInt(e.newValue, 10) || 0);
+      }
+    };
+  
+    window.addEventListener('storage', handleStorageChange);
+  
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const finalUnreadCount = propUnreadCount > 0 ? propUnreadCount : localUnreadCount;
@@ -80,12 +96,16 @@ export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ backgroundColor: '#484848' }}>
-          <IconButton color="inherit" onClick={handleDrawerOpen} edge="start" sx={[{ marginRight: 5 }, open && { display: 'none' }]}>
+        <Toolbar sx={{ backgroundColor: '#484848' }}> {!open ? (
+          <IconButton color="inherit" onClick={handleDrawerOpen} edge="start" sx={{ marginRight: 5 }}>
             <MenuIcon />
+          </IconButton> ) : (
+          <IconButton color="inherit" onClick={handleDrawerClose} edge="start" sx={{ marginRight: 5 }}>
+            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
-          <Typography variant="h6" noWrap>{title}</Typography>
-          <Typography variant="h6" sx={{ marginLeft: 'auto' }}>{memberName && `${memberName}님`}</Typography>
+          )}
+          <Typography variant="h6" noWrap sx={{ fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }} >{title}</Typography>
+          <Typography variant="h6" sx={{ marginLeft: 'auto', fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }}>{memberName && `${memberName}님`}</Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

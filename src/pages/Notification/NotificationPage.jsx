@@ -40,6 +40,12 @@ function NotificationPage() {
     };
   }, []);
 
+  useEffect(() => {
+    const unread = (notifications || []).filter(n => !n.read).length;
+    setUnreadCount(unread);
+    localStorage.setItem('unreadCount', unread);
+  }, [notifications]);
+
   // 기존 알림 목록 불러오기
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -88,11 +94,16 @@ function NotificationPage() {
         throw new Error('읽음 처리 실패');
       }
   
-      setNotifications((prev) =>
-        prev.map((n) =>
+      setNotifications((prev) => {
+        const updated = prev.map((n) =>
           n.noticeId === noticeId ? { ...n, read: true } : n
-        )
-      );
+        );
+  
+        const newUnread = updated.filter(n => !n.read).length;
+        localStorage.setItem('unreadCount', newUnread);
+        setUnreadCount(newUnread); 
+        return updated;
+      });
     } catch (err) {
       console.error('❌ 읽음 처리 중 오류 발생:', err);
     }

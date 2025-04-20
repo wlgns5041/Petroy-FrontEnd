@@ -44,39 +44,6 @@ const CareGiverList = () => {
         fetchCareGiverList();
     }, []);
 
-    
-const handleDeleteCareGiver = async (petId) => {
-    const token = localStorage.getItem('accessToken');
-    const memberId = localStorage.getItem('memberId');
-
-    if (!memberId) {
-        alert('회원 정보가 없습니다.');
-        return;
-    }
-
-    if (!window.confirm('정말로 이 반려동물의 돌보미를 삭제하시겠습니까?')) {
-        return;
-    }
-
-    try {
-        const response = await axios.delete(`${API_BASE_URL}/pets/${petId}`, {
-            params: { memberId },
-            headers: {
-                'Authorization': `${token}`
-            }
-        });
-
-        if (response.status === 200) {
-            alert('돌보미가 삭제되었습니다.');
-            setPets((prevPets) => prevPets.filter(p => p.petId !== petId));
-        }
-    } catch (err) {
-        const message = err.response?.data?.errorMessage || '삭제 중 오류가 발생했습니다.';
-        alert(message);
-        console.error('삭제 오류:', err);
-    }
-};
-
     return (
         <div className="careGiverPetsContainer">
             <h2 className="careGiverPetsHeader">돌보미로 등록된 반려동물 목록</h2>
@@ -99,13 +66,6 @@ const handleDeleteCareGiver = async (petId) => {
                             <p>나이: {pet.age}세</p>
                             <p>성별: {pet.gender === 'MALE' ? '남자' : '여자'}</p>
                             <p>메모: {pet.memo}</p>
-
-                            <button
-                                className="deleteCareGiverButton"
-                                onClick={() => handleDeleteCareGiver(pet.petId)}
-                            >
-                            돌보미 삭제
-                            </button>
                         </div>
                     ))}
                 </div>

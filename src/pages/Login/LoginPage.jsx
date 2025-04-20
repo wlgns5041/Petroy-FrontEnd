@@ -50,7 +50,6 @@ function LoginPage() {
             const data = await response.json();
             localStorage.setItem('accessToken', data.accessToken); // accessToken을 로컬 저장소에 저장
             localStorage.setItem('refreshToken', data.refreshToken); // refreshToken을 로컬 저장소에 저장
-            localStorage.setItem('memberId', data.myId);
 
             navigate('/mainPage'); // 메인 페이지로 이동
             

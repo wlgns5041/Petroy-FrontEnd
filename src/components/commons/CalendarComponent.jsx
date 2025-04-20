@@ -34,8 +34,8 @@ const CalendarComponent = ({ filteredSchedules }) => {
     };
 
     const weeks = groupDatesByWeek(startDay, endDay);
-    const koreanNow = new Date(Date.now() + 9 * 60 * 60 * 1000); 
-    const todayStr = koreanNow.toISOString().split('T')[0];
+    
+    const todayStr = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' });
 
     return (
         <div className="calendar">
@@ -57,11 +57,11 @@ const CalendarComponent = ({ filteredSchedules }) => {
                 {weeks.map((week, i) => (
                     <div key={i} className="week">
                         {week.map((date, j) => {
-                            const dateStr = date.toISOString().split('T')[0];
-                            const isToday = dateStr === todayStr;
+                            const localDateStr = new Date(date).toLocaleDateString('sv-SE', { timeZone: 'Asia/Seoul' });
+                            const isToday = localDateStr === todayStr;
 
                             const schedulesForDate = filteredSchedules.filter(
-                                s => new Date(s.date).toISOString().split('T')[0] === dateStr
+                                s => new Date(s.date).toISOString().split('T')[0] === localDateStr
                             );
 
                             return (

@@ -20,6 +20,7 @@ export const subscribeNotification = (onUnReadCount) => {
   eventSource.addEventListener("unReadCount", (e) => {
     const count = parseInt(e.data, 10);
     if (!isNaN(count) && typeof onUnReadCount === 'function') {
+      localStorage.setItem('unreadCount', count);
       onUnReadCount(count);
     }
   });
@@ -30,6 +31,7 @@ export const subscribeNotification = (onUnReadCount) => {
 
   const handleUnreadCount = (data) => {
     if (data.unReadCount !== undefined && typeof onUnReadCount === 'function') {
+      localStorage.setItem('unreadCount', data.unReadCount);
       onUnReadCount(data.unReadCount);
     }
   };

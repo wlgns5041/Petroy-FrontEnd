@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PetRegister from '../../components/Pet/PetRegister.jsx';
 import PetEdit from '../../components/Pet/PetEdit.jsx';
 import DeletePet from '../../components/Pet/DeletePet.jsx'; 
@@ -7,6 +8,8 @@ import CareGiverList from '../../components/Pet/CareGiverList.jsx';
 import { fetchMemberPets } from '../../services/TokenService.jsx';
 import NavBar from '../../components/commons/NavBar.jsx';
 import '../../styles/Pet/PetPage.css';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const PetPage = () => {
     const [showModal, setShowModal] = useState(false);
@@ -45,6 +48,38 @@ const PetPage = () => {
 
         loadPets();
     }, []);
+
+    const handleDeleteCareGiver = async (petId) => {
+        const token = localStorage.getItem('accessToken');
+        const memberId = localStorage.getItem('memberId');
+    
+        if (!memberId) {
+            alert('회원 정보가 없습니다.');
+            return;
+        }
+    
+        if (!window.confirm('정말로 이 반려동물의 돌보미를 삭제하시겠습니까?')) {
+            return;
+        }
+    
+        try {
+            const response = await axios.delete(`${API_BASE_URL}/pets/${petId}`, {
+                params: { careGiverId: memberId },
+                headers: {
+                    'Authorization': `${token}`
+                }
+            });
+    
+            if (response.status === 200) {
+                alert('돌보미가 삭제되었습니다.');
+                setPets((prevPets) => prevPets.filter(p => p.petId !== petId));
+            }
+        } catch (err) {
+            const message = err.response?.data?.errorMessage || '삭제 중 오류가 발생했습니다.';
+            alert(message);
+            console.error('삭제 오류:', err);
+        }
+    };
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -155,6 +190,7 @@ const PetPage = () => {
                             <button onClick={() => handleOpenEditModal(pet)}>펫 수정</button>
                             <button onClick={() => handleOpenDeleteModal(pet)} className="deleteButton">펫 삭제</button>
                             <button onClick={() => handleOpenAssignModal(pet)} className="assignButton">돌보미 등록</button>
+                            <button className="deleteCareGiverButton" onClick={() => handleDeleteCareGiver(pet.petId)}>돌보미 삭제</button>
                         </div>
                     ))}
                     </div>
