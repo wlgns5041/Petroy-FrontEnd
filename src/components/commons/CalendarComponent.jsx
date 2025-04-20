@@ -34,11 +34,12 @@ const CalendarComponent = ({ filteredSchedules }) => {
     };
 
     const weeks = groupDatesByWeek(startDay, endDay);
-    const todayStr = new Date().toISOString().split('T')[0];
+    const koreanNow = new Date(Date.now() + 9 * 60 * 60 * 1000); 
+    const todayStr = koreanNow.toISOString().split('T')[0];
 
     return (
         <div className="calendar">
-            <div className="header">
+            <div className="calendar-header">
                 <button onClick={() => setCurrentDate(new Date(year, month - 1, 1))} className="nav-button">
                     <i className="fa fa-chevron-left" />
                 </button>

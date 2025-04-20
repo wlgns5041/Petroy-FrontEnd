@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NavBar from '../../components/commons/NavBar.jsx';
 import '../../styles/Notification/NotificationPage.css';
 import { formatDistanceToNow } from 'date-fns';
@@ -22,6 +23,7 @@ function NotificationPage() {
   const [notifications, setNotifications] = useState([]);
   const [error, setError] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const eventSource = subscribeNotification();
@@ -114,7 +116,6 @@ function NotificationPage() {
           return false;
         });
 
-  // 탭 별 알림 수 
   const categoryCounts = {
     전체: notifications.filter(n => !n.read).length,
     친구: notifications.filter(n =>
@@ -122,6 +123,16 @@ function NotificationPage() {
     ).length,
     일정: notifications.filter(n => n.noticeType === 'SCHEDULE' && !n.read).length,
     커뮤니티: notifications.filter(n => n.noticeType === 'POST' && !n.read).length,
+  };
+
+  const handleNotificationClick = (notice) => {
+    if (notice.noticeType === 'SCHEDULE') {
+      navigate('/mainPage');
+    } else if (
+      ['FRIEND_REQUEST', 'FRIEND_ACCEPTED', 'FRIEND_REJECTED'].includes(notice.noticeType)
+    ) {
+      navigate('/friendPage');
+    }
   };
 
   return (
@@ -157,7 +168,10 @@ function NotificationPage() {
           </div>
         ) : (
           filteredNotifications.map((notice) => (
-            <div key={notice.noticeId} className={`notification-item ${notice.read ? 'read' : 'unread'}`}>
+            <div key={notice.noticeId} 
+            className={`notification-item ${notice.read ? 'read' : 'unread'}`}
+            onClick={() => handleNotificationClick(notice)}
+            >
             <div className="notification-content">
               <div className="notification-left">
                 <div className="notice-type">{typeMap[notice.noticeType]}</div>
@@ -175,7 +189,10 @@ function NotificationPage() {
                 <div className="notification-right">
                   <button
                     className="mark-read-button"
-                    onClick={() => markAsRead(notice.noticeId)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      markAsRead(notice.noticeId);
+                    }}
                   >
                     읽음
                   </button>

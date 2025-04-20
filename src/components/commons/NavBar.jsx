@@ -70,7 +70,7 @@ export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
     }
   }, []);
 
-  const finalUnreadCount = localUnreadCount;
+  const finalUnreadCount = propUnreadCount > 0 ? propUnreadCount : localUnreadCount;
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);

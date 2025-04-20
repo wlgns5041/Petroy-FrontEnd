@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../styles/SignUp/SignUpPage.css';
 import careImage from '../../assets/images/dogpaw.png';
 import { FaCheck, FaTimes } from "react-icons/fa";
+import KakaoLogin from '../../utils/KakaoLogin.jsx'; 
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -265,6 +266,7 @@ function SignUpPage() {
                         </button>
                     </div>
                 </form>
+                <div className="kakaoWithGuest-SignUp"><KakaoLogin className="kakao-login-button" /></div>
             </div>
         </div>
     </div>

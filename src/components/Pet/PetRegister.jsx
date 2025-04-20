@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/Pet/PetRegister.css';
 
@@ -16,44 +16,58 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    
-    // const [speciesOptions, setSpeciesOptions] = useState([]);
-    // const [breedOptions, setBreedOptions] = useState([]);
 
-    // useEffect(() => {
-    //     // Fetch species and breed options
-    //     const fetchOptions = async () => {
-    //         try {
-    //             const speciesResponse = await axios.get(`${API_BASE_URL}/pets/species`);
-    //             setSpeciesOptions(speciesResponse.data);
+    const [speciesOptions, setSpeciesOptions] = useState([]);
+    const [breedOptions, setBreedOptions] = useState([]);
 
-    //             const breedResponse = await axios.get(`${API_BASE_URL}/pets/breeds`);
-    //             setBreedOptions(breedResponse.data);
+    useEffect(() => {
+        const fetchSpecies = async () => {
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await axios.get(`${API_BASE_URL}/pets/species`, {
+                    headers: {
+                        Authorization: `${token}`,
+                      }
+                });
+                
+                const speciesList = response.data.content || [];
+                const formattedSpecies = speciesList.map((s) => ({
+                    value: s.speciesId,
+                    label: s.speciesName,
+                }));
+                setSpeciesOptions(formattedSpecies);
+            } catch (err) {
+                setError('종 정보를 불러오지 못했습니다.');
+            }
+        };
 
-    //         } catch (err) {
-    //             setError('species와 breeds 데이터를 가져오지 못했습니다');
-    //         }
-    //     };
+        fetchSpecies();
+    }, []);
 
-    //     fetchOptions();
-    // }, []);
+    useEffect(() => {
+        const fetchBreeds = async () => {
+            if (!petInfo.speciesId) return;
+            try {
+                const response = await axios.get(`${API_BASE_URL}/pets/breed/${petInfo.speciesId}`);
+                const breedList = response.data.content || [];
+                const formattedBreeds = breedList.map((b) => ({
+                    value: b.breedId,
+                    label: b.breedName,
+                }));
+                setBreedOptions(formattedBreeds);
+            } catch (err) {
+                setError('품종 정보를 불러오지 못했습니다.');
+            }
+        };
 
-    const speciesOptions = [
-        { value: 1, label: '강아지' },
-        { value: 2, label: '고양이' },
-    ];
-
-    const breedOptions = [
-        { value: 1, label: '치와와' },
-        { value: 2, label: '포메라니안' },
-        { value: 3, label: '진돗개' }
-    ];
+        fetchBreeds();
+    }, [petInfo.speciesId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setPetInfo((prev) => ({
             ...prev,
-            [name]: name === 'age' ? value : value, 
+            [name]: value,
         }));
     };
 
@@ -67,12 +81,10 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
             breedId: Number(petInfo.breedId),
             name: petInfo.name,
             age: Number(petInfo.age),
-            gender: petInfo.gender, 
+            gender: petInfo.gender,
             image: petInfo.image,
             memo: petInfo.memo,
         };
-
-        console.log(formattedPetInfo); 
 
         try {
             const token = localStorage.getItem('accessToken');
@@ -87,16 +99,16 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
                 if (response.status === 200) {
                     alert('펫 등록 성공');
-                    onRegisterSuccess(response.data); 
+                    onRegisterSuccess(response.data);
                     onClose();
                 } else {
-                    setError('펫 등록 실패');
+                    setError('펫 등록에 실패했습니다.');
                 }
             } else {
-                setError('토큰이 존재하지 않습니다');
+                setError('인증 토큰이 없습니다.');
             }
         } catch (err) {
-            setError('서버와의 응답이 실패했습니다');
+            setError('서버 오류가 발생했습니다.');
         } finally {
             setLoading(false);
         }

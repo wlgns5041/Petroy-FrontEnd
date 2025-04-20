@@ -74,6 +74,11 @@
   padding: 20px 20px 8px 20px;
   position: relative;
   border-radius: 12px;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  opacity: 0.8;
 }
 
 .notification-item.read {

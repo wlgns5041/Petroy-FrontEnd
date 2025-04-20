@@ -355,21 +355,26 @@ const handleDayClick = (day) => {
   
           <div className="schedule-section-card">
             <label className="form-label">반려동물</label>
+
+            {pets.length === 0 ? (
+            <p className="no-pets-message">등록된 반려동물이 없습니다</p>
+            ) : (
               <ul className="schedule-pet-select-container">
                 {pets.map((pet) => (
                   <li
                     key={pet.petId}
                     className={`schedule-pet-select-card ${formData.petId.includes(pet.petId) ? 'selected' : ''}`}
                     onClick={() => handlePetSelectionChange(pet.petId)}
-                  >
+                  >   
                     <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
-                    <div className="info">
-                      <div className="name">{pet.name}</div>
-                      <div className="species">{pet.breed}</div>
-                    </div>
+                      <div className="info">
+                        <div className="name">{pet.name}</div>
+                          <div className="species">{pet.breed}</div>
+                      </div>
                   </li>
                 ))}
               </ul>
+            )}
           </div>
   
           <div className="schedule-section-card">

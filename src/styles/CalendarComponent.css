@@ -6,23 +6,26 @@
   border-radius: 5px;
 }
 
-.header {
+.calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 800;
 }
 
 .nav-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .weekdays, .days {
   display: flex;
   flex-wrap: wrap;
+  font-size: 13px;
 }
 
 .weekdays div, .day {
@@ -35,29 +38,29 @@
   border: 1px solid #eee;
   box-sizing: border-box;
   height: 14.5vh;
-  text-align: left; /* 왼쪽 정렬 */
-  padding-left: 10px; /* 왼쪽 여백 추가 */
+  text-align: left;
 }
 
 
 .week {
   display: flex;
   width: 100%;
+  font-size: 14px;
 }
 
 .today {
-  background-color: #79ae70; /* 원하는 배경색으로 설정 */
+  background-color: #79ae70; 
 }
 
 .Calendar-schedule-title {
   margin-top: 2px;
   display: flex;
-  justify-content: center; /* 수평 중앙 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
-  text-align: center; /* 텍스트 중앙 정렬 */
-  background-color: #2e3030; /* 일정 제목 배경색 */
-  border-radius: 3px; /* 모서리 둥글게 */
-  padding: 2px; /* 여백 */
+  justify-content: center; 
+  align-items: center; 
+  text-align: center; 
+  background-color: #2e3030; 
+  border-radius: 3px; 
+  padding: 2px;
   margin-right: 5px;
   font-size: 11px;
   color: white;
@@ -66,28 +69,25 @@
 .day-number {
   font-weight: bold;
   margin-bottom: 5px;
+  margin-left: 5px;
 }
 
 .schedule-box {
-  font-size: 11px;
-  padding: 2px 5px;
-  margin-bottom: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 6px;
+  margin-bottom: 5px;
   border-radius: 5px;
   color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: center;
 }
 
 .priority-high {
-  background-color: #f87171; /* 빨강 */
+  background-color: #f87171; 
 }
 .priority-medium {
-  background-color: #fbbf24; /* 노랑 */
+  background-color: #fbbf24; 
 }
 .priority-low {
-  background-color: #34d399; /* 초록 */
-}
-.priority-normal {
-  background-color: #94a3b8; /* 회색 */
+  background-color: #34d399;
 }
