@@ -39,7 +39,7 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
     
         try {
             const response = await axios.post(
-                `${API_BASE_URL}/pets/${pet.petId}`, 
+                `${API_BASE_URL}/caregivers/${pet.petId}`, 
                 {}, 
                 {
                     headers: {

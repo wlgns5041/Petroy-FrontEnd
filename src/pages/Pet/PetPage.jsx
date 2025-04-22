@@ -63,7 +63,7 @@ const PetPage = () => {
         }
     
         try {
-            const response = await axios.delete(`${API_BASE_URL}/pets/${petId}`, {
+            const response = await axios.delete(`${API_BASE_URL}/caregivers/${petId}`, {
                 params: { careGiverId: memberId },
                 headers: {
                     'Authorization': `${token}`

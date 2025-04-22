@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import '../../styles/Main/ScheduleModal.css';
-import defaultPetPic from '../../assets/images/DefaultImage.png';
-import Calendar from 'react-calendar';  
-import axios from 'axios';
-import { FiInfo } from 'react-icons/fi';
+import React, { useState, useEffect } from "react";
+import "../../styles/Main/ScheduleModal.css";
+import defaultPetPic from "../../assets/images/DefaultImage.png";
+import Calendar from "react-calendar";
+import axios from "axios";
+import { FiInfo } from "react-icons/fi";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   const [formData, setFormData] = useState({
-    categoryId: '',
-    title: '',
-    content: '',
-    repeatYn: true, 
+    categoryId: "",
+    title: "",
+    content: "",
+    repeatYn: true,
     noticeYn: false,
     noticeAt: 0,
-    priority: 'LOW',
+    priority: "LOW",
     petId: [],
-    selectedDates: [], 
+    selectedDates: [],
     isAllDay: false,
-    repeatPattern: { 
-      frequency: 'DAY',
+    repeatPattern: {
+      frequency: "DAY",
       interval: 1,
-      startDate: new Date().toISOString().slice(0, 16), 
-      endDate: '',
+      startDate: new Date().toISOString().slice(0, 16),
+      endDate: "",
       daysOfWeek: [],
       daysOfMonth: [],
     },
@@ -34,7 +34,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const token = localStorage.getItem('accessToken');
+        const token = localStorage.getItem("accessToken");
         const response = await axios.get(`${API_BASE_URL}/schedules/category`, {
           headers: {
             Authorization: `${token}`,
@@ -42,7 +42,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
         });
         setCategories(response.data.content);
       } catch (error) {
-        console.error('카테고리 로딩 중 오류 발생:', error);
+        console.error("카테고리 로딩 중 오류 발생:", error);
       }
     };
     fetchCategories();
@@ -56,71 +56,73 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
       ...prevData,
       repeatPattern: {
         ...prevData.repeatPattern,
-        startDate: localDateTime,  
+        startDate: localDateTime,
       },
     }));
   }, []);
 
-  useEffect(() => {
-  }, [formData]);
+  useEffect(() => {}, [formData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
-    if (name === 'repeatPattern.frequency') {
-      setFormData((prevData) => ({
-          ...prevData,
-          repeatPattern: {
-              ...prevData.repeatPattern,
-              frequency: value,
-              daysOfWeek: [], 
-              daysOfMonth: [], 
-          },
-      }));
 
-  } else if (name === 'repeatYn') {
-      setFormData((prevData) => ({
-        ...prevData,
-        repeatYn: checked,
-        repeatPattern: checked ? {
-          frequency: 'DAY', 
-          interval: 1, 
-          startDate: new Date().toISOString().slice(0, 16),
-          endDate: '', 
-          daysOfWeek: [],
-          daysOfMonth: [],
-        } : {
-          ...prevData.repeatPattern,
-          frequency: '',
-          interval: 1, 
-          startDate: '', 
-          endDate: '',
-          daysOfWeek: [], 
-          daysOfMonth: [], 
-        },
-        selectedDates: !checked ? [] : prevData.selectedDates, 
-      }));
-
-    } else if (name.startsWith('repeatPattern.')) { 
-      const [, subKey] = name.split('.');
+    if (name === "repeatPattern.frequency") {
       setFormData((prevData) => ({
         ...prevData,
         repeatPattern: {
           ...prevData.repeatPattern,
-          [subKey]: type === 'checkbox' ? checked : value,
+          frequency: value,
+          daysOfWeek: [],
+          daysOfMonth: [],
         },
       }));
-
-    } else if (name === 'categoryId') {
+    } else if (name === "repeatYn") {
+      setFormData((prevData) => ({
+        ...prevData,
+        repeatYn: checked,
+        repeatPattern: checked
+          ? {
+              frequency: "DAY",
+              interval: 1,
+              startDate: new Date().toISOString().slice(0, 16),
+              endDate: "",
+              daysOfWeek: [],
+              daysOfMonth: [],
+            }
+          : {
+              ...prevData.repeatPattern,
+              frequency: "",
+              interval: 1,
+              startDate: "",
+              endDate: "",
+              daysOfWeek: [],
+              daysOfMonth: [],
+            },
+        selectedDates: !checked ? [] : prevData.selectedDates,
+      }));
+    } else if (name.startsWith("repeatPattern.")) {
+      const [, subKey] = name.split(".");
+      setFormData((prevData) => ({
+        ...prevData,
+        repeatPattern: {
+          ...prevData.repeatPattern,
+          [subKey]: type === "checkbox" ? checked : value,
+        },
+      }));
+    } else if (name === "categoryId") {
       setFormData((prevData) => ({
         ...prevData,
         [name]: Number(value),
       }));
-
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: type === 'checkbox' ? checked : name === 'noticeAt' ? Number(value) : value,
+        [name]:
+          type === "checkbox"
+            ? checked
+            : name === "noticeAt"
+            ? Number(value)
+            : value,
       }));
     }
   };
@@ -128,39 +130,40 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   const convertToKST = (date) => {
     const utcDate = new Date(date);
     const koreanTime = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000); // UTC +9시간
-    return koreanTime.toISOString().replace('Z', ''); // ISO 형식으로 변환 후 Z 제거
-  };  
+    return koreanTime.toISOString().replace("Z", ""); // ISO 형식으로 변환 후 Z 제거
+  };
 
   const dayMapping = {
-    '일': 'SUNDAY',
-    '월': 'MONDAY',
-    '화': 'TUESDAY',
-    '수': 'WEDNESDAY',
-    '목': 'THURSDAY',
-    '금': 'FRIDAY',
-    '토': 'SATURDAY',
-};
+    일: "SUNDAY",
+    월: "MONDAY",
+    화: "TUESDAY",
+    수: "WEDNESDAY",
+    목: "THURSDAY",
+    금: "FRIDAY",
+    토: "SATURDAY",
+  };
 
-const handleDayClick = (day) => {
-    const updatedDays = formData.repeatPattern.daysOfWeek.includes(dayMapping[day])
-        ? formData.repeatPattern.daysOfWeek.filter((d) => d !== dayMapping[day])
-        : [...formData.repeatPattern.daysOfWeek, dayMapping[day]];
+  const handleDayClick = (day) => {
+    const updatedDays = formData.repeatPattern.daysOfWeek.includes(
+      dayMapping[day]
+    )
+      ? formData.repeatPattern.daysOfWeek.filter((d) => d !== dayMapping[day])
+      : [...formData.repeatPattern.daysOfWeek, dayMapping[day]];
 
     setFormData((prevData) => ({
-        ...prevData,
-        repeatPattern: {
-            ...prevData.repeatPattern,
-            daysOfWeek: updatedDays,
-        },
+      ...prevData,
+      repeatPattern: {
+        ...prevData.repeatPattern,
+        daysOfWeek: updatedDays,
+      },
     }));
-};
+  };
 
-  
   const handleDayOfMonthClick = (day) => {
     const updatedDays = formData.repeatPattern.daysOfMonth.includes(day)
       ? formData.repeatPattern.daysOfMonth.filter((d) => d !== day)
       : [...formData.repeatPattern.daysOfMonth, day];
-  
+
     setFormData((prevData) => ({
       ...prevData,
       repeatPattern: {
@@ -181,19 +184,26 @@ const handleDayClick = (day) => {
 
   const handleDateChange = (date) => {
     // KST로 변환
-    const localDate = new Date(date.getTime() + (9 * 60 * 60 * 1000)); // UTC +9시간
+    const localDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // UTC +9시간
     const formattedDate = localDate.toISOString().slice(0, 10); // yyyy-mm-dd 형식
     setFormData((prevData) => {
-      const existingDate = prevData.selectedDates.find(d => d.date === formattedDate);
+      const existingDate = prevData.selectedDates.find(
+        (d) => d.date === formattedDate
+      );
       if (existingDate) {
         return {
           ...prevData,
-          selectedDates: prevData.selectedDates.filter(d => d.date !== formattedDate),
+          selectedDates: prevData.selectedDates.filter(
+            (d) => d.date !== formattedDate
+          ),
         };
       } else {
         return {
           ...prevData,
-          selectedDates: [...prevData.selectedDates, { date: formattedDate, time: '00:00' }],
+          selectedDates: [
+            ...prevData.selectedDates,
+            { date: formattedDate, time: "00:00" },
+          ],
         };
       }
     });
@@ -201,35 +211,61 @@ const handleDayClick = (day) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem('accessToken');
-  
+    const token = localStorage.getItem("accessToken");
+
     const startDateTime = new Date(formData.repeatPattern.startDate);
     const endDateTime = new Date(formData.repeatPattern.endDate);
     const generatedDates = [];
-  
+
     // 반복 유무에 따라 날짜 생성
     if (formData.repeatYn) {
-      if (formData.repeatPattern.frequency === 'DAY') {
+      if (formData.repeatPattern.frequency === "DAY") {
         // 일일 반복
-        for (let date = new Date(startDateTime); date <= endDateTime; date.setDate(date.getDate() + formData.repeatPattern.interval)) {
+        for (
+          let date = new Date(startDateTime);
+          date <= endDateTime;
+          date.setDate(date.getDate() + formData.repeatPattern.interval)
+        ) {
           generatedDates.push(convertToKST(date));
         }
-      } else if (formData.repeatPattern.frequency === 'WEEK') {
+      } else if (formData.repeatPattern.frequency === "WEEK") {
         const selectedDays = formData.repeatPattern.daysOfWeek;
-  
-        for (let date = new Date(startDateTime); date <= endDateTime; date.setDate(date.getDate() + 1)) {
-          if (selectedDays.includes(new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date))) {
-            generatedDates.push(convertToKST(date)); 
-            date.setDate(date.getDate() + (formData.repeatPattern.interval - 1) * 7);
+
+        for (
+          let date = new Date(startDateTime);
+          date <= endDateTime;
+          date.setDate(date.getDate() + 1)
+        ) {
+          if (
+            selectedDays.includes(
+              new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(date)
+            )
+          ) {
+            generatedDates.push(convertToKST(date));
+            date.setDate(
+              date.getDate() + (formData.repeatPattern.interval - 1) * 7
+            );
           }
         }
-      } else if (formData.repeatPattern.frequency === 'MONTH') {
+      } else if (formData.repeatPattern.frequency === "MONTH") {
         const dayOfMonth = formData.repeatPattern.daysOfMonth;
-        for (let date = new Date(startDateTime.getFullYear(), startDateTime.getMonth(), 1); date <= endDateTime; date.setMonth(date.getMonth() + 1)) {
-          dayOfMonth.forEach(day => {
-            const monthlyDate = new Date(date.getFullYear(), date.getMonth(), day);
+        for (
+          let date = new Date(
+            startDateTime.getFullYear(),
+            startDateTime.getMonth(),
+            1
+          );
+          date <= endDateTime;
+          date.setMonth(date.getMonth() + 1)
+        ) {
+          dayOfMonth.forEach((day) => {
+            const monthlyDate = new Date(
+              date.getFullYear(),
+              date.getMonth(),
+              day
+            );
             if (monthlyDate >= startDateTime && monthlyDate <= endDateTime) {
-              generatedDates.push(convertToKST(monthlyDate)); 
+              generatedDates.push(convertToKST(monthlyDate));
             }
           });
         }
@@ -237,13 +273,13 @@ const handleDayClick = (day) => {
     } else {
       // 반복이 없을 때 선택한 날짜 추가
       if (formData.selectedDates && formData.selectedDates.length > 0) {
-        formData.selectedDates.forEach(dateObj => {
+        formData.selectedDates.forEach((dateObj) => {
           const date = new Date(dateObj.date); // 날짜 객체 생성
           const time = dateObj.time; // 시간 가져오기
-          const [hours, minutes] = time.split(':'); // 시간 분리
+          const [hours, minutes] = time.split(":"); // 시간 분리
           date.setHours(hours); // 시간 설정
           date.setMinutes(minutes); // 분 설정
-  
+
           // 유효한 날짜인지 확인 후 KST 형식으로 변환
           if (!isNaN(date.getTime())) {
             generatedDates.push(convertToKST(date)); // KST 변환
@@ -251,7 +287,7 @@ const handleDayClick = (day) => {
         });
       }
     }
-  
+
     const requestData = {
       categoryId: formData.categoryId,
       title: formData.title,
@@ -270,50 +306,57 @@ const handleDayClick = (day) => {
       // '하루종일'이 아닐 때 사용자가 설정한 시간 포함
       requestData.scheduleTime = formData.scheduleTime || "00:00:00"; // 시간 설정, 없으면 기본값
     }
-  
+
     if (formData.repeatYn) {
       requestData.repeatPattern = {
         frequency: formData.repeatPattern.frequency,
         interval: formData.repeatPattern.interval,
         startDate: formData.repeatPattern.startDate,
         endDate: formData.repeatPattern.endDate,
-        ...(formData.repeatPattern.frequency === 'WEEK' && { daysOfWeek: formData.repeatPattern.daysOfWeek }),
-        ...(formData.repeatPattern.frequency === 'MONTH' && { daysOfMonth: formData.repeatPattern.daysOfMonth }),
+        ...(formData.repeatPattern.frequency === "WEEK" && {
+          daysOfWeek: formData.repeatPattern.daysOfWeek,
+        }),
+        ...(formData.repeatPattern.frequency === "MONTH" && {
+          daysOfMonth: formData.repeatPattern.daysOfMonth,
+        }),
       };
     } else {
-      requestData.selectedDates = formData.selectedDates.map(d => d.date); // yyyy-mm-dd 형식으로 전송
+      requestData.selectedDates = formData.selectedDates.map((d) => d.date); // yyyy-mm-dd 형식으로 전송
     }
-  
+
     if (formData.noticeYn) {
       requestData.noticeAt = formData.noticeAt;
     }
-  
+
     console.log("최종 요청 데이터:", requestData);
-  
+
     try {
-      const response = await axios.post(`${API_BASE_URL}/schedules`, requestData, {
-        headers: {
-          Authorization: `${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-  
+      const response = await axios.post(
+        `${API_BASE_URL}/schedules`,
+        requestData,
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       if (response.status === 200) {
-        alert('일정이 생성되었습니다.');
+        alert("일정이 생성되었습니다.");
         onScheduleCreated();
         onClose();
       }
     } catch (error) {
       const { data } = error.response;
-      alert(data.errorMessage || '일정 생성 중 오류가 발생했습니다.');
+      alert(data.errorMessage || "일정 생성 중 오류가 발생했습니다.");
     }
-  };  
-  
+  };
+
   return (
     <div className="schedule-modal-container">
       <div className="schedule-modal-content">
         <form onSubmit={handleSubmit}>
-  
           <div className="schedule-section-card">
             <div className="input-group">
               <label>카테고리</label>
@@ -323,7 +366,9 @@ const handleDayClick = (day) => {
                 onChange={handleChange}
                 required
               >
-                <option value="" disabled>카테고리 선택</option>
+                <option value="" disabled>
+                  카테고리 선택
+                </option>
                 {categories.map((category) => (
                   <option key={category.categoryId} value={category.categoryId}>
                     {category.name}
@@ -331,7 +376,7 @@ const handleDayClick = (day) => {
                 ))}
               </select>
             </div>
-  
+
             <div className="input-group">
               <label>제목</label>
               <input
@@ -342,7 +387,7 @@ const handleDayClick = (day) => {
                 required
               />
             </div>
-  
+
             <div className="input-group">
               <label>내용</label>
               <textarea
@@ -352,42 +397,50 @@ const handleDayClick = (day) => {
               />
             </div>
           </div>
-  
+
           <div className="schedule-section-card">
             <label className="form-label">반려동물</label>
 
             {pets.length === 0 ? (
-            <p className="no-pets-message">등록된 반려동물이 없습니다</p>
+              <p className="no-pets-message">등록된 반려동물이 없습니다</p>
             ) : (
               <ul className="schedule-pet-select-container">
                 {pets.map((pet) => (
                   <li
                     key={pet.petId}
-                    className={`schedule-pet-select-card ${formData.petId.includes(pet.petId) ? 'selected' : ''}`}
+                    className={`schedule-pet-select-card ${
+                      formData.petId.includes(pet.petId) ? "selected" : ""
+                    }`}
                     onClick={() => handlePetSelectionChange(pet.petId)}
-                  >   
+                  >
                     <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
-                      <div className="info">
-                        <div className="name">{pet.name}</div>
-                          <div className="species">{pet.breed}</div>
-                      </div>
+                    <div className="info">
+                      <div className="name">{pet.name}</div>
+                      <div className="species">{pet.breed}</div>
+                    </div>
                   </li>
                 ))}
               </ul>
             )}
           </div>
-  
+
           <div className="schedule-section-card">
             <div className="form-row between">
-            <span className="form-label-with-info">
-              반복 유무
-              <div className="tooltip-container">
-                <FiInfo className="info-icon" />
-                <span className="tooltip-text"><span style={{ color: '#ff5a3c' }}>설정 시</span> 시작과 종료 날짜 사이에 선택한<br />
-                                               주기와 간격으로 일정이 자동 생성합니다<br />
-                                               <span style={{ color: '#ff5a3c' }}>설정 해제 시</span> 일정 날짜를 직접 선택합니다</span>
-              </div>
-            </span>
+              <span className="form-label-with-info">
+                반복 유무
+                <div className="tooltip-container">
+                  <FiInfo className="info-icon" />
+                  <span className="tooltip-text">
+                    <span style={{ color: "#ff5a3c" }}>설정 시</span> 시작과
+                    종료 날짜 사이에 선택한
+                    <br />
+                    주기와 간격으로 일정이 자동 생성합니다
+                    <br />
+                    <span style={{ color: "#ff5a3c" }}>설정 해제 시</span> 일정
+                    날짜를 직접 선택합니다
+                  </span>
+                </div>
+              </span>
               <label className="switch">
                 <input
                   type="checkbox"
@@ -398,7 +451,7 @@ const handleDayClick = (day) => {
                 <span className="slider round"></span>
               </label>
             </div>
-  
+
             {formData.repeatYn && (
               <>
                 <div className="form-row between">
@@ -413,34 +466,48 @@ const handleDayClick = (day) => {
                     <option value="MONTH">월간</option>
                   </select>
                 </div>
-  
+
                 <div className="form-row between">
                   <span className="form-label-with-info">
                     반복 간격
-                  <div className="tooltip-container">
-                    <FiInfo className="info-icon" />
-                    <span className="tooltip-text">
-                    반복 주기마다 건너뛰는 간격을 의미하며<br /><span style={{ fontWeight: '600', color: '#ff5a3c' }}>주간(월간)</span>
-                    으로 선택 시 <span style={{ fontWeight: '600', color: '#ff5a3c' }}>선택한 요일(날짜)</span>마다 <br /> 선택한 간격으로 반복합니다
-                    </span>
-                  </div>
+                    <div className="tooltip-container">
+                      <FiInfo className="info-icon" />
+                      <span className="tooltip-text">
+                        반복 주기마다 건너뛰는 간격을 의미하며
+                        <br />
+                        <span style={{ fontWeight: "600", color: "#ff5a3c" }}>
+                          주간(월간)
+                        </span>
+                        으로 선택 시{" "}
+                        <span style={{ fontWeight: "600", color: "#ff5a3c" }}>
+                          선택한 요일(날짜)
+                        </span>
+                        마다 <br /> 선택한 간격으로 반복합니다
+                      </span>
+                    </div>
                   </span>
-                    <input
-                      type="number"
-                      name="repeatPattern.interval"
-                      value={formData.repeatPattern.interval}
-                      min="1"
-                      onChange={handleChange}
-                    />
+                  <input
+                    type="number"
+                    name="repeatPattern.interval"
+                    value={formData.repeatPattern.interval}
+                    min="1"
+                    onChange={handleChange}
+                  />
                 </div>
-  
-                {formData.repeatPattern.frequency === 'WEEK' && (
+
+                {formData.repeatPattern.frequency === "WEEK" && (
                   <div className="repeat-buttons">
-                    {['일', '월', '화', '수', '목', '금', '토'].map(day => (
+                    {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
                       <button
                         key={day}
                         type="button"
-                        className={`day-button ${formData.repeatPattern.daysOfWeek.includes(dayMapping[day]) ? 'selected' : ''}`}
+                        className={`day-button ${
+                          formData.repeatPattern.daysOfWeek.includes(
+                            dayMapping[day]
+                          )
+                            ? "selected"
+                            : ""
+                        }`}
                         onClick={() => handleDayClick(day)}
                       >
                         {day}
@@ -448,14 +515,18 @@ const handleDayClick = (day) => {
                     ))}
                   </div>
                 )}
-  
-                {formData.repeatPattern.frequency === 'MONTH' && (
+
+                {formData.repeatPattern.frequency === "MONTH" && (
                   <div className="repeat-buttons">
-                    {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
                       <button
                         key={day}
                         type="button"
-                        className={`day-button ${formData.repeatPattern.daysOfMonth.includes(day) ? 'selected' : ''}`}
+                        className={`day-button ${
+                          formData.repeatPattern.daysOfMonth.includes(day)
+                            ? "selected"
+                            : ""
+                        }`}
                         onClick={() => handleDayOfMonthClick(day)}
                       >
                         {day}
@@ -466,7 +537,7 @@ const handleDayClick = (day) => {
               </>
             )}
           </div>
-  
+
           {formData.repeatYn && (
             <div className="schedule-section-card">
               <div className="form-row between">
@@ -490,120 +561,144 @@ const handleDayClick = (day) => {
               </div>
             </div>
           )}
-  
+
           {!formData.repeatYn && (
             <div className="schedule-section-card">
               <div className="form-row">
-              <div className="selected-dates-title">날짜 선택</div>
+                <div className="selected-dates-title">날짜 선택</div>
                 <Calendar
                   onChange={handleDateChange}
                   value={null}
                   className="custom-small-calendar"
                   tileClassName={({ date }) => {
-                    const localDate = new Date(date.getTime() + (9 * 60 * 60 * 1000));
+                    const localDate = new Date(
+                      date.getTime() + 9 * 60 * 60 * 1000
+                    );
                     const formattedDate = localDate.toISOString().slice(0, 10);
-                    return formData.selectedDates.some(selected => selected.date === formattedDate)
-                      ? 'selected-date'
-                      : '';
+                    return formData.selectedDates.some(
+                      (selected) => selected.date === formattedDate
+                    )
+                      ? "selected-date"
+                      : "";
                   }}
                   selectRange={false}
                 />
               </div>
-  
+
               <div className="form-row">
-              {formData.selectedDates.length > 0 && (
-                <div className="form-row">
-                  <div className="selected-dates">
-                    <div className="selected-dates-title">선택된 날짜</div>
-                    <div className="selected-dates-grid">
-                      {formData.selectedDates.map((dateObj, index) => (
-                        <div key={index} className="date-time-selection">
-                          <span>{dateObj.date}</span>
-                        </div>
-                      ))}
+                {formData.selectedDates.length > 0 && (
+                  <div className="form-row">
+                    <div className="selected-dates">
+                      <div className="selected-dates-title">선택된 날짜</div>
+                      <div className="selected-dates-grid">
+                        {formData.selectedDates.map((dateObj, index) => (
+                          <div key={index} className="date-time-selection">
+                            <span>{dateObj.date}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                     </div>
                   </div>
                 )}
               </div>
             </div>
           )}
-  
+
           <div className="schedule-section-card">
             <div className="form-row between">
-            <span className="form-label-with-info">
-            하루종일
-            <div className="tooltip-container">
-              <FiInfo className="info-icon" />
-              <span className="tooltip-text">
-                시간 설정 없이 일정을 <span style={{ fontWeight: '600', color: '#ff5a3c' }}>하루 전체</span>로 간주됩니다
-                <br />알림 설정 시 해당 날짜 자정 기준으로 설정됩니다
+              <span className="form-label-with-info">
+                하루종일
+                <div className="tooltip-container">
+                  <FiInfo className="info-icon" />
+                  <span className="tooltip-text">
+                    시간 설정 없이 일정을{" "}
+                    <span style={{ fontWeight: "600", color: "#ff5a3c" }}>
+                      하루 전체
+                    </span>
+                    로 간주됩니다
+                    <br />
+                    알림 설정 시 해당 날짜 자정 기준으로 설정됩니다
+                  </span>
+                </div>
               </span>
-            </div>
-            </span>
 
-            <label className="switch">
-              <input
-               type="checkbox"
-               name="isAllDay"
-               checked={formData.isAllDay}
-               onChange={handleChange}
-              />
-              <span className="slider round"></span>
-            </label>
-          </div>
-  
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  name="isAllDay"
+                  checked={formData.isAllDay}
+                  onChange={handleChange}
+                />
+                <span className="slider round"></span>
+              </label>
+            </div>
+
             {!formData.isAllDay && (
               <div className="form-row between">
                 <span className="form-label">시간 설정</span>
                 <input
                   type="time"
-                  value={formData.scheduleTime || '00:00'}
-                  onChange={(e) => setFormData({ ...formData, scheduleTime: e.target.value })}
+                  value={formData.scheduleTime || "00:00"}
+                  onChange={(e) =>
+                    setFormData({ ...formData, scheduleTime: e.target.value })
+                  }
                 />
               </div>
             )}
           </div>
-  
+
           <div className="schedule-section-card">
             <div className="form-row between">
               <span className="form-label">우선순위</span>
-              <select
-                name="priority"
-                className="priority-select"
-                value={formData.priority}
-                onChange={handleChange}
-              >
-                <option value="LOW">낮음</option>
-                <option value="MEDIUM">보통</option>
-                <option value="HIGH">높음</option>
-              </select>
+              <div className="custom-priority-select">
+                {[
+                  { label: "낮음", value: "LOW", className: "priority-low" },
+                  { label: "보통", value: "MEDIUM", className: "priority-medium",},
+                  { label: "높음", value: "HIGH", className: "priority-high" },
+                ].map((option) => (
+                  <div
+                    key={option.value}
+                    className={`priority-option ${
+                      formData.priority === option.value ? "selected" : ""
+                    }`}
+                    onClick={() =>
+                      setFormData({ ...formData, priority: option.value })
+                    }
+                  >
+                    <span className={`priority-dot ${option.className}`} />
+                    {option.label}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-  
-          <div className="schedule-section-card">
-          <div className="form-row between">
-            <span className="form-label-with-info">
-              알림 설정
-              <div className="tooltip-container">
-                <FiInfo className="info-icon" />
-                <span className="tooltip-text">
-                  <span style={{ fontWeight: '600', color: '#ff5a3c' }}>설정한 시간 전</span>에 일정 시작 알림을 받을 수 있습니다
-                </span>
-              </div>
-            </span>
 
-            <label className="switch">
-              <input
-                type="checkbox"
-                name="noticeYn"
-                checked={formData.noticeYn}
-               onChange={handleChange}
-              />
-              <span className="slider round"></span>
-            </label>
-           </div>
-  
+          <div className="schedule-section-card">
+            <div className="form-row between">
+              <span className="form-label-with-info">
+                알림 설정
+                <div className="tooltip-container">
+                  <FiInfo className="info-icon" />
+                  <span className="tooltip-text">
+                    <span style={{ fontWeight: "600", color: "#ff5a3c" }}>
+                      설정한 시간 전
+                    </span>
+                    에 일정 시작 알림을 받을 수 있습니다
+                  </span>
+                </div>
+              </span>
+
+              <label className="switch">
+                <input
+                  type="checkbox"
+                  name="noticeYn"
+                  checked={formData.noticeYn}
+                  onChange={handleChange}
+                />
+                <span className="slider round"></span>
+              </label>
+            </div>
+
             {formData.noticeYn && (
               <div className="form-row between">
                 <span className="form-label">알림 시간</span>
@@ -613,7 +708,7 @@ const handleDayClick = (day) => {
                   onChange={handleChange}
                   className="notice-select"
                   required
-                  >
+                >
                   <option value={0}>시작 시 알림</option>
                   <option value={5}>5분 전</option>
                   <option value={10}>10분 전</option>
@@ -623,12 +718,15 @@ const handleDayClick = (day) => {
               </div>
             )}
           </div>
-  
+
           <div className="button-container">
-            <button type="submit" className="submit-btn">일정 생성</button>
-            <button type="button" className="cancel-btn" onClick={onClose}>취소</button>
+            <button type="submit" className="submit-btn">
+              일정 생성
+            </button>
+            <button type="button" className="cancel-btn" onClick={onClose}>
+              취소
+            </button>
           </div>
-  
         </form>
       </div>
     </div>

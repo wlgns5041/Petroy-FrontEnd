@@ -1,18 +1,24 @@
-
 .imageEdit-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    visibility: hidden; 
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
   
+  .imageEdit-modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 50vh; 
+    overflow-y: auto; 
+  }
+
   .imageEdit-modal.show {
     visibility: visible; 
   }
@@ -21,18 +27,18 @@
     background: white;
     padding: 20px;
     border-radius: 8px;
-    width: 60vw;
+    width: 90vw;
+    max-width: 400px; 
     display: flex;
     flex-direction: column;
     gap: 20px;
+    box-sizing: border-box;
   }
   
   .imageEdit-modal-header {
-    display: flex;
     font-size: 16px;
     font-weight: bold;
-    text-align: center;
-    align-items: flex-start;
+    text-align: left;
   }
 
   .imageEdit-myPage-input {
@@ -46,28 +52,32 @@
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 12px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
     text-align: center;
   }
-  
   
   .custom-file-upload:hover {
     background-color: #373737;
   }
 
   .imagePreview {
-    margin-top: 16px;
-    max-width: 100%;
-    height: auto;
+    margin-top: 12px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 1px solid #eee;
     object-fit: cover;
-    max-height: 100%; 
-  }
+    align-self: center;
+  }  
   
   .imageEdit-modal-body {
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   
   .imageEdit-modal-footer {

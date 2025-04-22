@@ -38,55 +38,51 @@ const DrawerHeader = styled('div')(({ theme }) => ({ display: 'flex', alignItems
 const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme }) => ({ zIndex: theme.zIndex.drawer + 1, transition: theme.transitions.create(['width', 'margin'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen }) }));
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({ width: drawerWidth, flexShrink: 0, whiteSpace: 'nowrap', boxSizing: 'border-box', ...(open && { ...openedMixin(theme), '& .MuiDrawer-paper': openedMixin(theme) }), ...(!open && { ...closedMixin(theme), '& .MuiDrawer-paper': closedMixin(theme) }) }));
 
-export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
+export default function NavBar({ title }) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [memberName, setMemberName] = useState('');
-  const [localUnreadCount, setLocalUnreadCount] = useState(() => {
-    const saved = localStorage.getItem('unreadCount');
-    return saved ? parseInt(saved, 10) : 0;
-  });
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
+
+  const fetchUnreadCount = async () => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) return;
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/notification`, {
+        headers: {
+          Authorization: `${token}`,
+        },
+      });
+      const data = await response.json();
+      const unread = (data.content || []).filter(n => !n.read).length;
+      setUnreadCount(unread);
+    } catch (err) {
+      console.error('🔔 알림 수 불러오기 실패:', err);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
 
     if (token) {
-      // 기본 멤버 정보 가져오기
-      const getMemberData = async () => {
-        const memberData = await fetchCurrentMember(token);
+      fetchCurrentMember(token).then((memberData) => {
         if (memberData?.name) setMemberName(memberData.name);
-      };
-      getMemberData();
-  
-      // ✅ SSE 연결 + unReadCount 수신 처리
-      const sse = subscribeNotification((count) => {
-        localStorage.setItem('unreadCount', count); 
-        setLocalUnreadCount(count);
       });
-  
+
+      fetchUnreadCount();
+
+      const sse = subscribeNotification((count) => {
+        setUnreadCount(count);
+      });
+
       return () => {
         sse.close();
         window.__eventSourceInstance = null;
       };
     }
   }, []);
-
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'unreadCount') {
-        setLocalUnreadCount(parseInt(e.newValue, 10) || 0);
-      }
-    };
-  
-    window.addEventListener('storage', handleStorageChange);
-  
-    return () => {
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
-  const finalUnreadCount = propUnreadCount > 0 ? propUnreadCount : localUnreadCount;
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -96,68 +92,80 @@ export default function NavBar({ title, unreadCount: propUnreadCount = 0 }) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ backgroundColor: '#484848' }}> {!open ? (
-          <IconButton color="inherit" onClick={handleDrawerOpen} edge="start" sx={{ marginRight: 5 }}>
-            <MenuIcon />
-          </IconButton> ) : (
-          <IconButton color="inherit" onClick={handleDrawerClose} edge="start" sx={{ marginRight: 5 }}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
+        <Toolbar sx={{ backgroundColor: '#484848' }}>
+          {!open ? (
+            <IconButton color="inherit" onClick={handleDrawerOpen} edge="start" sx={{ marginRight: 5 }}>
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <IconButton color="inherit" onClick={handleDrawerClose} edge="start" sx={{ marginRight: 5 }}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
           )}
-          <Typography variant="h6" noWrap sx={{ fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }} >{title}</Typography>
-          <Typography variant="h6" sx={{ marginLeft: 'auto', fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }}>{memberName && `${memberName}님`}</Typography>
+          <Typography variant="h6" noWrap sx={{ fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }}>
+            {title}
+          </Typography>
+          <Typography variant="h6" sx={{ marginLeft: 'auto', fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }}>
+            {memberName && `${memberName}님`}
+          </Typography>
         </Toolbar>
       </AppBar>
+
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
+
         <Divider />
         <List>
-          <ListItem key="홈 & 캘린더" disablePadding sx={{ display: 'block' }}>
-            <ListItemButton onClick={() => handleNavigation('/mainPage')} sx={[{ minHeight: 48, px: 2.5 }, open ? { justifyContent: 'initial' } : { justifyContent: 'center' }]}>              
-              <ListItemIcon sx={[{ minWidth: 0, justifyContent: 'center' }, open ? { mr: 3 } : { mr: 'auto' }]}> <CalendarTodayIcon /> </ListItemIcon>
-              <ListItemText primary="홈 & 캘린더" sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
+          <ListItem disablePadding sx={{ display: 'block' }}>
+            <ListItemButton onClick={() => handleNavigation('/mainPage')} sx={{ minHeight: 48, px: 2.5, justifyContent: open ? 'initial' : 'center' }}>
+              <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: open ? 3 : 'auto' }}>
+                <CalendarTodayIcon />
+              </ListItemIcon>
+              <ListItemText primary="홈 & 캘린더" sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
+
           {[['마이페이지', <PersonIcon />], ['펫', <PetsIcon />], ['친구', <GroupIcon />], ['커뮤니티', <ForumIcon />]].map(([text, icon]) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 onClick={() => handleNavigation(`/${text === '마이페이지' ? 'myPage' : text === '펫' ? 'petPage' : text === '친구' ? 'friendPage' : 'communityPage'}`)}
-                sx={[{ minHeight: 48, px: 2.5 }, open ? { justifyContent: 'initial' } : { justifyContent: 'center' }]}
+                sx={{ minHeight: 48, px: 2.5, justifyContent: open ? 'initial' : 'center' }}
               >
-                <ListItemIcon sx={[{ minWidth: 0, justifyContent: 'center' }, open ? { mr: 3 } : { mr: 'auto' }]}>{icon}</ListItemIcon>
-                <ListItemText primary={text} sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
+                <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: open ? 3 : 'auto' }}>{icon}</ListItemIcon>
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
+
         <Divider />
         <List>
-        {[
-  ['알림', NotificationsIcon],
-  ['설정', SettingsIcon],
-].map(([text, IconComponent]) => (
-  <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-    <ListItemButton
-      onClick={() => handleNavigation(`/${text === '알림' ? 'notificationPage' : 'settingsPage'}`)}
-      sx={[{ minHeight: 48, px: 2.5 }, open ? { justifyContent: 'initial' } : { justifyContent: 'center' }]}
-    >
-      <ListItemIcon sx={[{ minWidth: 0, justifyContent: 'center' }, open ? { mr: 3 } : { mr: 'auto' }]}>
-        {text === '알림' ? (
-          <Badge badgeContent={finalUnreadCount} color="error" max={99} showZero>
-            <IconComponent />
-          </Badge>
-        ) : (
-          <IconComponent />
-        )}
-      </ListItemIcon>
-      <ListItemText primary={text} sx={[open ? { opacity: 1 } : { opacity: 0 }]} />
-    </ListItemButton>
-  </ListItem>
-))}
+          {[
+            ['알림', NotificationsIcon],
+            ['설정', SettingsIcon],
+          ].map(([text, IconComponent]) => (
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                onClick={() => handleNavigation(`/${text === '알림' ? 'notificationPage' : 'settingsPage'}`)}
+                sx={{ minHeight: 48, px: 2.5, justifyContent: open ? 'initial' : 'center' }}
+              >
+                <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: open ? 3 : 'auto' }}>
+                  {text === '알림' ? (
+                    <Badge badgeContent={unreadCount} color="error" max={99} showZero>
+                      <IconComponent />
+                    </Badge>
+                  ) : (
+                    <IconComponent />
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
       </Drawer>
     </Box>

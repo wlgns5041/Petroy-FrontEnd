@@ -4,7 +4,7 @@ import NavBar from '../../components/commons/NavBar.jsx';
 import '../../styles/Notification/NotificationPage.css';
 import { formatDistanceToNow } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { subscribeNotification } from '../../services/SubscribeNotification.jsx';
+import { subscribeNotification, updateGlobalUnreadCount } from '../../services/SubscribeNotification.jsx';
 
 const categories = ['전체', '친구', '일정', '커뮤니티'];
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -100,8 +100,10 @@ function NotificationPage() {
         );
   
         const newUnread = updated.filter(n => !n.read).length;
-        localStorage.setItem('unreadCount', newUnread);
         setUnreadCount(newUnread); 
+
+        updateGlobalUnreadCount(newUnread);
+
         return updated;
       });
     } catch (err) {
