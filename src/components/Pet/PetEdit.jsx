@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../styles/Pet/PetEdit.css'; 
 
@@ -17,37 +17,51 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [error, setError] = useState(null); // 오류 메시지 상태
 
-    // const [speciesOptions, setSpeciesOptions] = useState([]);
-    // const [breedOptions, setBreedOptions] = useState([]);
+    const [speciesOptions, setSpeciesOptions] = useState([]);
+    const [breedOptions, setBreedOptions] = useState([]);
 
-    // useEffect(() => {
-    //     // Fetch species and breed options
-    //     const fetchOptions = async () => {
-    //         try {
-    //             const speciesResponse = await axios.get(`${API_BASE_URL}/pets/species`);
-    //             setSpeciesOptions(speciesResponse.data);
+    useEffect(() => {
+        const fetchSpecies = async () => {
+            try {
+                const token = localStorage.getItem('accessToken');
+                const response = await axios.get(`${API_BASE_URL}/pets/species`, {
+                    headers: {
+                        Authorization: `${token}`,
+                      }
+                });
+                
+                const speciesList = response.data.content || [];
+                const formattedSpecies = speciesList.map((s) => ({
+                    value: s.speciesId,
+                    label: s.speciesName,
+                }));
+                setSpeciesOptions(formattedSpecies);
+            } catch (err) {
+                setError('종 정보를 불러오지 못했습니다.');
+            }
+        };
 
-    //             const breedResponse = await axios.get(`${API_BASE_URL}/pets/breeds`);
-    //             setBreedOptions(breedResponse.data);
+        fetchSpecies();
+    }, []);
 
-    //         } catch (err) {
-    //             setError('species와 breeds 데이터를 가져오지 못했습니다');
-    //         }
-    //     };
+    useEffect(() => {
+        const fetchBreeds = async () => {
+            if (!petInfo.speciesId) return;
+            try {
+                const response = await axios.get(`${API_BASE_URL}/pets/breed/${petInfo.speciesId}`);
+                const breedList = response.data.content || [];
+                const formattedBreeds = breedList.map((b) => ({
+                    value: b.breedId,
+                    label: b.breedName,
+                }));
+                setBreedOptions(formattedBreeds);
+            } catch (err) {
+                setError('품종 정보를 불러오지 못했습니다.');
+            }
+        };
 
-    //     fetchOptions();
-    // }, []);
-
-    const speciesOptions = [
-        { value: 1, label: '강아지' },
-        { value: 2, label: '고양이' },
-    ];
-
-    const breedOptions = [
-        { value: 1, label: '치와와' },
-        { value: 2, label: '포메라니안' },
-        { value: 3, label: '진돗개' }
-    ];
+        fetchBreeds();
+    }, [petInfo.speciesId]);
 
     // 입력 필드의 값이 변경될 때 호출되는 함수
     const handleChange = (e) => { // e는 이벤트 객체
@@ -105,7 +119,7 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
         <div className="petEdit-modal-overlay"> 
             <div className="petEdit-modal-content"> 
                 <h2>펫 정보 수정</h2> 
-                <form onSubmit={handleSubmit}> {/* 폼 제출 시 handleSubmit 함수 호출 */}
+                <form onSubmit={handleSubmit}> 
                     <div className="petEdit-form-group">
                     <label>종:</label>
                         <select

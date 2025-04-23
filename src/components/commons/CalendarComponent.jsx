@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "../../styles/CalendarComponent.css";
 import "font-awesome/css/font-awesome.min.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
 
-const CalendarComponent = ({ filteredSchedules }) => {
+const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
   const [viewMode, setViewMode] = useState("week");
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -288,7 +290,7 @@ const CalendarComponent = ({ filteredSchedules }) => {
 
       {/* 주간 일정 요약 */}
       {viewMode === "week" && (
-        <div className="weekly-detail-rows">
+        <div className="weekly-summary-table-rows">
           {weeks[0].map((date, idx) => {
             const localDateStr = new Date(date).toLocaleDateString("sv-SE", {
               timeZone: "Asia/Seoul",
@@ -300,21 +302,48 @@ const CalendarComponent = ({ filteredSchedules }) => {
             );
 
             return (
-              <div key={idx} className="weekly-row">
-                <div className="weekly-date">
-                  {date.getMonth() + 1}월 {date.getDate()}일 (
-                  {date.toLocaleDateString("ko-KR", { weekday: "short" })})
+              <div key={idx} className="summary-date-block">
+                <div className="summary-date-info">
+                  <div className="summary-date-text">
+                    {date.getMonth() + 1}월 {date.getDate()}일
+                  </div>
                 </div>
-                <div className="weekly-schedule-list">
+
+                <div className="summary-schedule-blocks">
                   {schedules.length > 0 ? (
                     schedules.map((s, i) => (
-                      <div
-                        key={i}
-                        className={`weekly-schedule-item priority-${
-                          s.priority || "normal"
-                        }`}
-                      >
-                        {s.title}
+                      <div key={i} className="schedule-card-wide">
+                        <div className="schedule-content-left">
+                          <div className="schedule-wide-title">{s.title}</div>
+                          <div className="schedule-category">
+                            {s.categoryName || "카테고리 없음"}
+                          </div>
+                        </div>
+
+                        <div className="schedule-content-right">
+                          <span className="schedule-pets">
+                            {s.pets?.join(", ")}
+                          </span>
+                          <span
+                            className={`priority-badge ${s.priority?.toLowerCase()}`}
+                          >
+                            {s.priority}
+                          </span>
+                          <span className="schedule-time">
+                            {new Date(s.date).toLocaleString("ko-KR", {
+                              month: "short",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                          <button
+                            className="custom-detail-button"
+                            onClick={() => onOpenDetail(s.scheduleId, s.date)}
+                          >
+                            <FontAwesomeIcon icon={faCalendarDay} />
+                          </button>
+                        </div>
                       </div>
                     ))
                   ) : (

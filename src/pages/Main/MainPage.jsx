@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import CalendarComponent from '../../components/commons/CalendarComponent.jsx';
 import NavBar from '../../components/commons/NavBar.jsx';
 import CategoryModal from '../../components/Schedule/CategoryModal.jsx';
@@ -71,28 +71,36 @@ function MainPage() {
     }
   };
 
-  const loadSchedules = async () => {
+  const loadSchedules = useCallback(async () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
       try {
         const response = await axios.get(`${API_BASE_URL}/schedules`, {
           headers: { Authorization: `${token}` },
         });
+  
+        const getCategoryNameById = (id) => {
+          const match = categories.find(c => c.categoryId === id);
+          return match ? match.name : '카테고리 없음';
+        };
+  
         const schedulesData = response.data.content || [];
         const flatSchedules = schedulesData.flatMap(schedule =>
           schedule.dateInfo.map(info => ({
             ...schedule,
             date: new Date(info.date),
             status: info.status,
-            petId: schedule.petId,
+            categoryName: getCategoryNameById(schedule.categoryId),
+            pets: schedule.petName || [],
           }))
         );
+
         setSchedules(flatSchedules);
       } catch (err) {
         console.error('일정 불러오기 오류', err);
       }
     }
-  };
+  }, [categories]);
 
   const deleteCategory = async (categoryId) => {
     const token = localStorage.getItem('accessToken');
@@ -120,12 +128,16 @@ function MainPage() {
     }
   };
 
+
   useEffect(() => {
     loadPets();
     loadCareGiverPets();
     loadCategories();
-    loadSchedules();
   }, []);
+  
+  useEffect(() => {
+    loadSchedules();
+  }, [loadSchedules]);
 
   const openCategoryModal = () => setIsCategoryModalOpen(true);
   const closeCategoryModal = () => setIsCategoryModalOpen(false);
@@ -295,6 +307,8 @@ const filteredSchedules = schedules.filter((s) => {
     }
   });
 
+  
+
   return (
     <div className="main-page">
       <NavBar title="메인페이지" />
@@ -447,7 +461,10 @@ const filteredSchedules = schedules.filter((s) => {
   
           {/* 캘린더 본문 */}
           <div className="calendar-main">
-            <CalendarComponent filteredSchedules={filteredSchedules} />
+          <CalendarComponent 
+            filteredSchedules={filteredSchedules} 
+            onOpenDetail={openScheduleDetailModal}
+          />
           </div>
         </div>
       </div>

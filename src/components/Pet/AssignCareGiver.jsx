@@ -36,32 +36,29 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
 
     const handleAssign = async (careGiverId) => {
         const token = localStorage.getItem('accessToken');
-    
+      
         try {
-            const response = await axios.post(
-                `${API_BASE_URL}/caregivers/${pet.petId}`, 
-                {}, 
-                {
-                    headers: {
-                        'Authorization': `${token}`,
-                    },
-                    params: { memberId: careGiverId }, 
-                }
-            );
-    
-            if (response.status === 200) {
-                onAssignCareGiver(careGiverId); 
-                onClose(); 
-            }
+            const response = await axios.post(`${API_BASE_URL}/caregivers`, null, {
+                headers: {
+                  Authorization: `${token}`,
+                },
+                params: {
+                  petId: pet.petId,
+                  memberId: careGiverId,
+                },
+              });
+      
+          if (response.data === true) {
+            onAssignCareGiver(careGiverId);
+            onClose();
+          }
+
         } catch (err) {
-            if (err.response && err.response.data) {
-                setError(err.response.data.errorMessage || '오류가 발생했습니다.');
-            } else {
-                setError('오류가 발생했습니다.');
-            }
-            console.error(err);
+          const message = err.response?.data?.errorMessage || '오류가 발생했습니다.';
+          alert(message);
+          console.error(err);
         }
-    };
+      };
 
 
     return (
