@@ -136,14 +136,14 @@
 
 .day {
   flex: 1;
-  border-radius: 12px;
+  border-radius: 8px;
   background-color: #f9fafb;
   padding: 10px;
   min-height: 90px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   transition: background 0.3s;
   box-sizing: border-box;
-  height: 14.5vh;
+  height: 15.5vh;
   text-align: left;
 }
 
@@ -154,13 +154,13 @@
 .days.view-month {
   display: flex;
   flex-direction: column;
-  gap: 0px; /* 주간 간격 제거 */
+  gap: 0px; 
 }
 
 .week {
   display: flex;
-  width: 100%; /* 👈 필수 */
-  gap: 0;       /* 줄어드는 원인이면 제거 */
+  width: 100%; 
+  gap: 0;      
   padding: 0;
   margin: 0;
 }
@@ -206,9 +206,41 @@
 }
 
 .day-number {
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-left: 5px;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.day-number.today {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+  line-height: 26px;
+  background-color: #373737;
+  color: white;
+  border-radius: 50%;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: none;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.day.base-date {
+  background-color: rgba(0, 0, 0, 0.1); 
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03); 
+  transition: all 0.2s ease-in-out;
 }
 
 .other-month {
@@ -224,16 +256,35 @@
   color: white;
   text-align: center;
   animation: fadeIn 0.4s ease-in;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .priority-high {
   background-color: #f87171; 
+  transition: filter 0.2s ease-in-out;
 }
+
+.priority-high:hover {
+  filter: brightness(0.9);
+}
+
 .priority-medium {
   background-color: #fbbf24; 
+  transition: filter 0.2s ease-in-out;
 }
+
+.priority-medium:hover {
+  filter: brightness(0.9);
+}
+
 .priority-low {
   background-color: #34d399;
+  transition: filter 0.2s ease-in-out;
+}
+
+.priority-low:hover {
+  filter: brightness(0.9);
 }
 
 .calendar-top-section {
@@ -244,7 +295,7 @@
 }
 
 .calendar-content {
-  flex: 1; /* ⬅️ 이거 필수! */
+  flex: 1; 
   background-color: #ffffff;
   border-radius: 16px;
   padding: 20px;
@@ -279,18 +330,37 @@
 .mini-day {
   width: 32px;
   height: 32px;
+  line-height: 32px;
+  text-align: center;
   border-radius: 8px;
   font-size: 10px;
-  text-align: center;
-  line-height: 32px;
   color: #6b7280;
+  box-sizing: border-box;
+  vertical-align: top;
 }
 
 .mini-day.highlight-week {
   background-color: #3b82f6;
   color: white;
-  border-radius: 8px;
-  margin: 2px; 
+}
+
+.mini-day.mini-today {
+  background-color: #f87171;
+  color: white;
+  font-weight: bold;
+}
+
+.mini-week-row {
+  display: flex;
+  justify-content: space-between;
+  height: 36px; 
+  align-items: center;
+}
+
+.mini-day.highlight-week.mini-today {
+  background-color: #f87171;
+  color: #ffffff;
+  font-weight: bold;
 }
 
 /* --------------------------------------------- 일정표 --------------------------------------------- */
@@ -315,7 +385,7 @@
 }
 
 .summary-date-block {
-  background: #fff; /* 연한 회색 배경으로 구분 */
+  background: #fff; 
   border-radius: 12px;
   padding: 20px;
   display: flex;
@@ -323,7 +393,7 @@
   gap: 24px;
   align-items: stretch;
   flex-wrap: wrap;
-  box-shadow: none; /* 그림자 제거 */
+  box-shadow: none; 
 }
 
 .summary-date-info {
@@ -406,10 +476,27 @@
   margin-right: 120px;
 }
 
+.pet-icon-with-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  background-color: #f9fafb;
+  padding: 4px 6px;
+  border-radius: 12px;
+}
+
+.schedule-pet-thumbnail {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .priority-badge {
   padding: 4px 10px;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 700;
   border-radius: 6px;
   color: white;
   display: inline-block;

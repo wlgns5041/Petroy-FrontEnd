@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useEffect  } from "react";
 import "../../styles/CalendarComponent.css";
 import "font-awesome/css/font-awesome.min.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
+import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
+import dogJindo from "../../assets/icons/dog-jindo.png";
+import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
+import catCheese from "../../assets/icons/cat-cheese.png";
+import catMunchkin from "../../assets/icons/cat-munchkin.png";
+import catRussianBlue from "../../assets/icons/cat-russianblue.png";
+
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
   const [viewMode, setViewMode] = useState("week");
@@ -66,6 +74,24 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
     month: "long",
     timeZone: "Asia/Seoul",
   });
+
+  useEffect(() => {
+    console.log("📋 필터링된 일정 목록 확인", filteredSchedules);
+  }, [filteredSchedules]);
+
+  const fallbackIcons = {
+    "강아지-치와와": dogChihuahua,
+    "강아지-진돗개": dogJindo,
+    "강아지-포메라니안": dogPomeranian,
+    "고양이-치즈": catCheese,
+    "고양이-먼치킨": catMunchkin,
+    "고양이-러시안블루": catRussianBlue,
+  };
+  
+  const getPetIcon = (species, breed) => {
+    const key = `${species}-${breed}`;
+    return fallbackIcons[key] || "/defaultPet.png";
+  };
 
   return (
     <div className="calendar">
@@ -161,12 +187,18 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                     const isInSelectedWeek = weeks[0].some(
                       (w) => w.toDateString() === date.toDateString()
                     );
+
+                    const isToday =
+                      date.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      }) === todayStr;
+
                     return (
                       <div
                         key={j}
                         className={`mini-day ${
                           isInSelectedWeek ? "highlight-week" : ""
-                        }`}
+                        } ${isToday ? "mini-today" : ""}`}
                       >
                         {date.getDate()}
                       </div>
@@ -197,6 +229,15 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                         timeZone: "Asia/Seoul",
                       }
                     );
+
+                    const isBaseDate =
+                      date.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      }) ===
+                      currentDate.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      });
+
                     const isToday = localDateStr === todayStr;
 
                     const schedulesForDate = filteredSchedules.filter(
@@ -206,21 +247,29 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                     );
 
                     return (
-                      <div key={j} className={`day ${isToday ? "today" : ""}`}>
-                        <div className="day-number">{date.getDate()}</div>
-                        <div className="schedule-details">
-                          {schedulesForDate.map((s, index) => (
-                            <div
-                              key={index}
-                              className={`schedule-box priority-${
-                                s.priority?.toLowerCase() || "normal"
-                              }`}
-                            >
-                              {s.title}
-                            </div>
-                          ))}
-                        </div>
+                      <div
+                      key={j}
+                      className={`day ${isBaseDate ? "base-date" : ""}`}
+                      onClick={() => setCurrentDate(date)}
+                    >
+                      <div className={`day-number ${isToday ? "today" : ""}`}>
+                        {date.getDate()}
                       </div>
+                      <div className="schedule-details">
+                        {schedulesForDate.map((s, index) => (
+                          <div
+                            key={index}
+                            className={`schedule-box priority-${s.priority?.toLowerCase() || "normal"}`}
+                            onClick={(e) => {
+                              e.stopPropagation(); 
+                              onOpenDetail(s.scheduleId, s.date);
+                            }}
+                          >
+                            {s.title}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                     );
                   })}
                 </div>
@@ -259,21 +308,30 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                   );
 
                   return (
-                    <div key={j} className={`day ${isToday ? "today" : ""}`}>
-                      <div
-                        className={`day-number ${
-                          isOtherMonth ? "other-month" : ""
-                        }`}
-                      >
-                        {date.getDate()}
-                      </div>
+                    <div
+                    key={j}
+                    className="day"
+                    onClick={() => {
+                      setCurrentDate(date);
+                      setViewMode("week");
+                    }}
+                  >
+                    <div
+                      className={`day-number ${isToday ? "today" : ""} ${isOtherMonth ? "other-month" : ""}`}
+                    >
+                      {date.getDate()}
+                    </div>
+
                       <div className="schedule-details">
                         {schedulesForDate.map((s, index) => (
                           <div
                             key={index}
                             className={`schedule-box priority-${
-                              s.priority?.toLowerCase() || "normal"
-                            }`}
+                              s.priority?.toLowerCase() || "normal"}`}
+                              onClick={(e) => {
+                                e.stopPropagation(); 
+                                onOpenDetail(s.scheduleId, s.date);
+                              }}
                           >
                             {s.title}
                           </div>
@@ -321,9 +379,26 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                         </div>
 
                         <div className="schedule-content-right">
-                          <span className="schedule-pets">
-                            {s.pets?.join(", ")}
-                          </span>
+                        <div className="schedule-pets">
+  {(s.petInfo || []).map((pet, i) => {
+    const imageSrc = pet.image
+      ? pet.image.startsWith("http") || pet.image.startsWith("data:")
+        ? pet.image
+        : `${API_BASE_URL}${pet.image}`
+      : getPetIcon(pet.species, pet.breed);
+
+    return (
+      <div key={i} className="pet-icon-with-name">
+        <img
+          src={imageSrc}
+          alt={pet.name}
+          className="schedule-pet-thumbnail"
+        />
+        <span className="pet-name">{pet.name}</span>
+      </div>
+    );
+  })}
+</div>
                           <span
                             className={`priority-badge ${s.priority?.toLowerCase()}`}
                           >

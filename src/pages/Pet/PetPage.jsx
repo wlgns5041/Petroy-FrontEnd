@@ -8,6 +8,12 @@ import CareGiverList from "../../components/Pet/CareGiverList.jsx";
 import { fetchMemberPets } from "../../services/TokenService.jsx";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Pet/PetPage.css";
+import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
+import dogJindo from "../../assets/icons/dog-jindo.png";
+import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
+import catCheese from "../../assets/icons/cat-cheese.png";
+import catMunchkin from "../../assets/icons/cat-munchkin.png";
+import catRussianBlue from "../../assets/icons/cat-russianblue.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -22,6 +28,42 @@ const PetPage = () => {
   const [showCareGiverList, setShowCareGiverList] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const speciesKorToEng = {
+    강아지: "dog",
+    고양이: "cat",
+  };
+
+  const breedKorToEng = {
+    치와와: "chihuahua",
+    진돗개: "jindo",
+    포메라니안: "pomeranian",
+    치즈: "cheese",
+    먼치킨: "munchkin",
+    러시안블루: "russianblue",
+  };
+
+  const fallbackIcons = {
+    "dog-chihuahua": dogChihuahua,
+    "dog-jindo": dogJindo,
+    "dog-pomeranian": dogPomeranian,
+    "cat-cheese": catCheese,
+    "cat-munchkin": catMunchkin,
+    "cat-russianblue": catRussianBlue,
+  };
+
+  const getDefaultPetIcon = (speciesKor, breedKor) => {
+    const speciesEng = speciesKorToEng[speciesKor];
+    const breedEng = breedKorToEng[breedKor];
+    const key = `${speciesEng}-${breedEng}`;
+
+    console.log(
+      `종: ${speciesKor} → ${speciesEng} / 품종: ${breedKor} → ${breedEng}`
+    );
+    console.log("사용된 fallback 키:", key);
+
+    return fallbackIcons[key] || "/defaultPet.png";
+  };
 
   useEffect(() => {
     const loadPets = async () => {
@@ -238,41 +280,54 @@ const PetPage = () => {
         <div className="petsSection">
           <h2 className="petsListHeader">내 반려동물 목록</h2>
           <div className="petsList">
-            {pets.map((pet) => (
-              <div key={pet.petId} className="petCard">
-                <img src={pet.image} alt={pet.name} className="petImage" />
-                <h2>{pet.name}</h2>
-                <p>종: {pet.species}</p>
-                <p>품종: {pet.breed}</p>
-                <p>나이: {pet.age}세</p>
-                <p>성별: {pet.gender === "MALE" ? "남자" : "여자"}</p>
-                <p>메모: {pet.memo}</p>
-                <button onClick={() => handleOpenEditModal(pet)}>
-                  펫 수정
-                </button>
-                <button
-                  onClick={() => handleOpenDeleteModal(pet)}
-                  className="deleteButton"
-                >
-                  펫 삭제
-                </button>
-                <button
-                  onClick={() => handleOpenAssignModal(pet)}
-                  className="assignButton"
-                >
-                  돌보미 등록
-                </button>
-                <button
-                  className="viewCareGiverButton"
-                  onClick={() => {
-                    setSelectedPet(pet); 
-                    handleShowCareGivers(pet.petId); 
-                  }}
-                >
-                  돌보미 조회
-                </button>
-              </div>
-            ))}
+            {pets.map((pet) => {
+              return (
+                <div key={pet.petId} className="petCard">
+                  <img
+                    src={
+                      pet.image
+                        ? pet.image.startsWith("http") ||
+                          pet.image.startsWith("data:")
+                          ? pet.image
+                          : `${API_BASE_URL}${pet.image}`
+                        : getDefaultPetIcon(pet.species, pet.breed)
+                    }
+                    alt={pet.name}
+                    className="petImage"
+                  />
+                  <h2>{pet.name}</h2>
+                  <p>종: {pet.species}</p>
+                  <p>품종: {pet.breed}</p>
+                  <p>나이: {pet.age}세</p>
+                  <p>성별: {pet.gender === "MALE" ? "남자" : "여자"}</p>
+                  <p>메모: {pet.memo}</p>
+                  <button onClick={() => handleOpenEditModal(pet)}>
+                    펫 수정
+                  </button>
+                  <button
+                    onClick={() => handleOpenDeleteModal(pet)}
+                    className="deleteButton"
+                  >
+                    펫 삭제
+                  </button>
+                  <button
+                    onClick={() => handleOpenAssignModal(pet)}
+                    className="assignButton"
+                  >
+                    돌보미 등록
+                  </button>
+                  <button
+                    className="viewCareGiverButton"
+                    onClick={() => {
+                      setSelectedPet(pet);
+                      handleShowCareGivers(pet.petId);
+                    }}
+                  >
+                    돌보미 조회
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       ) : (

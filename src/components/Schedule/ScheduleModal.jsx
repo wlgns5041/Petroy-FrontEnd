@@ -4,6 +4,12 @@ import defaultPetPic from "../../assets/images/DefaultImage.png";
 import Calendar from "react-calendar";
 import axios from "axios";
 import { FiInfo } from "react-icons/fi";
+import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
+import dogJindo from "../../assets/icons/dog-jindo.png";
+import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
+import catCheese from "../../assets/icons/cat-cheese.png";
+import catMunchkin from "../../assets/icons/cat-munchkin.png";
+import catRussianBlue from "../../assets/icons/cat-russianblue.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -353,6 +359,36 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
     }
   };
 
+  const speciesKorToEng = {
+    강아지: "dog",
+    고양이: "cat",
+  };
+
+  const breedKorToEng = {
+    치와와: "chihuahua",
+    진돗개: "jindo",
+    포메라니안: "pomeranian",
+    치즈: "cheese",
+    먼치킨: "munchkin",
+    러시안블루: "russianblue",
+  };
+
+  const fallbackIcons = {
+    "dog-chihuahua": dogChihuahua,
+    "dog-jindo": dogJindo,
+    "dog-pomeranian": dogPomeranian,
+    "cat-cheese": catCheese,
+    "cat-munchkin": catMunchkin,
+    "cat-russianblue": catRussianBlue,
+  };
+
+  const getDefaultPetIcon = (speciesKor, breedKor) => {
+    const speciesEng = speciesKorToEng[speciesKor];
+    const breedEng = breedKorToEng[breedKor];
+    const key = `${speciesEng}-${breedEng}`;
+    return fallbackIcons[key] || defaultPetPic;
+  };
+
   return (
     <div className="schedule-modal-container">
       <div className="schedule-modal-content">
@@ -413,7 +449,18 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                     }`}
                     onClick={() => handlePetSelectionChange(pet.petId)}
                   >
-                    <img src={pet.imageUrl || defaultPetPic} alt={pet.name} />
+                    <img
+                      src={
+                        pet.image
+                          ? pet.image.startsWith("http") ||
+                            pet.image.startsWith("data:")
+                            ? pet.image
+                            : `${API_BASE_URL}${pet.image}`
+                          : getDefaultPetIcon(pet.species, pet.breed)
+                      }
+                      alt={pet.name}
+                      className="pet-image"
+                    />
                     <div className="info">
                       <div className="name">{pet.name}</div>
                       <div className="species">{pet.breed}</div>
@@ -653,7 +700,11 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
               <div className="custom-priority-select">
                 {[
                   { label: "낮음", value: "LOW", className: "priority-low" },
-                  { label: "보통", value: "MEDIUM", className: "priority-medium",},
+                  {
+                    label: "보통",
+                    value: "MEDIUM",
+                    className: "priority-medium",
+                  },
                   { label: "높음", value: "HIGH", className: "priority-high" },
                 ].map((option) => (
                   <div

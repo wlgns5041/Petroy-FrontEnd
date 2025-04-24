@@ -86,13 +86,20 @@ function MainPage() {
   
         const schedulesData = response.data.content || [];
         const flatSchedules = schedulesData.flatMap(schedule =>
-          schedule.dateInfo.map(info => ({
-            ...schedule,
-            date: new Date(info.date),
-            status: info.status,
-            categoryName: getCategoryNameById(schedule.categoryId),
-            pets: schedule.petName || [],
-          }))
+          schedule.dateInfo.map(info => {
+            const petInfo = (schedule.petId || []).map(id =>
+              [...pets, ...careGiverPets].find(p => p.petId === id)
+            ).filter(Boolean); 
+        
+            return {
+              ...schedule,
+              date: new Date(info.date),
+              status: info.status,
+              categoryName: getCategoryNameById(schedule.categoryId),
+              pets: schedule.petName || [],
+              petInfo, 
+            };
+          })
         );
 
         setSchedules(flatSchedules);
@@ -100,7 +107,7 @@ function MainPage() {
         console.error('일정 불러오기 오류', err);
       }
     }
-  }, [categories]);
+  }, [categories, pets, careGiverPets]);
 
   const deleteCategory = async (categoryId) => {
     const token = localStorage.getItem('accessToken');

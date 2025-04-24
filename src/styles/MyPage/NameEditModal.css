@@ -1,65 +1,111 @@
-
 .nameEdit-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    visibility: hidden; 
-  }
-  
-  .nameEdit-modal.show {
-    visibility: visible; 
-  }
-  
-  .nameEdit-modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 60vw;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .nameEdit-modal-header {
-    display: flex;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    align-items: flex-start;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  visibility: hidden;
+}
 
-  .nameEdit-myPage-input {
-    padding: 6px;
-  }
-  
-  .nameEdit-modal-body {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .nameEdit-modal-footer {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-  }
-  
-  .nameEdit-modal-footer button {
-    background-color: #ff4e50;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-  }
-  
-  .nameEdit-modal-footer button:hover {
-    background-color: #e94345;
-  }
+.nameEdit-modal.show {
+  visibility: visible;
+}
+
+.nameEdit-modal-content {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 28px 24px;
+  width: 90vw;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.nameEdit-modal-header {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+}
+
+.nameEdit-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.nameEdit-myPage-input {
+  flex: 1;
+  padding: 10px 14px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.nameEdit-myPage-input:focus {
+  border-color: #6366f1;
+}
+
+.check-button {
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.check-button:hover {
+  background-color: #e5e7eb;
+}
+
+.name-error.visible {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: -4px;
+  padding-left: 2px;
+}
+
+.nameEdit-modal-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.nameEdit-modal-footer button {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  background-color: #4b5563;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nameEdit-modal-footer button:hover {
+  background-color: #374151;
+}
