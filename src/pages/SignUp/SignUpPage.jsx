@@ -32,8 +32,6 @@ function SignUpPage() {
     specialChar: false,
   });
 
-  const [emailError, setEmailError] = useState("");
-  const [nameError, setNameError] = useState("");
   const [emailChecked, setEmailChecked] = useState(false);
   const [nameChecked, setNameChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -79,7 +77,9 @@ function SignUpPage() {
 
     if (name === "email") {
       setEmailChecked(false);
-      setEmailGuide("이메일 중복확인을 해주세요");
+      if (!emailGuide || emailChecked) {
+        setEmailGuide("이메일 중복확인을 해주세요");
+      }
     }
 
     if (name === "name") {
@@ -97,6 +97,11 @@ function SignUpPage() {
     }
   };
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const validatePassword = (password) => {
     setPasswordCriteria({
       length: password.length >= 8,
@@ -108,32 +113,54 @@ function SignUpPage() {
   };
 
   const checkEmailDuplicate = async () => {
+    if (!formData.email) {
+      setEmailChecked(false);
+      setEmailGuide("이메일을 입력해주세요.");
+      return;
+    }
+  
+    if (!isValidEmail(formData.email)) {
+      setEmailChecked(false);
+      setEmailGuide("이메일 형식을 확인해주세요");
+      return;
+    }
+  
     try {
       const response = await axios.get(`${API_BASE_URL}/members/check-email`, {
         params: { email: formData.email },
       });
       if (response.status === 200) {
         setEmailChecked(true);
-        setEmailError("사용 가능한 이메일입니다.");
+        setEmailGuide("사용 가능한 이메일입니다.");
       }
     } catch (error) {
       setEmailChecked(false);
-      setEmailError("이미 사용 중인 이메일입니다.");
+      const errorMessage =
+        error.response?.data?.errorMessage || "중복된 이메일입니다.";
+      setEmailGuide(errorMessage);
     }
   };
 
   const checkNameDuplicate = async () => {
+    if (!formData.name.trim()) {
+      setNameChecked(false);
+      setNameGuide("이름을 입력해주세요.");
+      return;
+    }
+  
     try {
       const response = await axios.get(`${API_BASE_URL}/members/check-name`, {
         params: { name: formData.name },
       });
       if (response.status === 200) {
         setNameChecked(true);
-        setNameError("사용 가능한 이름입니다.");
+        setNameGuide("사용 가능한 이름입니다.");
       }
     } catch (error) {
       setNameChecked(false);
-      setNameError("이미 사용 중인 이름입니다.");
+      const errorMessage =
+        error.response?.data?.errorMessage || "중복된 이름입니다.";
+      setNameGuide(errorMessage);
     }
   };
 
@@ -171,40 +198,47 @@ function SignUpPage() {
         </div>
         <div className="signUpRightSection">
           <form onSubmit={handleSubmit}>
-            <div className="signUpFormGroup">
-              <div className="inputWithButton">
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="이메일"
-                  className={!emailChecked && emailGuide ? "input-error" : ""}
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-                <button
-                  type="button"
-                  className="checkButton"
-                  onClick={checkEmailDuplicate}
-                >
-                  중복 확인
-                </button>
-              </div>
+          <div className="signUpHeader">
+  <h2>
+    회원가입을 통해
+    <br />
+    반려동물과의 일상을 관리해보세요
+  </h2>
+  <p>일정을 기록하고 친구와 함께 반려동물을 돌볼 수 있어요</p>
+</div>
+          <div className="signUpFormGroup">
+  <div className="inputWithButton">
+    <input
+      type="email"
+      name="email"
+      placeholder="이메일"
+      className={!emailChecked && emailGuide ? "input-error" : ""}
+      value={formData.email}
+      onChange={handleChange}
+      required
+    />
+    <button
+      type="button"
+      className="checkButton"
+      onClick={checkEmailDuplicate}
+    >
+      중복 확인
+    </button>
+  </div>
 
-              {emailChecked ? (
-                <div className="input-success-message">
-                  <FaCheckCircle className="success-icon" />
-                  <span>{emailError}</span>{" "}
-                </div>
-              ) : (
-                emailGuide && (
-                  <div className="input-error-message">
-                    <FaExclamationCircle className="error-icon" />
-                    <span>{emailGuide}</span>
-                  </div>
-                )
-              )}
-            </div>
+  <div
+    className={`message-area ${!emailGuide ? "hidden" : ""} ${
+      emailChecked ? "input-success-message" : "input-error-message"
+    }`}
+  >
+    {emailChecked ? (
+      <FaCheckCircle className="success-icon" />
+    ) : (
+      <FaExclamationCircle className="error-icon" />
+    )}
+    <span>{emailGuide || " "}</span>
+  </div>
+</div>
 
             <div className="signUpFormGroup">
               <div className="passwordInputWrapper">
@@ -231,16 +265,16 @@ function SignUpPage() {
                   {passwordCriteria.length ? <FaCheck /> : <FaTimes />} 8자 이상
                 </li>
                 <li
-                  className={passwordCriteria.uppercase ? "valid" : "invalid"}
-                >
-                  {passwordCriteria.uppercase ? <FaCheck /> : <FaTimes />}{" "}
-                  대문자 포함
-                </li>
-                <li
                   className={passwordCriteria.lowercase ? "valid" : "invalid"}
                 >
                   {passwordCriteria.lowercase ? <FaCheck /> : <FaTimes />}{" "}
                   소문자 포함
+                </li>
+                <li
+                  className={passwordCriteria.uppercase ? "valid" : "invalid"}
+                >
+                  {passwordCriteria.uppercase ? <FaCheck /> : <FaTimes />}{" "}
+                  대문자 포함
                 </li>
                 <li className={passwordCriteria.number ? "valid" : "invalid"}>
                   {passwordCriteria.number ? <FaCheck /> : <FaTimes />} 숫자
@@ -256,102 +290,121 @@ function SignUpPage() {
             </div>
 
             <div className="signUpFormGroup">
-              <div className="passwordInputWrapper">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="비밀번호 확인"
-                  className={
-                    confirmPasswordTouched && passwordMismatch
-                      ? "input-error"
-                      : ""
-                  }
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-                <span
-                  className="password-toggle-icon"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-                </span>
-              </div>
+  <div className="password-input-wrapper">
+    <input
+      type={showConfirmPassword ? "text" : "password"}
+      name="confirmPassword"
+      placeholder="비밀번호 확인"
+      className={
+        confirmPasswordTouched && passwordMismatch ? "input-error" : ""
+      }
+      value={formData.confirmPassword}
+      onChange={handleChange}
+      required
+    />
+    <span
+      className="password-toggle-icon"
+      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+    >
+      {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+    </span>
+  </div>
 
-              {/* 비밀번호 확인 에러/성공 메시지 */}
-              {confirmPasswordTouched &&
-                (passwordMismatch ? (
-                  <div className="input-error-message">
-                    <FaExclamationCircle className="error-icon" />
-                    <span>비밀번호가 일치하지 않습니다</span>
-                  </div>
-                ) : (
-                  <div className="input-success-message">
-                    <FaCheckCircle className="success-icon" />
-                    <span>비밀번호가 일치합니다</span>
-                  </div>
-                ))}
-            </div>
-
-            <div className="signUpFormGroup">
-              <div className="inputWithButton">
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="이름"
-                  className={!nameChecked && nameGuide ? "input-error" : ""}
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-                <button
-                  type="button"
-                  className="checkButton"
-                  onClick={checkNameDuplicate}
-                >
-                  중복 확인
-                </button>
-              </div>
-
-              {nameChecked ? (
-                <div className="input-success-message">
-                  <FaCheckCircle className="success-icon" />
-                  <span>{nameError}</span>
-                </div>
-              ) : (
-                nameGuide && (
-                  <div className="input-error-message">
-                    <FaExclamationCircle className="error-icon" />
-                    <span>{nameGuide}</span>
-                  </div>
-                )
-              )}
-            </div>
+  <div
+    className={`message-area ${
+      !confirmPasswordTouched ? "hidden" : ""
+    } ${
+      !formData.password
+        ? "input-error-message"
+        : !Object.values(passwordCriteria).every(Boolean)
+        ? "input-error-message"
+        : passwordMismatch
+        ? "input-error-message"
+        : "input-success-message"
+    }`}
+  >
+    {!formData.password ? (
+      <>
+        <FaExclamationCircle className="error-icon" />
+        <span>비밀번호를 먼저 입력해주세요</span>
+      </>
+    ) : !Object.values(passwordCriteria).every(Boolean) ? (
+      <>
+        <FaExclamationCircle className="error-icon" />
+        <span>비밀번호 양식을 확인해주세요</span>
+      </>
+    ) : passwordMismatch ? (
+      <>
+        <FaExclamationCircle className="error-icon" />
+        <span>비밀번호가 일치하지 않습니다</span>
+      </>
+    ) : (
+      <>
+        <FaCheckCircle className="success-icon" />
+        <span>비밀번호가 일치합니다</span>
+      </>
+    )}
+  </div>
+</div>
 
             <div className="signUpFormGroup">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="휴대폰 번호 ( - 포함 )"
-                value={formData.phone}
-                onChange={handleChange}
-                className={phoneValid || !phoneError ? "" : "input-error"}
-                required
-              />
+  <div className="inputWithButton">
+    <input
+      type="text"
+      name="name"
+      placeholder="이름"
+      className={!nameChecked && nameGuide ? "input-error" : ""}
+      value={formData.name}
+      onChange={handleChange}
+      required
+    />
+    <button
+      type="button"
+      className="checkButton"
+      onClick={checkNameDuplicate}
+    >
+      중복 확인
+    </button>
+  </div>
 
-              {phoneError &&
-                (phoneValid ? (
-                  <div className="input-success-message">
-                    <FaCheckCircle className="success-icon" />
-                    <span>{phoneError}</span>
-                  </div>
-                ) : (
-                  <div className="input-error-message">
-                    <FaExclamationCircle className="error-icon" />
-                    <span>{phoneError}</span>
-                  </div>
-                ))}
-            </div>
+  <div
+    className={`message-area ${!nameGuide ? "hidden" : ""} ${
+      nameChecked ? "input-success-message" : "input-error-message"
+    }`}
+  >
+    {nameChecked ? (
+      <FaCheckCircle className="success-icon" />
+    ) : (
+      <FaExclamationCircle className="error-icon" />
+    )}
+    <span>{nameGuide || " "}</span>
+  </div>
+</div>
+
+<div className="signUpFormGroup">
+  <input
+    type="tel"
+    name="phone"
+    placeholder="휴대폰 번호 ( - 포함 )"
+    value={formData.phone}
+    onChange={handleChange}
+    className={phoneValid || !phoneError ? "" : "input-error"}
+    required
+  />
+
+  <div
+    className={`message-area ${!phoneError ? "hidden" : ""} ${
+      phoneValid ? "input-success-message" : "input-error-message"
+    }`}
+  >
+    {phoneValid ? (
+      <FaCheckCircle className="success-icon" />
+    ) : (
+      <FaExclamationCircle className="error-icon" />
+    )}
+    <span>{phoneError || " "}</span>
+  </div>
+</div>
 
             <div className="signUpButtonGroup">
               <button type="button" onClick={() => navigate("/")}>
@@ -361,6 +414,15 @@ function SignUpPage() {
                 회원가입
               </button>
             </div>
+
+            <div className="signInText">
+  <div className="signInWrapper">
+    <span className="signInPrompt">이미 아이디가 있다면?</span>
+    <span className="signInLink" onClick={() => navigate("/login")}>
+      로그인하러가기
+    </span>
+  </div>
+</div>
           </form>
         </div>
       </div>

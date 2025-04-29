@@ -106,7 +106,7 @@ function LoginPage() {
             <h2>
               로그인을 통해
               <br />
-              반려동물 일정을 함께 관리해보세요
+              반려동물 일정을 관리해보세요
             </h2>
             <p>친구와 일정을 공유하며 반려동물을 더 편하게 돌볼 수 있어요</p>
           </div>
@@ -143,22 +143,22 @@ function LoginPage() {
             {error && <p className="loginError">{error}</p>}
             <div className="loginButtonGroup">
               <button
-                type="submit"
-                className="loginConfirmButton"
-                disabled={!email || !password}
-              >
-                로그인
-              </button>
-              <button
                 type="button"
                 className="homeRedirectButton"
                 onClick={() => navigate("/")}
               >
                 홈으로
               </button>
+              <button
+                type="submit"
+                className="loginConfirmButton"
+                disabled={!email || !password}
+              >
+                로그인
+              </button>
             </div>
 
-            <div className="signUpText" onClick={() => navigate("/signUp")}>
+            <div className="signUpText">
               <div className="signUpWrapper">
                 <span className="signUpPrompt">아이디가 아직 없다면?</span>
                 <span
