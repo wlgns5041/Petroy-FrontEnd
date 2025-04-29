@@ -1,8 +1,9 @@
-import React, { useState,useEffect  } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/CalendarComponent.css";
 import "font-awesome/css/font-awesome.min.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDay } from "@fortawesome/free-solid-svg-icons";
+import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
+import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
 import dogJindo from "../../assets/icons/dog-jindo.png";
 import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
@@ -87,7 +88,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
     "고양이-먼치킨": catMunchkin,
     "고양이-러시안블루": catRussianBlue,
   };
-  
+
   const getPetIcon = (species, breed) => {
     const key = `${species}-${breed}`;
     return fallbackIcons[key] || "/defaultPet.png";
@@ -248,28 +249,30 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
                     return (
                       <div
-                      key={j}
-                      className={`day ${isBaseDate ? "base-date" : ""}`}
-                      onClick={() => setCurrentDate(date)}
-                    >
-                      <div className={`day-number ${isToday ? "today" : ""}`}>
-                        {date.getDate()}
+                        key={j}
+                        className={`day ${isBaseDate ? "base-date" : ""}`}
+                        onClick={() => setCurrentDate(date)}
+                      >
+                        <div className={`day-number ${isToday ? "today" : ""}`}>
+                          {date.getDate()}
+                        </div>
+                        <div className="schedule-details">
+                          {schedulesForDate.map((s, index) => (
+                            <div
+                              key={index}
+                              className={`schedule-box priority-${
+                                s.priority?.toLowerCase() || "normal"
+                              }`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onOpenDetail(s.scheduleId, s.date);
+                              }}
+                            >
+                              {s.title}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                      <div className="schedule-details">
-                        {schedulesForDate.map((s, index) => (
-                          <div
-                            key={index}
-                            className={`schedule-box priority-${s.priority?.toLowerCase() || "normal"}`}
-                            onClick={(e) => {
-                              e.stopPropagation(); 
-                              onOpenDetail(s.scheduleId, s.date);
-                            }}
-                          >
-                            {s.title}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
                     );
                   })}
                 </div>
@@ -309,29 +312,32 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
                   return (
                     <div
-                    key={j}
-                    className="day"
-                    onClick={() => {
-                      setCurrentDate(date);
-                      setViewMode("week");
-                    }}
-                  >
-                    <div
-                      className={`day-number ${isToday ? "today" : ""} ${isOtherMonth ? "other-month" : ""}`}
+                      key={j}
+                      className="day"
+                      onClick={() => {
+                        setCurrentDate(date);
+                        setViewMode("week");
+                      }}
                     >
-                      {date.getDate()}
-                    </div>
+                      <div
+                        className={`day-number ${isToday ? "today" : ""} ${
+                          isOtherMonth ? "other-month" : ""
+                        }`}
+                      >
+                        {date.getDate()}
+                      </div>
 
                       <div className="schedule-details">
                         {schedulesForDate.map((s, index) => (
                           <div
                             key={index}
                             className={`schedule-box priority-${
-                              s.priority?.toLowerCase() || "normal"}`}
-                              onClick={(e) => {
-                                e.stopPropagation(); 
-                                onOpenDetail(s.scheduleId, s.date);
-                              }}
+                              s.priority?.toLowerCase() || "normal"
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onOpenDetail(s.scheduleId, s.date);
+                            }}
                           >
                             {s.title}
                           </div>
@@ -361,70 +367,92 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
             return (
               <div key={idx} className="summary-date-block">
-                <div className="summary-date-info">
-                  <div className="summary-date-text">
-                    {date.getMonth() + 1}월 {date.getDate()}일
+                <div className="summary-date-column">
+                  <div className="weekday-text">
+                    {date.toLocaleDateString("en-US", { weekday: "short" })}
                   </div>
+                  <div className="day-number-large">{date.getDate()}</div>
                 </div>
 
                 <div className="summary-schedule-blocks">
-                  {schedules.length > 0 ? (
-                    schedules.map((s, i) => (
-                      <div key={i} className="schedule-card-wide">
-                        <div className="schedule-content-left">
-                          <div className="schedule-wide-title">{s.title}</div>
-                          <div className="schedule-category">
-                            {s.categoryName || "카테고리 없음"}
-                          </div>
-                        </div>
+  {schedules.length > 0 ? (
+    schedules.map((s, i) => (
+      <React.Fragment key={i}>
+        {i > 0 && <hr className="schedule-divider-hr" />}
+        <div className="schedule-card-wide">
+          {/* 시간 + 카테고리 */}
+          <div className="summary-time-category">
+            <div className="date-text">
+              <AccessTimeFilledRoundedIcon
+                fontSize="small"
+                className="summary-icon"
+              />
+              {new Date(s.date).toLocaleDateString("ko-KR", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </div>
+            <div className="category-text">
+              <CategoryRoundedIcon
+                fontSize="small"
+                className="summary-icon"
+              />
+              {s.categoryName || "카테고리 없음"}
+            </div>
+          </div>
 
-                        <div className="schedule-content-right">
-                        <div className="schedule-pets">
-  {(s.petInfo || []).map((pet, i) => {
-    const imageSrc = pet.image
-      ? pet.image.startsWith("http") || pet.image.startsWith("data:")
-        ? pet.image
-        : `${API_BASE_URL}${pet.image}`
-      : getPetIcon(pet.species, pet.breed);
+          {/* 제목 + 펫 */}
+          <div className="summary-title-pets">
+            <div className="schedule-title">{s.title}</div>
+            <div className="schedule-pets">
+              {(s.petInfo || []).map((pet, i) => {
+                const imageSrc = pet.image
+                  ? pet.image.startsWith("http") || pet.image.startsWith("data:")
+                    ? pet.image
+                    : `${API_BASE_URL}${pet.image}`
+                  : getPetIcon(pet.species, pet.breed);
 
-    return (
-      <div key={i} className="pet-icon-with-name">
-        <img
-          src={imageSrc}
-          alt={pet.name}
-          className="schedule-pet-thumbnail"
-        />
-        <span className="pet-name">{pet.name}</span>
-      </div>
-    );
-  })}
+                return (
+                  <div key={i} className="pet-circle-with-name">
+                    <div className="pet-circle">
+                      <img
+                        src={imageSrc}
+                        alt={pet.name}
+                        title={pet.name}
+                        className="schedule-pet-thumbnail"
+                      />
+                    </div>
+                    <span className="pet-name">{pet.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 중요도 + 상세보기 */}
+          <div className="summary-actions">
+            <span className={`priority-badge ${s.priority?.toLowerCase()}`}>
+              {s.priority}
+            </span>
+            <button
+              className="styled-detail-button"
+              onClick={() => onOpenDetail(s.scheduleId, s.date)}
+            >
+              상세보기
+              <InfoRoundedIcon
+                className="styled-detail-icon"
+                fontSize="small"
+              />
+            </button>
+          </div>
+        </div>
+      </React.Fragment>
+    ))
+  ) : (
+    <div className="no-schedule">일정 없음</div>
+  )}
 </div>
-                          <span
-                            className={`priority-badge ${s.priority?.toLowerCase()}`}
-                          >
-                            {s.priority}
-                          </span>
-                          <span className="schedule-time">
-                            {new Date(s.date).toLocaleString("ko-KR", {
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </span>
-                          <button
-                            className="custom-detail-button"
-                            onClick={() => onOpenDetail(s.scheduleId, s.date)}
-                          >
-                            <FontAwesomeIcon icon={faCalendarDay} />
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="no-schedule">일정 없음</div>
-                  )}
-                </div>
               </div>
             );
           })}
