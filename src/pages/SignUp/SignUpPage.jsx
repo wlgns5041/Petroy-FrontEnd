@@ -88,12 +88,27 @@ function SignUpPage() {
     }
 
     if (name === "phone") {
+      const numericValue = value.replace(/\D/g, "");
+    
+      let formatted = numericValue;
+    
+      if (numericValue.length <= 3) {
+        formatted = numericValue;
+      } else if (numericValue.length <= 7) {
+        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(3)}`;
+      } else if (numericValue.length <= 11) {
+        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+      } else {
+        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+      }
+    
+      setFormData((prev) => ({ ...prev, [name]: formatted }));
+    
       const phoneRegex = /^010-\d{4}-\d{4}$/;
-      const isValid = phoneRegex.test(value);
+      const isValid = phoneRegex.test(formatted);
       setPhoneValid(isValid);
-      setPhoneError(
-        isValid ? "사용 가능한 번호입니다" : "양식에 일치하지 않습니다"
-      );
+      setPhoneError(isValid ? "사용 가능한 번호입니다" : "양식에 일치하지 않습니다");
+      return; 
     }
   };
 
@@ -387,7 +402,7 @@ function SignUpPage() {
               <input
                 type="tel"
                 name="phone"
-                placeholder="휴대폰 번호 ( - 포함 )"
+                placeholder="휴대폰 번호"
                 value={formData.phone}
                 onChange={handleChange}
                 className={phoneValid || !phoneError ? "" : "input-error"}

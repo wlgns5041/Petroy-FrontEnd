@@ -337,6 +337,17 @@
   color: #6b7280;
   box-sizing: border-box;
   vertical-align: top;
+  cursor: pointer; 
+}
+
+.mini-day:hover {
+  background-color: #f0f0f0;
+}
+
+.mini-day.selected-date {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: rgb(0, 0, 0) !important;
+  font-weight: bold;
 }
 
 .mini-day.highlight-week {

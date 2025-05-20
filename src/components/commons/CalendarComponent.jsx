@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../styles/CalendarComponent.css";
 import "font-awesome/css/font-awesome.min.css";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
@@ -75,10 +75,6 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
     month: "long",
     timeZone: "Asia/Seoul",
   });
-
-  useEffect(() => {
-    console.log("📋 필터링된 일정 목록 확인", filteredSchedules);
-  }, [filteredSchedules]);
 
   const fallbackIcons = {
     "강아지-치와와": dogChihuahua,
@@ -194,15 +190,21 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                         timeZone: "Asia/Seoul",
                       }) === todayStr;
 
+                      const isSelectedDate =
+  date.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" }) ===
+  currentDate.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
+
+
                     return (
                       <div
-                        key={j}
-                        className={`mini-day ${
-                          isInSelectedWeek ? "highlight-week" : ""
-                        } ${isToday ? "mini-today" : ""}`}
-                      >
-                        {date.getDate()}
-                      </div>
+                      key={j}
+                      className={`mini-day ${
+                        isInSelectedWeek ? "highlight-week" : ""
+                      } ${isToday ? "mini-today" : ""} ${isSelectedDate ? "selected-date" : ""}`}
+                      onClick={() => setCurrentDate(date)}
+                    >
+                      {date.getDate()}
+                    </div>
                     );
                   })}
                 </div>
@@ -375,84 +377,87 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                 </div>
 
                 <div className="summary-schedule-blocks">
-  {schedules.length > 0 ? (
-    schedules.map((s, i) => (
-      <React.Fragment key={i}>
-        {i > 0 && <hr className="schedule-divider-hr" />}
-        <div className="schedule-card-wide">
-          {/* 시간 + 카테고리 */}
-          <div className="summary-time-category">
-            <div className="date-text">
-              <AccessTimeFilledRoundedIcon
-                fontSize="small"
-                className="summary-icon"
-              />
-              {new Date(s.date).toLocaleDateString("ko-KR", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </div>
-            <div className="category-text">
-              <CategoryRoundedIcon
-                fontSize="small"
-                className="summary-icon"
-              />
-              {s.categoryName || "카테고리 없음"}
-            </div>
-          </div>
+                  {schedules.length > 0 ? (
+                    schedules.map((s, i) => (
+                      <React.Fragment key={i}>
+                        {i > 0 && <hr className="schedule-divider-hr" />}
+                        <div className="schedule-card-wide">
+                          {/* 시간 + 카테고리 */}
+                          <div className="summary-time-category">
+                            <div className="date-text">
+                              <AccessTimeFilledRoundedIcon
+                                fontSize="small"
+                                className="summary-icon"
+                              />
+                              {new Date(s.date).toLocaleDateString("ko-KR", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </div>
+                            <div className="category-text">
+                              <CategoryRoundedIcon
+                                fontSize="small"
+                                className="summary-icon"
+                              />
+                              {s.categoryName || "카테고리 없음"}
+                            </div>
+                          </div>
 
-          {/* 제목 + 펫 */}
-          <div className="summary-title-pets">
-            <div className="schedule-title">{s.title}</div>
-            <div className="schedule-pets">
-              {(s.petInfo || []).map((pet, i) => {
-                const imageSrc = pet.image
-                  ? pet.image.startsWith("http") || pet.image.startsWith("data:")
-                    ? pet.image
-                    : `${API_BASE_URL}${pet.image}`
-                  : getPetIcon(pet.species, pet.breed);
+                          {/* 제목 + 펫 */}
+                          <div className="summary-title-pets">
+                            <div className="schedule-title">{s.title}</div>
+                            <div className="schedule-pets">
+                              {(s.petInfo || []).map((pet, i) => {
+                                const imageSrc = pet.image
+                                  ? pet.image.startsWith("http") ||
+                                    pet.image.startsWith("data:")
+                                    ? pet.image
+                                    : `${API_BASE_URL}${pet.image}`
+                                  : getPetIcon(pet.species, pet.breed);
 
-                return (
-                  <div key={i} className="pet-circle-with-name">
-                    <div className="pet-circle">
-                      <img
-                        src={imageSrc}
-                        alt={pet.name}
-                        title={pet.name}
-                        className="schedule-pet-thumbnail"
-                      />
-                    </div>
-                    <span className="pet-name">{pet.name}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+                                return (
+                                  <div key={i} className="pet-circle-with-name">
+                                    <div className="pet-circle">
+                                      <img
+                                        src={imageSrc}
+                                        alt={pet.name}
+                                        title={pet.name}
+                                        className="schedule-pet-thumbnail"
+                                      />
+                                    </div>
+                                    <span className="pet-name">{pet.name}</span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
 
-          {/* 중요도 + 상세보기 */}
-          <div className="summary-actions">
-            <span className={`priority-badge ${s.priority?.toLowerCase()}`}>
-              {s.priority}
-            </span>
-            <button
-              className="styled-detail-button"
-              onClick={() => onOpenDetail(s.scheduleId, s.date)}
-            >
-              상세보기
-              <InfoRoundedIcon
-                className="styled-detail-icon"
-                fontSize="small"
-              />
-            </button>
-          </div>
-        </div>
-      </React.Fragment>
-    ))
-  ) : (
-    <div className="no-schedule">일정 없음</div>
-  )}
-</div>
+                          {/* 중요도 + 상세보기 */}
+                          <div className="summary-actions">
+                            <span
+                              className={`priority-badge ${s.priority?.toLowerCase()}`}
+                            >
+                              {s.priority}
+                            </span>
+                            <button
+                              className="styled-detail-button"
+                              onClick={() => onOpenDetail(s.scheduleId, s.date)}
+                            >
+                              상세보기
+                              <InfoRoundedIcon
+                                className="styled-detail-icon"
+                                fontSize="small"
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <div className="no-schedule">일정 없음</div>
+                  )}
+                </div>
               </div>
             );
           })}

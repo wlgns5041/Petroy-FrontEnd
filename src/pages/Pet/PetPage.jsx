@@ -270,8 +270,6 @@ const PetPage = () => {
         </div>
       )}
 
-      <CareGiverList />
-
       {loading ? (
         <p>로딩 중...</p>
       ) : error ? (
@@ -280,9 +278,42 @@ const PetPage = () => {
         <div className="petsSection">
           <h2 className="petsListHeader">내 반려동물 목록</h2>
           <div className="petsList">
-            {pets.map((pet) => {
-              return (
-                <div key={pet.petId} className="petCard">
+            {pets.map((pet) => (
+              <div key={pet.petId} className="pet-card-new">
+                <div className="pet-card-header">
+                  <span className="pet-name">{pet.name}</span>
+                  <div className="pet-card-menu">
+                    <button
+                      onClick={() => setSelectedPet(pet)}
+                      className="dot-button"
+                      onFocus={(e) => e.target.classList.add("open")}
+                      onBlur={(e) => e.target.classList.remove("open")}
+                    >
+                      ⋮
+                      <div className="dropdown-menu">
+                        <button onMouseDown={() => handleOpenEditModal(pet)}>
+                          수정
+                        </button>
+                        <button onMouseDown={() => handleOpenDeleteModal(pet)}>
+                          삭제
+                        </button>
+                        <button onMouseDown={() => handleOpenAssignModal(pet)}>
+                          돌보미 등록
+                        </button>
+                        <button
+                          onMouseDown={() => {
+                            setSelectedPet(pet);
+                            handleShowCareGivers(pet.petId);
+                          }}
+                        >
+                          돌보미 조회
+                        </button>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pet-card-body">
                   <img
                     src={
                       pet.image
@@ -293,46 +324,35 @@ const PetPage = () => {
                         : getDefaultPetIcon(pet.species, pet.breed)
                     }
                     alt={pet.name}
-                    className="petImage"
+                    className="pet-avatar"
                   />
-                  <h2>{pet.name}</h2>
-                  <p>종: {pet.species}</p>
-                  <p>품종: {pet.breed}</p>
-                  <p>나이: {pet.age}세</p>
-                  <p>성별: {pet.gender === "MALE" ? "남자" : "여자"}</p>
-                  <p>메모: {pet.memo}</p>
-                  <button onClick={() => handleOpenEditModal(pet)}>
-                    펫 수정
-                  </button>
-                  <button
-                    onClick={() => handleOpenDeleteModal(pet)}
-                    className="deleteButton"
-                  >
-                    펫 삭제
-                  </button>
-                  <button
-                    onClick={() => handleOpenAssignModal(pet)}
-                    className="assignButton"
-                  >
-                    돌보미 등록
-                  </button>
-                  <button
-                    className="viewCareGiverButton"
-                    onClick={() => {
-                      setSelectedPet(pet);
-                      handleShowCareGivers(pet.petId);
-                    }}
-                  >
-                    돌보미 조회
-                  </button>
+                  <div className="pet-info">
+                    <p>
+                      <strong>종 :</strong> {pet.species}
+                    </p>
+                    <p>
+                      <strong>품종 :</strong> {pet.breed}
+                    </p>
+                    <p>
+                      <strong>나이 :</strong> {pet.age}세
+                    </p>
+                    <p>
+                      <strong>성별 :</strong>{" "}
+                      {pet.gender === "MALE" ? "남자" : "여자"}
+                    </p>
+                    <p>
+                      <strong>메모 :</strong> {pet.memo}
+                    </p>
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       ) : (
         <p>등록된 반려동물이 없습니다.</p>
       )}
+      <CareGiverList />
     </div>
   );
 };
