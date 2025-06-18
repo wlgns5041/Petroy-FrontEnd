@@ -434,7 +434,7 @@ function SignUpPage() {
 
             <div className="signInText">
               <div className="signInWrapper">
-                <span className="signInPrompt">이미 아이디가 있다면?</span>
+                <span className="signInPrompt">이미 계정이 있나요?</span>
                 <span className="signInLink" onClick={() => navigate("/login")}>
                   로그인하러가기
                 </span>

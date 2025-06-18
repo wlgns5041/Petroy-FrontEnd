@@ -151,8 +151,6 @@ function NotificationPage() {
   return (
     <div className="notification-page">
       <NavBar title="알림" unreadCount={unreadCount} />
-      <h2 className="notification-title">알림</h2>
-
       <div className="category-tabs">
         {categories.map((cat) => (
           <button

@@ -160,7 +160,7 @@ function LoginPage() {
 
             <div className="signUpText">
               <div className="signUpWrapper">
-                <span className="signUpPrompt">아이디가 아직 없다면?</span>
+                <span className="signUpPrompt">아직 계정이 없으신가요?</span>
                 <span
                   className="signUpLink"
                   onClick={() => navigate("/signUp")}

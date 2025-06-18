@@ -196,7 +196,7 @@
   
   .section-card-pets li img {
     max-width: 40px; 
-    height: auto;
+    height: 40px;
     margin-right: 16px; 
   }
   
