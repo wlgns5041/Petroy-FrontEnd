@@ -6,6 +6,7 @@
 }
 
 .petPage-body {
+  min-height: 840px;
   background-color: rgb(249, 250, 251);
   border-radius: 12px;
   padding: 24px;
@@ -89,6 +90,23 @@
   white-space: nowrap; 
 }
 
+.petPage-sort-button {
+  box-sizing: border-box;
+  display: block;
+  height: 26px;
+  width: 60px;
+  padding: 6px 10px;
+  font-family: Pretendard, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  text-align: center;
+  background-color: rgb(238, 238, 238);
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
 .petPage-petsList {
   display: flex;
   flex-direction: column;
@@ -97,7 +115,7 @@
 
 .petPage-pet-card-new {
   background-color: #ffffff;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 16px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   position: relative;
@@ -290,3 +308,40 @@
     border-radius: 6px;
     cursor: pointer;
   }
+
+  /* ----------------- 하단 페이지 버튼 ------------------- */
+
+  .petPage-pagination-buttons {
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  
+  .petPage-pagination-buttons button {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    box-sizing: border-box;
+    display: block;
+    font-family: Pretendard, sans-serif;
+    font-size: 10px;
+    background-color: rgb(238, 238, 238);
+    color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+  }
+  
+  .petPage-pagination-buttons button.active {
+    background-color: #34d399;
+    color: white;
+    font-weight: 800;
+  }
+
+  

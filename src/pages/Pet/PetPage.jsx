@@ -7,12 +7,6 @@ import AssignCareGiver from "../../components/Pet/AssignCareGiver.jsx";
 import { fetchMemberPets } from "../../services/TokenService.jsx";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Pet/PetPage.css";
-import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
-import dogJindo from "../../assets/icons/dog-jindo.png";
-import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
-import catCheese from "../../assets/icons/cat-cheese.png";
-import catMunchkin from "../../assets/icons/cat-munchkin.png";
-import catRussianBlue from "../../assets/icons/cat-russianblue.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -31,65 +25,104 @@ const PetPage = () => {
   const [caregiverPets, setCaregiverPets] = useState([]);
   const [caregiverLoading, setCaregiverLoading] = useState(false);
   const [caregiverError, setCaregiverError] = useState(null);
+  const [petSortIndex, setPetSortIndex] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [caregiverCurrentPage, setCaregiverCurrentPage] = useState(1);
 
-  const speciesKorToEng = {
-    강아지: "dog",
-    고양이: "cat",
+  const sortOptions = [
+    { key: "name-asc", label: "이름순 ↓" },
+    { key: "name-desc", label: "이름순 ↑" },
+    { key: "date-asc", label: "등록순 ↓" },
+    { key: "date-desc", label: "등록순 ↑" },
+  ];
+
+  const currentPetSort = sortOptions[petSortIndex];
+
+  const sortPetList = (list) => {
+    const sorted = [...list];
+    switch (currentPetSort.key) {
+      case "name-asc":
+        return sorted.sort((a, b) => a.name.localeCompare(b.name));
+      case "name-desc":
+        return sorted.sort((a, b) => b.name.localeCompare(a.name));
+      case "date-asc":
+        return sorted.sort((a, b) => {
+          const dateA = a.createdAt ? new Date(a.createdAt) : a.petId;
+          const dateB = b.createdAt ? new Date(b.createdAt) : b.petId;
+          return dateA - dateB;
+        });
+      case "date-desc":
+        return sorted.sort((a, b) => {
+          const dateA = a.createdAt ? new Date(a.createdAt) : a.petId;
+          const dateB = b.createdAt ? new Date(b.createdAt) : b.petId;
+          return dateB - dateA;
+        });
+      default:
+        return list;
+    }
   };
 
-  const breedKorToEng = {
-    치와와: "chihuahua",
-    진돗개: "jindo",
-    포메라니안: "pomeranian",
-    치즈: "cheese",
-    먼치킨: "munchkin",
-    러시안블루: "russianblue",
+  const sortedPets = sortPetList(pets);
+  const sortedCaregiverPets = sortPetList(caregiverPets);
+
+  const itemsPerPage = 3;
+  const caregiverItemsPerPage = 3;
+
+  const paginatedPets = sortedPets.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const caregiverPaginatedPets = sortedCaregiverPets.slice(
+    (caregiverCurrentPage - 1) * caregiverItemsPerPage,
+    caregiverCurrentPage * caregiverItemsPerPage
+  );
+
+  const totalPages = Math.ceil(sortedPets.length / itemsPerPage);
+  const caregiverTotalPages = Math.ceil(
+    sortedCaregiverPets.length / caregiverItemsPerPage
+  );
+
+  const rotatePetSort = () => {
+    setPetSortIndex((prevIndex) => (prevIndex + 1) % sortOptions.length);
+    setCurrentPage(1);
   };
 
-  const fallbackIcons = {
-    "dog-chihuahua": dogChihuahua,
-    "dog-jindo": dogJindo,
-    "dog-pomeranian": dogPomeranian,
-    "cat-cheese": catCheese,
-    "cat-munchkin": catMunchkin,
-    "cat-russianblue": catRussianBlue,
+  const resetPetSort = () => {
+    setPetSortIndex(0);
   };
 
-  const getDefaultPetIcon = (speciesKor, breedKor) => {
-    const speciesEng = speciesKorToEng[speciesKor];
-    const breedEng = breedKorToEng[breedKor];
-    const key = `${speciesEng}-${breedEng}`;
+  /* 펫 등록 후 새로고침을 방지하기 위해 API를 외부함수로 꺼서 useEffect에 넣음 등록 성공 시 호출 */
 
-    return fallbackIcons[key] || "/defaultPet.png";
+  const loadPets = async () => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      try {
+        const response = await fetchMemberPets(token);
+
+        if (response && response.content) {
+          setPets(response.content);
+          console.log("🐾 받은 펫 데이터:", response.content);
+        } else {
+          setError("펫 정보를 불러오는 중 오류 발생");
+        }
+      } catch (error) {
+        setError("반려동물 정보를 불러오는 중 오류 발생");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setError("로그인이 필요합니다");
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const loadPets = async () => {
-      const token = localStorage.getItem("accessToken");
-
-      if (token) {
-        try {
-          const response = await fetchMemberPets(token);
-
-          if (response && response.content) {
-            setPets(response.content);
-          } else {
-            setError("펫 정보를 불러오는 중 오류 발생");
-          }
-        } catch (error) {
-          setError("반려동물 정보를 불러오는 중 오류 발생");
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setError("로그인이 필요합니다");
-        setLoading(false);
-      }
-    };
-
     loadPets();
   }, []);
+
   useEffect(() => {
     const loadCaregiverPets = async () => {
       const token = localStorage.getItem("accessToken");
@@ -204,7 +237,13 @@ const PetPage = () => {
   };
 
   const handleRegisterSuccess = (newPet) => {
-    setPets([...pets, newPet]);
+    loadPets();
+
+    if (newPet?.petId && newPet?.name) {
+      setPets((prev) => [newPet, ...prev]);
+      setCurrentPage(1);
+      resetPetSort();
+    }
   };
 
   const handleOpenAssignModal = (pet) => {
@@ -233,7 +272,11 @@ const PetPage = () => {
             className={`petPage-tab-button ${
               activeTab === "mine" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("mine")}
+            onClick={() => {
+              setActiveTab("mine");
+              resetPetSort();
+              setCurrentPage(1);
+            }}
           >
             내 반려동물
             <span className="petPage-tab-count">{pets.length}</span>
@@ -242,7 +285,11 @@ const PetPage = () => {
             className={`petPage-tab-button ${
               activeTab === "caregiver" ? "active" : ""
             }`}
-            onClick={() => setActiveTab("caregiver")}
+            onClick={() => {
+              setActiveTab("caregiver");
+              resetPetSort();
+              setCurrentPage(1);
+            }}
           >
             돌보미 반려동물
             <span className="petPage-tab-count">{caregiverPets.length}</span>
@@ -252,6 +299,10 @@ const PetPage = () => {
         <div className="petPage-top-bar">
           <button onClick={handleOpenModal} className="petPage-register-button">
             펫 등록하기
+          </button>
+
+          <button className="petPage-sort-button" onClick={rotatePetSort}>
+            {currentPetSort.label}
           </button>
         </div>
 
@@ -265,7 +316,7 @@ const PetPage = () => {
               pets.length > 0 ? (
                 <div className="petPage-petsSection">
                   <div className="petPage-petsList">
-                    {pets.map((pet) => (
+                    {paginatedPets.filter(Boolean).map((pet) => (
                       <div key={pet.petId} className="petPage-pet-card-new">
                         <div className="petPage-pet-card-header">
                           <span className="petPage-pet-card-name">
@@ -310,12 +361,10 @@ const PetPage = () => {
                         <div className="petPage-pet-card-body">
                           <img
                             src={
-                              pet.image
-                                ? pet.image.startsWith("http") ||
-                                  pet.image.startsWith("data:")
-                                  ? pet.image
-                                  : `${API_BASE_URL}${pet.image}`
-                                : getDefaultPetIcon(pet.species, pet.breed)
+                              pet.image.startsWith("http") ||
+                              pet.image.startsWith("data:")
+                                ? pet.image
+                                : `${API_BASE_URL}${pet.image}`
                             }
                             alt={pet.name}
                             className="petPage-pet-avatar"
@@ -348,6 +397,19 @@ const PetPage = () => {
                       </div>
                     ))}
                   </div>
+                  {totalPages > 1 && (
+                    <div className="petPage-pagination-buttons">
+                      {Array.from({ length: totalPages }, (_, i) => (
+                        <button
+                          key={i + 1}
+                          onClick={() => setCurrentPage(i + 1)}
+                          className={currentPage === i + 1 ? "active" : ""}
+                        >
+                          {i + 1}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p>등록된 반려동물이 없습니다.</p>
@@ -359,55 +421,71 @@ const PetPage = () => {
                 ) : caregiverError ? (
                   <p className="error">{caregiverError}</p>
                 ) : caregiverPets.length > 0 ? (
-                  <div className="petPage-petsList">
-                    {caregiverPets.map((pet) => (
-                      <div key={pet.petId} className="petPage-pet-card-new">
-                        <div className="petPage-pet-card-header">
-                          <span className="petPage-pet-card-name">
-                            {pet.name}
-                          </span>
-                        </div>
-                        <div className="petPage-pet-card-body">
-                          <img
-                            src={
-                              pet.image
-                                ? pet.image.startsWith("http") ||
-                                  pet.image.startsWith("data:")
+                  <>
+                    <div className="petPage-petsList">
+                      {caregiverPaginatedPets.map((pet) => (
+                        <div key={pet.petId} className="petPage-pet-card-new">
+                          <div className="petPage-pet-card-header">
+                            <span className="petPage-pet-card-name">
+                              {pet.name}
+                            </span>
+                          </div>
+                          <div className="petPage-pet-card-body">
+                            <img
+                              src={
+                                pet.image &&
+                                (pet.image.startsWith("http") ||
+                                  pet.image.startsWith("data:"))
                                   ? pet.image
                                   : `${API_BASE_URL}${pet.image}`
-                                : getDefaultPetIcon(pet.species, pet.breed)
-                            }
-                            alt={pet.name}
-                            className="petPage-pet-avatar"
-                          />
-                          <div className="petPage-pet-info">
-                            <div className="info-row">
-                              <span className="label">종</span>
-                              <span className="value">{pet.species}</span>
-                            </div>
-                            <div className="info-row">
-                              <span className="label">품종</span>
-                              <span className="value">{pet.breed}</span>
-                            </div>
-                            <div className="info-row">
-                              <span className="label">나이</span>
-                              <span className="value">{pet.age}세</span>
-                            </div>
-                            <div className="info-row">
-                              <span className="label">성별</span>
-                              <span className="value">
-                                {pet.gender === "MALE" ? "남자" : "여자"}
-                              </span>
-                            </div>
-                            <div className="info-row">
-                              <span className="label">메모</span>
-                              <span className="value">{pet.memo}</span>
+                              }
+                              alt={pet.name}
+                              className="petPage-pet-avatar"
+                            />
+                            <div className="petPage-pet-info">
+                              <div className="info-row">
+                                <span className="label">종</span>
+                                <span className="value">{pet.species}</span>
+                              </div>
+                              <div className="info-row">
+                                <span className="label">품종</span>
+                                <span className="value">{pet.breed}</span>
+                              </div>
+                              <div className="info-row">
+                                <span className="label">나이</span>
+                                <span className="value">{pet.age}세</span>
+                              </div>
+                              <div className="info-row">
+                                <span className="label">성별</span>
+                                <span className="value">
+                                  {pet.gender === "MALE" ? "남자" : "여자"}
+                                </span>
+                              </div>
+                              <div className="info-row">
+                                <span className="label">메모</span>
+                                <span className="value">{pet.memo}</span>
+                              </div>
                             </div>
                           </div>
                         </div>
+                      ))}
+                    </div>
+                    {caregiverTotalPages > 1 && (
+                      <div className="petPage-pagination-buttons">
+                        {Array.from({ length: caregiverTotalPages }, (_, i) => (
+                          <button
+                            key={i + 1}
+                            onClick={() => setCaregiverCurrentPage(i + 1)}
+                            className={
+                              caregiverCurrentPage === i + 1 ? "active" : ""
+                            }
+                          >
+                            {i + 1}
+                          </button>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 ) : (
                   <p>돌보미로 등록된 반려동물이 없습니다.</p>
                 )}
