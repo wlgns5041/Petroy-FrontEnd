@@ -4,6 +4,7 @@ import PetRegister from "../../components/Pet/PetRegister.jsx";
 import PetEdit from "../../components/Pet/PetEdit.jsx";
 import DeletePet from "../../components/Pet/DeletePet.jsx";
 import AssignCareGiver from "../../components/Pet/AssignCareGiver.jsx";
+import CareGiverList from "../../components/Pet/CareGiverList.jsx"
 import { fetchMemberPets } from "../../services/TokenService.jsx";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Pet/PetPage.css";
@@ -17,7 +18,6 @@ const PetPage = () => {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
-  const [caregiversList, setCaregiversList] = useState([]);
   const [showCareGiverList, setShowCareGiverList] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -103,7 +103,6 @@ const PetPage = () => {
 
         if (response && response.content) {
           setPets(response.content);
-          console.log("🐾 받은 펫 데이터:", response.content);
         } else {
           setError("펫 정보를 불러오는 중 오류 발생");
         }
@@ -154,62 +153,6 @@ const PetPage = () => {
     loadCaregiverPets();
   }, []);
 
-  const handleShowCareGivers = async (petId) => {
-    const token = localStorage.getItem("accessToken");
-
-    try {
-      const response = await axios.get(`${API_BASE_URL}/caregivers`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-        params: {
-          petId,
-        },
-      });
-
-      if (response.status === 200) {
-        setCaregiversList(response.data.content || []);
-        setShowCareGiverList(true);
-      }
-    } catch (err) {
-      const msg =
-        err.response?.data?.errorMessage ||
-        "돌보미 정보를 불러오지 못했습니다.";
-      alert(msg);
-      console.error(err);
-    }
-  };
-
-  const handleDeleteCareGiver = async (petId, memberId) => {
-    const token = localStorage.getItem("accessToken");
-
-    if (!window.confirm("해당 돌보미를 삭제하시겠습니까?")) return;
-
-    try {
-      const response = await axios.delete(`${API_BASE_URL}/caregivers`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-        params: {
-          petId,
-          memberId,
-        },
-      });
-
-      if (response.data === true) {
-        alert("돌보미가 삭제되었습니다.");
-        setCaregiversList((prev) =>
-          prev.filter((cg) => cg.memberId !== memberId)
-        );
-      }
-    } catch (err) {
-      const msg =
-        err.response?.data?.errorMessage || "삭제 중 오류가 발생했습니다.";
-      alert(msg);
-      console.error(err);
-    }
-  };
-
   const handleOpenModal = () => setShowModal(true);
 
   const handleCloseModal = () => setShowModal(false);
@@ -230,6 +173,8 @@ const PetPage = () => {
 
   const handleUpdatePet = (updatedPet) => {
     setPets(pets.map((p) => (p.petId === updatedPet.petId ? updatedPet : p)));
+    loadPets();
+    setShowEditModal(false);
   };
 
   const handleDeleteSuccess = () => {
@@ -349,7 +294,7 @@ const PetPage = () => {
                               <button
                                 onMouseDown={() => {
                                   setSelectedPet(pet);
-                                  handleShowCareGivers(pet.petId);
+                                  setShowCareGiverList(true);
                                 }}
                               >
                                 돌보미 조회
@@ -522,37 +467,11 @@ const PetPage = () => {
         />
       )}
 
-      {showCareGiverList && (
-        <div className="caregiverModalOverlay">
-          <div className="caregiverModalContent">
-            <h3>돌보미 목록</h3>
-            {caregiversList.length > 0 ? (
-              <ul className="caregiverList">
-                {caregiversList.map((cg) => (
-                  <li key={cg.memberId} className="caregiverItem">
-                    <span>{cg.memberName}</span>
-                    <button
-                      className="caregiverDeleteButton"
-                      onClick={() =>
-                        handleDeleteCareGiver(selectedPet.petId, cg.memberId)
-                      }
-                    >
-                      삭제
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p>등록된 돌보미가 없습니다.</p>
-            )}
-            <button
-              onClick={() => setShowCareGiverList(false)}
-              className="caregiverCloseButton"
-            >
-              닫기
-            </button>
-          </div>
-        </div>
+      {showCareGiverList && selectedPet && (
+        <CareGiverList
+          pet={selectedPet}
+          onClose={() => setShowCareGiverList(false)}
+        />
       )}
     </div>
   );

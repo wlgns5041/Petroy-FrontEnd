@@ -1,4 +1,4 @@
-  .petAssign-overlay {
+.CareGiverList-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +12,7 @@
     font-family: 'Pretendard', sans-serif;
   }
   
-  .petAssign-container {
+  .CareGiverList-modal {
     background-color: white;
     width: 90%;
     max-height: 60%;
@@ -21,9 +21,10 @@
     padding: 60px 32px;
     position: relative;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    align-items: center;
   }
-  
-  .petAssign-close {
+
+  .CareGiverList-close {
     position: absolute;
     top: 12px;
     right: 12px;
@@ -34,11 +35,11 @@
     cursor: pointer;
   }
   
-  .petAssign-close:hover {
+  .CareGiverList-close:hover {
     color: #10b981;
   }
-  
-  .petAssign-title {
+
+  .CareGiverList-title {
     font-size: 16px;
     font-weight: 400;
     margin-top: 20px;
@@ -47,16 +48,7 @@
     color: #111827;
   }
   
-  .petAssign-loading,
-  .petAssign-error,
-  .petAssign-no-friends {
-    text-align: center;
-    color: #6b7280;
-    font-size: 16px;
-    margin-top: 16px;
-  }
-  
-  .petAssign-friends-grid {
+  .CareGiverList-list {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,14 +57,15 @@
     overflow-y: auto;
     padding-right: 4px; 
     scrollbar-width: none;        
-    -ms-overflow-style: none;     
+    -ms-overflow-style: none;   
   }
   
-  .petAssign-friends-grid::-webkit-scrollbar {
-    display: none; 
+  .CareGiverList-list::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
   }
   
-  .petAssign-friend-card {
+  .CareGiverList-card {
     min-width: 70%;
     display: flex;
     align-items: center;
@@ -83,19 +76,19 @@
     background-color: #f5f5f5; 
     transition: background-color 0.3s ease;
   }
-
-  .petAssign-friend-card:hover {
+  
+  .CareGiverList-card:hover {
     background-color: #eeeeee;
     transition: background-color 0.3s ease;
   }
 
-  .petAssign-left {
+  .CareGiverList-left {
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  
-  .petAssign-friend-image {
+
+  .CareGiverList-friend-image {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -103,13 +96,13 @@
     margin-right: 12px;
   }
   
-  .petAssign-friend-name {
+  .CareGiverList-name {
     flex: 1;
     font-size: 14px;
     font-weight: 500;
   }
   
-  .petAssign-button {
+  .CareGiverList-button {
     background-color: #414141;
     color: white;
     border: none;
@@ -122,12 +115,34 @@
     font-weight: 500;
   }
   
-  .petAssign-button:hover {
+  .CareGiverList-button:hover {
     background-color: #2f2f2f;
     transition: background-color 0.3s ease;
   }
 
-  .petAssign-button:disabled {
-    background-color: #9ca3af !important;
-    cursor: default !important;
+  .CareGiverList-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    margin: 30px auto 0 auto; 
+    background-color: #f4f4f4;
+    border-radius: 20px;
+    width: 70%; 
+    max-width: 400px;
+  }
+  
+  .CareGiverList-empty-img {
+    width: 80px;
+    height: auto;
+    margin: 20px;
+    opacity: 0.8;
+  }
+
+  .CareGiverList-empty-text {
+    font-size: 14px;
+    color: #2e2f30; 
+    font-weight: 600;
   }

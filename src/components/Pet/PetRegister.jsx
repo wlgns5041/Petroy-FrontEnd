@@ -25,9 +25,9 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     "1": require("../../assets/icons/dog-chihuahua.png"),
     "2": require("../../assets/icons/dog-jindo.png"),
     "3": require("../../assets/icons/dog-pomeranian.png"),
-    "4": require("../../assets/icons/cat-cheese.png"),
+    "4": require("../../assets/icons/cat-russianblue.png"),
     "5": require("../../assets/icons/cat-munchkin.png"),
-    "6": require("../../assets/icons/cat-russianblue.png"),
+    "6": require("../../assets/icons/cat-cheese.png"),
   };
 
   useEffect(() => {

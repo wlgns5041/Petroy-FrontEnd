@@ -79,7 +79,8 @@
 }
 
 .petPage-register-button {
-  background-color: #f97316;
+  background-color: #414141;
+  transition: background-color 0.3s ease;
   color: white;
   padding: 10px 24px;
   border: none;
@@ -88,6 +89,11 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap; 
+}
+
+.petPage-register-button:hover {
+  background-color: #2f2f2f;
+  transition: background-color 0.3s ease;
 }
 
 .petPage-sort-button {

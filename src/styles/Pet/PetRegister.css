@@ -278,17 +278,16 @@
   }
   
   .petRegister-file-clear {
+    width: 120px;
     background-color: #e5e7eb;
     color: #111827;
     border: none;
-    padding: 14px 0;
+    padding: 10px 0;
     font-size: 14px;
     font-weight: 600;
-    width: 80%; 
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    margin-top: 8px;
   }
   
   .petRegister-button-row {

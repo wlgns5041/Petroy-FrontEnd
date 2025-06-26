@@ -1,65 +1,115 @@
-.deletePetModal-overlay {
+.petDelete-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.deletePetModal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 100%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.deletePetModal-content h2 {
-    margin-top: 0;
-}
-
-.deletePetModal-content p {
-    margin: 10px 0;
-}
-
-.deletePetModal-content input {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .petDelete-container {
+    background-color: #fff;
+    width: 90%;
+    max-width: 420px;
+    height: auto;
+    padding: 32px 24px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+  }
+
+  .petDelete-title {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: #111827;
+    margin-bottom: 16px;
+  }
+  
+  .petDelete-description {
+    font-size: 14px;
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+
+  .petDelete-description strong {
+    font-weight: 600;
+    color: #111827;   
+  }
+  
+  .petDelete-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #f9f9f9;
     box-sizing: border-box;
-}
-
-.deletePetModal-delete-button {
-    background-color: #dc3545;
-    color: white;
-    padding: 10px 15px;
+    margin-bottom: 12px;
+    color: #111827;
+  }
+  
+  .petDelete-input:focus {
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px #10b981;
+  }
+  
+  .petDelete-error {
+    color: #ef4444;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  
+  .petDelete-button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  .petDelete-cancel-button,
+  .petDelete-confirm-button {
+    flex: 1;
+    height: 44px;
+    font-size: 14px;
+    font-weight: bold;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-right: 10px;
-}
-
-.deletePetModal-delete-button:disabled {
-    background-color: #ccc;
+    transition: background-color 0.2s ease;
+  }
+  
+  .petDelete-cancel-button {
+    background-color: #e5e7eb;
+    transition: background-color 0.3s ease;
+    color: #374151;
+    margin-right: 8px;
+  }
+  
+  .petDelete-cancel-button:hover {
+    background-color: #d1d5db;
+    transition: background-color 0.3s ease;
+  }
+  
+  .petDelete-confirm-button {
+    background-color: #414141;
+    transition: background-color 0.3s ease;
+    color: white;
+  }
+  
+  .petDelete-confirm-button:hover {
+    background-color: #2f2f2f;
+    transition: background-color 0.3s ease;
+  }
+  
+  .petDelete-confirm-button:disabled {
+    background-color: #fca5a5;
     cursor: not-allowed;
-}
-
-.deletePetModal-cancel-button {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.deletePetModal-error {
-    color: red;
-    margin-top: 10px;
-}
+  }
