@@ -4,12 +4,7 @@ import "font-awesome/css/font-awesome.min.css";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
-import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
-import dogJindo from "../../assets/icons/dog-jindo.png";
-import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
-import catCheese from "../../assets/icons/cat-cheese.png";
-import catMunchkin from "../../assets/icons/cat-munchkin.png";
-import catRussianBlue from "../../assets/icons/cat-russianblue.png";
+import defaultPetPic from "../../assets/images/DefaultImage.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -75,20 +70,6 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
     month: "long",
     timeZone: "Asia/Seoul",
   });
-
-  const fallbackIcons = {
-    "강아지-치와와": dogChihuahua,
-    "강아지-진돗개": dogJindo,
-    "강아지-포메라니안": dogPomeranian,
-    "고양이-치즈": catCheese,
-    "고양이-먼치킨": catMunchkin,
-    "고양이-러시안블루": catRussianBlue,
-  };
-
-  const getPetIcon = (species, breed) => {
-    const key = `${species}-${breed}`;
-    return fallbackIcons[key] || "/defaultPet.png";
-  };
 
   return (
     <div className="calendar">
@@ -190,21 +171,26 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                         timeZone: "Asia/Seoul",
                       }) === todayStr;
 
-                      const isSelectedDate =
-  date.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" }) ===
-  currentDate.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
-
+                    const isSelectedDate =
+                      date.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      }) ===
+                      currentDate.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      });
 
                     return (
                       <div
-                      key={j}
-                      className={`mini-day ${
-                        isInSelectedWeek ? "highlight-week" : ""
-                      } ${isToday ? "mini-today" : ""} ${isSelectedDate ? "selected-date" : ""}`}
-                      onClick={() => setCurrentDate(date)}
-                    >
-                      {date.getDate()}
-                    </div>
+                        key={j}
+                        className={`mini-day ${
+                          isInSelectedWeek ? "highlight-week" : ""
+                        } ${isToday ? "mini-today" : ""} ${
+                          isSelectedDate ? "selected-date" : ""
+                        }`}
+                        onClick={() => setCurrentDate(date)}
+                      >
+                        {date.getDate()}
+                      </div>
                     );
                   })}
                 </div>
@@ -245,8 +231,12 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
                     const schedulesForDate = filteredSchedules.filter(
                       (s) =>
-                        new Date(s.date).toISOString().split("T")[0] ===
-                        localDateStr
+                        new Date(s.date).toLocaleDateString("sv-SE", {
+                          timeZone: "Asia/Seoul",
+                        }) ===
+                        date.toLocaleDateString("sv-SE", {
+                          timeZone: "Asia/Seoul",
+                        })
                     );
 
                     return (
@@ -308,8 +298,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
                   const schedulesForDate = filteredSchedules.filter(
                     (s) =>
-                      new Date(s.date).toISOString().split("T")[0] ===
-                      localDateStr
+                      new Date(s.date).toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      }) === localDateStr
                   );
 
                   return (
@@ -364,7 +355,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
             const schedules = filteredSchedules.filter(
               (s) =>
-                new Date(s.date).toISOString().split("T")[0] === localDateStr
+                new Date(s.date).toLocaleDateString("sv-SE", {
+                  timeZone: "Asia/Seoul",
+                }) === localDateStr
             );
 
             return (
@@ -390,6 +383,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                                 className="summary-icon"
                               />
                               {new Date(s.date).toLocaleDateString("ko-KR", {
+                                timeZone: "Asia/Seoul",
                                 year: "numeric",
                                 month: "long",
                                 day: "numeric",
@@ -410,11 +404,10 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                             <div className="schedule-pets">
                               {(s.petInfo || []).map((pet, i) => {
                                 const imageSrc = pet.image
-                                  ? pet.image.startsWith("http") ||
-                                    pet.image.startsWith("data:")
-                                    ? pet.image
-                                    : `${API_BASE_URL}${pet.image}`
-                                  : getPetIcon(pet.species, pet.breed);
+                                ? pet.image.startsWith("http") || pet.image.startsWith("data:")
+                                ? pet.image
+                                : `${API_BASE_URL}${pet.image}`
+                              : defaultPetPic;
 
                                 return (
                                   <div key={i} className="pet-circle-with-name">

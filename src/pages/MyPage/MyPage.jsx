@@ -14,12 +14,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw, faPen } from "@fortawesome/free-solid-svg-icons";
 
 import defaultPetPic from "../../assets/images/DefaultImage.png";
-import dogChihuahua from "../../assets/icons/dog-chihuahua.png";
-import dogJindo from "../../assets/icons/dog-jindo.png";
-import dogPomeranian from "../../assets/icons/dog-pomeranian.png";
-import catCheese from "../../assets/icons/cat-cheese.png";
-import catMunchkin from "../../assets/icons/cat-munchkin.png";
-import catRussianBlue from "../../assets/icons/cat-russianblue.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -191,36 +185,6 @@ const MyPage = () => {
     navigate(path);
   };
 
-  const speciesKorToEng = {
-    강아지: "dog",
-    고양이: "cat",
-  };
-
-  const breedKorToEng = {
-    치와와: "chihuahua",
-    진돗개: "jindo",
-    포메라니안: "pomeranian",
-    치즈: "cheese",
-    먼치킨: "munchkin",
-    러시안블루: "russianblue",
-  };
-
-  const fallbackIcons = {
-    "dog-chihuahua": dogChihuahua,
-    "dog-jindo": dogJindo,
-    "dog-pomeranian": dogPomeranian,
-    "cat-cheese": catCheese,
-    "cat-munchkin": catMunchkin,
-    "cat-russianblue": catRussianBlue,
-  };
-
-  const getDefaultPetIcon = (speciesKor, breedKor) => {
-    const speciesEng = speciesKorToEng[speciesKor];
-    const breedEng = breedKorToEng[breedKor];
-    const key = `${speciesEng}-${breedEng}`;
-    return fallbackIcons[key] || defaultPetPic;
-  };
-
   return (
     <div className="myPage">
       <NavBar title="마이페이지" />
@@ -293,7 +257,7 @@ const MyPage = () => {
                         pet.image.startsWith("data:")
                         ? pet.image
                         : `${API_BASE_URL}${pet.image}`
-                      : getDefaultPetIcon(pet.species, pet.breed)
+                      : defaultPetPic
                   }
                   alt={pet.name}
                   className="pet-image"

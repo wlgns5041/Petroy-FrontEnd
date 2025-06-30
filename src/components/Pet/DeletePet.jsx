@@ -56,14 +56,19 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
       <div className="petDelete-container">
         <h2 className="petDelete-title">정말로 삭제하시겠습니까?</h2>
         <p className="petDelete-description">
-        <strong>반려동물 삭제</strong>를 원하시면 <strong>반려동물의 이름</strong>을
-          입력해주세요
+          <strong>반려동물 삭제</strong>를 원하시면{" "}
+          <strong>반려동물의 이름</strong>을 입력해주세요
         </p>
 
         <input
           type="text"
           value={nameInput}
           onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && nameInput === pet.name) {
+              handleDelete();
+            }
+          }}
           className="petDelete-input"
           placeholder={pet.name}
         />
@@ -81,7 +86,7 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
           <button
             className="petDelete-confirm-button"
             onClick={handleDelete}
-            disabled={loading}
+            disabled={loading || nameInput !== pet.name}
           >
             {loading ? "삭제 중..." : "삭제하기"}
           </button>
