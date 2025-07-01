@@ -423,17 +423,17 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
               <div>
                 {step === 1 && (
                   <div className="schedule-create-section-card">
-                    <div className="petRegister-form-inline">
+                    <div className="schedule-create-form-inline">
                       <label
                         htmlFor="categoryId"
-                        className="petRegister-inline-label"
+                        className="schedule-create-inline-label"
                       >
                         카테고리
                       </label>
                       <select
                         id="categoryId"
                         name="categoryId"
-                        className="petRegister-inline-select"
+                        className="schedule-create-inline-select"
                         value={formData.categoryId || ""}
                         onChange={handleChange}
                       >
@@ -446,10 +446,10 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                       </select>
                     </div>
 
-                    <div className="petRegister-form-inline">
+                    <div className="schedule-create-form-inline">
                       <label
                         htmlFor="title"
-                        className="petRegister-inline-label"
+                        className="schedule-create-inline-label"
                       >
                         제목
                       </label>
@@ -457,18 +457,18 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                         type="text"
                         id="title"
                         name="title"
-                        className="petRegister-input"
+                        className="schedule-create-input"
                         value={formData.title || ""}
                         onChange={handleChange}
                         placeholder="제목을 입력하세요"
                       />
                     </div>
 
-                    <div className="petRegister-form-inline"></div>
+                    <div className="schedule-create-form-inline"></div>
                     <textarea
                       id="content"
                       name="content"
-                      className="petRegister-textarea"
+                      className="schedule-create-textarea"
                       value={formData.content || ""}
                       onChange={handleChange}
                       placeholder="일정에 대한 내용을 작성하세요"
@@ -523,8 +523,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
                 {step === 3 && (
                   <>
-                    <div className="schedule-create-section-card">
-                      <div className="schedule-create-form-row between">
+                    <div className="schedule-create-section-card-step3">
+                      <div className="schedule-create-form-step3">
                         <span className="schedule-create-form-label-with-info">
                           반복 유무
                           <div className="schedule-create-tooltip-container">
@@ -555,7 +555,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
                       {formData.repeatYn && (
                         <>
-                          <div className="schedule-create-form-row between">
+                          <div className="schedule-create-form-step3">
                             <span className="schedule-create-form-label">
                               반복 주기
                             </span>
@@ -570,7 +570,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                             </select>
                           </div>
 
-                          <div className="schedule-create-form-row between">
+                          <div className="schedule-create-form-step3">
                             <span className="schedule-create-form-label-with-info">
                               반복 간격
                               <div className="schedule-create-tooltip-container">
@@ -647,7 +647,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                             </div>
                           )}
 
-                          <div className="schedule-create-form-row between">
+                          <div className="schedule-create-form-step3">
                             <span className="schedule-create-form-label">
                               일정 반복 시작
                             </span>
@@ -660,7 +660,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                             />
                           </div>
 
-                          <div className="schedule-create-form-row between">
+                          <div className="schedule-create-form-step3">
                             <span className="schedule-create-form-label">
                               일정 반복 종료
                             </span>
@@ -676,11 +676,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                     </div>
 
                     {!formData.repeatYn && (
-                      <div className="schedule-create-section-card">
-                        <div className="schedule-create-form-row">
-                          <div className="schedule-create-selected-dates-title">
-                            날짜 선택
-                          </div>
+                      <div className="schedule-create-section-card-step3">
+                        <div className="schedule-create-form-step3">
                           <Calendar
                             onChange={handleDateChange}
                             value={null}
@@ -702,7 +699,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                           />
                         </div>
 
-                        <div className="schedule-create-form-row">
+                        <div className="schedule-create-form-row-step3">
                           {formData.selectedDates.length > 0 && (
                             <div className="schedule-create-selected-dates">
                               <div className="schedule-create-selected-dates-title">
@@ -726,8 +723,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                       </div>
                     )}
 
-                    <div className="schedule-create-section-card">
-                      <div className="schedule-create-form-row between">
+                    <div className="schedule-create-section-card-step3">
+                      <div className="schedule-create-form-step3">
                         <span className="schedule-create-form-label-with-info">
                           하루종일
                           <div className="schedule-create-tooltip-container">
@@ -757,7 +754,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                       </div>
 
                       {!formData.isAllDay && (
-                        <div className="schedule-create-form-row between">
+                        <div className="schedule-create-form-step3">
                           <span className="schedule-create-form-label">
                             시간 설정
                           </span>
@@ -876,7 +873,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
               
             </CSSTransition>
           </SwitchTransition>
-          
+          </form>
+        </div>
 
           <div className="schedule-create-bottom-btn">
             {step < 5 ? (
@@ -899,9 +897,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
               </button>
             )}
           </div>
-        </form>
-      </div>
-    </div>
+     </div>
     </div>
   );
 };
