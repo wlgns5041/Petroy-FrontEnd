@@ -400,166 +400,173 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
   return (
     <div className="schedule-create-modal-overlay">
-      <div className="schedule-create-modal-content">
-       <div class="schedule-create-modal-scrollable">
-        {step > 1 && (
-          <button
-            className="schedule-create-back-button"
-            onClick={() => setStep(step - 1)}
-          >
-            ‹
+      <div className={`schedule-create-modal-content step-${step}`}>
+        <div class="schedule-create-modal-scrollable">
+          {step > 1 && (
+            <button
+              className="schedule-create-back-button"
+              onClick={() => setStep(step - 1)}
+            >
+              ‹
+            </button>
+          )}
+          <button className="schedule-create-close-button" onClick={onClose}>
+            &times;
           </button>
-        )}
-        <button className="schedule-create-close-button" onClick={onClose}>
-          &times;
-        </button>
-        <div className="schedule-create-header">
-          <p className="schedule-create-step-indicator">{step} / 5</p>
-          <h2 className="schedule-create-title">{getStepTitle(step)}</h2>
-        </div>
-        <form onSubmit={handleSubmit}>
-          <SwitchTransition>
-            <CSSTransition key={step} timeout={300} classNames="fade">
-              <div>
-                {step === 1 && (
-                  <div className="schedule-create-section-card">
-                    <div className="schedule-create-form-inline">
-                      <label
-                        htmlFor="categoryId"
-                        className="schedule-create-inline-label"
-                      >
-                        카테고리
-                      </label>
-                      <select
-                        id="categoryId"
-                        name="categoryId"
-                        className="schedule-create-inline-select"
-                        value={formData.categoryId || ""}
-                        onChange={handleChange}
-                      >
-                        <option value="">선택</option>
-                        {categories.map((c) => (
-                          <option key={c.categoryId} value={c.categoryId}>
-                            {c.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="schedule-create-form-inline">
-                      <label
-                        htmlFor="title"
-                        className="schedule-create-inline-label"
-                      >
-                        제목
-                      </label>
-                      <input
-                        type="text"
-                        id="title"
-                        name="title"
-                        className="schedule-create-input"
-                        value={formData.title || ""}
-                        onChange={handleChange}
-                        placeholder="제목을 입력하세요"
-                      />
-                    </div>
-
-                    <div className="schedule-create-form-inline"></div>
-                    <textarea
-                      id="content"
-                      name="content"
-                      className="schedule-create-textarea"
-                      value={formData.content || ""}
-                      onChange={handleChange}
-                      placeholder="일정에 대한 내용을 작성하세요"
-                    />
-                  </div>
-                )}
-
-                {step === 2 && (
-                  <div className="schedule-create-section-card">
-                    {pets.length === 0 ? (
-                      <p className="schedule-create-no-pets-message">
-                        등록된 반려동물이 없습니다
-                      </p>
-                    ) : (
-                      <ul className="schedule-create-pet-select-container">
-                        {pets.map((pet) => (
-                          <li
-                            key={pet.petId}
-                            className={`schedule-create-pet-select-card ${
-                              formData.petId.includes(pet.petId)
-                                ? "selected"
-                                : ""
-                            }`}
-                            onClick={() => handlePetSelectionChange(pet.petId)}
-                          >
-                            <img
-                              src={
-                                pet.image
-                                  ? pet.image.startsWith("http") ||
-                                    pet.image.startsWith("data:")
-                                    ? pet.image
-                                    : `${API_BASE_URL}${pet.image}`
-                                  : defaultPetPic
-                              }
-                              alt={pet.name}
-                              className="schedule-create-pet-image"
-                            />
-                            <div className="schedule-create-info">
-                              <div className="schedule-create-name">
-                                {pet.name}
-                              </div>
-                              <div className="schedule-create-species">
-                                {pet.breed}
-                              </div>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                )}
-
-                {step === 3 && (
-                  <>
-                    <div className="schedule-create-section-card-step3">
-                      <div className="schedule-create-form-step3">
-                        <span className="schedule-create-form-label-with-info">
-                          반복 유무
-                          <div className="schedule-create-tooltip-container">
-                            <FiInfo className="schedule-create-info-icon" />
-                            <span className="schedule-create-tooltip-text">
-                              <span style={{ color: "#ff5a3c" }}>설정 시</span>{" "}
-                              시작과 종료 날짜 사이에 선택한
-                              <br />
-                              주기와 간격으로 일정이 자동 생성합니다
-                              <br />
-                              <span style={{ color: "#ff5a3c" }}>
-                                설정 해제 시
-                              </span>{" "}
-                              일정 날짜를 직접 선택합니다
-                            </span>
-                          </div>
-                        </span>
-                        <label className="schedule-create-switch">
-                          <input
-                            type="checkbox"
-                            name="repeatYn"
-                            checked={formData.repeatYn}
-                            onChange={handleChange}
-                          />
-                          <span className="schedule-create-slider round"></span>
+          <div className="schedule-create-header">
+            <p className="schedule-create-step-indicator">{step} / 5</p>
+            <h2 className="schedule-create-title">{getStepTitle(step)}</h2>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <SwitchTransition>
+              <CSSTransition key={step} timeout={300} classNames="fade">
+                <div>
+                  {step === 1 && (
+                    <div className="schedule-create-section-card">
+                      <div className="schedule-create-form-inline">
+                        <label
+                          htmlFor="categoryId"
+                          className="schedule-create-inline-label"
+                        >
+                          카테고리
                         </label>
+                        <select
+                          id="categoryId"
+                          name="categoryId"
+                          className="schedule-create-inline-select"
+                          value={formData.categoryId || ""}
+                          onChange={handleChange}
+                        >
+                          <option value="">선택</option>
+                          {categories.map((c) => (
+                            <option key={c.categoryId} value={c.categoryId}>
+                              {c.name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
 
-                      {formData.repeatYn && (
-                        <>
-                          <div className="schedule-create-form-step3">
-                            <span className="schedule-create-form-label">
+                      <div className="schedule-create-form-inline">
+                        <label
+                          htmlFor="title"
+                          className="schedule-create-inline-label"
+                        >
+                          제목
+                        </label>
+                        <input
+                          type="text"
+                          id="title"
+                          name="title"
+                          className="schedule-create-input"
+                          value={formData.title || ""}
+                          onChange={handleChange}
+                          placeholder="제목을 입력하세요"
+                        />
+                      </div>
+
+                      <div className="schedule-create-form-inline"></div>
+                      <textarea
+                        id="content"
+                        name="content"
+                        className="schedule-create-textarea"
+                        value={formData.content || ""}
+                        onChange={handleChange}
+                        placeholder="일정에 대한 내용을 작성하세요"
+                      />
+                    </div>
+                  )}
+
+                  {step === 2 && (
+                    <div className="schedule-create-section-card">
+                      {pets.length === 0 ? (
+                        <p className="schedule-create-no-pets-message">
+                          등록된 반려동물이 없습니다
+                        </p>
+                      ) : (
+                        <ul className="schedule-create-pet-select-container">
+                          {pets.map((pet) => (
+                            <li
+                              key={pet.petId}
+                              className={`schedule-create-pet-select-card ${
+                                formData.petId.includes(pet.petId)
+                                  ? "selected"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                handlePetSelectionChange(pet.petId)
+                              }
+                            >
+                              <img
+                                src={
+                                  pet.image
+                                    ? pet.image.startsWith("http") ||
+                                      pet.image.startsWith("data:")
+                                      ? pet.image
+                                      : `${API_BASE_URL}${pet.image}`
+                                    : defaultPetPic
+                                }
+                                alt={pet.name}
+                                className="schedule-create-pet-image"
+                              />
+                              <div className="schedule-create-info">
+                                <div className="schedule-create-name">
+                                  {pet.name}
+                                </div>
+                                <div className="schedule-create-species">
+                                  {pet.breed}
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )}
+
+                  {step === 3 && (
+                    <>
+                      <div className="schedule-create-section-card-step33">
+                        <div className="schedule-create-form-step3-repeat">
+                          <span className="schedule-create-form-label-with-info-bold-label">
+                            반복 유무
+                            <div className="schedule-create-tooltip-container">
+                              <FiInfo className="schedule-create-info-icon" />
+                              <span className="schedule-create-tooltip-text">
+                                <span style={{ color: "#ff5a3c" }}>
+                                  설정 시
+                                </span>{" "}
+                                시작과 종료 날짜 사이에 선택한
+                                <br />
+                                주기와 간격으로 일정이 자동 생성합니다
+                                <br />
+                                <span style={{ color: "#ff5a3c" }}>
+                                  설정 해제 시
+                                </span>{" "}
+                                일정 날짜를 직접 선택합니다
+                              </span>
+                            </div>
+                          </span>
+                          <label className="schedule-create-switch">
+                            <input
+                              type="checkbox"
+                              name="repeatYn"
+                              checked={formData.repeatYn}
+                              onChange={handleChange}
+                            />
+                            <span className="schedule-create-slider round"></span>
+                          </label>
+                        </div>
+                      </div>
+
+                    {formData.repeatYn && (
+                      <div className="schedule-create-section-card-step3">
+                        <div className="schedule-create-form-row">
+                          <div className="schedule-create-input-group">
+                            <label className="schedule-create-label-with-count">
                               반복 주기
-                            </span>
+                            </label>
                             <select
+                              className="schedule-create-select-step3"
                               name="repeatPattern.frequency"
                               value={formData.repeatPattern.frequency}
                               onChange={handleChange}
@@ -570,334 +577,341 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                             </select>
                           </div>
 
-                          <div className="schedule-create-form-step3">
-                            <span className="schedule-create-form-label-with-info">
+                          <div className="schedule-create-input-group">
+                            <label className="schedule-create-label-with-info">
                               반복 간격
                               <div className="schedule-create-tooltip-container">
                                 <FiInfo className="schedule-create-info-icon" />
                                 <span className="schedule-create-tooltip-text">
                                   반복 주기마다 건너뛰는 간격을 의미하며
                                   <br />
-                                  <span
-                                    style={{
-                                      fontWeight: "600",
-                                      color: "#ff5a3c",
-                                    }}
-                                  >
+                                  <strong style={{ color: "#ff5a3c" }}>
                                     주간(월간)
-                                  </span>
-                                  으로 선택 시 선택한 요일(날짜)마다
+                                  </strong>
+                                  으로 선택 시
                                   <br />
-                                  선택한 간격으로 반복합니다
+                                  선택한 요일(날짜)마다 선택한 간격으로
+                                  반복합니다.
                                 </span>
                               </div>
-                            </span>
+                            </label>
                             <input
                               type="number"
+                              min="1"
                               name="repeatPattern.interval"
                               value={formData.repeatPattern.interval}
-                              min="1"
                               onChange={handleChange}
+                              className="schedule-create-input-step3"
                             />
                           </div>
+                        </div>
 
-                          {formData.repeatPattern.frequency === "WEEK" && (
-                            <div className="schedule-create-repeat-buttons">
-                              {["일", "월", "화", "수", "목", "금", "토"].map(
-                                (day) => (
-                                  <button
-                                    key={day}
-                                    type="button"
-                                    className={`schedule-create-day-button ${
-                                      formData.repeatPattern.daysOfWeek.includes(
-                                        dayMapping[day]
-                                      )
-                                        ? "selected"
-                                        : ""
-                                    }`}
-                                    onClick={() => handleDayClick(day)}
-                                  >
-                                    {day}
-                                  </button>
-                                )
-                              )}
-                            </div>
-                          )}
+                        {formData.repeatPattern.frequency === "WEEK" && (
+                          <div className="schedule-create-repeat-buttons-week">
+                            {["일", "월", "화", "수", "목", "금", "토"].map(
+                              (day) => (
+                                <button
+                                  key={day}
+                                  type="button"
+                                  className={`schedule-create-week-button ${
+                                    formData.repeatPattern.daysOfWeek.includes(
+                                      dayMapping[day]
+                                    )
+                                      ? "selected"
+                                      : ""
+                                  }`}
+                                  onClick={() => handleDayClick(day)}
+                                >
+                                  {day}
+                                </button>
+                              )
+                            )}
+                          </div>
+                        )}
 
-                          {formData.repeatPattern.frequency === "MONTH" && (
-                            <div className="schedule-create-repeat-buttons">
-                              {Array.from({ length: 31 }, (_, i) => i + 1).map(
-                                (day) => (
-                                  <button
-                                    key={day}
-                                    type="button"
-                                    className={`schedule-create-day-button ${
-                                      formData.repeatPattern.daysOfMonth.includes(
-                                        day
-                                      )
-                                        ? "selected"
-                                        : ""
-                                    }`}
-                                    onClick={() => handleDayOfMonthClick(day)}
-                                  >
-                                    {day}
-                                  </button>
-                                )
-                              )}
-                            </div>
-                          )}
+                        {formData.repeatPattern.frequency === "MONTH" && (
+                          <div className="schedule-create-repeat-buttons-month">
+                            {Array.from({ length: 31 }, (_, i) => i + 1).map(
+                              (day) => (
+                                <button
+                                  key={day}
+                                  type="button"
+                                  className={`schedule-create-month-button ${
+                                    formData.repeatPattern.daysOfMonth.includes(
+                                      day
+                                    )
+                                      ? "selected"
+                                      : ""
+                                  }`}
+                                  onClick={() => handleDayOfMonthClick(day)}
+                                >
+                                  {day}
+                                </button>
+                              )
+                            )}
+                          </div>
+                        )}
 
-                          <div className="schedule-create-form-step3">
-                            <span className="schedule-create-form-label">
+                        <div className="schedule-create-form-row">
+                          <div className="schedule-create-input-group wide">
+                            <label className="schedule-create-form-label">
                               일정 반복 시작
-                            </span>
+                            </label>
                             <input
                               type="datetime-local"
                               name="repeatPattern.startDate"
                               value={formData.repeatPattern.startDate}
                               onChange={handleChange}
-                              required
+                              className="schedule-create-input-step3 wide"
                             />
                           </div>
-
-                          <div className="schedule-create-form-step3">
-                            <span className="schedule-create-form-label">
+                          <div className="schedule-create-input-group wide">
+                            <label className="schedule-create-form-label">
                               일정 반복 종료
-                            </span>
+                            </label>
                             <input
                               type="datetime-local"
                               name="repeatPattern.endDate"
                               value={formData.repeatPattern.endDate}
                               onChange={handleChange}
+                              className="schedule-create-input-step3 wide"
                             />
                           </div>
-                        </>
-                      )}
-                    </div>
-
-                    {!formData.repeatYn && (
-                      <div className="schedule-create-section-card-step3">
-                        <div className="schedule-create-form-step3">
-                          <Calendar
-                            onChange={handleDateChange}
-                            value={null}
-                            className="schedule-create-custom-small-calendar"
-                            tileClassName={({ date }) => {
-                              const localDate = new Date(
-                                date.getTime() + 9 * 60 * 60 * 1000
-                              );
-                              const formattedDate = localDate
-                                .toISOString()
-                                .slice(0, 10);
-                              return formData.selectedDates.some(
-                                (selected) => selected.date === formattedDate
-                              )
-                                ? "schedule-create-selected-date"
-                                : "";
-                            }}
-                            selectRange={false}
-                          />
-                        </div>
-
-                        <div className="schedule-create-form-row-step3">
-                          {formData.selectedDates.length > 0 && (
-                            <div className="schedule-create-selected-dates">
-                              <div className="schedule-create-selected-dates-title">
-                                선택된 날짜
-                              </div>
-                              <div className="schedule-create-selected-dates-grid">
-                                {formData.selectedDates.map(
-                                  (dateObj, index) => (
-                                    <div
-                                      key={index}
-                                      className="schedule-create-date-time-selection"
-                                    >
-                                      <span>{dateObj.date}</span>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     )}
 
-                    <div className="schedule-create-section-card-step3">
-                      <div className="schedule-create-form-step3">
-                        <span className="schedule-create-form-label-with-info">
-                          하루종일
-                          <div className="schedule-create-tooltip-container">
-                            <FiInfo className="schedule-create-info-icon" />
-                            <span className="schedule-create-tooltip-text">
-                              시간 설정 없이 일정을{" "}
-                              <span
-                                style={{ fontWeight: "600", color: "#ff5a3c" }}
-                              >
-                                하루 전체
-                              </span>
-                              로 간주됩니다
-                              <br />
-                              알림 설정 시 해당 날짜 자정 기준으로 설정됩니다
-                            </span>
+                      {!formData.repeatYn && (
+                        <div className="schedule-create-section-card-step3">
+                          <div className="schedule-create-form-step3">
+                            <Calendar
+                              onChange={handleDateChange}
+                              value={null}
+                              className="schedule-create-custom-small-calendar"
+                              tileClassName={({ date }) => {
+                                const localDate = new Date(
+                                  date.getTime() + 9 * 60 * 60 * 1000
+                                );
+                                const formattedDate = localDate
+                                  .toISOString()
+                                  .slice(0, 10);
+                                return formData.selectedDates.some(
+                                  (selected) => selected.date === formattedDate
+                                )
+                                  ? "schedule-create-selected-date"
+                                  : "";
+                              }}
+                              selectRange={false}
+                              formatDay={(locale, date) => date.getDate()} 
+                            />
                           </div>
-                        </span>
-                        <label className="schedule-create-switch">
-                          <input
-                            type="checkbox"
-                            name="isAllDay"
-                            checked={formData.isAllDay}
-                            onChange={handleChange}
-                          />
-                          <span className="schedule-create-slider round"></span>
-                        </label>
-                      </div>
 
-                      {!formData.isAllDay && (
-                        <div className="schedule-create-form-step3">
-                          <span className="schedule-create-form-label">
-                            시간 설정
-                          </span>
-                          <input
-                            type="time"
-                            value={formData.scheduleTime || "00:00"}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                scheduleTime: e.target.value,
-                              })
-                            }
-                          />
+                          <div className="schedule-create-form-row-step3">
+                            {formData.selectedDates.length > 0 && (
+                              <div className="schedule-create-selected-dates">
+                                <div className="schedule-create-selected-dates-title">
+                                  선택된 날짜
+                                </div>
+                                <div className="schedule-create-selected-dates-grid">
+                                  {formData.selectedDates.map(
+                                    (dateObj, index) => (
+                                      <div
+                                        key={index}
+                                        className="schedule-create-date-time-selection"
+                                      >
+                                        <span>{dateObj.date}</span>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
-                    </div>
-                  </>
-                )}
-                {step === 4 && (
-                  <div className="schedule-create-section-card">
-                    <div className="schedule-create-priority">
-                      <div className="schedule-create-priority-select">
-                        {[
-                          {
-                            label: "낮음",
-                            value: "LOW",
-                            className: "priority-low",
-                          },
-                          {
-                            label: "보통",
-                            value: "MEDIUM",
-                            className: "priority-medium",
-                          },
-                          {
-                            label: "높음",
-                            value: "HIGH",
-                            className: "priority-high",
-                          },
-                        ].map((option) => (
-                          <div
-                            key={option.value}
-                            className={`schedule-create-priority-option ${
-                              formData.priority === option.value
-                                ? "selected"
-                                : ""
-                            }`}
-                            onClick={() =>
-                              setFormData({
-                                ...formData,
-                                priority: option.value,
-                              })
-                            }
-                          >
-                            <span
-                              className={`schedule-create-priority-dot ${option.className}`}
-                            />
-                            {option.label}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-                {step === 5 && (
-                  <div className="schedule-create-alert-section-card">
-                    <div className="schedule-create-alert-group">
-                      <div className="schedule-create-alert-row">
-                        <label className="schedule-create-alert-label">
-                          알림 설정
-                          <div className="schedule-create-tooltip-container">
-                            <FiInfo className="schedule-create-info-icon" />
-                            <span className="schedule-create-tooltip-text">
-                              <span
-                                style={{ fontWeight: "600", color: "#ff5a3c" }}
-                              >
-                                설정한 시간 전
-                              </span>
-                              에 일정 시작 알림을 받을 수 있습니다
-                            </span>
-                          </div>
-                        </label>
-                        <label className="schedule-create-switch">
-                          <input
-                            type="checkbox"
-                            name="noticeYn"
-                            checked={formData.noticeYn}
-                            onChange={handleChange}
-                          />
-                          <span className="schedule-create-slider round"></span>
-                        </label>
-                      </div>
 
-                      {formData.noticeYn && (
+                      <div className="schedule-create-section-card-step33">
+                      <div className="schedule-create-form-step3-repeat">
+                          <span className="schedule-create-form-label-with-info-bold-label">
+                            하루종일
+                            <div className="schedule-create-tooltip-container">
+                              <FiInfo className="schedule-create-info-icon" />
+                              <span className="schedule-create-tooltip-text">
+                                시간 설정 없이 일정을{" "}
+                                <span
+                                  style={{
+                                    fontWeight: "600",
+                                    color: "#ff5a3c",
+                                  }}
+                                >
+                                  하루 전체
+                                </span>
+                                로 간주됩니다
+                                <br />
+                                알림 설정 시 해당 날짜 자정 기준으로 설정됩니다
+                              </span>
+                            </div>
+                          </span>
+                          <label className="schedule-create-switch">
+                            <input
+                              type="checkbox"
+                              name="isAllDay"
+                              checked={formData.isAllDay}
+                              onChange={handleChange}
+                            />
+                            <span className="schedule-create-slider round"></span>
+                          </label>
+                        </div>
+
+                        {!formData.isAllDay && (
+                          <div className="schedule-create-form-step3-time">
+                            <span className="schedule-create-form-label-time">
+                              시간 설정
+                            </span>
+                            <input
+                              className="schedule-create-form-label-time-input"
+                              type="time"
+                              value={formData.scheduleTime || "00:00"}
+                              onChange={(e) =>
+                                setFormData({
+                                  ...formData,
+                                  scheduleTime: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  {step === 4 && (
+                    <div className="schedule-create-section-card">
+                      <div className="schedule-create-priority">
+                        <div className="schedule-create-priority-select">
+                          {[
+                            {
+                              label: "낮음",
+                              value: "LOW",
+                              className: "priority-low",
+                            },
+                            {
+                              label: "보통",
+                              value: "MEDIUM",
+                              className: "priority-medium",
+                            },
+                            {
+                              label: "높음",
+                              value: "HIGH",
+                              className: "priority-high",
+                            },
+                          ].map((option) => (
+                            <div
+                              key={option.value}
+                              className={`schedule-create-priority-option ${
+                                formData.priority === option.value
+                                  ? "selected"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                setFormData({
+                                  ...formData,
+                                  priority: option.value,
+                                })
+                              }
+                            >
+                              <span
+                                className={`schedule-create-priority-dot ${option.className}`}
+                              />
+                              {option.label}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {step === 5 && (
+                    <div className="schedule-create-alert-section-card">
+                      <div className="schedule-create-alert-group">
                         <div className="schedule-create-alert-row">
                           <label className="schedule-create-alert-label">
-                            알림 시간
+                            알림 설정
+                            <div className="schedule-create-tooltip-container">
+                              <FiInfo className="schedule-create-info-icon" />
+                              <span className="schedule-create-tooltip-text">
+                                <span
+                                  style={{
+                                    fontWeight: "600",
+                                    color: "#ff5a3c",
+                                  }}
+                                >
+                                  설정한 시간 전
+                                </span>
+                                에 일정 시작 알림을 받을 수 있습니다
+                              </span>
+                            </div>
                           </label>
-                          <select
-                            name="noticeAt"
-                            value={formData.noticeAt}
-                            onChange={handleChange}
-                            className="schedule-create-alert-select"
-                          >
-                            <option value={0}>시작 시 알림</option>
-                            <option value={5}>5분 전</option>
-                            <option value={10}>10분 전</option>
-                            <option value={30}>30분 전</option>
-                            <option value={60}>1시간 전</option>
-                          </select>
+                          <label className="schedule-create-switch">
+                            <input
+                              type="checkbox"
+                              name="noticeYn"
+                              checked={formData.noticeYn}
+                              onChange={handleChange}
+                            />
+                            <span className="schedule-create-slider round"></span>
+                          </label>
                         </div>
-                      )}
+
+                        {formData.noticeYn && (
+                          <div className="schedule-create-alert-row">
+                            <label className="schedule-create-alert-label2">
+                              알림 시간
+                            </label>
+                            <select
+                              name="noticeAt"
+                              value={formData.noticeAt}
+                              onChange={handleChange}
+                              className="schedule-create-alert-select"
+                            >
+                              <option value={0}>시작 시 알림</option>
+                              <option value={5}>5분 전</option>
+                              <option value={10}>10분 전</option>
+                              <option value={30}>30분 전</option>
+                              <option value={60}>1시간 전</option>
+                            </select>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-              
-            </CSSTransition>
-          </SwitchTransition>
+                  )}
+                </div>
+              </CSSTransition>
+            </SwitchTransition>
           </form>
         </div>
 
-          <div className="schedule-create-bottom-btn">
-            {step < 5 ? (
-              <button
-                type="button"
-                className="schedule-create-next-btn"
-                onClick={goToNext}
-                disabled={!isStepValid()}
-              >
-                다음으로
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="schedule-create-next-btn"
-                onClick={handleSubmit}
-                disabled={!isStepValid()}
-              >
-                일정 생성
-              </button>
-            )}
-          </div>
-     </div>
+        <div className="schedule-create-bottom-btn">
+          {step < 5 ? (
+            <button
+              type="button"
+              className="schedule-create-next-btn"
+              onClick={goToNext}
+              disabled={!isStepValid()}
+            >
+              다음으로
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="schedule-create-next-btn"
+              onClick={handleSubmit}
+              disabled={!isStepValid()}
+            >
+              일정 생성
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
