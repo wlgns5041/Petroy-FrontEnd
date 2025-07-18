@@ -184,6 +184,12 @@
     background-color: #4b4848;
   }
 
+  .send-request-button.disabled {
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+
   .search-results-error-message {
     text-align: center;
     margin-top: 40px;

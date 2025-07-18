@@ -114,7 +114,7 @@
   }
 
   .petEdit-step2-group {
-    margin-top: 20px;
+    margin-top: 40px;
   }
   
   .petEdit-form-inline {
@@ -295,7 +295,7 @@
     justify-content: center;
     align-items: center;
     flex: none;              
-    margin-top: 12px;
+    margin-top: 20px;
   }
   
   .petEdit-textarea {

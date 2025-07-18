@@ -141,24 +141,35 @@ const FriendPage = () => {
           {error && <div className="search-results-error-message">{error}</div>}
           {searchResults.length > 0 ? (
             <ul>
-              {searchResults.map((member) => (
-                <li key={member.id} className="search-result-item">
-                  <div className="search-result-info">
-                    <img
-                      src={member.image || defaultProfilePic}
-                      alt={member.name}
-                      className="profile-image"
-                    />
-                    <span>{member.name}</span>
-                  </div>
-                  <button
-                    className="send-request-button"
-                    onClick={() => handleSendRequest(member.id)}
-                  >
-                    친구 요청
-                  </button>
-                </li>
-              ))}
+              {searchResults.map((member) => {
+                const isAlreadyFriend = friends.some((f) => f.id === member.id); 
+
+                return (
+                  <li key={member.id} className="search-result-item">
+                    <div className="search-result-info">
+                      <img
+                        src={member.image || defaultProfilePic}
+                        alt={member.name}
+                        className="profile-image"
+                      />
+                      <span>{member.name}</span>
+                    </div>
+
+                    {isAlreadyFriend ? (
+                      <button className="send-request-button disabled" disabled>
+                        이미 친구입니다
+                      </button>
+                    ) : (
+                      <button
+                        className="send-request-button"
+                        onClick={() => handleSendRequest(member.id)}
+                      >
+                        친구 요청
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             !loading && <p className="no-results">검색 결과가 없습니다.</p>
