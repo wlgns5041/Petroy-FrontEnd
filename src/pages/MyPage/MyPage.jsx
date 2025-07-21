@@ -12,7 +12,7 @@ import NameEditModal from "../../components/MyPage/NameEditModal.jsx";
 import ImageEditModal from "../../components/MyPage/ImageEditModal.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw, faPen } from "@fortawesome/free-solid-svg-icons";
-
+import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx"
 import defaultPetPic from "../../assets/images/DefaultImage.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -26,6 +26,7 @@ const MyPage = () => {
   const [showNameModal, setShowNameModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [friendsCount, setFriendsCount] = useState(0);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   const fetchFriendCount = async (token) => {
     try {
@@ -185,6 +186,15 @@ const MyPage = () => {
     navigate(path);
   };
 
+  const handleConfirm = async () => {
+    if (confirmAction?.type === "logout") {
+      handleLogout();
+    } else if (confirmAction?.type === "delete") {
+      await handleAccountDelete();
+    }
+    setConfirmAction(null); // 모달 닫기
+  };
+
   return (
     <div className="myPage">
       <NavBar title="마이페이지" />
@@ -226,10 +236,26 @@ const MyPage = () => {
           >
             이미지 변경
           </button>
-          <button className="myPage-button gray" onClick={handleLogout}>
+          <button
+            className="myPage-button gray"
+            onClick={() =>
+              setConfirmAction({
+                type: "logout",
+                message: "정말 로그아웃 하시겠어요?",
+              })
+            }
+          >
             로그아웃
           </button>
-          <button className="myPage-button gray" onClick={handleAccountDelete}>
+          <button
+            className="myPage-button gray"
+            onClick={() =>
+              setConfirmAction({
+                type: "delete",
+                message: "정말 탈퇴하시겠어요? \n이 작업은 되돌릴 수 없습니다."
+              })
+            }
+          >
             회원 탈퇴
           </button>
         </div>
@@ -309,6 +335,14 @@ const MyPage = () => {
         <ImageEditModal
           onSave={handleImageUpload}
           onClose={() => setShowImageModal(false)}
+        />
+      )}
+
+      {confirmAction && (
+        <MyPageConfirmModal
+          message={confirmAction.message}
+          onConfirm={handleConfirm}
+          onCancel={() => setConfirmAction(null)}
         />
       )}
     </div>

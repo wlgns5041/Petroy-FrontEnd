@@ -25,7 +25,7 @@ const NameEditModal = ({ onClose, onSave }) => {
 
     try {
       const response = await axios.get(`${API_BASE_URL}/members/check-name`, {
-        params: { name: newName }
+        params: { name: newName },
       });
 
       if (response.status === 200) {
@@ -56,24 +56,45 @@ const NameEditModal = ({ onClose, onSave }) => {
   return (
     <div className="nameEdit-modal show">
       <div className="nameEdit-modal-content">
-        <div className="nameEdit-modal-header">이름 변경</div>
+        <div className="nameEdit-modal-header">
+          <h2>변경할 이름을 입력해주세요</h2>
+        </div>
+
         <div className="nameEdit-modal-body">
-          <div className="input-with-button">
+          <div className="input-row">
             <input
               type="text"
               placeholder="새로운 이름"
               value={newName}
               onChange={handleNameChange}
-              className="nameEdit-myPage-input"
-              maxLength="10"
+              maxLength={10}
             />
-            <button className="check-button" onClick={checkNameDuplicate}>중복 확인</button>
+            <button className="check-button" onClick={checkNameDuplicate}>
+              중복 확인
+            </button>
           </div>
-          <p className={`name-error ${nameError ? 'visible' : ''}`}>{nameError}</p>
+          {nameError && (
+            <p
+              className={`nameEdit-error ${
+                nameChecked ? 'valid' : 'invalid'
+              }`}
+            >
+              {nameError}
+            </p>
+          )}
         </div>
+
         <div className="nameEdit-modal-footer">
-          <button onClick={onClose}>닫기</button>
-          <button onClick={handleSave}>저장</button>
+          <button className="skip-button" onClick={onClose}>
+            취소
+          </button>
+          <button
+            className="next-button"
+            onClick={handleSave}
+            disabled={!nameChecked}
+          >
+            확인
+          </button>
         </div>
       </div>
     </div>

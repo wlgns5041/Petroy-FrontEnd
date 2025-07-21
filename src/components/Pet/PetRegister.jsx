@@ -22,12 +22,12 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [error, setError] = useState(null);
 
   const breedImageMap = {
-    "1": require("../../assets/icons/dog-chihuahua.png"),
-    "2": require("../../assets/icons/dog-jindo.png"),
-    "3": require("../../assets/icons/dog-pomeranian.png"),
-    "4": require("../../assets/icons/cat-russianblue.png"),
-    "5": require("../../assets/icons/cat-munchkin.png"),
-    "6": require("../../assets/icons/cat-cheese.png"),
+    1: require("../../assets/icons/dog-chihuahua.png"),
+    2: require("../../assets/icons/dog-jindo.png"),
+    3: require("../../assets/icons/dog-pomeranian.png"),
+    4: require("../../assets/icons/cat-russianblue.png"),
+    5: require("../../assets/icons/cat-munchkin.png"),
+    6: require("../../assets/icons/cat-cheese.png"),
   };
 
   useEffect(() => {
@@ -91,14 +91,14 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     try {
       const token = localStorage.getItem("accessToken");
       const formData = new FormData();
-  
+
       formData.append("speciesId", petInfo.speciesId);
       formData.append("breedId", petInfo.breedId);
       formData.append("name", petInfo.name);
       formData.append("age", petInfo.age);
       formData.append("gender", petInfo.gender);
       formData.append("memo", petInfo.memo || "");
-  
+
       if (petInfo.image && petInfo.image instanceof File) {
         formData.append("image", petInfo.image);
       } else {
@@ -108,14 +108,14 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
         const file = new File([blob], "default.png", { type: blob.type });
         formData.append("image", file);
       }
-  
+
       const response = await axios.post(`${API_BASE_URL}/pets`, formData, {
         headers: {
           Authorization: `${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       alert("반려동물이 성공적으로 등록되었습니다.");
       if (onRegisterSuccess && response.data) {
         onRegisterSuccess(response.data);
@@ -194,6 +194,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                     <button
                       className="petRegister-step-button"
                       onClick={handleNext}
+                      disabled={!petInfo.speciesId || !petInfo.breedId}
                     >
                       다음으로
                     </button>
@@ -253,6 +254,9 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                     <button
                       className="petRegister-step-button"
                       onClick={handleNext}
+                      disabled={
+                        !petInfo.name || !petInfo.age || !petInfo.gender
+                      }
                     >
                       다음으로
                     </button>

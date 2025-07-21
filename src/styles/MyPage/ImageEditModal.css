@@ -1,9 +1,6 @@
 .imageEdit-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
@@ -11,90 +8,114 @@
   z-index: 1000;
 }
 
-.imageEdit-modal.show {
-  visibility: visible;
-}
-
 .imageEdit-modal-content {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 28px 24px;
+  background-color: white;
+  border-radius: 20px;
   width: 90vw;
-  max-width: 400px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  box-sizing: border-box;
-  font-family: 'Pretendard', sans-serif;
-}
-
-.imageEdit-modal-header {
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
-  text-align: center;
-}
-
-.imageEdit-modal-body {
+  max-width: 420px;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  max-height: 50vh;
-  overflow-y: auto;
+  font-family: 'Pretendard', sans-serif;
+  box-sizing: border-box;
 }
 
-.imageEdit-myPage-input {
+.imageEdit-step-indicator {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.imageEdit-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.imageEdit-upload-box {
+  border: 2px dashed #d1d5db;
+  border-radius: 16px;
+  padding: 48px 0;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.imageEdit-upload-box:hover {
+  background-color: #f9fafb;
+}
+
+.imageEdit-input-hidden {
   display: none;
 }
 
-.custom-file-upload {
+.imageEdit-preview-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.imageEdit-preview-image {
+  width: 140px;
+  height: 140px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+}
+
+.imageEdit-reset-button {
   background-color: #f3f4f6;
-  color: #111827;
-  padding: 10px 20px;
-  border-radius: 6px;
-  cursor: pointer;
+  color: #1f2937;
+  padding: 10px 24px;
   font-size: 14px;
   font-weight: 600;
-  border: 1px solid #d1d5db;
-  width: 100%;
-  text-align: center;
-  transition: background-color 0.2s;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
 }
 
-.custom-file-upload:hover {
-  background-color: #e5e7eb;
-}
-
-.imagePreview {
-  margin-top: 8px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 1px solid #e5e7eb;
-  object-fit: cover;
-}
-
-.imageEdit-modal-footer {
+.imageEdit-footer {
   display: flex;
   gap: 12px;
-  justify-content: center;
+  margin-top: 40px;
+  width: 100%;
 }
 
-.imageEdit-modal-footer button {
+.imageEdit-skip-button {
   flex: 1;
-  padding: 10px 16px;
-  font-size: 14px;
+  background-color: #f3f4f6;
+  color: #1f2937;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 0;
+  font-size: 15px;
   font-weight: 600;
-  background-color: #4b5563;
+  cursor: pointer;
+}
+
+.imageEdit-next-button {
+  flex: 1;
+  background-color: #10b981;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
 }
 
-.imageEdit-modal-footer button:hover {
-  background-color: #374151;
+.imageEdit-next-button:disabled {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
