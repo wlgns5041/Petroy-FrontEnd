@@ -4,7 +4,7 @@ import PetRegister from "../../components/Pet/PetRegister.jsx";
 import PetEdit from "../../components/Pet/PetEdit.jsx";
 import DeletePet from "../../components/Pet/DeletePet.jsx";
 import AssignCareGiver from "../../components/Pet/AssignCareGiver.jsx";
-import CareGiverList from "../../components/Pet/CareGiverList.jsx"
+import CareGiverList from "../../components/Pet/CareGiverList.jsx";
 import { fetchMemberPets } from "../../services/TokenService.jsx";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Pet/PetPage.css";
@@ -212,11 +212,9 @@ const PetPage = () => {
       <div className="petPage-body">
         <NavBar title="펫 관리" />
 
-        <div className="petPage-tab-container">
+        <div className="petPage-tab-bar">
           <button
-            className={`petPage-tab-button ${
-              activeTab === "mine" ? "active" : ""
-            }`}
+            className={`petPage-tab ${activeTab === "mine" ? "active" : ""}`}
             onClick={() => {
               setActiveTab("mine");
               resetPetSort();
@@ -224,10 +222,10 @@ const PetPage = () => {
             }}
           >
             내 반려동물
-            <span className="petPage-tab-count">{pets.length}</span>
+            <span className="tab-count">{pets.length}</span>
           </button>
           <button
-            className={`petPage-tab-button ${
+            className={`petPage-tab ${
               activeTab === "caregiver" ? "active" : ""
             }`}
             onClick={() => {
@@ -237,18 +235,25 @@ const PetPage = () => {
             }}
           >
             돌보미 반려동물
-            <span className="petPage-tab-count">{caregiverPets.length}</span>
+            <span className="tab-count">{caregiverPets.length}</span>
           </button>
         </div>
 
         <div className="petPage-top-bar">
-          <button onClick={handleOpenModal} className="petPage-register-button">
-            펫 등록하기
-          </button>
+          <div className="petPage-sort-wrapper">
+            <button className="petPage-sort-button" onClick={rotatePetSort}>
+              {currentPetSort.label}
+            </button>
+          </div>
 
-          <button className="petPage-sort-button" onClick={rotatePetSort}>
-            {currentPetSort.label}
-          </button>
+          <div className="petPage-register-wrapper">
+            <button
+              onClick={handleOpenModal}
+              className="petPage-register-button"
+            >
+              펫 등록하기
+            </button>
+          </div>
         </div>
 
         {loading ? (

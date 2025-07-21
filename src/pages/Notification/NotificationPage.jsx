@@ -173,29 +173,20 @@ function NotificationPage() {
   return (
     <div className="notification-page">
       <NavBar title="알림" unreadCount={unreadCount} />
-      <div className="category-tabs">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`tab-button ${activeCategory === cat ? "active" : ""}`}
-            onClick={() => setActiveCategory(cat)}
-          >
-            {cat}
-            {categoryCounts[cat] > 0 && (
-              <span
-                style={{
-                  color: "#ff4e50",
-                  marginLeft: "8px",
-                  fontSize: "12px",
-                  fontWeight: "800",
-                }}
-              >
-                {categoryCounts[cat]}
-              </span>
-            )}
-          </button>
-        ))}
-      </div>
+      <div className="notification-tabBar">
+  {categories.map((cat) => (
+    <button
+      key={cat}
+      className={`notification-tabButton ${
+        activeCategory === cat ? "active" : ""
+      }`}
+      onClick={() => setActiveCategory(cat)}
+    >
+      {cat}
+      {categoryCounts[cat] > 0 && <span>{categoryCounts[cat]}</span>}
+    </button>
+  ))}
+</div>
 
       {error && <div className="error-message">❌ {error}</div>}
 

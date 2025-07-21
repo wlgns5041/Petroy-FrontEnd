@@ -204,7 +204,7 @@ const MyPage = () => {
           <img
             src={userInfo.image || defaultProfilePic}
             alt="profile"
-            className="profile-image"
+            className="myPage-profile-image"
           />
           <div className="profile-info">
             <div className="name">{userInfo.name}</div>

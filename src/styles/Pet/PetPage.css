@@ -2,7 +2,7 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    padding-top: 120px;
+    padding-top: 100px;
 }
 
 .petPage-body {
@@ -10,6 +10,7 @@
   background-color: rgb(249, 250, 251);
   border-radius: 12px;
   padding: 24px;
+  
 }
 
 .petPage button:disabled {
@@ -21,61 +22,78 @@
     margin-top: 10px;
 }
 
-.petPage-tab-container {
+.petPage-tab-bar {
   display: flex;
-  border-bottom: 2px solid #f3f4f6;
-  margin-bottom: 20px;
-}
-
-.petPage-tab-button {
-  flex: 1;
-  padding: 12px 0;
-  font-size: 15px;
-  font-weight: 500;
-  text-align: center;
-  color: #c4c4c4;
-  background: none;
-  border: none;
-  position: relative;
-  cursor: pointer;
-  transition: color 0.3s ease;
-  display: flex;
-  align-items: center;
   justify-content: center;
-}
-
-.petPage-tab-button::after {
-  content: "";
-  position: absolute;
-  bottom: -4px;
+  gap: 12px;
+  padding: 6px;
+  margin: 0px auto 20px;
   width: 100%;
-  height: 5px;
-  background-color: #f3f4f6;  
-  border-radius: 4px;
+  background-color: #f1f3f5;
+  border-radius: 8px;
 }
 
-.petPage-tab-button.active {
-  color: #111827;
+.petPage-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
   font-weight: 600;
+  border-radius: 6px;
+  color: #6b7280;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.petPage-tab-button.active::after {
-  background-color: #34d399; 
+.petPage-tab.active {
+  background-color: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.petPage-tab-count {
+.tab-count {
+  margin-left: 6px;
+  color: #888;
+  font-weight: 500;
   font-size: 13px;
-  margin-left: 8px;
-  color: #9ca3af; 
 }
 
 .petPage-top-bar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin: 16px 0;
-  padding: 0;
-  gap: 8px;
+  align-items: center;
+  width: 100%;
+  margin: 0px 0px 24px;
+  padding: 0px;
+}
+
+.petPage-sort-wrapper {
+  flex: 1;
+}
+
+.petPage-register-wrapper {
+  flex-shrink: 0;
+}
+
+.petPage-sort-button {
+  box-sizing: border-box;
+  display: block;
+  height: 26px;
+  width: 60px;
+  padding: 6px 10px;
+  font-family: Pretendard, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  background-color: rgb(238, 238, 238);
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 12px;
 }
 
 .petPage-register-button {
@@ -89,28 +107,12 @@
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap; 
+  margin-right: 12px;
 }
 
 .petPage-register-button:hover {
   background-color: #2f2f2f;
   transition: background-color 0.3s ease;
-}
-
-.petPage-sort-button {
-  box-sizing: border-box;
-  display: block;
-  height: 26px;
-  width: 60px;
-  padding: 6px 10px;
-  font-family: Pretendard, sans-serif;
-  font-size: 10px;
-  font-weight: 400;
-  text-align: center;
-  background-color: rgb(238, 238, 238);
-  color: rgb(0, 0, 0);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
 }
 
 .petPage-petsList {
@@ -318,14 +320,10 @@
   /* ----------------- 하단 페이지 버튼 ------------------- */
 
   .petPage-pagination-buttons {
-    position: fixed;
-    bottom: 40px;
-    left: 0;
-    right: 0;
     display: flex;
     justify-content: center;
+    margin-top: 20px;
     gap: 8px;
-    margin-top: 16px;
   }
   
   .petPage-pagination-buttons button {
