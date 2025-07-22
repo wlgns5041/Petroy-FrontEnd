@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/MyPage/NameEditModal.css';
-import axios from 'axios';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import { checkNameDuplicate } from "../../services/MemberService";
 
 const NameEditModal = ({ onClose, onSave }) => {
   const [newName, setNewName] = useState('');
@@ -16,7 +14,7 @@ const NameEditModal = ({ onClose, onSave }) => {
     setNameError('이름 중복 확인을 해주세요.');
   };
 
-  const checkNameDuplicate = async () => {
+  const handleCheckNameDuplicate = async () => {
     if (newName.trim() === '') {
       setNameError('이름을 입력해 주세요.');
       setNameChecked(false);
@@ -24,14 +22,9 @@ const NameEditModal = ({ onClose, onSave }) => {
     }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/members/check-name`, {
-        params: { name: newName },
-      });
-
-      if (response.status === 200) {
-        setNameError('사용 가능한 이름입니다.');
-        setNameChecked(true);
-      }
+      await checkNameDuplicate(newName); 
+      setNameError('사용 가능한 이름입니다.');
+      setNameChecked(true);
     } catch (error) {
       if (error.response) {
         setNameError('중복된 이름입니다.');
@@ -49,6 +42,8 @@ const NameEditModal = ({ onClose, onSave }) => {
       alert('이름 중복 확인을 완료해주세요.');
       return;
     }
+
+    alert('이름을 변경했습니다');
     onSave(newName);
     onClose();
   };
@@ -69,7 +64,7 @@ const NameEditModal = ({ onClose, onSave }) => {
               onChange={handleNameChange}
               maxLength={10}
             />
-            <button className="check-button" onClick={checkNameDuplicate}>
+            <button className="check-button" onClick={handleCheckNameDuplicate}>
               중복 확인
             </button>
           </div>

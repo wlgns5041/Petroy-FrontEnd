@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import Routing from './routes/Routing';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { subscribeNotification } from './services/SubscribeNotification.jsx';
+import { subscribeNotification } from './services/NotificationService.jsx';
 
 function App() {
   useEffect(() => {

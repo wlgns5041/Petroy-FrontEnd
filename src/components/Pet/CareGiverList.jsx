@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "../../styles/Pet/CareGiverList.css";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import noCaregiverImg from "../../assets/images/dogpaw.png";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import { fetchAcceptedFriends } from "../../services/FriendService";
+import {fetchCaregiversByPet, deleteCaregiver} from "../../services/PetService";
 
 const CareGiverList = ({ pet, onClose }) => {
   const [caregiversList, setCaregiversList] = useState([]);
@@ -13,13 +12,9 @@ const CareGiverList = ({ pet, onClose }) => {
 
   useEffect(() => {
     const fetchFriends = async () => {
-      const token = localStorage.getItem("accessToken");
       try {
-        const response = await axios.get(`${API_BASE_URL}/friends`, {
-          headers: { Authorization: `${token}` },
-          params: { status: "ACCEPTED" },
-        });
-        setFriends(response.data.content || []);
+        const data = await fetchAcceptedFriends();
+        setFriends(data);
       } catch (err) {
         console.error("친구 목록을 불러오지 못했습니다:", err);
       }
@@ -30,14 +25,9 @@ const CareGiverList = ({ pet, onClose }) => {
 
   useEffect(() => {
     const fetchCaregivers = async () => {
-      const token = localStorage.getItem("accessToken");
       try {
-        const response = await axios.get(`${API_BASE_URL}/caregivers`, {
-          headers: { Authorization: `${token}` },
-          params: { petId: pet.petId },
-        });
-
-        setCaregiversList(response.data.content || []);
+        const data = await fetchCaregiversByPet(pet.petId);
+        setCaregiversList(data);
       } catch (err) {
         const msg =
           err.response?.data?.errorMessage ||
@@ -50,8 +40,6 @@ const CareGiverList = ({ pet, onClose }) => {
   }, [pet.petId]);
 
   const handleDeleteCareGiver = async (cgId, memberName) => {
-    const token = localStorage.getItem("accessToken");
-
     const realFriend = friends.find((f) => f.name === memberName);
     if (!realFriend) {
       alert("해당 친구의 ID를 찾을 수 없습니다.");
@@ -63,15 +51,8 @@ const CareGiverList = ({ pet, onClose }) => {
     if (!window.confirm("해당 돌보미를 삭제하시겠습니까?")) return;
 
     try {
-      const response = await axios.delete(`${API_BASE_URL}/caregivers`, {
-        headers: { Authorization: `${token}` },
-        params: {
-          petId: pet.petId,
-          memberId: realMemberId,
-        },
-      });
-
-      if (response.data === true) {
+      const success = await deleteCaregiver(pet.petId, realMemberId);
+      if (success) {
         alert("돌보미가 삭제되었습니다.");
         setCaregiversList((prev) =>
           prev.filter((cg) => cg.memberName !== memberName)

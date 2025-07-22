@@ -1,147 +1,118 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import CalendarComponent from '../../components/commons/CalendarComponent.jsx';
-import NavBar from '../../components/commons/NavBar.jsx';
-import CategoryModal from '../../components/Schedule/CategoryModal.jsx';
-import ScheduleModal from '../../components/Schedule/ScheduleModal.jsx';
-import ScheduleDetailModal from '../../components/Schedule/ScheduleDetailModal.jsx'; 
-import { fetchMemberPets } from '../../services/TokenService.jsx';
-import axios from 'axios';
-import '../../styles/Main/MainPage.css';
-import InfoIcon from '@mui/icons-material/Info';
-import ClearIcon from '@mui/icons-material/Clear';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import React, { useState, useEffect, useCallback } from "react";
+import CalendarComponent from "../../components/commons/CalendarComponent.jsx";
+import NavBar from "../../components/commons/NavBar.jsx";
+import CategoryModal from "../../components/Schedule/CategoryModal.jsx";
+import ScheduleModal from "../../components/Schedule/ScheduleModal.jsx";
+import ScheduleDetailModal from "../../components/Schedule/ScheduleDetailModal.jsx";
+import { fetchMemberPets, fetchCaregiverPets } from "../../services/PetService.jsx";
+import { fetchScheduleCategories, fetchAllSchedules, deleteScheduleCategory } from "../../services/ScheduleService.jsx";
+import "../../styles/Main/MainPage.css";
+import InfoIcon from "@mui/icons-material/Info";
+import ClearIcon from "@mui/icons-material/Clear";
 
 function MainPage() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
-  const [isScheduleDetailModalOpen, setIsScheduleDetailModalOpen] = useState(false);
+  const [isScheduleDetailModalOpen, setIsScheduleDetailModalOpen] =
+    useState(false);
   const [pets, setPets] = useState([]);
   const [careGiverPets, setCareGiverPets] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedScheduleId, setSelectedScheduleId] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null); 
+  const [selectedDate, setSelectedDate] = useState(null);
   const [selectedCategories, setSelectedCategories] = useState(new Set());
   const [selectedMyPets, setSelectedMyPets] = useState(new Set());
   const [selectedCareGiverPets, setSelectedCareGiverPets] = useState(new Set());
   const [selectedSchedules, setSelectedSchedules] = useState(new Set());
-  const [sortMode, setSortMode] = useState('timeAsc'); 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [sortMode, setSortMode] = useState("timeAsc");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const loadPets = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const response = await fetchMemberPets(token);
-        if (response && response.content) {
-          setPets(response.content);
-        }
-      } catch (err) {
-        console.error('내 반려동물 오류', err);
-      }
+    try {
+      const data = await fetchMemberPets();
+      setPets(data || []);
+    } catch (err) {
+      console.error("내 반려동물 오류", err);
     }
   };
 
-  const loadCareGiverPets = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/pets/caregiver`, {
-          headers: { Authorization: `${token}` },
-        });
-        setCareGiverPets(response.data.content || []);
-      } catch (err) {
-        console.error('돌보미 반려동물 오류', err);
-      }
-    }
-  };
+const loadCareGiverPets = async () => {
+  try {
+    const data = await fetchCaregiverPets();
+    setCareGiverPets(data || []);
+  } catch (err) {
+    console.error("돌보미 반려동물 오류", err);
+  }
+};
 
-  const loadCategories = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/schedules/category`, {
-          headers: { Authorization: `${token}` },
-        });
-        setCategories(response.data.content || []);
-      } catch (err) {
-        console.error('카테고리 오류', err);
-      }
-    }
-  };
+const loadCategories = async () => {
+  try {
+    const data = await fetchScheduleCategories();
+    setCategories(data || []);
+  } catch (err) {
+    console.error("카테고리 오류", err);
+  }
+};
 
   const loadSchedules = useCallback(async () => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      try {
-        const response = await axios.get(`${API_BASE_URL}/schedules`, {
-          headers: { Authorization: `${token}` },
-        });
-  
-        const getCategoryNameById = (id) => {
-          const match = categories.find(c => c.categoryId === id);
-          return match ? match.name : '카테고리 없음';
+  try {
+    const data = await fetchAllSchedules();
+
+    const getCategoryNameById = (id) => {
+      const match = categories.find((c) => c.categoryId === id);
+      return match ? match.name : "카테고리 없음";
+    };
+
+    const flatSchedules = data.flatMap((schedule) =>
+      schedule.dateInfo.map((info) => {
+        const petInfo = (schedule.petId || [])
+          .map((id) =>
+            [...pets, ...careGiverPets].find((p) => p.petId === id)
+          )
+          .filter(Boolean);
+
+        return {
+          ...schedule,
+          date: new Date(info.date),
+          status: info.status,
+          categoryName: getCategoryNameById(schedule.categoryId),
+          pets: schedule.petName || [],
+          petInfo,
         };
-  
-        const schedulesData = response.data.content || [];
-        const flatSchedules = schedulesData.flatMap(schedule =>
-          schedule.dateInfo.map(info => {
-            const petInfo = (schedule.petId || []).map(id =>
-              [...pets, ...careGiverPets].find(p => p.petId === id)
-            ).filter(Boolean); 
-        
-            return {
-              ...schedule,
-              date: new Date(info.date),
-              status: info.status,
-              categoryName: getCategoryNameById(schedule.categoryId),
-              pets: schedule.petName || [],
-              petInfo, 
-            };
-          })
-        );
+      })
+    );
 
-        setSchedules(flatSchedules);
-      } catch (err) {
-        console.error('일정 불러오기 오류', err);
-      }
+    setSchedules(flatSchedules);
+  } catch (err) {
+    console.error("일정 불러오기 오류", err);
+  }
+}, [categories, pets, careGiverPets]);
+
+const deleteCategory = async (categoryId) => {
+  const confirmDelete = window.confirm("카테고리를 삭제하시겠습니까?");
+  if (!confirmDelete) return;
+
+  try {
+    const success = await deleteScheduleCategory(categoryId);
+    if (success) {
+      alert("카테고리가 삭제되었습니다.");
+      loadCategories();
+    } else {
+      alert("삭제에 실패했습니다.");
     }
-  }, [categories, pets, careGiverPets]);
-
-  const deleteCategory = async (categoryId) => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) return;
-  
-    const confirmDelete = window.confirm('카테고리를 삭제하시겠습니까?');
-    if (!confirmDelete) return;
-  
-    try {
-      const response = await axios.delete(`${API_BASE_URL}/schedules/category/${categoryId}`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-  
-      if (response.data === true) {
-        alert('카테고리가 삭제되었습니다.');
-        loadCategories();
-      } else {
-        alert('삭제에 실패했습니다.');
-      }
-    } catch (err) {
-      console.error('카테고리 삭제 오류:', err);
-      alert('해당 카테고리에 대한 일정이 존재하여 삭제에 실패하였습니다.');
-    }
-  };
-
+  } catch (err) {
+    console.error("카테고리 삭제 오류:", err);
+    alert("해당 카테고리에 대한 일정이 존재하여 삭제에 실패하였습니다.");
+  }
+};
 
   useEffect(() => {
     loadPets();
     loadCareGiverPets();
     loadCategories();
   }, []);
-  
+
   useEffect(() => {
     loadSchedules();
   }, [loadSchedules]);
@@ -157,27 +128,27 @@ function MainPage() {
   };
   const closeScheduleDetailModal = () => setIsScheduleDetailModalOpen(false);
 
-/* --------------------------------------- 항목 선택 초기화 --------------------------------------- */
+  /* --------------------------------------- 항목 선택 초기화 --------------------------------------- */
 
   const clearAllGroupsExcept = (groupName) => {
-    if (groupName !== 'category') {
+    if (groupName !== "category") {
       setSelectedCategories(new Set());
     }
-    if (groupName !== 'pet') {
+    if (groupName !== "pet") {
       setSelectedMyPets(new Set());
       setSelectedCareGiverPets(new Set());
     }
-    if (groupName !== 'schedule') {
+    if (groupName !== "schedule") {
       setSelectedSchedules(new Set());
     }
   };
 
-/* --------------------------------------- 카테고리 선택 로직 --------------------------------------- */
+  /* --------------------------------------- 카테고리 선택 로직 --------------------------------------- */
 
   const isCategorySelected = (id) => selectedCategories.has(id);
 
   const toggleCategory = (id) => {
-    clearAllGroupsExcept('category');
+    clearAllGroupsExcept("category");
     const newSet = new Set(selectedCategories);
     if (newSet.has(id)) {
       newSet.delete(id);
@@ -188,48 +159,48 @@ function MainPage() {
   };
 
   const selectAllCategories = () => {
-    clearAllGroupsExcept('category');
+    clearAllGroupsExcept("category");
     if (selectedCategories.size === categories.length) {
-      setSelectedCategories(new Set()); 
+      setSelectedCategories(new Set());
     } else {
-      setSelectedCategories(new Set(categories.map((c) => c.categoryId))); 
+      setSelectedCategories(new Set(categories.map((c) => c.categoryId)));
     }
   };
 
-/* --------------------------------------- 펫(돌보미포함) 선택 로직 --------------------------------------- */
-  
-const isMyPetSelected = (id) => selectedMyPets.has(id);
-const isCareGiverPetSelected = (id) => selectedCareGiverPets.has(id);
+  /* --------------------------------------- 펫(돌보미포함) 선택 로직 --------------------------------------- */
 
-const toggleMyPet = (id) => {
-    clearAllGroupsExcept('pet');
+  const isMyPetSelected = (id) => selectedMyPets.has(id);
+  const isCareGiverPetSelected = (id) => selectedCareGiverPets.has(id);
+
+  const toggleMyPet = (id) => {
+    clearAllGroupsExcept("pet");
     const newSet = new Set(selectedMyPets);
     newSet.has(id) ? newSet.delete(id) : newSet.add(id);
     setSelectedMyPets(newSet);
   };
 
-const toggleCareGiverPet = (id) => {
-  clearAllGroupsExcept('pet');
-  const newSet = new Set(selectedCareGiverPets);
-  newSet.has(id) ? newSet.delete(id) : newSet.add(id);
-  setSelectedCareGiverPets(newSet);
-};
+  const toggleCareGiverPet = (id) => {
+    clearAllGroupsExcept("pet");
+    const newSet = new Set(selectedCareGiverPets);
+    newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+    setSelectedCareGiverPets(newSet);
+  };
 
-const selectAllMyPets = () => {
-  clearAllGroupsExcept('pet');
+  const selectAllMyPets = () => {
+    clearAllGroupsExcept("pet");
     if (selectedMyPets.size === pets.length) {
       setSelectedMyPets(new Set());
     } else {
-      setSelectedMyPets(new Set(pets.map(p => p.petId)));
+      setSelectedMyPets(new Set(pets.map((p) => p.petId)));
     }
   };
 
   const selectAllCareGiverPets = () => {
-    clearAllGroupsExcept('pet');
+    clearAllGroupsExcept("pet");
     if (selectedCareGiverPets.size === careGiverPets.length) {
       setSelectedCareGiverPets(new Set());
     } else {
-      setSelectedCareGiverPets(new Set(careGiverPets.map(p => p.petId)));
+      setSelectedCareGiverPets(new Set(careGiverPets.map((p) => p.petId)));
     }
   };
 
@@ -239,14 +210,14 @@ const selectAllMyPets = () => {
   const isScheduleSelected = (key) => selectedSchedules.has(key);
 
   const toggleSchedule = (key) => {
-    clearAllGroupsExcept('schedule');
+    clearAllGroupsExcept("schedule");
     const newSet = new Set(selectedSchedules);
     newSet.has(key) ? newSet.delete(key) : newSet.add(key);
     setSelectedSchedules(newSet);
-  };  
+  };
 
   const selectAllSchedules = () => {
-    clearAllGroupsExcept('schedule');
+    clearAllGroupsExcept("schedule");
     const allKeys = schedules.map(getScheduleKey);
     const allSelected = allKeys.every((key) => selectedSchedules.has(key));
     setSelectedSchedules(allSelected ? new Set() : new Set(allKeys));
@@ -254,19 +225,21 @@ const selectAllMyPets = () => {
 
   /* --------------------------------------- 캘린더로 넘기기 --------------------------------------- */
 
-const filteredSchedules = schedules.filter((s) => {
+  const filteredSchedules = schedules.filter((s) => {
     const key = `${s.scheduleId}-${s.date}`;
-    const categoryMatch = selectedCategories.size === 0 || selectedCategories.has(s.categoryId);
-  
+    const categoryMatch =
+      selectedCategories.size === 0 || selectedCategories.has(s.categoryId);
+
     const schedulePetIds = Array.isArray(s.petId) ? s.petId : [s.petId];
     const petMatch =
       selectedMyPets.size === 0 && selectedCareGiverPets.size === 0
         ? true
-        : schedulePetIds.some(pid => selectedMyPets.has(pid)) ||
-          schedulePetIds.some(pid => selectedCareGiverPets.has(pid));
-  
-    const scheduleMatch = selectedSchedules.size === 0 || selectedSchedules.has(key);
-  
+        : schedulePetIds.some((pid) => selectedMyPets.has(pid)) ||
+          schedulePetIds.some((pid) => selectedCareGiverPets.has(pid));
+
+    const scheduleMatch =
+      selectedSchedules.size === 0 || selectedSchedules.has(key);
+
     return categoryMatch && petMatch && scheduleMatch;
   });
 
@@ -275,137 +248,183 @@ const filteredSchedules = schedules.filter((s) => {
   const rotateSortMode = () => {
     setSortMode((prev) => {
       switch (prev) {
-        case 'timeAsc':
-          return 'timeDesc';
-        case 'timeDesc':
-          return 'priorityHigh';
-        case 'priorityHigh':
-          return 'priorityLow';
+        case "timeAsc":
+          return "timeDesc";
+        case "timeDesc":
+          return "priorityHigh";
+        case "priorityHigh":
+          return "priorityLow";
         default:
-          return 'timeAsc';
+          return "timeAsc";
       }
     });
   };
 
   const filteredAndSortedSchedules = [...schedules]
-  .filter((s) =>
-    s.title?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-  .sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    const priorityValue = {
-      HIGH: 3,
-      MEDIUM: 2,
-      LOW: 1,
-    };
+    .filter((s) => s.title?.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      const priorityValue = {
+        HIGH: 3,
+        MEDIUM: 2,
+        LOW: 1,
+      };
 
-    switch (sortMode) {
-      case 'timeAsc':
-        return dateA - dateB;
-      case 'timeDesc':
-        return dateB - dateA;
-      case 'priorityHigh':
-        return (priorityValue[b.priority] || 0) - (priorityValue[a.priority] || 0);
-      case 'priorityLow':
-        return (priorityValue[a.priority] || 0) - (priorityValue[b.priority] || 0);
-      default:
-        return 0;
-    }
-  });
-
-  
+      switch (sortMode) {
+        case "timeAsc":
+          return dateA - dateB;
+        case "timeDesc":
+          return dateB - dateA;
+        case "priorityHigh":
+          return (
+            (priorityValue[b.priority] || 0) - (priorityValue[a.priority] || 0)
+          );
+        case "priorityLow":
+          return (
+            (priorityValue[a.priority] || 0) - (priorityValue[b.priority] || 0)
+          );
+        default:
+          return 0;
+      }
+    });
 
   return (
     <div className="main-page">
       <NavBar title="메인페이지" />
-  
+
       <div className="calendar-layout">
         <div className="calendar-body">
           {/* 사이드바 */}
           <div className="calendar-sidebar">
             <div className="calendar-buttons-sidebar">
-              <button className="calendar-add-btn" onClick={openCategoryModal}>카테고리 생성</button>
-              <button className="calendar-add-btn" onClick={openScheduleModal}>일정 생성</button>
+              <button className="calendar-add-btn" onClick={openCategoryModal}>
+                카테고리 생성
+              </button>
+              <button className="calendar-add-btn" onClick={openScheduleModal}>
+                일정 생성
+              </button>
             </div>
-  
+
             {/* 카테고리 섹션 */}
             <div className="filter-card fixed-title">
               <div className="filter-title-row">
                 <h4 className="filter-title">
-                  내 카테고리 <span className="item-count">{categories.length}</span>
+                  내 카테고리{" "}
+                  <span className="item-count">{categories.length}</span>
                 </h4>
-                <button className="select-all-button" onClick={selectAllCategories}>전체선택</button>
+                <button
+                  className="select-all-button"
+                  onClick={selectAllCategories}
+                >
+                  전체선택
+                </button>
               </div>
-  
+
               <div className="filter-scroll-area">
-                <div className="category-grid">
-                  {categories.map((c) => (
-                    <div
-                      key={c.categoryId}
-                      className={`filter-item ${isCategorySelected(c.categoryId) ? 'selected' : ''}`}
-                      onClick={() => toggleCategory(c.categoryId)}
-                    >
-                      <span className="category-name">{c.name}</span>
-                      <ClearIcon
-                        className="delete-icon"
-                        fontSize="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          deleteCategory(c.categoryId);
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
+                {categories.length === 0 ? (
+                  <div className="empty-message">
+                    등록된 카테고리가 없습니다
+                  </div>
+                ) : (
+                  <div className="category-grid">
+                    {categories.map((c) => (
+                      <div
+                        key={c.categoryId}
+                        className={`filter-item ${
+                          isCategorySelected(c.categoryId) ? "selected" : ""
+                        }`}
+                        onClick={() => toggleCategory(c.categoryId)}
+                      >
+                        <span className="category-name">{c.name}</span>
+                        <ClearIcon
+                          className="delete-icon"
+                          fontSize="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteCategory(c.categoryId);
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-  
+
             {/* 반려동물 섹션 */}
             <div className="pets-grid">
               <div className="filter-card fixed-title">
                 <div className="filter-title-row">
                   <h4 className="filter-title">
-                    내 반려동물 <span className="item-count">{pets.length}</span>
+                    내 반려동물{" "}
+                    <span className="item-count">{pets.length}</span>
                   </h4>
-                  <button className="select-all-button" onClick={selectAllMyPets}>전체선택</button>
+                  <button
+                    className="select-all-button"
+                    onClick={selectAllMyPets}
+                  >
+                    전체선택
+                  </button>
                 </div>
-  
+
                 <div className="filter-scroll-area">
-                  {pets.map((p) => (
-                    <div
-                      key={p.petId}
-                      className={`filter-item ${isMyPetSelected(p.petId) ? 'selected' : ''}`}
-                      onClick={() => toggleMyPet(p.petId)}
-                    >
-                      {p.name} ({p.breed})
+                  {pets.length === 0 ? (
+                    <div className="empty-message">
+                      등록된 반려동물이 없습니다
                     </div>
-                  ))}
+                  ) : (
+                    pets.map((p) => (
+                      <div
+                        key={p.petId}
+                        className={`filter-item ${
+                          isMyPetSelected(p.petId) ? "selected" : ""
+                        }`}
+                        onClick={() => toggleMyPet(p.petId)}
+                      >
+                        {p.name}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
-  
+
               <div className="filter-card fixed-title">
                 <div className="filter-title-row">
                   <h4 className="filter-title">
-                    돌보미 반려동물 <span className="item-count">{careGiverPets.length}</span>
+                    돌보미 반려동물{" "}
+                    <span className="item-count">{careGiverPets.length}</span>
                   </h4>
-                  <button className="select-all-button" onClick={selectAllCareGiverPets}>전체선택</button>
+                  <button
+                    className="select-all-button"
+                    onClick={selectAllCareGiverPets}
+                  >
+                    전체선택
+                  </button>
                 </div>
-  
+
                 <div className="filter-scroll-area">
-                  {careGiverPets.map((p) => (
-                    <div
-                      key={p.petId}
-                      className={`filter-item ${isCareGiverPetSelected(p.petId) ? 'selected' : ''}`}
-                      onClick={() => toggleCareGiverPet(p.petId)}
-                    >
-                      {p.name} ({p.breed})
+                  {careGiverPets.length === 0 ? (
+                    <div className="empty-message">
+                      등록된 돌보미 반려동물이 없습니다
                     </div>
-                  ))}
+                  ) : (
+                    careGiverPets.map((p) => (
+                      <div
+                        key={p.petId}
+                        className={`filter-item ${
+                          isCareGiverPetSelected(p.petId) ? "selected" : ""
+                        }`}
+                        onClick={() => toggleCareGiverPet(p.petId)}
+                      >
+                        {p.name} ({p.breed})
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
-  
+
             {/* 일정 목록 섹션 */}
             <div className="filter-card fixed-title schedule-list">
               <div className="filter-title-row schedule-header">
@@ -417,65 +436,85 @@ const filteredSchedules = schedules.filter((s) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="schedule-search-input"
                   />
-                  <button onClick={rotateSortMode} className="schedule-sort-button">
-                    {sortMode === 'timeAsc' && '시간↑'}
-                    {sortMode === 'timeDesc' && '시간↓'}
-                    {sortMode === 'priorityHigh' && '중요도↑'}
-                    {sortMode === 'priorityLow' && '중요도↓'}
+                  <button
+                    onClick={rotateSortMode}
+                    className="schedule-sort-button"
+                  >
+                    {sortMode === "timeAsc" && "시간↑"}
+                    {sortMode === "timeDesc" && "시간↓"}
+                    {sortMode === "priorityHigh" && "중요도↑"}
+                    {sortMode === "priorityLow" && "중요도↓"}
                   </button>
                 </div>
-  
+
                 <div className="schedule-title-center">
                   <h4 className="filter-title">
-                    일정 목록 <span className="item-count">{filteredAndSortedSchedules.length}</span>
+                    일정 목록{" "}
+                    <span className="item-count">
+                      {filteredAndSortedSchedules.length}
+                    </span>
                   </h4>
                 </div>
-  
+
                 <div className="schedule-actions">
-                  <button className="select-all-button" onClick={selectAllSchedules}>전체선택</button>
+                  <button
+                    className="select-all-button"
+                    onClick={selectAllSchedules}
+                  >
+                    전체선택
+                  </button>
                 </div>
               </div>
-  
-              <div className="filter-scroll-area schedule-scroll-grid">
-                {filteredAndSortedSchedules.map((s) => {
-                  const key = `${s.scheduleId}-${s.date}`;
-                  const isSelected = isScheduleSelected(key);
-  
-                  return (
-                    <div
-                      key={key}
-                      className={`schedule-list-item ${isSelected ? 'selected' : ''}`}
-                      onClick={() => toggleSchedule(key)}
-                    >
-                      <div className={`priority-indicator priority-${s.priority.toLowerCase()}`} />
-                      <button
-                        className="detail-icon-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openScheduleDetailModal(s.scheduleId, s.date);
-                        }}
+
+              {filteredAndSortedSchedules.length === 0 ? (
+                <div className="schedule-empty-message">
+                  생성된 일정이 없습니다
+                </div>
+              ) : (
+                <div className="filter-scroll-area schedule-scroll-grid">
+                  {filteredAndSortedSchedules.map((s) => {
+                    const key = `${s.scheduleId}-${s.date}`;
+                    const isSelected = isScheduleSelected(key);
+                    return (
+                      <div
+                        key={key}
+                        className={`schedule-list-item ${
+                          isSelected ? "selected" : ""
+                        }`}
+                        onClick={() => toggleSchedule(key)}
                       >
-                        <InfoIcon fontSize="small" />
-                      </button>
-                      <p>{s.title}</p>
-                      <small>{new Date(s.date).toLocaleString()}</small>
-                    </div>
-                  );
-                })}
-              </div>
+                        <div
+                          className={`priority-indicator priority-${s.priority.toLowerCase()}`}
+                        />
+                        <button
+                          className="detail-icon-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openScheduleDetailModal(s.scheduleId, s.date);
+                          }}
+                        >
+                          <InfoIcon fontSize="small" />
+                        </button>
+                        <p>{s.title}</p>
+                        <small>{new Date(s.date).toLocaleString()}</small>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
-  
+
           {/* 캘린더 본문 */}
           <div className="calendar-main">
-          <CalendarComponent 
-            filteredSchedules={filteredSchedules} 
-            onOpenDetail={openScheduleDetailModal}
-          />
+            <CalendarComponent
+              filteredSchedules={filteredSchedules}
+              onOpenDetail={openScheduleDetailModal}
+            />
           </div>
         </div>
       </div>
-  
+
       {/* 모달들 */}
       {isScheduleModalOpen && (
         <ScheduleModal

@@ -1,6 +1,6 @@
 // NavBar.jsx
 import * as React from 'react';
-import { fetchCurrentMember } from '../../services/TokenService.jsx'; 
+import { fetchCurrentMember } from '../../services/MemberService.jsx'; 
 import { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
@@ -28,7 +28,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; 
 import { useNavigate } from 'react-router-dom';
-import { subscribeNotification } from '../../services/SubscribeNotification';
+import { subscribeNotification } from '../../services/NotificationService.jsx';
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({ width: drawerWidth, transition: theme.transitions.create('width', { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen }), overflowX: 'hidden' });

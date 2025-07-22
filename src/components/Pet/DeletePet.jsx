@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "../../styles/Pet/DeletePet.css";
+import { deletePet } from "../../services/PetService";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
   const [nameInput, setNameInput] = useState("");
@@ -23,17 +22,8 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
     setError(null);
 
     try {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        setError("액세스 토큰이 존재하지 않습니다.");
-        return;
-      }
-
-      const response = await axios.delete(`${API_BASE_URL}/pets/${pet.petId}`, {
-        headers: { Authorization: `${token}` },
-      });
-
-      if (response.status === 200) {
+      const success = await deletePet(pet.petId);
+      if (success) {
         alert("펫 삭제 성공");
         onDeleteSuccess();
         onClose();

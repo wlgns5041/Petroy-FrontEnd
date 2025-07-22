@@ -9,9 +9,11 @@ import {
   FaCheckCircle,
   FaExclamationCircle,
 } from "react-icons/fa";
-import axios from "axios";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import {
+  checkEmailDuplicate,
+  checkNameDuplicate,
+  registerMember,
+} from "../../services/MemberService";
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -89,26 +91,34 @@ function SignUpPage() {
 
     if (name === "phone") {
       const numericValue = value.replace(/\D/g, "");
-    
+
       let formatted = numericValue;
-    
+
       if (numericValue.length <= 3) {
         formatted = numericValue;
       } else if (numericValue.length <= 7) {
         formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(3)}`;
       } else if (numericValue.length <= 11) {
-        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(
+          3,
+          7
+        )}-${numericValue.slice(7, 11)}`;
       } else {
-        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(3, 7)}-${numericValue.slice(7, 11)}`;
+        formatted = `${numericValue.slice(0, 3)}-${numericValue.slice(
+          3,
+          7
+        )}-${numericValue.slice(7, 11)}`;
       }
-    
+
       setFormData((prev) => ({ ...prev, [name]: formatted }));
-    
+
       const phoneRegex = /^010-\d{4}-\d{4}$/;
       const isValid = phoneRegex.test(formatted);
       setPhoneValid(isValid);
-      setPhoneError(isValid ? "사용 가능한 번호입니다" : "양식에 일치하지 않습니다");
-      return; 
+      setPhoneError(
+        isValid ? "사용 가능한 번호입니다" : "양식에 일치하지 않습니다"
+      );
+      return;
     }
   };
 
@@ -127,7 +137,7 @@ function SignUpPage() {
     });
   };
 
-  const checkEmailDuplicate = async () => {
+  const handleCheckEmail = async () => {
     if (!formData.email) {
       setEmailChecked(false);
       setEmailGuide("이메일을 입력해주세요.");
@@ -141,9 +151,7 @@ function SignUpPage() {
     }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/members/check-email`, {
-        params: { email: formData.email },
-      });
+      const response = await checkEmailDuplicate(formData.email);
       if (response.status === 200) {
         setEmailChecked(true);
         setEmailGuide("사용 가능한 이메일입니다.");
@@ -156,7 +164,7 @@ function SignUpPage() {
     }
   };
 
-  const checkNameDuplicate = async () => {
+  const handleCheckName = async () => {
     if (!formData.name.trim()) {
       setNameChecked(false);
       setNameGuide("이름을 입력해주세요.");
@@ -164,9 +172,7 @@ function SignUpPage() {
     }
 
     try {
-      const response = await axios.get(`${API_BASE_URL}/members/check-name`, {
-        params: { name: formData.name },
-      });
+      const response = await checkNameDuplicate(formData.name);
       if (response.status === 200) {
         setNameChecked(true);
         setNameGuide("사용 가능한 이름입니다.");
@@ -191,7 +197,7 @@ function SignUpPage() {
     };
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/members`, payload);
+      const response = await registerMember(payload);
       if (response.status === 200) {
         alert("회원가입 성공");
         navigate("/login");
@@ -235,7 +241,7 @@ function SignUpPage() {
                 <button
                   type="button"
                   className="checkButton"
-                  onClick={checkEmailDuplicate}
+                  onClick={handleCheckEmail}
                 >
                   중복 확인
                 </button>
@@ -378,7 +384,7 @@ function SignUpPage() {
                 <button
                   type="button"
                   className="checkButton"
-                  onClick={checkNameDuplicate}
+                  onClick={handleCheckName}
                 >
                   중복 확인
                 </button>

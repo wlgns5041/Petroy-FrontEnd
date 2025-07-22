@@ -7,11 +7,18 @@ import { ko } from "date-fns/locale";
 import {
   subscribeNotification,
   updateGlobalUnreadCount,
-} from "../../services/SubscribeNotification.jsx";
-import { FaUserPlus, FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaComments } from "react-icons/fa";
+  fetchNotifications,
+  markNotificationAsRead,
+} from "../../services/NotificationService.jsx";
+import {
+  FaUserPlus,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaCalendarAlt,
+  FaComments,
+} from "react-icons/fa";
 
 const categories = ["전체", "친구", "일정", "커뮤니티"];
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const typeMap = {
   FRIEND_REQUEST: "친구 요청",
@@ -57,53 +64,23 @@ function NotificationPage() {
     localStorage.setItem("unreadCount", unread);
   }, [notifications]);
 
-  // 기존 알림 목록 불러오기
   useEffect(() => {
-    const fetchNotifications = async () => {
+    const loadNotifications = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await fetch(`${API_BASE_URL}/notification`, {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`알림 요청 실패 (status: ${response.status})`);
-        }
-
-        let data;
-        try {
-          data = await response.json();
-        } catch (jsonErr) {
-          console.warn("⚠️ 응답 본문이 비어있거나 JSON 아님");
-          data = { content: [] };
-        }
-
-        setNotifications(data.content || []);
+        const data = await fetchNotifications();
+        setNotifications(data);
       } catch (err) {
         console.error("❌ 알림 로딩 실패:", err);
         setError(err.message);
       }
     };
 
-    fetchNotifications();
+    loadNotifications();
   }, []);
 
-  // 읽음 처리 함수
   const markAsRead = async (noticeId) => {
-    const token = localStorage.getItem("accessToken");
     try {
-      const response = await fetch(`${API_BASE_URL}/notification/${noticeId}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("읽음 처리 실패");
-      }
+      await markNotificationAsRead(noticeId);
 
       setNotifications((prev) => {
         const updated = prev.map((n) =>
@@ -174,26 +151,26 @@ function NotificationPage() {
     <div className="notification-page">
       <NavBar title="알림" unreadCount={unreadCount} />
       <div className="notification-tabBar">
-  {categories.map((cat) => (
-    <button
-      key={cat}
-      className={`notification-tabButton ${
-        activeCategory === cat ? "active" : ""
-      }`}
-      onClick={() => setActiveCategory(cat)}
-    >
-      {cat}
-      {categoryCounts[cat] > 0 && <span>{categoryCounts[cat]}</span>}
-    </button>
-  ))}
-</div>
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            className={`notification-tabButton ${
+              activeCategory === cat ? "active" : ""
+            }`}
+            onClick={() => setActiveCategory(cat)}
+          >
+            {cat}
+            {categoryCounts[cat] > 0 && <span>{categoryCounts[cat]}</span>}
+          </button>
+        ))}
+      </div>
 
       {error && <div className="error-message">❌ {error}</div>}
 
       <div className="notification-list">
         {filteredNotifications.length === 0 ? (
           <div className="empty-state">
-            <p className="icon">📭</p>
+            <p className="empty-icon">📭</p>
             <p className="empty-title">알림 목록이 없습니다</p>
             <p className="empty-subtitle">
               새로운 소식이 도착하면 알려드릴게요!

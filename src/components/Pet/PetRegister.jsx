@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../../styles/Pet/PetRegister.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import {fetchSpeciesList, fetchBreedList, registerPet} from "../../services/PetService";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [step, setStep] = useState(1);
@@ -33,12 +32,8 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
   useEffect(() => {
     const fetchSpecies = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${API_BASE_URL}/pets/species`, {
-          headers: { Authorization: `${token}` },
-        });
-        const list = response.data.content || [];
-        const formatted = list.map((s) => ({
+        const speciesList = await fetchSpeciesList();
+        const formatted = speciesList.map((s) => ({
           value: s.speciesId,
           label: s.speciesName,
         }));
@@ -54,11 +49,8 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     const fetchBreeds = async () => {
       if (!petInfo.speciesId) return;
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/pets/breed/${petInfo.speciesId}`
-        );
-        const list = response.data.content || [];
-        const formatted = list.map((b) => ({
+        const breedList = await fetchBreedList(petInfo.speciesId);
+        const formatted = breedList.map((b) => ({
           value: b.breedId,
           label: b.breedName,
         }));
@@ -89,9 +81,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
   const handleRegister = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
       const formData = new FormData();
-
       formData.append("speciesId", petInfo.speciesId);
       formData.append("breedId", petInfo.breedId);
       formData.append("name", petInfo.name);
@@ -109,16 +99,11 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
         formData.append("image", file);
       }
 
-      const response = await axios.post(`${API_BASE_URL}/pets`, formData, {
-        headers: {
-          Authorization: `${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const result = await registerPet(formData);
 
       alert("반려동물이 성공적으로 등록되었습니다.");
-      if (onRegisterSuccess && response.data) {
-        onRegisterSuccess(response.data);
+      if (onRegisterSuccess && result) {
+        onRegisterSuccess(result);
       }
       onClose();
     } catch (err) {

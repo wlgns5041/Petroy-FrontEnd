@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendDetail.css";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import { fetchFriendDetail } from "../../services/FriendService.jsx";
 
 const FriendDetail = ({ memberId, onClose }) => {
   const [friendDetail, setFriendDetail] = useState(null);
@@ -12,20 +10,13 @@ const FriendDetail = ({ memberId, onClose }) => {
 
   useEffect(() => {
     const getFriendDetail = async () => {
-      const token = localStorage.getItem("accessToken");
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/friends/${memberId}`,
-          {
-            headers: { Authorization: `${token}` },
-          }
-        );
-        console.log("친구 상세 정보 응답:", response.data); // 👈 추가
-        setFriendDetail(response.data);
+        const data = await fetchFriendDetail(memberId);
+        setFriendDetail(data);
       } catch (error) {
         setError(
           error.response?.data?.errorMessage ||
-            "친구 상세 정보를 불러오는 중 오류가 발생했습니다."
+          "친구 상세 정보를 불러오는 중 오류가 발생했습니다."
         );
       }
     };

@@ -1,11 +1,6 @@
 import { toast } from 'react-toastify';
-import {
-  FaUserPlus,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaCalendarAlt,
-  FaComments,
-} from "react-icons/fa";
+import axios from "axios";
+import {FaUserPlus, FaCheckCircle, FaTimesCircle, FaCalendarAlt, FaComments} from "react-icons/fa";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -153,10 +148,28 @@ export const subscribeNotification = (onUnReadCount) => {
   return eventSource;
 };
 
+// 읽지않은 알림수 조회
 export const updateGlobalUnreadCount = (count) => {
   if (typeof count === 'number') {
     globalUnreadCallbacks.forEach((cb) => {
       if (typeof cb === 'function') cb(count);
     });
   }
+};
+
+// 알림 목록 조회
+export const fetchNotifications = async () => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.get(`${API_BASE_URL}/notification`, {
+    headers: { Authorization: `${token}` },
+  });
+  return response.data.content || [];
+};
+
+// 알림 읽음 처리
+export const markNotificationAsRead = async (noticeId) => {
+  const token = localStorage.getItem("accessToken");
+  await axios.patch(`${API_BASE_URL}/notification/${noticeId}`, null, {
+    headers: { Authorization: `${token}` },
+  });
 };

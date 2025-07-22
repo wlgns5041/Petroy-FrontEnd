@@ -4,57 +4,33 @@ import "../../styles/Login/LoginPage.css";
 import careImage from "../../assets/images/dogpaw.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiKakaoTalkFill } from "react-icons/ri";
+import { loginUser } from "../../services/MemberService";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 const KAKAO_KEY = process.env.REACT_APP_KAKAO_KEY;
 
 function LoginPage() {
-  const navigate = useNavigate(); // 페이지 이동을 위한 훅
-  const [email, setEmail] = useState(""); // 이메일 상태
-  const [password, setPassword] = useState(""); // 비밀번호 상태
-  const [error, setError] = useState(null); // 에러 메시지 상태
+  const navigate = useNavigate(); 
+  const [email, setEmail] = useState(""); 
+  const [password, setPassword] = useState(""); 
+  const [error, setError] = useState(null); 
   const [showPassword, setShowPassword] = useState(false);
 
-  // 로그인 폼 제출 핸들러
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // 폼의 기본 제출 동작을 막음
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      // 로그인 요청을 보내기
-      const response = await fetch(`${API_BASE_URL}/members/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // 요청 본문이 JSON임을 명시
-        },
-        body: JSON.stringify({
-          email: email, // 이메일 필드
-          password: password, // 비밀번호 필드
-        }),
-      });
-
-      // 응답이 성공적이지 않을 경우 에러 처리
-      if (!response.ok) {
-        let errorMessage = "로그인 실패"; // 기본 에러 메시지
-        try {
-          const errorData = await response.json(); // 서버에서 반환된 JSON 데이터 파싱
-          errorMessage = errorData.errorMessage || "로그인 실패"; // 서버에서 반환된 에러 메시지 사용
-        } catch (e) {
-          errorMessage = "서버 응답을 처리할 수 없습니다."; // JSON 파싱 오류 시 에러 메시지
-        }
-        throw new Error(errorMessage); // 에러 발생
-      }
-
-      // 로그인 성공 시, 응답 데이터 처리
-      const data = await response.json();
-      localStorage.setItem("accessToken", data.accessToken); // accessToken을 로컬 저장소에 저장
-      localStorage.setItem("refreshToken", data.refreshToken); // refreshToken을 로컬 저장소에 저장
-
-      navigate("/mainPage"); // 메인 페이지로 이동
-    } catch (error) {
-      // 에러 처리
-      setError(error.message || "로그인에 실패했습니다. 다시 시도해 주세요."); // 에러 메시지 상태 업데이트
+  try {
+    const data = await loginUser(email, password);
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+    navigate("/mainPage");
+  } catch (error) {
+    let message = "로그인 실패";
+    if (error.response?.data?.errorMessage) {
+      message = error.response.data.errorMessage;
     }
-  };
+    setError(message);
+  }
+};
 
   useEffect(() => {
     if (!KAKAO_KEY) {

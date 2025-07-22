@@ -275,6 +275,13 @@
     background-color: #999;
   }
 
+  .loginError {
+    margin-top: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ff0000;
+  }
+
   @media (max-width: 768px) {
     .loginPageContainer {
       flex-direction: column;

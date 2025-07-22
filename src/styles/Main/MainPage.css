@@ -368,3 +368,22 @@
   min-height: 700px;
   width: 100%;
 }
+
+.empty-message {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.schedule-empty-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  text-align: center;
+}

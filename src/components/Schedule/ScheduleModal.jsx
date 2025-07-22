@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import "../../styles/Main/ScheduleModal.css";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
 import Calendar from "react-calendar";
-import axios from "axios";
 import { FiInfo } from "react-icons/fi";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import {createSchedule, fetchScheduleCategories} from "../../services/ScheduleService";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -38,13 +38,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const token = localStorage.getItem("accessToken");
-        const response = await axios.get(`${API_BASE_URL}/schedules/category`, {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
-        setCategories(response.data.content);
+        const list = await fetchScheduleCategories();
+        setCategories(list);
       } catch (error) {
         console.error("카테고리 로딩 중 오류 발생:", error);
       }
@@ -215,7 +210,6 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const token = localStorage.getItem("accessToken");
 
     const startDateTime = new Date(formData.repeatPattern.startDate);
     const endDateTime = new Date(formData.repeatPattern.endDate);
@@ -335,16 +329,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
     console.log("최종 요청 데이터:", requestData);
 
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/schedules`,
-        requestData,
-        {
-          headers: {
-            Authorization: `${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await createSchedule(requestData);
 
       if (response.status === 200) {
         alert("일정이 생성되었습니다.");

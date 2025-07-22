@@ -148,10 +148,18 @@
   }
 
   .left-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
+
+  .myPage-pet-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
   
   .section-card-pets h3 .link {
     color: #888;
@@ -178,13 +186,10 @@
     display: flex;
     align-items: center; 
     justify-content: space-between;
-    flex: 0 0 calc(50% - 8px); /* 수치 조정 */
-    max-width: calc(50% - 8px); /* 추가: li가 100% 차지 못하게 */
     background: #fafafa;
-    border: 1px solid #eee;
+    border: none;
     border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 16px;
+    padding: 20px;
     font-size: 14px;
   }
 
@@ -260,9 +265,38 @@
     justify-content: space-between;
     flex: 1 1 calc(50% - 16px); 
     background: #fafafa;
-    border: 1px solid #eee;
+    border: none;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 16px;
     font-size: 14px;
+  }
+
+  .myPage-empty-state {
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    border-radius: 8px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 12px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .myPage-empty-text-main {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: #333;
+  }
+
+  .myPage-empty-text-sub {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: #999;
+    margin-top: 2px;
   }

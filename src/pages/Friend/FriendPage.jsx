@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "../../styles/Friend/FriendPage.css";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import NavBar from "../../components/commons/NavBar.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import FriendList from "../../components/Friend/FriendList.jsx";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import {
+  fetchAcceptedFriends,
+  fetchPendingFriends,
+  handleFriendRequest,
+  searchFriends,
+  sendFriendRequest,
+} from "../../services/FriendService";
 
 const FriendPage = () => {
   const [activeTab, setActiveTab] = useState("friends");
@@ -15,36 +19,24 @@ const FriendPage = () => {
   const [keyword, setKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [requestedIds, setRequestedIds] = useState([]);
   const [error, setError] = useState("");
 
-  const fetchFriends = async () => {
-    const token = localStorage.getItem("accessToken");
-    const response = await axios.get(`${API_BASE_URL}/friends`, {
-      params: { status: "ACCEPTED" },
-      headers: { Authorization: `${token}` },
-    });
-    setFriends(response.data.content || []);
+  const loadFriends = async () => {
+    const data = await fetchAcceptedFriends();
+    setFriends(data);
   };
 
-  const fetchRequests = async () => {
-    const token = localStorage.getItem("accessToken");
-    const response = await axios.get(`${API_BASE_URL}/friends`, {
-      params: { status: "PENDING" },
-      headers: { Authorization: `${token}` },
-    });
-    setRequests(response.data.content || []);
+  const loadRequests = async () => {
+    const data = await fetchPendingFriends();
+    setRequests(data);
+
+    const pendingIds = data.map((r) => r.id);
+    setRequestedIds(pendingIds);
   };
 
   const handleRequestAction = async (memberId, action) => {
-    const token = localStorage.getItem("accessToken");
-    await axios.patch(
-      `${API_BASE_URL}/friends/${memberId}`,
-      {},
-      {
-        headers: { Authorization: `${token}` },
-        params: { status: action },
-      }
-    );
+    await handleFriendRequest(memberId, action);
 
     const accepted = requests.find((r) => r.id === memberId);
 
@@ -66,17 +58,8 @@ const FriendPage = () => {
     setError("");
 
     try {
-      const token = localStorage.getItem("accessToken");
-      const response = await axios.get(`${API_BASE_URL}/friends/search`, {
-        params: { keyword },
-        headers: { Authorization: `${token}` },
-      });
-
-      if (response.data && Array.isArray(response.data.content)) {
-        setSearchResults(response.data.content);
-      } else {
-        setSearchResults([]);
-      }
+      const result = await searchFriends(keyword);
+      setSearchResults(result);
     } catch (err) {
       setError("친구 검색 중 오류 발생");
       console.error(err);
@@ -87,14 +70,8 @@ const FriendPage = () => {
 
   const handleSendRequest = async (memberId) => {
     try {
-      const token = localStorage.getItem("accessToken");
-      await axios.post(
-        `${API_BASE_URL}/friends/${memberId}`,
-        {},
-        {
-          headers: { Authorization: `${token}` },
-        }
-      );
+      await sendFriendRequest(memberId);
+      setRequestedIds((prev) => [...prev, memberId]);
       alert("친구 요청을 보냈습니다.");
     } catch (error) {
       alert("친구 요청에 실패했습니다.");
@@ -103,8 +80,8 @@ const FriendPage = () => {
   };
 
   useEffect(() => {
-    fetchFriends();
-    fetchRequests();
+    loadFriends();
+    loadRequests();
   }, []);
 
   useEffect(() => {
@@ -142,7 +119,7 @@ const FriendPage = () => {
           {searchResults.length > 0 ? (
             <ul>
               {searchResults.map((member) => {
-                const isAlreadyFriend = friends.some((f) => f.id === member.id); 
+                const isAlreadyFriend = friends.some((f) => f.id === member.id);
 
                 return (
                   <li key={member.id} className="search-result-item">
@@ -158,6 +135,10 @@ const FriendPage = () => {
                     {isAlreadyFriend ? (
                       <button className="send-request-button disabled" disabled>
                         이미 친구입니다
+                      </button>
+                    ) : requestedIds.includes(member.id) ? (
+                      <button className="send-request-button disabled" disabled>
+                        친구 요청중입니다
                       </button>
                     ) : (
                       <button

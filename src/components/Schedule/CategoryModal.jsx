@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import '../../styles/Main/CategoryModal.css';
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import { createScheduleCategory } from '../../services/ScheduleService';
 
 const CategoryModal = ({ isOpen, onRequestClose, onCategoryCreated }) => {
   const [categoryName, setCategoryName] = useState('');
@@ -10,18 +8,8 @@ const CategoryModal = ({ isOpen, onRequestClose, onCategoryCreated }) => {
   if (!isOpen) return null;
 
   const handleSubmit = async () => {
-    const token = localStorage.getItem('accessToken');
-
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/schedules/category`,
-        { name: categoryName },
-        {
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
+      const response = await createScheduleCategory(categoryName);
       if (response.status === 200) {
         alert('일정 카테고리가 생성되었습니다.');
         onCategoryCreated();
@@ -49,10 +37,16 @@ const CategoryModal = ({ isOpen, onRequestClose, onCategoryCreated }) => {
           />
         </div>
         <div className="category-modal-button-group">
-          <button className="category-modal-btn category-modal-cancel" onClick={onRequestClose}>
+          <button
+            className="category-modal-btn category-modal-cancel"
+            onClick={onRequestClose}
+          >
             취소
           </button>
-          <button className="category-modal-btn category-modal-submit" onClick={handleSubmit}>
+          <button
+            className="category-modal-btn category-modal-submit"
+            onClick={handleSubmit}
+          >
             생성
           </button>
         </div>

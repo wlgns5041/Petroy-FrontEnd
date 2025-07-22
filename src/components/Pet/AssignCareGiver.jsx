@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Pet/AssignCareGiver.css";
+import { fetchAcceptedFriends } from "../../services/FriendService";
+import {fetchCaregiversByPet, assignCaregiver} from "../../services/PetService";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
   const [friends, setFriends] = useState([]);
@@ -13,21 +13,14 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("accessToken");
       try {
-        const [friendsRes, caregiversRes] = await Promise.all([
-          axios.get(`${API_BASE_URL}/friends`, {
-            params: { status: "ACCEPTED" },
-            headers: { Authorization: `${token}` },
-          }),
-          axios.get(`${API_BASE_URL}/caregivers`, {
-            params: { petId: pet.petId },
-            headers: { Authorization: `${token}` },
-          }),
+        const [friendsList, caregiverList] = await Promise.all([
+          fetchAcceptedFriends(),
+          fetchCaregiversByPet(pet.petId),
         ]);
 
-        setFriends(friendsRes.data.content || []);
-        setCaregivers(caregiversRes.data.content || []);
+        setFriends(friendsList);
+        setCaregivers(caregiverList);
       } catch (err) {
         setError("데이터를 불러오는 중 오류가 발생했습니다.");
         console.error(err);
@@ -40,20 +33,9 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
   }, [pet.petId]);
 
   const handleAssign = async (careGiverId) => {
-    const token = localStorage.getItem("accessToken");
-
     try {
-      const response = await axios.post(`${API_BASE_URL}/caregivers`, null, {
-        headers: {
-          Authorization: `${token}`,
-        },
-        params: {
-          petId: pet.petId,
-          memberId: careGiverId,
-        },
-      });
-
-      if (response.data === true) {
+      const success = await assignCaregiver(pet.petId, careGiverId);
+      if (success) {
         onAssignCareGiver(careGiverId);
         onClose();
       }

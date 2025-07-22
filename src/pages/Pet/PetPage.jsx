@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import PetRegister from "../../components/Pet/PetRegister.jsx";
 import PetEdit from "../../components/Pet/PetEdit.jsx";
 import DeletePet from "../../components/Pet/DeletePet.jsx";
 import AssignCareGiver from "../../components/Pet/AssignCareGiver.jsx";
 import CareGiverList from "../../components/Pet/CareGiverList.jsx";
-import { fetchMemberPets } from "../../services/TokenService.jsx";
+import { fetchMemberPets } from "../../services/PetService.jsx";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Pet/PetPage.css";
+import { fetchCaregiverPets } from "../../services/PetService.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -92,66 +92,46 @@ const PetPage = () => {
     setPetSortIndex(0);
   };
 
-  /* 펫 등록 후 새로고침을 방지하기 위해 API를 외부함수로 꺼서 useEffect에 넣음 등록 성공 시 호출 */
+const loadPets = async () => {
+  const token = localStorage.getItem("accessToken");
 
-  const loadPets = async () => {
-    const token = localStorage.getItem("accessToken");
-
-    if (token) {
-      try {
-        const response = await fetchMemberPets(token);
-
-        if (response && response.content) {
-          setPets(response.content);
-        } else {
-          setError("펫 정보를 불러오는 중 오류 발생");
-        }
-      } catch (error) {
-        setError("반려동물 정보를 불러오는 중 오류 발생");
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      setError("로그인이 필요합니다");
+  if (token) {
+    try {
+      const petList = await fetchMemberPets(); 
+      console.log("🐶 내 펫 리스트 응답:", petList); // 여기를 추가
+      setPets(petList);
+    } catch (error) {
+      setError("반려동물 정보를 불러오는 중 오류 발생");
+      console.error(error);
+    } finally {
       setLoading(false);
     }
-  };
+  } else {
+    setError("로그인이 필요합니다");
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     loadPets();
   }, []);
 
-  useEffect(() => {
-    const loadCaregiverPets = async () => {
-      const token = localStorage.getItem("accessToken");
+useEffect(() => {
+  const loadCaregiverPets = async () => {
+    try {
+      setCaregiverLoading(true);
+      const pets = await fetchCaregiverPets();
+      setCaregiverPets(pets);
+    } catch (err) {
+      setCaregiverError("돌보미 반려동물 정보를 불러오는 중 오류 발생");
+      console.error(err);
+    } finally {
+      setCaregiverLoading(false);
+    }
+  };
 
-      if (token) {
-        try {
-          setCaregiverLoading(true);
-          const response = await axios.get(`${API_BASE_URL}/pets/caregiver`, {
-            headers: { Authorization: `${token}` },
-          });
-
-          if (response && response.data && response.data.content) {
-            setCaregiverPets(response.data.content);
-          } else {
-            setCaregiverError("돌보미 반려동물 정보를 불러오는 중 오류 발생");
-          }
-        } catch (err) {
-          setCaregiverError("돌보미 반려동물 정보를 불러오는 중 오류 발생");
-          console.error(err);
-        } finally {
-          setCaregiverLoading(false);
-        }
-      } else {
-        setCaregiverError("로그인이 필요합니다");
-        setCaregiverLoading(false);
-      }
-    };
-
-    loadCaregiverPets();
-  }, []);
+  loadCaregiverPets();
+}, []);
 
   const handleOpenModal = () => setShowModal(true);
 
@@ -362,7 +342,15 @@ const PetPage = () => {
                   )}
                 </div>
               ) : (
-                <p>등록된 반려동물이 없습니다.</p>
+                <div className="petPage-empty-state">
+                  <p className="petPage-empty-icon">🐾</p>
+                  <p className="petPage-empty-text-main">
+                    등록된 반려동물이 없습니다
+                  </p>
+                  <p className="petPage-empty-text-sub">
+                    반려동물을 등록하면 이곳에 표시됩니다!
+                  </p>
+                </div>
               )
             ) : (
               <div className="petPage-petsSection">
@@ -437,7 +425,15 @@ const PetPage = () => {
                     )}
                   </>
                 ) : (
-                  <p>돌보미로 등록된 반려동물이 없습니다.</p>
+                  <div className="petPage-empty-state">
+                    <p className=".petPage-empty-icon">🐾</p>
+                    <p className="petPage-empty-text-main">
+                      등록된 돌보미 반려동물이 없습니다
+                    </p>
+                    <p className="petPage-empty-text-sub">
+                      친구의 반려동물을 등록하면 이곳에 표시됩니다!
+                    </p>
+                  </div>
                 )}
               </div>
             )}

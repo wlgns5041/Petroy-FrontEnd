@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import "../../styles/Pet/PetEdit.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import { updatePet, fetchMemberPets } from "../../services/PetService";
 
 const PetEdit = ({ pet, onClose, onUpdate }) => {
   const [step, setStep] = useState(1);
@@ -19,8 +17,6 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`✏️ ${name} 값 변경됨:`, value);
-
     setPetInfo((prev) => ({
       ...prev,
       [name]: value,
@@ -33,45 +29,64 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
     setPreviewUrl(URL.createObjectURL(file));
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-  
-    try {
-      const token = localStorage.getItem("accessToken");
-  
-      const formData = new FormData();
-      formData.append("name", petInfo.name);
-      formData.append("age", petInfo.age);
-      formData.append("memo", petInfo.memo || "");
-  
-      if (petInfo.image && petInfo.image instanceof File) {
-        formData.append("image", petInfo.image); 
-      }
-  
-      const response = await axios.patch(
-        `${API_BASE_URL}/pets/${pet.petId}`,
-        formData,
-        {
-          headers: {
-            Authorization: `${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-  
-      if (response.status === 200) {
-        alert("반려동물이 성공적으로 등록되었습니다.");
-        onUpdate(response.data);
-        onClose();
+const handleSubmit = async () => {
+  setLoading(true);
+  setError(null);
+
+  try {
+    const formData = new FormData();
+    formData.append("name", petInfo.name);
+    formData.append("age", petInfo.age);
+    formData.append("memo", petInfo.memo || "");
+
+    if (petInfo.image && petInfo.image instanceof File) {
+      formData.append("image", petInfo.image);
+    } else {
+      const allPets = await fetchMemberPets();
+      const currentPet = allPets.find((p) => p.petId === pet.petId);
+
+      if (!currentPet) {
+        console.warn("⚠ 현재 펫 정보를 찾을 수 없습니다.");
       } else {
-        setError("펫 정보 수정에 실패했습니다.");
+        const { species, breed } = currentPet;
+        console.log("✔ species:", species, "✔ breed:", breed);
+
+        const fallbackImageMap = {
+          "강아지-치와와": "dog-chihuahua.png",
+          "강아지-진돗개": "dog-jindo.png",
+          "강아지-포메라니안": "dog-pomeranian.png",
+          "고양이-러시안블루": "cat-russianblue.png",
+          "고양이-먼치킨": "cat-munchkin.png",
+          "고양이-치즈": "cat-cheese.png",
+        };
+
+        const fallbackKey = `${species}-${breed}`;
+        const fallbackFileName = fallbackImageMap[fallbackKey];
+
+        if (fallbackFileName) {
+          const fallbackImageUrl = `${process.env.PUBLIC_URL}/assets/icons/${fallbackFileName}`;
+          const response = await fetch(fallbackImageUrl);
+          const blob = await response.blob();
+          const file = new File([blob], fallbackFileName, { type: blob.type });
+          formData.append("image", file);
+          console.log("✔ fallback 이미지 적용:", fallbackFileName);
+        } else {
+          console.warn("⚠ 매핑된 fallback 이미지가 없습니다.");
+        }
       }
-    } catch (err) {
-      setError("서버와의 통신에 실패했습니다.");
-      console.error(err);
     }
-  };
+
+    const data = await updatePet(pet.petId, formData);
+    alert("반려동물이 성공적으로 수정되었습니다.");
+    onUpdate(data);
+    onClose();
+  } catch (err) {
+    setError("서버와의 통신에 실패했습니다.");
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const isStep1Valid = petInfo.name && petInfo.age;
 
@@ -185,6 +200,7 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
             </CSSTransition>
           </SwitchTransition>
         </div>
+
         <div className="petEdit-button-row">
           <button
             className="petEdit-next-button"

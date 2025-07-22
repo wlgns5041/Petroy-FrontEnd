@@ -118,10 +118,25 @@
     transition: background-color 0.2s ease;
   }
 
-  .friendEmptyMessage {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 15px;
-    color: #9ca3af;
-    font-weight: 500;
-  }
+.friendEmptyState {
+  text-align: center;
+  margin-top: 60px;
+  color: #555;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.friendEmptyicon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.friendEmptyMessage-main {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.friendEmptyMessage-sub {
+  font-size: 14px;
+  color: #888;
+}
