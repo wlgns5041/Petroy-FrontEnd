@@ -1,12 +1,3 @@
-.loginPage {
-    background-color: #f4f5f7;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; 
-    box-sizing: border-box;
-  }
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -18,7 +9,16 @@
     }
 }
 
-.loginPageContainer {
+.loginpage {
+    background-color: #f4f5f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    box-sizing: border-box;
+  }
+
+.loginpage-container {
     display: flex;
     width: 60vw;
     height: 70vh;
@@ -32,7 +32,7 @@
     gap: 24px;
 }
 
-.loginLeftSection {
+.loginpage-leftsection {
     flex: 1;
     background-color: #e8e9ec;
     display: flex;
@@ -43,13 +43,13 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
-.loginImage {
+.loginpage-leftsection-image {
     max-width: 20%;
     max-height: 30%;
     object-fit: cover;
 }
 
-.loginRightSection {
+.loginpage-rightsection {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -61,7 +61,7 @@
     gap: 8px;
   }
   
-  .loginHeader h2 {
+  .loginpage-title h2 {
     font-size: 20px;
     font-weight: 800;
     margin-bottom: 6px;
@@ -69,7 +69,7 @@
     line-height: 1.4;
   }
   
-  .loginHeader p {
+  .loginpage-title p {
     font-size: 12px;
     font-weight: 400;
     color: #6b7280;
@@ -77,12 +77,12 @@
     text-align: left;
   }
   
-  .loginFormGroup {
+  .loginpage-form {
     width: 100%;
     margin-bottom: 16px;
   }
   
-.loginFormGroup input {
+  .loginpage-form input {
     width: 100%;
     padding: 12px 14px;
     font-size: 13px;
@@ -95,33 +95,33 @@
     border: 1px solid transparent;  
   }
   
-  .loginFormGroup input:hover {
+  .loginpage-form input:hover {
     background-color: #f3f4f6;
   }
   
-  .loginFormGroup input:focus {
+  .loginpage-form input:focus {
     outline: none;
     background-color: #ffffff;
     border: 1px solid transparent; 
     box-shadow: 0 0 0 2px #111827;
   }
   
-  .loginFormGroup input.filled {
+  .loginpage-form input.filled {
     border: 1px solid #e5e7eb;
     background-color: #ffffff;
   }
 
-  .password-input-wrapper {
+  .loginpage-password {
     position: relative;
     width: 100%;
   }
   
-  .password-input-wrapper input {
+  .loginpage-password input {
     width: 100%;
     padding-right: 40px; 
   }
   
-  .password-toggle-icon {
+  .loginpage-password-icon {
     position: absolute;
     right: 12px;
     top: 50%;
@@ -131,20 +131,28 @@
     font-size: 20px;
     transition: color 0.5s ease;
   }
-  
-  .password-input-wrapper input {
-    padding-right: 40px; 
-  }
 
-  .loginButtonGroup {
+  .loginpage-button {
     display: flex;
     gap: 20px;
     margin-top: 2.5rem;
     width: 100%;
   }
   
-  .loginConfirmButton,
-  .homeRedirectButton {
+  .loginpage-homebutton {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: #1e293b; 
+    color: #fff;
+    transition: background-color 0.3s ease;
+  }
+
+  .loginpage-loginbutton {
     flex: 1;
     padding: 12px 0;
     border: none;
@@ -157,53 +165,44 @@
     transition: background-color 0.3s ease;
   }
   
-  .homeRedirectButton:hover,
-  .loginConfirmButton:hover {
+  .loginpage-homebutton:hover {
     background-color: #0f172a;
   }
 
-  .loginConfirmButton:disabled {
+  .loginpage-loginbutton:hover {
+    background-color: #0f172a;
+  }
+
+  .loginpage-loginbutton:disabled {
     background-color: #d1d5db;
     color: #9ca3af;
     cursor: not-allowed;
   }
-  
-  .signUpText {
-    margin-top: 30px;
-    font-size: 13px;
-    color: #888;
-    text-align: center;
-    cursor: pointer;
-  }
 
-  .signUpWrapper {
+  .loginpage-signup-wrapper {
     margin-top: 30px;
     text-align: center;
     font-size: 13px;
     color: #888;
   }
   
-  .signUpPrompt {
+  .loginpage-signup-title {
     margin-right: 12px;
     cursor: default; 
   }
   
-  .signUpLink {
+  .loginpage-signup-link {
     font-weight: 600;
     color: #272727;
     cursor: pointer;
     transition: color 0.2s ease;
   }
   
-  .signUpLink:hover {
+  .loginpage-signup-link:hover {
     color: #555;
   }
   
-  .signUpText:hover {
-    color: #666;
-  }
-  
-  .loginDivider {
+  .loginpage-sns-title {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -213,21 +212,21 @@
     color: #6b7280;
   }
   
-  .loginDivider hr {
+  .loginpage-sns-title hr {
     flex: 1;
     height: 1px;
     background-color: #e5e7eb;
     border: none;
   }
   
-  .snsLoginButtons {
+  .loginpage-sns-buttons {
     display: flex;
     justify-content: center;
     gap: 20px;
     width: 100%;
   }
   
-  .customKakaoButton {
+  .loginpage-kakao-button {
     flex: 1;
     display: flex;
     align-items: center;
@@ -245,17 +244,11 @@
     transition: background-color 0.3s ease;
   }
   
-  .customKakaoButton:hover {
+  .loginpage-kakao-button:hover {
     background-color: #ffeb3b;
   }
   
-  .kakaoCustomIcon {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
-  }
-  
-  .guestLoginButton {
+  .loginpage-guest-button {
     flex: 1;
     height: 44px;
     font-size: 14px;
@@ -271,52 +264,13 @@
     transition: background-color 0.3s ease;
   }
   
-  .guestLoginButton:hover {
+  .loginpage-guest-button:hover {
     background-color: #999;
   }
 
-  .loginError {
+  .loginpage-error {
     margin-top: 32px;
     font-size: 14px;
     font-weight: 500;
     color: #ff0000;
-  }
-
-  @media (max-width: 768px) {
-    .loginPageContainer {
-      flex-direction: column;
-      width: 90vw;
-      height: auto;
-      padding: 20px;
-    }
-  
-    .loginLeftSection,
-    .loginRightSection {
-      width: 100%;
-      border-radius: 16px;
-      padding: 40px 20px;
-    }
-  
-    .loginLeftSection {
-      margin-bottom: 20px;
-    }
-  
-    .loginImage {
-      max-width: 30%;
-      max-height: 30%;
-    }
-  
-    .loginRightSection {
-      padding: 20px;
-    }
-  
-    .loginButtonGroup {
-      flex-direction: column;
-      gap: 12px;
-    }
-  
-    .snsLoginButtons {
-      flex-direction: column;
-      gap: 12px;
-    }
   }

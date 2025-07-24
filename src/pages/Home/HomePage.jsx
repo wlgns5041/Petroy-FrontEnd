@@ -102,20 +102,20 @@ function HomePage() {
                                     <span className="homepage-pagination-total">{slides.length}</span>
                                 </div>
                                 <div className="homepage-progress">
-                                    <span className="bar"></span>
+                                    <span className="homepage-bar"></span>
                                 </div>
                             </div>
-                            <div className={`homepage-text-area fade ${isAnimating ? 'fade-out' : 'fade-in'}`}>
-                                <h1 className="title">{slides[activeSlide].title}</h1>
-                                <h2 className="subtitle">{slides[activeSlide].subtitle}</h2>
-                                <p className="description">
+                            <div className={`homepage-textarea fade ${isAnimating ? 'fade-out' : 'fade-in'}`}>
+                                <h1 className="homepage-textarea-title">{slides[activeSlide].title}</h1>
+                                <h2 className="homepage-textarea-subtitle">{slides[activeSlide].subtitle}</h2>
+                                <p className="homepage-textarea-description">
                                     반려동물을 위한, 반려동물의 삶을 더 쉽고
                                     <br />
                                     간단하게 관리해보세요
                                 </p>
                             </div>
                         </div>
-                        <div className={`homepage-slider_wrap fade ${isAnimating ? 'fade-out' : 'fade-in'}`}>
+                        <div className={`homepage-slider fade ${isAnimating ? 'fade-out' : 'fade-in'}`}>
                             <img
                                 className="homepage-slider-image"
                                 src={slides[activeSlide].image}
@@ -152,7 +152,7 @@ function HomePage() {
                             <img src={require('../../assets/images/calendar.png')} alt="캘린더 관리" />
                             <div className="homepage-middle-card-round"></div>
                             <div className="homepage-middle-card-text">
-                                <h4>캘린더 관리</h4>
+                                <div className="homepage-middle-card-title">캘린더 관리</div>
                                 <p className="homepage-middle-card-content">
                                     일정을 등록하고<br />
                                     반려동물을 손쉽게 관리하세요
@@ -163,7 +163,7 @@ function HomePage() {
                             <img src={require('../../assets/images/care.jpg')} alt="돌보미 기능" />
                             <div className="homepage-middle-card-round"></div>
                             <div className="homepage-middle-card-text">
-                                <h4>돌보미 기능</h4>
+                                <div className="homepage-middle-card-title">돌보미 기능</div>
                                 <p className="homepage-middle-card-content">
                                     믿을 수 있는 돌보미와 함께<br />
                                     반려동물을 안전하게 케어하세요
@@ -174,7 +174,7 @@ function HomePage() {
                             <img src={require('../../assets/images/sns.png')} alt="커뮤니티" />
                             <div className="homepage-middle-card-round"></div>
                             <div className="homepage-middle-card-text">
-                                <h4>커뮤니티</h4>
+                                <div className="homepage-middle-card-title">커뮤니티</div>
                                 <p className="homepage-middle-card-content">
                                     반려동물에 대한 정보를<br />
                                     공유하고 소통하며<br />

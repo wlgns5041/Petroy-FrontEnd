@@ -68,17 +68,17 @@ function LoginPage() {
   };
 
   return (
-    <div className="loginPage">
-      <div className="loginPageContainer">
-        <div className="loginLeftSection">
+    <div className="loginpage">
+      <div className="loginpage-container">
+        <div className="loginpage-leftsection">
           <img
             src={careImage}
             alt="Login Illustration"
-            className="loginImage"
+            className="loginpage-leftsection-image"
           />
         </div>
-        <div className="loginRightSection">
-          <div className="loginHeader">
+        <div className="loginpage-rightsection">
+          <div className="loginpage-title">
             <h2>
               로그인을 통해
               <br />
@@ -87,8 +87,8 @@ function LoginPage() {
             <p>친구와 일정을 공유하며 반려동물을 더 편하게 돌볼 수 있어요</p>
           </div>
 
-          <form className="fullGroup" onSubmit={handleSubmit}>
-            <div className="loginFormGroup">
+          <form onSubmit={handleSubmit}>
+            <div className="loginpage-form">
               <input
                 type="email"
                 placeholder="이메일"
@@ -97,8 +97,8 @@ function LoginPage() {
                 required
               />
             </div>
-            <div className="loginFormGroup">
-              <div className="password-input-wrapper">
+            <div className="loginpage-form">
+              <div className="loginpage-password">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
@@ -109,36 +109,36 @@ function LoginPage() {
                   required
                 />
                 <span
-                  className="password-toggle-icon"
+                  className="loginpage-password-icon"
                   onClick={() => setShowPassword((prev) => !prev)}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </span>
               </div>
             </div>
-            {error && <p className="loginError">{error}</p>}
-            <div className="loginButtonGroup">
+            {error && <p className="loginpage-error">{error}</p>}
+            <div className="loginpage-button">
               <button
                 type="button"
-                className="homeRedirectButton"
+                className="loginpage-homebutton"
                 onClick={() => navigate("/")}
               >
                 홈으로
               </button>
               <button
                 type="submit"
-                className="loginConfirmButton"
+                className="loginpage-loginbutton"
                 disabled={!email || !password}
               >
                 로그인
               </button>
             </div>
 
-            <div className="signUpText">
-              <div className="signUpWrapper">
-                <span className="signUpPrompt">아직 계정이 없으신가요?</span>
+            <div>
+              <div className="loginpage-signup-wrapper">
+                <span className="loginpage-signup-title">아직 계정이 없으신가요?</span>
                 <span
-                  className="signUpLink"
+                  className="loginpage-signup-link"
                   onClick={() => navigate("/signUp")}
                 >
                   회원가입하러가기
@@ -147,22 +147,22 @@ function LoginPage() {
             </div>
           </form>
 
-          <div className="loginDivider">
+          <div className="loginpage-sns-title">
             <hr />
             <span>SNS 로그인</span>
             <hr />
           </div>
 
-          <div className="snsLoginButtons">
+          <div className="loginpage-sns-buttons">
             <button
               type="button"
-              className="customKakaoButton"
+              className="loginpage-kakao-button"
               onClick={loginWithKakao}
             >
               <RiKakaoTalkFill size={18} color="#191919" />
-              <span className="kakaoText">카카오 로그인</span>
+              <span> 카카오 로그인</span>
             </button>
-            <button type="button" className="guestLoginButton">
+            <button type="button" className="loginpage-guest-button">
               게스트 로그인
             </button>
           </div>
