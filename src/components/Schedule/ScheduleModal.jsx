@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../../styles/Main/ScheduleModal.css";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
-import Calendar from "react-calendar";
 import { FiInfo } from "react-icons/fi";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import {createSchedule, fetchScheduleCategories} from "../../services/ScheduleService";
+import {
+  createSchedule,
+  fetchScheduleCategories,
+} from "../../services/ScheduleService";
+import { ko } from "date-fns/locale";
+import { format } from "date-fns";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -30,7 +34,30 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
     },
   });
 
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const currentMonthStr = format(currentDate, "yyyy년 M월", { locale: ko });
   const [step, setStep] = useState(1);
+
+  const calendarRef = useRef(null);
+  const [syncedHeight, setSyncedHeight] = useState(0);
+
+  useEffect(() => {
+    if (calendarRef.current) {
+      setSyncedHeight(calendarRef.current.offsetHeight);
+    }
+  }, [formData.selectedDates, currentDate]);
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      if (calendarRef.current) {
+        const height = calendarRef.current.offsetHeight;
+        if (height > 0) {
+          setSyncedHeight(height);
+        }
+      }
+    });
+  }, []);
+
   const goToNext = () => setStep((prev) => Math.min(prev + 1, 5));
 
   const [categories, setCategories] = useState([]);
@@ -182,9 +209,10 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   };
 
   const handleDateChange = (date) => {
-    // KST로 변환
-    const localDate = new Date(date.getTime() + 9 * 60 * 60 * 1000); // UTC +9시간
-    const formattedDate = localDate.toISOString().slice(0, 10); // yyyy-mm-dd 형식
+    // KST 보정
+    const localDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    const formattedDate = localDate.toISOString().slice(0, 10);
+
     setFormData((prevData) => {
       const existingDate = prevData.selectedDates.find(
         (d) => d.date === formattedDate
@@ -381,6 +409,44 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
       default:
         return "";
     }
+  };
+
+  // 미니캘린더 월 시작일 ~ 종료일 가져오기
+  const getStartOfMonth = () => {
+    const start = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const day = start.getDay();
+    start.setDate(start.getDate() - day); // 해당 월의 첫 주 일요일
+    return start;
+  };
+
+  const getEndOfMonth = () => {
+    const end = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
+    const day = end.getDay();
+    end.setDate(end.getDate() + (6 - day)); // 해당 월의 마지막 주 토요일
+    return end;
+  };
+
+  // 주 단위로 나누기
+  const groupDatesByWeek = (start, end) => {
+    const weeks = [];
+    let current = new Date(start);
+    while (current <= end) {
+      const week = [];
+      for (let i = 0; i < 7; i++) {
+        week.push(new Date(current));
+        current.setDate(current.getDate() + 1);
+      }
+      weeks.push(week);
+    }
+    return weeks;
   };
 
   return (
@@ -686,101 +752,147 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                       )}
 
                       {!formData.repeatYn && (
-                        <div className="schedule-create-section-card-step3">
-                          <div className="schedule-create-form-step3">
-                            <Calendar
-                              onChange={handleDateChange}
-                              value={null}
-                              className="schedule-create-custom-small-calendar"
-                              tileClassName={({ date }) => {
-                                const localDate = new Date(
-                                  date.getTime() + 9 * 60 * 60 * 1000
-                                );
-                                const formatted = localDate
-                                  .toISOString()
-                                  .slice(0, 10);
-                                const selected = formData.selectedDates.map(
-                                  (d) => d.date
-                                );
+                        <div className="step3-calendar-wrapper">
+                          {/* ⬅ 좌측 미니 캘린더 */}
+                          <div
+                            className="step3-mini-calendar"
+                            ref={calendarRef}
+                          >
+                            <div className="step3-mini-calendar-header">
+                              <button
+                                type="button"
+                                className="step3-nav-btn"
+                                onClick={() =>
+                                  setCurrentDate(
+                                    (prev) =>
+                                      new Date(
+                                        prev.getFullYear(),
+                                        prev.getMonth() - 1,
+                                        1
+                                      )
+                                  )
+                                }
+                              >
+                                ◀
+                              </button>
+                              <span className="step3-month-label">
+                                {currentMonthStr}
+                              </span>
+                              <button
+                                type="button"
+                                className="step3-nav-btn"
+                                onClick={() =>
+                                  setCurrentDate(
+                                    (prev) =>
+                                      new Date(
+                                        prev.getFullYear(),
+                                        prev.getMonth() + 1,
+                                        1
+                                      )
+                                  )
+                                }
+                              >
+                                ▶
+                              </button>
+                            </div>
 
-                                if (!selected.includes(formatted)) return "";
+                            {groupDatesByWeek(
+                              getStartOfMonth(),
+                              getEndOfMonth()
+                            ).map((week, i) => (
+                              <div key={i} className="step3-week-row">
+                                {week.map((date, j) => {
+                                  const formatted = new Date(
+                                    date.getTime() + 9 * 60 * 60 * 1000
+                                  )
+                                    .toISOString()
+                                    .slice(0, 10);
 
-                                const left = new Date(localDate);
-                                const right = new Date(localDate);
-                                const top = new Date(localDate);
-                                const bottom = new Date(localDate);
+                                  const isSelected =
+                                    formData.selectedDates.some(
+                                      (d) => d.date === formatted
+                                    );
+                                  const isToday =
+                                    date.toLocaleDateString("sv-SE", {
+                                      timeZone: "Asia/Seoul",
+                                    }) ===
+                                    new Date().toLocaleDateString("sv-SE", {
+                                      timeZone: "Asia/Seoul",
+                                    });
 
-                                left.setDate(localDate.getDate() - 1);
-                                right.setDate(localDate.getDate() + 1);
-                                top.setDate(localDate.getDate() - 7);
-                                bottom.setDate(localDate.getDate() + 7);
-
-                                const hasLeft = selected.includes(
-                                  left.toISOString().slice(0, 10)
-                                );
-                                const hasRight = selected.includes(
-                                  right.toISOString().slice(0, 10)
-                                );
-                                const hasTop = selected.includes(
-                                  top.toISOString().slice(0, 10)
-                                );
-                                const hasBottom = selected.includes(
-                                  bottom.toISOString().slice(0, 10)
-                                );
-
-                                const classes = ["connected"];
-                                if (hasTop) classes.push("t");
-                                if (hasBottom) classes.push("b");
-                                if (hasLeft) classes.push("l");
-                                if (hasRight) classes.push("r");
-
-                                return classes.join(" ");
-                              }}
-                            />
+                                  return (
+                                    <div
+                                      key={j}
+                                      className={`step3-day
+                ${isToday ? "today" : ""}
+                ${isSelected ? "selected" : ""}
+                ${isToday && isSelected ? "today-selected" : ""}
+              `}
+                                      onClick={() => handleDateChange(date)}
+                                    >
+                                      {date.getDate()}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            ))}
                           </div>
 
-                          <div className="schedule-create-form-row-step3">
-                            {formData.selectedDates.length > 0 && (
-                              <div className="schedule-create-selected-dates">
-                                <button
-                                  className="schedule-create-clear-button"
+                          {/* ➡ 우측 선택된 날짜 */}
+                          <div
+                            className="step3-selected-dates-box"
+                            style={{
+                              height: syncedHeight
+                                ? `${syncedHeight}px`
+                                : "auto", // fallback 도 가능
+                            }}
+                          >
+                            <div className="step3-selected-dates-title-row">
+                              <div className="step3-selected-dates-title">
+                                선택된 날짜
+                              </div>
+                              <button
+                                className="step3-clear-btn"
+                                type="button"
+                                onClick={() =>
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    selectedDates: [],
+                                  }))
+                                }
+                              >
+                                전체해제
+                              </button>
+                            </div>
+
+                            <div
+                              className={`step3-date-list ${
+                                formData.selectedDates.length % 2 === 1
+                                  ? "align-left"
+                                  : ""
+                              }`}
+                              style={{
+                                overflowY: "auto",
+                                maxHeight: `${syncedHeight - 48 - 24}px`, // title 높이 + padding 고려
+                              }}
+                            >
+                              {formData.selectedDates.map((item, idx) => (
+                                <div
+                                  key={idx}
+                                  className="step3-date-pill"
                                   onClick={() =>
                                     setFormData((prev) => ({
                                       ...prev,
-                                      selectedDates: [],
+                                      selectedDates: prev.selectedDates.filter(
+                                        (d) => d.date !== item.date
+                                      ),
                                     }))
                                   }
                                 >
-                                  전체해제
-                                </button>
-
-                                <div className="schedule-create-selected-dates-title">
-                                  선택된 날짜
+                                  {item.date}
                                 </div>
-
-                                <div className="schedule-create-selected-dates-grid">
-                                  {formData.selectedDates.map(
-                                    (dateObj, index) => (
-                                      <div
-                                        key={index}
-                                        className="schedule-create-date-time-selection"
-                                        onClick={() => {
-                                          setFormData((prev) => ({
-                                            ...prev,
-                                            selectedDates:
-                                              prev.selectedDates.filter(
-                                                (d) => d.date !== dateObj.date
-                                              ),
-                                          }));
-                                        }}
-                                      >
-                                        <span>{dateObj.date}</span>
-                                      </div>
-                                    )
-                                  )}
-                                </div>
-                              </div>
-                            )}
+                              ))}
+                            </div>
                           </div>
                         </div>
                       )}
