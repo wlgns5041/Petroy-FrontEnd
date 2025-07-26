@@ -1,173 +1,359 @@
-// NavBar.jsx
-import * as React from 'react';
-import { fetchCurrentMember } from '../../services/MemberService.jsx'; 
-import { useState, useEffect } from 'react';
-import { styled, useTheme } from '@mui/material/styles';
-import Badge from '@mui/material/Badge';
-import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import PersonIcon from '@mui/icons-material/Person';
-import PetsIcon from '@mui/icons-material/Pets';
-import GroupIcon from '@mui/icons-material/Group';
-import ForumIcon from '@mui/icons-material/Forum';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SettingsIcon from '@mui/icons-material/Settings';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'; 
-import { useNavigate } from 'react-router-dom';
-import { subscribeNotification } from '../../services/NotificationService.jsx';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { fetchCurrentMember } from "../../services/MemberService.jsx";
+import { subscribeNotification } from "../../services/NotificationService.jsx";
+import Badge from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import calendarIcon from "../../assets/icons/calendar-icon.png";
+import communityIcon from "../../assets/icons/community-icon.png";
+import friendIcon from "../../assets/icons/friend-icon.png";
+import myIcon from "../../assets/icons/my-icon.png";
+import petIcon from "../../assets/icons/pet-icon.png";
+import notificationIcon from "../../assets/icons/notification-icon.png";
+import settingsIcon from "../../assets/icons/setting-icon.png";
 
-const drawerWidth = 240;
-const openedMixin = (theme) => ({ width: drawerWidth, transition: theme.transitions.create('width', { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen }), overflowX: 'hidden' });
-const closedMixin = (theme) => ({ transition: theme.transitions.create('width', { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen }), overflowX: 'hidden', width: `calc(${theme.spacing(7)} + 1px)`, [theme.breakpoints.up('sm')]: { width: `calc(${theme.spacing(8)} + 1px)` } });
-
-const DrawerHeader = styled('div')(({ theme }) => ({ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: theme.spacing(0, 1), ...theme.mixins.toolbar }));
-const AppBar = styled(MuiAppBar, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme }) => ({ zIndex: theme.zIndex.drawer + 1, transition: theme.transitions.create(['width', 'margin'], { easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen }) }));
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({ width: drawerWidth, flexShrink: 0, whiteSpace: 'nowrap', boxSizing: 'border-box', ...(open && { ...openedMixin(theme), '& .MuiDrawer-paper': openedMixin(theme) }), ...(!open && { ...closedMixin(theme), '& .MuiDrawer-paper': closedMixin(theme) }) }));
-
-export default function NavBar({ title }) {
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const [memberName, setMemberName] = useState('');
+export default function NavBar() {
+  const [memberName, setMemberName] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
+  const [currentDate, setCurrentDate] = useState("");
+  const [currentTime, setCurrentTime] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const fetchUnreadCount = async () => {
-    const token = localStorage.getItem('accessToken');
-    if (!token) return;
-
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/notification`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
-      const data = await response.json();
-      const unread = (data.content || []).filter(n => !n.read).length;
-      setUnreadCount(unread);
-    } catch (err) {
-      console.error('🔔 알림 수 불러오기 실패:', err);
-    }
-  };
-
+  // 시계
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const update = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const weekNames = ["일", "월", "화", "수", "목", "금", "토"];
+      const weekday = weekNames[now.getDay()];
+      setCurrentDate(`${year}.${month}.${day} ${weekday}`);
 
-    if (token) {
-      fetchCurrentMember(token).then((memberData) => {
-        if (memberData?.name) setMemberName(memberData.name);
-      });
-
-      fetchUnreadCount();
-
-      const sse = subscribeNotification((count) => {
-        setUnreadCount(count);
-      });
-
-      return () => {
-        sse.close();
-        window.__eventSourceInstance = null;
-      };
-    }
+      const hour = String(now.getHours()).padStart(2, "0");
+      const min = String(now.getMinutes()).padStart(2, "0");
+      const sec = String(now.getSeconds()).padStart(2, "0");
+      setCurrentTime(`${hour}:${min}:${sec}`);
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
   }, []);
 
-  const handleDrawerOpen = () => setOpen(true);
-  const handleDrawerClose = () => setOpen(false);
-  const handleNavigation = (path) => navigate(path);
+  // 사용자, 알림
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return;
+    fetchCurrentMember(token).then((memberData) => {
+      if (memberData?.name) setMemberName(memberData.name);
+    });
+
+    const fetchUnreadCount = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}/notification`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
+        const data = await response.json();
+        const unread = (data.content || []).filter((n) => !n.read).length;
+        setUnreadCount(unread);
+      } catch (err) {
+        console.error("🔔 알림 수 불러오기 실패:", err);
+      }
+    };
+    fetchUnreadCount();
+
+    const sse = subscribeNotification((count) => setUnreadCount(count));
+    return () => {
+      sse.close();
+      window.__eventSourceInstance = null;
+    };
+  }, []);
+
+  const navIcons = [
+    { label: "홈", icon: calendarIcon, path: "/mainPage" },
+    { label: "마이페이지", icon: myIcon, path: "/myPage" },
+    { label: "펫", icon: petIcon, path: "/petPage" },
+    { label: "친구", icon: friendIcon, path: "/friendPage" },
+    { label: "커뮤니티", icon: communityIcon, path: "/communityPage" },
+  ];
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar sx={{ backgroundColor: '#484848' }}>
-          {!open ? (
-            <IconButton color="inherit" onClick={handleDrawerOpen} edge="start" sx={{ marginRight: 5 }}>
-              <MenuIcon />
-            </IconButton>
-          ) : (
-            <IconButton color="inherit" onClick={handleDrawerClose} edge="start" sx={{ marginRight: 5 }}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          )}
-          <Typography variant="h6" noWrap sx={{ fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }}>
-            {title}
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        width: "100%",
+        height: 64,
+        minHeight: 64,
+        position: "fixed",
+        top: 0,
+        left: 0,
+        zIndex: 1300,
+        background: "#484848",
+        boxShadow: "0 2px 6px 0 rgba(0,0,0,0.04)",
+        px: { xs: 1, md: 4 },
+        overflow: "hidden",
+      }}
+    >
+      {/* 좌측 로고 */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 4 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#fff",
+            fontWeight: 800,
+            fontSize: 20,
+            fontFamily: "Pretendard",
+            whiteSpace: "nowrap",
+            letterSpacing: "1px",
+          }}
+        >
+          PETORY
+        </Typography>
+      </Box>
+
+      {/* 네비 아이콘: 이미지로 표시 */}
+      {navIcons.map(({ label, icon, path }) => {
+        const isActive = location.pathname === path;
+        return (
+          <button
+            key={label}
+            onClick={() => navigate(path)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minWidth: 56,
+              height: 48,
+              marginTop: 6,
+              marginBottom: 6,
+              background: isActive ? "#fff" : "transparent",
+              border: "none",
+              borderRadius: 6,
+              color: isActive ? "#222" : "#fff",
+              fontWeight: isActive ? 700 : 600,
+              fontSize: 11,
+              cursor: "pointer",
+              padding: "0 16px",
+              transition: "background 0.3s, color 0.3s, box-shadow 0.3s",
+              boxShadow: isActive ? "0 2px 6px rgba(0,0,0,0.04)" : "none",
+              marginRight: 8,
+              position: "relative",
+              overflow: "hidden",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.querySelector(".tab-icon img").style.filter =
+                "invert(0)";
+              e.currentTarget.style.background = isActive ? "#fff" : "#F0F2F5";
+              e.currentTarget.querySelector(".tab-label").style.color = "#222";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.querySelector(".tab-icon img").style.filter =
+                isActive ? "invert(0)" : "invert(1) brightness(2)";
+              e.currentTarget.style.background = isActive
+                ? "#fff"
+                : "transparent";
+              e.currentTarget.querySelector(".tab-label").style.color = isActive
+                ? "#222"
+                : "#fff";
+            }}
+          >
+            <span
+              className="tab-icon"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+
+                width: 28,
+                height: 28,
+                marginBottom: 2,
+                transition: "filter 0.3s",
+              }}
+            >
+              <img
+                src={icon}
+                alt={label}
+                style={{
+                  width: 24,
+                  height: 24,
+                  objectFit: "contain",
+                  display: "block",
+                  margin: "0 auto",
+                  verticalAlign: "middle",
+                  transition: "filter 0.3s",
+                  filter: isActive ? "invert(0)" : "invert(1) brightness(2)",
+                }}
+              />
+            </span>
+            <span
+              className="tab-label"
+              style={{
+                fontFamily: "Pretendard",
+                fontSize: 11,
+                fontWeight: isActive ? 700 : 600,
+                color: isActive ? "#222" : "#fff",
+                transition:
+                  "opacity 0.3s, max-height 0.3s, color 0.3s, font-weight 0.3s",
+                opacity: isActive ? 1 : 0,
+                maxHeight: isActive ? 30 : 0,
+                pointerEvents: "none",
+                marginTop: -4,
+              }}
+            >
+              {label}
+            </span>
+            <style>
+              {`
+                button:hover .tab-label {
+                  opacity: 1 !important;
+                  max-height: 30px !important;
+                }
+              `}
+            </style>
+          </button>
+        );
+      })}
+
+      <Box sx={{ flex: 1 }} />
+
+      {/* 우측 영역 : 사용자 이름, 시계, 설정, 알림 */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          gap: 1,
+          flexShrink: 0,
+          pr: { xs: "20px", md: "50px" },
+        }}
+      >
+
+        {/* 사용자 이름 */}
+        <Typography
+          variant="subtitle1"
+          sx={{
+            color: "#fff",
+            fontWeight: 700,
+            fontFamily: "Pretendard",
+            textAlign: "center",
+            whiteSpace: "nowrap",
+            fontSize: 16,
+            mr: 1,
+          }}
+          noWrap
+        >
+          {memberName ? `${memberName} 님` : ""}
+        </Typography>
+        
+        <Box
+          sx={{
+            width: "3px",
+            height: 36,
+            bgcolor: "#5d5d5dff",
+            mx: 0.2,
+            borderRadius: 999,
+          }}
+        />
+
+        {/* 날짜 및 시간 */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",    
+            justifyContent: "center",
+            minWidth: 100,
+            userSelect: "none",
+          }}
+        >
+          <Typography
+            variant="body2"
+            sx={{
+              color: "#fff",
+              fontFamily: "Pretendard",
+              fontWeight: 600,
+              fontSize: 13,
+              letterSpacing: 0.5,
+              lineHeight: 1.2,
+              textAlign: "center",
+            }}
+          >
+            {currentDate}
           </Typography>
-          <Typography variant="h6" sx={{ marginLeft: 'auto', fontFamily: 'Pretendard, sans-serif', fontWeight: 600 }}>
-            {memberName && `${memberName}님`}
+
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: "#fff",
+              fontFamily: "Pretendard",
+              fontWeight: 800,
+              fontVariantNumeric: "tabular-nums",
+              fontSize: 15,
+              letterSpacing: 2,
+              textAlign: "center",
+              lineHeight: 1.2,
+              mt: "2px",
+            }}
+          >
+            {currentTime}
           </Typography>
-        </Toolbar>
-      </AppBar>
+        </Box>
 
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </DrawerHeader>
+        <Box
+          sx={{
+            width: "3px",
+            height: 36,
+            bgcolor: "#5d5d5dff",
+            mx: 0.2,
+            borderRadius: 999,
+          }}
+        />
 
-        <Divider />
-        <List>
-          <ListItem disablePadding sx={{ display: 'block' }}>
-            <ListItemButton onClick={() => handleNavigation('/mainPage')} sx={{ minHeight: 48, px: 2.5, justifyContent: open ? 'initial' : 'center' }}>
-              <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: open ? 3 : 'auto' }}>
-                <CalendarTodayIcon />
-              </ListItemIcon>
-              <ListItemText primary="홈 & 캘린더" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
+        <IconButton
+          onClick={() => navigate("/settingsPage")}
+          sx={{ color: "#fff", p: 1.1 }}
+        >
+          <img
+            src={settingsIcon}
+            alt="설정"
+            style={{
+              width: 24,
+              height: 24,
+              display: "block",
+              objectFit: "contain",
+              filter: "invert(1) brightness(2)",
+            }}
+          />
+        </IconButton>
 
-          {[['마이페이지', <PersonIcon />], ['펫', <PetsIcon />], ['친구', <GroupIcon />], ['커뮤니티', <ForumIcon />]].map(([text, icon]) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                onClick={() => handleNavigation(`/${text === '마이페이지' ? 'myPage' : text === '펫' ? 'petPage' : text === '친구' ? 'friendPage' : 'communityPage'}`)}
-                sx={{ minHeight: 48, px: 2.5, justifyContent: open ? 'initial' : 'center' }}
-              >
-                <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: open ? 3 : 'auto' }}>{icon}</ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <Divider />
-        <List>
-          {[
-            ['알림', NotificationsIcon],
-            ['설정', SettingsIcon],
-          ].map(([text, IconComponent]) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                onClick={() => handleNavigation(`/${text === '알림' ? 'notificationPage' : 'settingsPage'}`)}
-                sx={{ minHeight: 48, px: 2.5, justifyContent: open ? 'initial' : 'center' }}
-              >
-                <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: open ? 3 : 'auto' }}>
-                  {text === '알림' ? (
-                    <Badge badgeContent={unreadCount} color="error" max={99} showZero>
-                      <IconComponent />
-                    </Badge>
-                  ) : (
-                    <IconComponent />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
+        <IconButton
+          onClick={() => navigate("/notificationPage")}
+          sx={{ color: "#fff", p: 1.1 }}
+        >
+          <Badge badgeContent={unreadCount} color="error" max={99} showZero>
+            <img
+              src={notificationIcon}
+              alt="알림"
+              style={{
+                width: 24,
+                height: 24,
+                display: "block",
+                objectFit: "contain",
+                filter: "invert(1) brightness(2)",
+              }}
+            />
+          </Badge>
+        </IconButton>
+      </Box>
     </Box>
   );
 }
