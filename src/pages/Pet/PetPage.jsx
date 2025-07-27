@@ -5,7 +5,6 @@ import DeletePet from "../../components/Pet/DeletePet.jsx";
 import AssignCareGiver from "../../components/Pet/AssignCareGiver.jsx";
 import CareGiverList from "../../components/Pet/CareGiverList.jsx";
 import { fetchMemberPets } from "../../services/PetService.jsx";
-import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Pet/PetPage.css";
 import { fetchCaregiverPets } from "../../services/PetService.jsx";
 
@@ -188,13 +187,11 @@ useEffect(() => {
   };
 
   return (
-    <div className="petPage">
-      <div className="petPage-body">
-        <NavBar title="펫 관리" />
-
-        <div className="petPage-tab-bar">
+    <div className="petpage">
+      <div className="petpage-container">
+        <div className="petpage-tab-bar">
           <button
-            className={`petPage-tab ${activeTab === "mine" ? "active" : ""}`}
+            className={`petpage-tab ${activeTab === "mine" ? "active" : ""}`}
             onClick={() => {
               setActiveTab("mine");
               resetPetSort();
@@ -202,10 +199,10 @@ useEffect(() => {
             }}
           >
             내 반려동물
-            <span className="tab-count">{pets.length}</span>
+            <span className="petpage-tab-count">{pets.length}</span>
           </button>
           <button
-            className={`petPage-tab ${
+            className={`petpage-tab ${
               activeTab === "caregiver" ? "active" : ""
             }`}
             onClick={() => {
@@ -215,7 +212,7 @@ useEffect(() => {
             }}
           >
             돌보미 반려동물
-            <span className="tab-count">{caregiverPets.length}</span>
+            <span className="petpage-tab-count">{caregiverPets.length}</span>
           </button>
         </div>
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {fetchMemberPosts} from "../../services/CommunityService.jsx";
 import "../../styles/MyPage/MyPage.css";
-import NavBar from "../../components/commons/NavBar.jsx";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import NameEditModal from "../../components/MyPage/NameEditModal.jsx";
 import ImageEditModal from "../../components/MyPage/ImageEditModal.jsx";
@@ -127,17 +126,15 @@ const MyPage = () => {
   };
 
   return (
-    <div className="myPage">
-      <NavBar title="마이페이지" />
-
-      <div className="profile-card">
-        <div className="profile-card-content">
+    <div className="mypage">
+      <div className="mypage-profile">
+        <div className="mypage-profile-card">
           <img
             src={userInfo.image || defaultProfilePic}
             alt="profile"
-            className="myPage-profile-image"
+            className="mypage-profile-image"
           />
-          <div className="profile-info">
+          <div className="mypage-profile-info">
             <div className="name">{userInfo.name}</div>
             <div className="phone">{userInfo.phone}</div>
             <div className="counts">
@@ -154,21 +151,21 @@ const MyPage = () => {
           </div>
         </div>
 
-        <div className="myPage-button-group">
+        <div className="mypage-button-group">
           <button
-            className="myPage-button"
+            className="mypage-button"
             onClick={() => setShowNameModal(true)}
           >
             이름 변경
           </button>
           <button
-            className="myPage-button"
+            className="mypage-button"
             onClick={() => setShowImageModal(true)}
           >
             이미지 변경
           </button>
           <button
-            className="myPage-button gray"
+            className="mypage-button gray"
             onClick={() =>
               setConfirmAction({
                 type: "logout",
@@ -179,7 +176,7 @@ const MyPage = () => {
             로그아웃
           </button>
           <button
-            className="myPage-button gray"
+            className="mypage-button gray"
             onClick={() =>
               setConfirmAction({
                 type: "delete",
@@ -192,26 +189,26 @@ const MyPage = () => {
         </div>
       </div>
 
-      <div className="section-card-pets">
-        <h3 className="pet-section-title">
-          <div className="left-group">
+      <div className="mypage-pet-section">
+        <h3 className="mypage-pet-section-title">
+          <div className="mypage-icon-withtext">
             <FontAwesomeIcon icon={faPaw} />내 펫
           </div>
-          <span className="link" onClick={() => handleNavigation("/petPage")}>
+          <span className="mypage-pet-section-link" onClick={() => handleNavigation("/petPage")}>
             펫 바로가기
           </span>
         </h3>
         {pets.length === 0 ? (
-          <div className="myPage-empty-state">
-            <p className="myPage-empty-text-main">
+          <div className="mypage-empty-state">
+            <p className="mypage-empty-text-main">
               등록된 펫이 없습니다.
-              <span className="myPage-empty-text-sub">
+              <span className="mypage-empty-text-sub">
                 펫을 등록하면 이곳에 표시됩니다!
               </span>
             </p>
           </div>
         ) : (
-          <div className="myPage-pet-list">
+          <div className="mypage-pet-list">
             {pets.map((pet) => (
               <li key={pet.petId}>
                 <img
@@ -224,24 +221,24 @@ const MyPage = () => {
                       : defaultPetPic
                   }
                   alt={pet.name}
-                  className="pet-image"
+                  className="mypage-pet-image"
                 />
-                <div className="info">
-                  <div className="name">{pet.name}</div>
-                  <div className="species">{pet.breed || "종 미등록"}</div>
+                <div className="mypage-pet-info">
+                  <div className="mypage-pet-name">{pet.name}</div>
+                  <div className="mypage-pet-species">{pet.breed || "종 미등록"}</div>
                 </div>
               </li>
             ))}
           </div>
         )}
       </div>
-      <div className="section-card-posts">
-        <h3 className="pet-section-title">
-          <div className="left-group">
+      <div className="mypage-post-section">
+        <h3 className="mypage-post-section-title">
+          <div className="mypage-icon-withtext">
             <FontAwesomeIcon icon={faPen} />내 글
           </div>
           <span
-            className="link"
+            className="mypage-post-section-link"
             onClick={() => handleNavigation("/communityPage")}
           >
             커뮤니티 바로가기
@@ -249,10 +246,10 @@ const MyPage = () => {
         </h3>
         <ul>
           {posts.length === 0 ? (
-            <div className="myPage-empty-state">
-              <p className="myPage-empty-text-main">
+            <div className="mypage-empty-state">
+              <p className="mypage-empty-text-main">
                 작성한 글이 없습니다.
-                <span className="myPage-empty-text-sub">
+                <span className="mypage-empty-text-sub">
                   게시글을 작성하면 이곳에 표시됩니다!
                 </span>
               </p>

@@ -90,8 +90,7 @@ export default function NavBar() {
         display: "flex",
         alignItems: "center",
         width: "100%",
-        height: 64,
-        minHeight: 64,
+        height: 50,
         position: "fixed",
         top: 0,
         left: 0,
@@ -100,10 +99,11 @@ export default function NavBar() {
         boxShadow: "0 2px 6px 0 rgba(0,0,0,0.04)",
         px: { xs: 1, md: 4 },
         overflow: "hidden",
+        py: 1.5,
       }}
     >
       {/* 좌측 로고 */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 4 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 3 }}>
         <Typography
           variant="h6"
           sx={{
@@ -119,109 +119,124 @@ export default function NavBar() {
         </Typography>
       </Box>
 
-      {/* 네비 아이콘: 이미지로 표시 */}
-      {navIcons.map(({ label, icon, path }) => {
-        const isActive = location.pathname === path;
-        return (
-          <button
-            key={label}
-            onClick={() => navigate(path)}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              minWidth: 56,
-              height: 48,
-              marginTop: 6,
-              marginBottom: 6,
-              background: isActive ? "#fff" : "transparent",
-              border: "none",
-              borderRadius: 6,
-              color: isActive ? "#222" : "#fff",
-              fontWeight: isActive ? 700 : 600,
-              fontSize: 11,
-              cursor: "pointer",
-              padding: "0 16px",
-              transition: "background 0.3s, color 0.3s, box-shadow 0.3s",
-              boxShadow: isActive ? "0 2px 6px rgba(0,0,0,0.04)" : "none",
-              marginRight: 8,
-              position: "relative",
-              overflow: "hidden",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.querySelector(".tab-icon img").style.filter =
-                "invert(0)";
-              e.currentTarget.style.background = isActive ? "#fff" : "#F0F2F5";
-              e.currentTarget.querySelector(".tab-label").style.color = "#222";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.querySelector(".tab-icon img").style.filter =
-                isActive ? "invert(0)" : "invert(1) brightness(2)";
-              e.currentTarget.style.background = isActive
-                ? "#fff"
-                : "transparent";
-              e.currentTarget.querySelector(".tab-label").style.color = isActive
-                ? "#222"
-                : "#fff";
-            }}
-          >
-            <span
-              className="tab-icon"
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+          height: 44,
+          px: 1, 
+          py: 1, 
+          borderRadius: 2,
+          backgroundColor: "#3a3a3a", 
+          marginBottom:0.3
+        }}
+      >
+        {/* 네비 아이콘: 이미지로 표시 */}
+        {navIcons.map(({ label, icon, path }) => {
+          const isActive = location.pathname === path;
+          return (
+            <button
+              key={label}
+              onClick={() => navigate(path)}
               style={{
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-
-                width: 28,
-                height: 28,
-                marginBottom: 2,
-                transition: "filter 0.3s",
-              }}
-            >
-              <img
-                src={icon}
-                alt={label}
-                style={{
-                  width: 24,
-                  height: 24,
-                  objectFit: "contain",
-                  display: "block",
-                  margin: "0 auto",
-                  verticalAlign: "middle",
-                  transition: "filter 0.3s",
-                  filter: isActive ? "invert(0)" : "invert(1) brightness(2)",
-                }}
-              />
-            </span>
-            <span
-              className="tab-label"
-              style={{
-                fontFamily: "Pretendard",
-                fontSize: 11,
-                fontWeight: isActive ? 700 : 600,
+                minWidth: 52,
+                height: 46,
+                marginTop: 6,
+                marginBottom: 6,
+                marginRight: 2,
+                marginLeft: 1,
+                background: isActive ? "#fff" : "transparent",
+                border: "none",
+                borderRadius: 6,
                 color: isActive ? "#222" : "#fff",
-                transition:
-                  "opacity 0.3s, max-height 0.3s, color 0.3s, font-weight 0.3s",
-                opacity: isActive ? 1 : 0,
-                maxHeight: isActive ? 30 : 0,
-                pointerEvents: "none",
-                marginTop: -4,
+                fontWeight: isActive ? 700 : 600,
+                fontSize: 11,
+                cursor: "pointer",
+                padding: "0 16px",
+                transition: "background 0.3s, color 0.3s, box-shadow 0.3s",
+                boxShadow: isActive ? "0 2px 6px rgba(0,0,0,0.04)" : "none",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.querySelector(".tab-icon img").style.filter =
+                  "invert(0)";
+                e.currentTarget.style.background = isActive
+                  ? "#fff"
+                  : "#F0F2F5";
+                e.currentTarget.querySelector(".tab-label").style.color =
+                  "#222";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.querySelector(".tab-icon img").style.filter =
+                  isActive ? "invert(0)" : "invert(1) brightness(2)";
+                e.currentTarget.style.background = isActive
+                  ? "#fff"
+                  : "transparent";
+                e.currentTarget.querySelector(".tab-label").style.color =
+                  isActive ? "#222" : "#fff";
               }}
             >
-              {label}
-            </span>
-            <style>
-              {`
+              <span
+                className="tab-icon"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 24,
+                  height: 28,
+                  marginBottom: 0,
+                  transition: "filter 0.3s",
+                }}
+              >
+                <img
+                  src={icon}
+                  alt={label}
+                  style={{
+                    width: 26,
+                    height: 26,
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
+                    verticalAlign: "middle",
+                    transition: "filter 0.3s",
+                    filter: isActive ? "invert(0)" : "invert(1) brightness(2)",
+                  }}
+                />
+              </span>
+              <span
+                className="tab-label"
+                style={{
+                  fontFamily: "Pretendard",
+                  fontSize: 11,
+                  fontWeight: isActive ? 700 : 600,
+                  color: isActive ? "#222" : "#fff",
+                  transition:
+                    "opacity 0.3s, max-height 0.3s, color 0.3s, font-weight 0.3s",
+                  opacity: isActive ? 1 : 0,
+                  maxHeight: isActive ? 30 : 0,
+                  pointerEvents: "none",
+                }}
+              >
+                {label}
+              </span>
+              <style>
+                {`
                 button:hover .tab-label {
                   opacity: 1 !important;
                   max-height: 30px !important;
                 }
               `}
-            </style>
-          </button>
-        );
-      })}
+              </style>
+            </button>
+          );
+        })}
+      </Box>
 
       <Box sx={{ flex: 1 }} />
 
@@ -236,7 +251,6 @@ export default function NavBar() {
           pr: { xs: "20px", md: "50px" },
         }}
       >
-
         {/* 사용자 이름 */}
         <Typography
           variant="subtitle1"
@@ -253,7 +267,7 @@ export default function NavBar() {
         >
           {memberName ? `${memberName} 님` : ""}
         </Typography>
-        
+
         <Box
           sx={{
             width: "3px",
@@ -269,7 +283,7 @@ export default function NavBar() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",    
+            alignItems: "center",
             justifyContent: "center",
             minWidth: 100,
             userSelect: "none",

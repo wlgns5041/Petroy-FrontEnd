@@ -1,12 +1,11 @@
-.main-page {
+.mainpage {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: 45px;
   overflow: hidden;
 }
 
-.calendar-layout {
+.mainpage-container{
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -15,27 +14,28 @@
   border-radius: 12px;
 }
 
-.calendar-body {
+.mainpage-container-body {
   display: grid;
   grid-template-columns: 500px 1fr;
   gap: 24px;
 }
 
-.calendar-sidebar {
+.mainpage-leftsection {
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: 500px;
 }
 
-.calendar-buttons-sidebar {
+/* 카테고리, 일정 생성 버튼 */
+.mainpage-buttons {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 8px;
 }
 
-.calendar-add-btn {
+.mainpage-category-button {
   flex: 1;
   background-color: #5C5C5C;
   color: white;
@@ -48,7 +48,24 @@
   transition: background-color 0.2s ease;
 }
 
-.calendar-add-btn:hover {
+.mainpage-category-button:hover {
+  background-color: #333333;
+}
+
+.mainpage-calendar-button {
+  flex: 1;
+  background-color: #5C5C5C;
+  color: white;
+  font-weight: bold;
+  padding: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.mainpage-calendar-button:hover {
   background-color: #333333;
 }
 

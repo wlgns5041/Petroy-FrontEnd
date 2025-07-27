@@ -53,14 +53,14 @@ function InputInfo() {
   };
 
   return (
-    <div className="inputInfoPage">
-      <div className="inputInfoPageContainer">
-        <h2 className="inputInfoTitle">
+    <div className="inputinfopage">
+      <div className="inputinfopage-container">
+        <h2 className="inputinfopage-title">
           카카오 로그인을 위해 추가 정보를 입력해주세요
         </h2>
-        <form onSubmit={handleSubmit} className="inputInfoForm">
-          <div className="inputInfoGroup">
-            <label className="inputInfoLabel">이메일 :</label>
+        <form onSubmit={handleSubmit} className="inputinfopage-form">
+          <div className="inputinfopage-group">
+            <label className="inputinfopage-label">이메일 :</label>
             <input
               type="email"
               value={userData.email}
@@ -68,12 +68,12 @@ function InputInfo() {
                 setUserData({ ...userData, email: e.target.value })
               }
               required
-              className="inputInfoInput"
+              className="inputinfopage-input"
             />
           </div>
 
-          <div className="inputInfoGroup">
-            <label className="inputInfoLabel">전화번호 :</label>
+          <div className="inputinfopage-group">
+            <label className="inputinfopage-label">전화번호 :</label>
             <input
               type="tel"
               value={userData.phone}
@@ -81,19 +81,19 @@ function InputInfo() {
                 setUserData({ ...userData, phone: e.target.value })
               }
               required
-              className="inputInfoInput"
+              className="inputinfopage-input"
             />
           </div>
 
-          <div className="inputInfoButtonGroup">
+          <div className="inputinfopage-buttongroup">
             <button
               type="button"
-              className="inputInfoCancelButton"
+              className="inputinfopage-cancelbutton"
               onClick={() => navigate("/")}
             >
               홈으로 이동
             </button>
-            <button type="submit" className="inputInfoSubmitButton">
+            <button type="submit" className="inputinfopage-submitbutton">
               완료
             </button>
           </div>

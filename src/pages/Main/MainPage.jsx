@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import CalendarComponent from "../../components/commons/CalendarComponent.jsx";
-import NavBar from "../../components/commons/NavBar.jsx";
 import CategoryModal from "../../components/Schedule/CategoryModal.jsx";
 import ScheduleModal from "../../components/Schedule/ScheduleModal.jsx";
 import ScheduleDetailModal from "../../components/Schedule/ScheduleDetailModal.jsx";
@@ -290,18 +289,16 @@ const deleteCategory = async (categoryId) => {
     });
 
   return (
-    <div className="main-page">
-      <NavBar title="메인페이지" />
-
-      <div className="calendar-layout">
-        <div className="calendar-body">
+    <div className="mainpage">
+      <div className="mainpage-container">
+        <div className="mainpage-container-body">
           {/* 사이드바 */}
-          <div className="calendar-sidebar">
-            <div className="calendar-buttons-sidebar">
-              <button className="calendar-add-btn" onClick={openCategoryModal}>
+          <div className="mainpage-leftsection">
+            <div className="mainpage-buttons">
+              <button className="mainpage-category-button" onClick={openCategoryModal}>
                 카테고리 생성
               </button>
-              <button className="calendar-add-btn" onClick={openScheduleModal}>
+              <button className="mainpage-calendar-button" onClick={openScheduleModal}>
                 일정 생성
               </button>
             </div>

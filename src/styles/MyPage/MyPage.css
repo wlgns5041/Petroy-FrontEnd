@@ -1,19 +1,20 @@
-.myPage {
+.mypage {
     max-width: 480px;
     padding: 20px 16px 20px;
     background-color: #f9f9f9;
     font-family: 'Pretendard', sans-serif;
     margin: 0 auto;
-    margin-top: 120px;
+    margin-top: 40px;
     border-radius: 8px;
   }
 
-  .myPage ul {
+  .mypage ul {
     padding-left: 0;
     list-style: none;
   }
-  
-  .profile-card {
+
+  /* 상단 프로필 카드 */
+  .mypage-profile {
     background: white;
     border-radius: 12px;
     padding: 20px;
@@ -22,14 +23,14 @@
     margin-bottom: 40px;
   }
   
-  .profile-card-content {
+  .mypage-profile-card {
     display: flex;
     align-items: flex-start;
     gap: 50px; 
     padding: 10px;
   }
   
-  .myPage-profile-image {
+  .mypage-profile-image {
     width: 80px;
     height: 80px;
     object-fit: cover;
@@ -37,44 +38,44 @@
     border: 1px solid #eee;
   }
   
-  .profile-info {
+  .mypage-profile-info {
     display: flex;
     flex-direction: column;
     justify-content: center; 
     align-items: flex-start;
   }
   
-  .profile-info .name {
+  .mypage-profile-info .name {
     font-size: 18px;
     font-weight: 700;
   }
   
-  .profile-info .phone {
+  .mypage-profile-info .phone {
     font-size: 14px;
     color: #777;
     margin-bottom: 10px;
   }
   
-  .profile-info .counts {
+  .mypage-profile-info .counts {
     display: flex;
     justify-content: space-between;
     gap: 30px;
     width: 100%;
   }
   
-  .profile-info .counts div {
+  .mypage-profile-info .counts div {
     font-size: 14px;
     color: #333;
     font-weight: bold;
   }
   
-  .profile-info .counts span {
+  .mypage-profile-info .counts span {
     font-size: 14px;
     color: #000;
     margin-right: 5px;
   }
 
-  .profile-info .counts span:last-child {
+  .mypage-profile-info .counts span:last-child {
     background-color: #e0e0e0;
     color: #333;
     padding: 2px 8px;
@@ -82,25 +83,30 @@
     font-size: 11px;
   }
   
-  .profile-info .counts .text {
+  .mypage-profile-info .counts .text {
     font-weight: normal;
     cursor: pointer;
   }
 
-  .profile-info .counts .text:hover {
+  .mypage-profile-info .counts .text:hover {
     color: #ff4e50;
     font-weight: bold;
   }
-  
-  .myPage-button-group {
+
+  /* 상단 프로필 버튼 (이름변경, 이미지변경, 로그아웃, 회원탈퇴) */
+  .mypage-button-group {
     display: flex;
     justify-content: space-evenly;
-    
     margin-top: 24px;
     width: 100%;
   }
+
+  .mypage-button-group button {
+    flex-grow: 1;
+    margin: 0 8px;
+  }
   
-  .myPage-button {
+  .mypage-button {
     flex-grow: 1;
     padding: 8px 12px;
     border: none;
@@ -114,22 +120,18 @@
     transition: all 0.3s ease;
   }
 
-  .myPage-button:hover {
+  .mypage-button:hover {
     transform: scale(1.05);
     opacity: 0.9;
   }
   
-  .myPage-button.gray {
+  .mypage-button.gray {
     background-color: #e0e0e0;
     color: #333;
   }
-  
-  .myPage-button-group button {
-    flex-grow: 1;
-    margin: 0 8px;
-  }
-  
-  .section-card-pets {
+
+  /* 펫 카드 */
+  .mypage-pet-section {
     background: white;
     border-radius: 16px;
     padding: 20px;
@@ -138,7 +140,7 @@
     margin-bottom: 40px;
   }
 
-  .section-card-pets h3 {
+  .mypage-pet-section-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -147,21 +149,13 @@
     margin-bottom: 16px;
   }
 
-  .left-group {
+  .mypage-icon-withtext {
     display: flex;
     align-items: center;
     gap: 8px;
   }
 
-  .myPage-pet-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  padding: 0;
-  list-style: none;
-}
-  
-  .section-card-pets h3 .link {
+  .mypage-pet-section-link {
     color: #888;
     font-size: 12px;
     text-decoration: none;
@@ -169,20 +163,20 @@
     font-weight: 500;
   }
 
-  .section-card-pets h3 .link:hover {
+  .mypage-pet-section-link:hover {
     color: #ff4e50;
     font-weight: bold;
   }
 
-  .section-card-pets ul {
-    display: flex;
-    flex-wrap: wrap; 
-    gap: 16px;
+  .mypage-pet-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
     padding: 0;
     list-style: none;
   }
-  
-  .section-card-pets li {
+
+  .mypage-pet-section li {
     display: flex;
     align-items: center; 
     justify-content: space-between;
@@ -193,86 +187,35 @@
     font-size: 14px;
   }
 
-  .section-card-pets li:hover {
+  .mypage-pet-section li:hover {
     transform: scale(1.03);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
   }
   
-  .section-card-pets li img {
+  .mypage-pet-image {
     max-width: 40px; 
     height: 40px;
     margin-right: 16px; 
   }
   
-  .section-card-pets li .info {
+  .mypage-pet-info {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
   }
   
-  .section-card-pets li .name {
+  .mypage-pet-name {
     font-weight: bold;
   }
   
-  .section-card-pets li .species {
+  .mypage-pet-species {
     font-size: 12px;
     color: #777;
   }
 
-  .section-card-posts {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .section-card-posts h3 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 16px;
-  }
-  
-  .section-card-posts h3 .link {
-    color: #888;
-    font-size: 12px;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: 500;
-  }
-
-  .section-card-posts h3 .link:hover {
-    color: #ff4e50;
-    font-weight: bold;
-  }
-
-  .section-card-posts ul {
-    display: flex;
-    flex-wrap: wrap; 
-    gap: 16px;
-    padding: 0;
-    list-style: none;
-  }
-
-  .section-card-posts li {
-    display: flex;
-    align-items: center; 
-    justify-content: space-between;
-    flex: 1 1 calc(50% - 16px); 
-    background: #fafafa;
-    border: none;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 16px;
-    font-size: 14px;
-  }
-
-  .myPage-empty-state {
+  .mypage-empty-state {
     width: 100%;
     background-color: #f9f9f9;
     padding: 40px 20px;
@@ -286,17 +229,55 @@
     text-align: center;
   }
 
-  .myPage-empty-text-main {
+  .mypage-empty-text-main {
     font-size: 14px;
     font-weight: 600;
     margin: 0;
     color: #333;
   }
 
-  .myPage-empty-text-sub {
+  .mypage-empty-text-sub {
     display: block;
     font-size: 12px;
     font-weight: 400;
     color: #999;
     margin-top: 2px;
+  }
+
+  .mypage-post-section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .mypage-post-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .mypage-post-section-link {
+    color: #888;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .mypage-post-section-link:hover {
+    color: #ff4e50;
+    font-weight: bold;
+  }
+
+  .mypage-post-section ul {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 16px;
+    padding: 0;
+    list-style: none;
   }

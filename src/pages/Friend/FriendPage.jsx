@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/Friend/FriendPage.css";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
-import NavBar from "../../components/commons/NavBar.jsx";
 import SearchIcon from "@mui/icons-material/Search";
 import FriendList from "../../components/Friend/FriendList.jsx";
 import {
@@ -93,8 +92,6 @@ const FriendPage = () => {
 
   return (
     <div className="friendPageContainer">
-      <NavBar title="친구" />
-
       {/* 검색창 */}
       <div className="friendSearchBar">
         <input
