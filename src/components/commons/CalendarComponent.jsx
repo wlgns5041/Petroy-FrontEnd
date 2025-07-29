@@ -76,23 +76,23 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
       {/* 상단 네비게이션 바 */}
       <div className="calendar-top-bar">
         {viewMode === "month" ? (
-          <div className="calendar-nav-left styled-nav calendar-week-nav-custom">
-            <div className="nav-button-left">
+          <div className="calendar-nav-left calendar-styled-nav calendar-week-nav-custom">
+            <div className="calendar-nav-button-left">
               <button
-                className="nav-rounded-button"
+                className="calendar-nav-rounded-button"
                 onClick={() => setCurrentDate(new Date(year, month - 1, 1))}
               >
                 <i className="fa fa-arrow-left" />
               </button>
             </div>
 
-            <span className="styled-title">
+            <span className="calendar-styled-title">
               {year}년 {month + 1}월
             </span>
 
-            <div className="nav-button-right">
+            <div className="calendar-nav-button-right">
               <button
-                className="nav-rounded-button"
+                className="calendar-nav-rounded-button"
                 onClick={() => setCurrentDate(new Date(year, month + 1, 1))}
               >
                 <i className="fa fa-arrow-right" />
@@ -100,10 +100,10 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             </div>
           </div>
         ) : (
-          <div className="calendar-week-nav styled-nav calendar-week-nav-custom">
-            <div className="nav-button-left">
+          <div className="calendar-week-nav calendar-styled-nav calendar-week-nav-custom">
+            <div className="calendar-nav-button-left">
               <button
-                className="nav-rounded-button"
+                className="calendar-nav-rounded-button"
                 onClick={() => {
                   const newDate = new Date(currentDate);
                   newDate.setDate(currentDate.getDate() - 7);
@@ -114,14 +114,14 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
               </button>
             </div>
 
-            <span className="styled-title">
+            <span className="calendar-styled-title">
               {weeks[0][0].getMonth() + 1}월 {weeks[0][0].getDate()}일 ~{" "}
               {weeks[0][6].getMonth() + 1}월 {weeks[0][6].getDate()}일
             </span>
 
-            <div className="nav-button-right">
+            <div className="calendar-nav-button-right">
               <button
-                className="nav-rounded-button"
+                className="calendar-nav-rounded-button"
                 onClick={() => {
                   const newDate = new Date(currentDate);
                   newDate.setDate(currentDate.getDate() + 7);
@@ -136,7 +136,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
         <div className="calendar-view-tabs">
           <button
-            className={`view-tab ${viewMode === "week" ? "active" : ""}`}
+            className={`calendar-view-tab ${
+              viewMode === "week" ? "active" : ""
+            }`}
             onClick={() => {
               setCurrentDate(new Date());
               setViewMode("week");
@@ -145,7 +147,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             주간 보기
           </button>
           <button
-            className={`view-tab ${viewMode === "month" ? "active" : ""}`}
+            className={`calendar-view-tab ${
+              viewMode === "month" ? "active" : ""
+            }`}
             onClick={() => setViewMode("month")}
           >
             월간 보기
@@ -156,11 +160,11 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
       {/* 주간 보기 섹션 (가로 배치: 미니 + 캘린더) */}
       {viewMode === "week" && (
         <div className="calendar-top-section">
-          <div className="mini-month-calendar">
-            <div className="mini-month-header">{currentMonthStr}</div>
+          <div className="calendar-mini-month-calendar">
+            <div className="calendar-mini-month-header">{currentMonthStr}</div>
             {groupDatesByWeek(getStartOfMonth(), getEndOfMonth()).map(
               (week, i) => (
-                <div key={i} className="mini-week-row">
+                <div key={i} className="calendar-mini-week-row">
                   {week.map((date, j) => {
                     const isInSelectedWeek = weeks[0].some(
                       (w) => w.toDateString() === date.toDateString()
@@ -182,10 +186,10 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                     return (
                       <div
                         key={j}
-                        className={`mini-day ${
-                          isInSelectedWeek ? "highlight-week" : ""
-                        } ${isToday ? "mini-today" : ""} ${
-                          isSelectedDate ? "selected-date" : ""
+                        className={`calendar-mini-day ${
+                          isInSelectedWeek ? "calendar-highlight-week" : ""
+                        } ${isToday ? "calendar-mini-today" : ""} ${
+                          isSelectedDate ? "calendar-selected-date" : ""
                         }`}
                         onClick={() => setCurrentDate(date)}
                       >
@@ -200,7 +204,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
           {/* 주간 달력 본체 */}
           <div className="calendar-content">
-            <div className="weekdays">
+            <div className="calendar-weekdays">
               {weeks[0].map((date, idx) => (
                 <div key={idx}>
                   {date.toLocaleDateString("ko-KR", { weekday: "short" })}
@@ -208,9 +212,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
               ))}
             </div>
 
-            <div className="days view-week">
+            <div className="calendar-days calendar-view-week">
               {weeks.map((week, i) => (
-                <div key={i} className="week">
+                <div key={i} className="calendar-week">
                   {week.map((date, j) => {
                     const localDateStr = new Date(date).toLocaleDateString(
                       "sv-SE",
@@ -242,17 +246,23 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                     return (
                       <div
                         key={j}
-                        className={`day ${isBaseDate ? "base-date" : ""}`}
+                        className={`calendar-day ${
+                          isBaseDate ? "calendar-base-date" : ""
+                        }`}
                         onClick={() => setCurrentDate(date)}
                       >
-                        <div className={`day-number ${isToday ? "today" : ""}`}>
+                        <div
+                          className={`calendar-day-number ${
+                            isToday ? "calendar-today" : ""
+                          }`}
+                        >
                           {date.getDate()}
                         </div>
-                        <div className="schedule-details">
+                        <div className="calendar-schedule-details">
                           {schedulesForDate.map((s, index) => (
                             <div
                               key={index}
-                              className={`schedule-box priority-${
+                              className={`calendar-schedule-box calendar-priority-${
                                 s.priority?.toLowerCase() || "normal"
                               }`}
                               onClick={(e) => {
@@ -277,14 +287,14 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
       {/* 월간 보기 본체 */}
       {viewMode === "month" && (
         <>
-          <div className="weekdays">
+          <div className="calendar-weekdays">
             {["일", "월", "화", "수", "목", "금", "토"].map((day, idx) => (
               <div key={idx}>{day}</div>
             ))}
           </div>
-          <div className="days view-month">
+          <div className="calendar-days calendar-view-month">
             {weeks.map((week, i) => (
-              <div key={i} className="week">
+              <div key={i} className="calendar-week">
                 {week.map((date, j) => {
                   const localDateStr = new Date(date).toLocaleDateString(
                     "sv-SE",
@@ -306,25 +316,25 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                   return (
                     <div
                       key={j}
-                      className="day"
+                      className="calendar-day"
                       onClick={() => {
                         setCurrentDate(date);
                         setViewMode("week");
                       }}
                     >
                       <div
-                        className={`day-number ${isToday ? "today" : ""} ${
-                          isOtherMonth ? "other-month" : ""
-                        }`}
+                        className={`calendar-day-number ${
+                          isToday ? "calendar-today" : ""
+                        } ${isOtherMonth ? "calendar-other-month" : ""}`}
                       >
                         {date.getDate()}
                       </div>
 
-                      <div className="schedule-details">
+                      <div className="calendar-schedule-details">
                         {schedulesForDate.map((s, index) => (
                           <div
                             key={index}
-                            className={`schedule-box priority-${
+                            className={`calendar-schedule-box calendar-priority-${
                               s.priority?.toLowerCase() || "normal"
                             }`}
                             onClick={(e) => {
@@ -347,7 +357,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
 
       {/* 주간 일정 요약 */}
       {viewMode === "week" && (
-        <div className="weekly-summary-table-rows">
+        <div className="calendar-weekly-summary-table-rows">
           {weeks[0].map((date, idx) => {
             const localDateStr = new Date(date).toLocaleDateString("sv-SE", {
               timeZone: "Asia/Seoul",
@@ -361,26 +371,30 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             );
 
             return (
-              <div key={idx} className="summary-date-block">
-                <div className="summary-date-column">
-                  <div className="weekday-text">
+              <div key={idx} className="calendar-summary-date-block">
+                <div className="calendar-summary-date-column">
+                  <div className="calendar-weekday-text">
                     {date.toLocaleDateString("en-US", { weekday: "short" })}
                   </div>
-                  <div className="day-number-large">{date.getDate()}</div>
+                  <div className="calendar-day-number-large">
+                    {date.getDate()}
+                  </div>
                 </div>
 
-                <div className="summary-schedule-blocks">
+                <div className="calendar-summary-schedule-blocks">
                   {schedules.length > 0 ? (
                     schedules.map((s, i) => (
                       <React.Fragment key={i}>
-                        {i > 0 && <hr className="schedule-divider-hr" />}
-                        <div className="schedule-card-wide">
+                        {i > 0 && (
+                          <hr className="calendar-schedule-divider-hr" />
+                        )}
+                        <div className="calendar-schedule-card-wide">
                           {/* 시간 + 카테고리 */}
-                          <div className="summary-time-category">
-                            <div className="date-text">
+                          <div className="calendar-summary-time-category">
+                            <div className="calendar-date-text">
                               <AccessTimeFilledRoundedIcon
                                 fontSize="small"
-                                className="summary-icon"
+                                className="calendar-summary-icon"
                               />
                               {new Date(s.date).toLocaleDateString("ko-KR", {
                                 timeZone: "Asia/Seoul",
@@ -389,37 +403,45 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                                 day: "numeric",
                               })}
                             </div>
-                            <div className="category-text">
+                            <div className="calendar-category-text">
                               <CategoryRoundedIcon
                                 fontSize="small"
-                                className="summary-icon"
+                                className="calendar-summary-icon"
                               />
                               {s.categoryName || "카테고리 없음"}
                             </div>
                           </div>
 
                           {/* 제목 + 펫 */}
-                          <div className="summary-title-pets">
-                            <div className="schedule-title">{s.title}</div>
-                            <div className="schedule-pets">
+                          <div className="calendar-summary-title-pets">
+                            <div className="calendar-schedule-title">
+                              {s.title}
+                            </div>
+                            <div className="calendar-schedule-pets">
                               {(s.petInfo || []).map((pet, i) => {
                                 const imageSrc = pet.image
-                                ? pet.image.startsWith("http") || pet.image.startsWith("data:")
-                                ? pet.image
-                                : `${API_BASE_URL}${pet.image}`
-                              : defaultPetPic;
+                                  ? pet.image.startsWith("http") ||
+                                    pet.image.startsWith("data:")
+                                    ? pet.image
+                                    : `${API_BASE_URL}${pet.image}`
+                                  : defaultPetPic;
 
                                 return (
-                                  <div key={i} className="pet-circle-with-name">
-                                    <div className="pet-circle">
+                                  <div
+                                    key={i}
+                                    className="calendar-pet-circle-with-name"
+                                  >
+                                    <div className="calendar-pet-circle">
                                       <img
                                         src={imageSrc}
                                         alt={pet.name}
                                         title={pet.name}
-                                        className="schedule-pet-thumbnail"
+                                        className="calendar-schedule-pet-thumbnail"
                                       />
                                     </div>
-                                    <span className="pet-name">{pet.name}</span>
+                                    <span className="calendar-pet-name">
+                                      {pet.name}
+                                    </span>
                                   </div>
                                 );
                               })}
@@ -427,19 +449,19 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                           </div>
 
                           {/* 중요도 + 상세보기 */}
-                          <div className="summary-actions">
+                          <div className="calendar-summary-actions">
                             <span
-                              className={`priority-badge ${s.priority?.toLowerCase()}`}
+                              className={`calendar-priority-badge ${s.priority?.toLowerCase()}`}
                             >
                               {s.priority}
                             </span>
                             <button
-                              className="styled-detail-button"
+                              className="calendar-styled-detail-button"
                               onClick={() => onOpenDetail(s.scheduleId, s.date)}
                             >
                               상세보기
                               <InfoRoundedIcon
-                                className="styled-detail-icon"
+                                className="calendar-styled-detail-icon"
                                 fontSize="small"
                               />
                             </button>
@@ -448,7 +470,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                       </React.Fragment>
                     ))
                   ) : (
-                    <div className="no-schedule">일정 없음</div>
+                    <div className="calendar-no-schedule">일정 없음</div>
                   )}
                 </div>
               </div>

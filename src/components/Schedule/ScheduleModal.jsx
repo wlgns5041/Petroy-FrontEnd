@@ -451,8 +451,10 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
   return (
     <div className="schedule-create-modal-overlay">
-      <div className={`schedule-create-modal-content step-${step}`}>
-        <div class="schedule-create-modal-scrollable">
+      <div
+        className={`schedule-create-modal-content schedule-create-step-${step}`}
+      >
+        <div className="schedule-create-modal-scrollable">
           {step > 1 && (
             <button
               className="schedule-create-back-button"
@@ -590,7 +592,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                               }))
                             }
                           >
-                            <div className="tab-label-with-tooltip">
+                            <div className="schedule-create-tab-label-with-tooltip">
                               반복 선택
                               <div className="schedule-create-tooltip-container">
                                 <FiInfo className="schedule-create-info-icon" />
@@ -752,16 +754,16 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                       )}
 
                       {!formData.repeatYn && (
-                        <div className="step3-calendar-wrapper">
+                        <div className="schedule-create-step3-calendar-wrapper">
                           {/* ⬅ 좌측 미니 캘린더 */}
                           <div
-                            className="step3-mini-calendar"
+                            className="schedule-create-step3-mini-calendar"
                             ref={calendarRef}
                           >
-                            <div className="step3-mini-calendar-header">
+                            <div className="schedule-create-step3-mini-calendar-header">
                               <button
                                 type="button"
-                                className="step3-nav-btn"
+                                className="schedule-create-step3-nav-btn"
                                 onClick={() =>
                                   setCurrentDate(
                                     (prev) =>
@@ -775,12 +777,12 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                               >
                                 ◀
                               </button>
-                              <span className="step3-month-label">
+                              <span className="schedule-create-step3-month-label">
                                 {currentMonthStr}
                               </span>
                               <button
                                 type="button"
-                                className="step3-nav-btn"
+                                className="schedule-create-step3-nav-btn"
                                 onClick={() =>
                                   setCurrentDate(
                                     (prev) =>
@@ -800,7 +802,10 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                               getStartOfMonth(),
                               getEndOfMonth()
                             ).map((week, i) => (
-                              <div key={i} className="step3-week-row">
+                              <div
+                                key={i}
+                                className="schedule-create-step3-week-row"
+                              >
                                 {week.map((date, j) => {
                                   const formatted = new Date(
                                     date.getTime() + 9 * 60 * 60 * 1000
@@ -823,7 +828,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                                   return (
                                     <div
                                       key={j}
-                                      className={`step3-day
+                                      className={`schedule-create-step3-day
                 ${isToday ? "today" : ""}
                 ${isSelected ? "selected" : ""}
                 ${isToday && isSelected ? "today-selected" : ""}
@@ -840,19 +845,19 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
                           {/* ➡ 우측 선택된 날짜 */}
                           <div
-                            className="step3-selected-dates-box"
+                            className="schedule-create-step3-selected-dates-box"
                             style={{
                               height: syncedHeight
                                 ? `${syncedHeight}px`
-                                : "auto", // fallback 도 가능
+                                : "auto",
                             }}
                           >
-                            <div className="step3-selected-dates-title-row">
-                              <div className="step3-selected-dates-title">
+                            <div className="schedule-create-step3-selected-dates-title-row">
+                              <div className="schedule-create-step3-selected-dates-title">
                                 선택된 날짜
                               </div>
                               <button
-                                className="step3-clear-btn"
+                                className="schedule-create-step3-clear-btn"
                                 type="button"
                                 onClick={() =>
                                   setFormData((prev) => ({
@@ -866,20 +871,20 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                             </div>
 
                             <div
-                              className={`step3-date-list ${
+                              className={`schedule-create-step3-date-list ${
                                 formData.selectedDates.length % 2 === 1
                                   ? "align-left"
                                   : ""
                               }`}
                               style={{
                                 overflowY: "auto",
-                                maxHeight: `${syncedHeight - 48 - 24}px`, // title 높이 + padding 고려
+                                maxHeight: `${syncedHeight - 48 - 24}px`,
                               }}
                             >
                               {formData.selectedDates.map((item, idx) => (
                                 <div
                                   key={idx}
-                                  className="step3-date-pill"
+                                  className="schedule-create-step3-date-pill"
                                   onClick={() =>
                                     setFormData((prev) => ({
                                       ...prev,
@@ -1006,6 +1011,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                       </div>
                     </div>
                   )}
+
                   {step === 5 && (
                     <div className="schedule-create-alert-section-card">
                       <div className="schedule-create-alert-group">
@@ -1065,7 +1071,6 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
             </SwitchTransition>
           </form>
         </div>
-
         <div className="schedule-create-bottom-btn">
           {step < 5 ? (
             <button

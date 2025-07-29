@@ -16,7 +16,7 @@ const FriendDetail = ({ memberId, onClose }) => {
       } catch (error) {
         setError(
           error.response?.data?.errorMessage ||
-          "친구 상세 정보를 불러오는 중 오류가 발생했습니다."
+            "친구 상세 정보를 불러오는 중 오류가 발생했습니다."
         );
       }
     };
@@ -26,74 +26,74 @@ const FriendDetail = ({ memberId, onClose }) => {
   if (!friendDetail && !error) return <div className="modal">로딩 중...</div>;
 
   return (
-    <div className="friend-detail-modal">
-      <div className="modal-content">
-        <button className="close-button" onClick={onClose}>
+    <div className="frienddetail-modal">
+      <div className="frienddetail-modal-content">
+        <button className="frienddetail-close-button" onClick={onClose}>
           ×
         </button>
 
         {!error ? (
           <>
-            <div className="profile-section">
+            <div className="frienddetail-profile-section">
               <img
                 src={friendDetail.image || defaultProfilePic}
                 alt={friendDetail.name}
-                className="profile-image"
+                className="frienddetail-profile-image"
               />
-              <h2 className="friend-name">{friendDetail.name}</h2>
+              <h2 className="frienddetail-friend-name">{friendDetail.name}</h2>
             </div>
 
-            <div className="pet-section">
-              <h3 className="section-title">
+            <div className="frienddetail-pet-section">
+              <h3 className="frienddetail-section-title">
                 <strong>{friendDetail.name}</strong>님에게 돌보미로 등록한 펫
               </h3>
-              <ul className="pet-list">
+              <ul className="frienddetail-pet-list">
                 {friendDetail.myPets?.length > 0 ? (
                   friendDetail.myPets.map((pet) => (
-                    <li key={pet.id} className="pet-item">
+                    <li key={pet.id} className="frienddetail-pet-item">
                       <img
                         src={pet.petImage}
                         alt={pet.name}
-                        className="pet-image"
+                        className="frienddetail-pet-image"
                       />
-                      <span className="pet-name">{pet.name}</span>
+                      <span className="frienddetail-pet-name">{pet.name}</span>
                     </li>
                   ))
                 ) : (
-                  <li className="empty-text">돌보미로 등록한 펫이 없습니다</li>
+                  <li className="frienddetail-empty-text">
+                    돌보미로 등록한 펫이 없습니다
+                  </li>
                 )}
               </ul>
             </div>
 
-            <div className="pet-section">
-              <h3 className="section-title">
+            <div className="frienddetail-pet-section">
+              <h3 className="frienddetail-section-title">
                 <strong>{friendDetail.name}</strong>님이 나를 돌보미로 등록한 펫
               </h3>
-              {friendDetail.careGiversPets?.length > 0 ? ( 
-                <ul className="pet-list">
-                  {friendDetail.careGiversPets.map(
-                    (
-                      pet 
-                    ) => (
-                      <li key={pet.id} className="pet-item">
-                        <img
-                          src={pet.petImage}
-                          alt={pet.name}
-                          className="pet-image"
-                        />
-                        <span className="pet-name">{pet.name}</span>
-                      </li>
-                    )
-                  )}
+              {friendDetail.careGiversPets?.length > 0 ? (
+                <ul className="frienddetail-pet-list">
+                  {friendDetail.careGiversPets.map((pet) => (
+                    <li key={pet.id} className="frienddetail-pet-item">
+                      <img
+                        src={pet.petImage}
+                        alt={pet.name}
+                        className="frienddetail-pet-image"
+                      />
+                      <span className="frienddetail-pet-name">{pet.name}</span>
+                    </li>
+                  ))}
                 </ul>
               ) : (
-                <p className="empty-text">돌보미로 등록된 펫이 없습니다.</p>
+                <p className="frienddetail-empty-text">
+                  돌보미로 등록된 펫이 없습니다.
+                </p>
               )}
             </div>
           </>
         ) : (
-          <ul className="pet-list">
-            <li className="pet-error-message">{error}</li>
+          <ul className="frienddetail-pet-list">
+            <li className="frienddetail-pet-error-message">{error}</li>
           </ul>
         )}
       </div>

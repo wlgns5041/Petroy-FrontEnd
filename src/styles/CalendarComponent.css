@@ -2,22 +2,19 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
-  
+
+/* ---------- 상단 네비 ---------- */
 .calendar-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-}
-
-.calendar-nav-left {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  margin-bottom: 12px;
 }
 
-
-.styled-nav {
+.calendar-nav-left,
+.calendar-week-nav,
+.calendar-week-nav-custom,
+.calendar-styled-nav {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -27,9 +24,19 @@
   font-size: 14px;
   font-weight: 500;
   width: 280px;
+  justify-content: space-between;
+  position: relative;
 }
 
-.nav-rounded-button {
+.calendar-nav-button-left,
+.calendar-nav-button-right {
+  width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendar-nav-rounded-button {
   background-color: #ffffff;
   border: none;
   border-radius: 50%;
@@ -39,43 +46,14 @@
   color: #374151;
   transition: background 0.2s ease;
 }
-
-.nav-rounded-button:hover {
+.calendar-nav-rounded-button:hover {
   background-color: #d1d5db;
 }
 
-.calendar-week-nav-custom {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background-color: #f0f2f5;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 500;
-  width: 280px;
-  justify-content: space-between;
-}
-
-.nav-button-left,
-.nav-button-right {
-  width: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.styled-title {
+.calendar-styled-title {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-}
-
-.calendar-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
 }
 
 .calendar-view-tabs {
@@ -84,10 +62,10 @@
   border-radius: 12px;
   padding: 4px;
   gap: 4px;
-  margin-left: auto; 
+  margin-left: auto;
 }
 
-.view-tab {
+.calendar-view-tab {
   border: none;
   background-color: transparent;
   font-size: 13px;
@@ -97,44 +75,48 @@
   color: #6b7280;
   transition: all 0.2s ease;
 }
-
-.view-tab.active {
+.calendar-view-tab.active {
   background-color: white;
   color: #111827;
   font-weight: 600;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
-.nav-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  color: #333;
-}
-
-.weekdays {
+/* ---------- 달력 요일/일 ---------- */
+.calendar-weekdays {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
   color: #6b7280;
   margin-bottom: 8px;
 }
-
-
-.weekdays div, .day {
+.calendar-weekdays div,
+.calendar-day {
   width: 14.28%;
   text-align: center;
   padding: 5px;
 }
 
-.days {
+.calendar-days {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
+.calendar-days.calendar-view-month {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
 
-.day {
+.calendar-week {
+  display: flex;
+  width: 100%;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.calendar-day {
   flex: 1;
   border-radius: 8px;
   background-color: #f9fafb;
@@ -146,66 +128,18 @@
   height: 15.5vh;
   text-align: left;
 }
-
-.day:hover {
+.calendar-day:hover {
   background-color: #f3f4f6;
 }
-
-.days.view-month {
-  display: flex;
-  flex-direction: column;
-  gap: 0px; 
+.calendar-day.calendar-base-date {
+  background-color: rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease-in-out;
 }
 
-.week {
-  display: flex;
-  width: 100%; 
-  gap: 0;      
-  padding: 0;
-  margin: 0;
-}
-
-.calendar-week-nav {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.week-nav-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #333;
-  cursor: pointer;
-}
-
-.week-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
-}
-
-.today {
-  border: 2px solid #000000;
-  background-color: #f0f2f5;
-  box-sizing: border-box;
-}
-
-.Calendar-schedule-title {
-  margin-top: 2px;
-  display: flex;
-  justify-content: center; 
-  align-items: center; 
-  text-align: center; 
-  background-color: #2e3030; 
-  border-radius: 3px; 
-  padding: 2px;
-  margin-right: 5px;
-  font-size: 11px;
-  color: white;
-}
-
-.day-number {
+.calendar-day-number {
   width: 32px;
   height: 32px;
   line-height: 32px;
@@ -219,8 +153,7 @@
   align-items: center;
   margin-bottom: 4px;
 }
-
-.day-number.today {
+.calendar-day-number.calendar-today {
   width: 26px;
   height: 26px;
   font-size: 12px;
@@ -234,20 +167,16 @@
   margin-top: 4px;
   margin-bottom: 6px;
 }
-
-.day.base-date {
-  background-color: rgba(0, 0, 0, 0.1); 
-  font-weight: 600;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03); 
-  transition: all 0.2s ease-in-out;
-}
-
-.other-month {
+.calendar-day-number.calendar-other-month {
   color: #cbd5e1;
 }
 
-.schedule-box {
+/* ---------- 일정 (타일 내) ---------- */
+.calendar-schedule-details {
+  margin-top: 2px;
+}
+
+.calendar-schedule-box {
   font-size: 10px;
   font-weight: 600;
   padding: 6px;
@@ -259,34 +188,23 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
-.priority-high {
-  background-color: #f87171; 
+.calendar-priority-high {
+  background-color: #f87171;
   transition: filter 0.2s ease-in-out;
 }
-
-.priority-high:hover {
-  filter: brightness(0.9);
-}
-
-.priority-medium {
-  background-color: #fbbf24; 
+.calendar-priority-high:hover { filter: brightness(0.9); }
+.calendar-priority-medium {
+  background-color: #fbbf24;
   transition: filter 0.2s ease-in-out;
 }
-
-.priority-medium:hover {
-  filter: brightness(0.9);
-}
-
-.priority-low {
+.calendar-priority-medium:hover { filter: brightness(0.9); }
+.calendar-priority-low {
   background-color: #34d399;
   transition: filter 0.2s ease-in-out;
 }
+.calendar-priority-low:hover { filter: brightness(0.9); }
 
-.priority-low:hover {
-  filter: brightness(0.9);
-}
-
+/* ---------- 주간/미니 캘린더 ---------- */
 .calendar-top-section {
   display: flex;
   flex-direction: row;
@@ -294,25 +212,7 @@
   width: 100%;
 }
 
-.calendar-content {
-  flex: 1; 
-  background-color: #ffffff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* --------------------------------------------- 미니캘린더(주간) --------------------------------------------- */
-
-.mini-week-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.mini-month-calendar {
+.calendar-mini-month-calendar {
   width: 280px;
   min-width: 280px;
   background-color: #f9fafb;
@@ -320,14 +220,21 @@
   padding: 12px;
 }
 
-.mini-month-header {
+.calendar-mini-month-header {
   font-size: 16px;
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 16px;
 }
 
-.mini-day {
+.calendar-mini-week-row {
+  display: flex;
+  justify-content: space-between;
+  height: 36px;
+  align-items: center;
+}
+
+.calendar-mini-day {
   width: 32px;
   height: 32px;
   line-height: 32px;
@@ -337,46 +244,45 @@
   color: #6b7280;
   box-sizing: border-box;
   vertical-align: top;
-  cursor: pointer; 
+  cursor: pointer;
 }
-
-.mini-day:hover {
+.calendar-mini-day:hover {
   background-color: #f0f0f0;
 }
-
-.mini-day.selected-date {
+.calendar-mini-day.calendar-selected-date {
   background-color: rgba(0, 0, 0, 0.2) !important;
   color: rgb(0, 0, 0) !important;
   font-weight: bold;
 }
-
-.mini-day.highlight-week {
+.calendar-mini-day.calendar-highlight-week {
   background-color: #3b82f6;
   color: white;
 }
-
-.mini-day.mini-today {
+.calendar-mini-day.calendar-mini-today {
   background-color: #f87171;
   color: white;
   font-weight: bold;
 }
-
-.mini-week-row {
-  display: flex;
-  justify-content: space-between;
-  height: 36px; 
-  align-items: center;
-}
-
-.mini-day.highlight-week.mini-today {
+.calendar-mini-day.calendar-highlight-week.calendar-mini-today {
   background-color: #f87171;
   color: #ffffff;
   font-weight: bold;
 }
 
-/* --------------------------------------------- 일정표 --------------------------------------------- */
+/* ---------- 주간 달력 본체 ---------- */
+.calendar-content {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-.weekly-summary-table-rows {
+/* ---------- 주간 일정 요약 ---------- */
+.calendar-weekly-summary-table-rows {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -390,12 +296,10 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-
-.weekly-summary-table-rows::-webkit-scrollbar {
+.calendar-weekly-summary-table-rows::-webkit-scrollbar {
   display: none;
 }
-
-.summary-date-block {
+.calendar-summary-date-block {
   background: #fff;
   border-radius: 12px;
   padding: 20px;
@@ -404,8 +308,7 @@
   gap: 24px;
   align-items: stretch;
 }
-
-.summary-date-column {
+.calendar-summary-date-column {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -417,35 +320,30 @@
   padding-right: 40px;
   border-right: 1px solid #e5e7eb;
 }
-
-.weekday-text {
+.calendar-weekday-text {
   font-size: 16px;
   color: #ef4444;
   font-weight: 700;
 }
-
-.day-number-large {
+.calendar-day-number-large {
   font-size: 24px;
   font-weight: 800;
   color: #000000;
 }
-
-.summary-schedule-blocks {
+.calendar-summary-schedule-blocks {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  justify-content: center; 
-  min-height: 80px;   
+  justify-content: center;
+  min-height: 80px;
 }
-
-.schedule-divider-hr {
+.calendar-schedule-divider-hr {
   border: none;
   border-top: 1px solid #e5e7eb;
   margin: 0px 30px;
 }
-
-.schedule-card-wide {
+.calendar-schedule-card-wide {
   flex: 1;
   display: flex;
   align-items: center;
@@ -455,8 +353,7 @@
   gap: 24px;
   box-shadow: none;
 }
-
-.summary-time-category {
+.calendar-summary-time-category {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -467,23 +364,17 @@
   align-items: flex-start;
   text-align: left;
 }
-
-.summary-time-category .summary-icon {
+.calendar-summary-time-category .calendar-summary-icon {
   max-width: 16px;
   margin-right: 10px;
   color: #252525;
 }
-.date-text, .category-text {
+.calendar-date-text,
+.calendar-category-text {
   display: flex;
   align-items: center;
 }
-
-.date-text, .category-text {
-  display: flex;
-  align-items: center;
-}
-
-.summary-title-pets {
+.calendar-summary-title-pets {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -492,8 +383,7 @@
   align-items: flex-start;
   text-align: left;
 }
-
-.schedule-title {
+.calendar-schedule-title {
   font-size: 14px;
   font-weight: 600;
   color: #000000;
@@ -502,13 +392,11 @@
   text-overflow: ellipsis;
   margin-left: 6px;
 }
-
-.schedule-pets {
+.calendar-schedule-pets {
   display: flex;
   gap: 6px;
 }
-
-.pet-circle-with-name {
+.calendar-pet-circle-with-name {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -518,8 +406,7 @@
   padding: 4px 8px;
   border-radius: 12px;
 }
-
-.pet-circle {
+.calendar-pet-circle {
   background-color: #e5e7eb;
   border-radius: 50%;
   width: 24px;
@@ -528,29 +415,25 @@
   align-items: center;
   justify-content: center;
 }
-
-.schedule-pet-thumbnail {
+.calendar-schedule-pet-thumbnail {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
 }
-
-.pet-name {
+.calendar-pet-name {
   white-space: nowrap;
   font-size: 12px;
   font-weight: 500;
 }
-
-.summary-actions {
+.calendar-summary-actions {
   display: flex;
   align-items: center;
   gap: 16px;
   justify-content: flex-end;
   min-width: 200px;
 }
-
-.priority-badge {
+.calendar-priority-badge {
   padding: 4px 16px;
   font-size: 11px;
   font-weight: 700;
@@ -560,18 +443,16 @@
   min-width: 60px;
   text-align: center;
 }
-
-.priority-badge.high {
+.calendar-priority-badge.high {
   background-color: rgb(248, 113, 113);
 }
-.priority-badge.medium {
+.calendar-priority-badge.medium {
   background-color: rgb(251, 191, 36);
 }
-.priority-badge.low {
+.calendar-priority-badge.low {
   background-color: rgb(52, 211, 153);
 }
-
-.styled-detail-button {
+.calendar-styled-detail-button {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -586,17 +467,14 @@
   transition: background-color 0.4s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-
-.styled-detail-button:hover {
+.calendar-styled-detail-button:hover {
   background-color: #ebebeb;
   transition: background-color 0.4s ease;
 }
-
-.styled-detail-icon {
+.calendar-styled-detail-icon {
   color: #363636;
 }
-
-.no-schedule {
+.calendar-no-schedule {
   font-size: 13px;
   color: #9ca3af;
   margin-left: 24px;

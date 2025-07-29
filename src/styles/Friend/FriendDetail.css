@@ -1,131 +1,131 @@
-.friend-detail-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Pretendard", sans-serif;
-  }
-  
-  .modal-content {
-    background-color: white;
-    width: 90%;
-    max-width: 400px;
-    padding: 32px 24px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    position: relative;
-    text-align: center;
-  }
-  
-  .close-button {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    font-size: 24px;
-    font-weight: bold;
-    background: none;
-    border: none;
-    color: #111827;
-    cursor: pointer;
-  }
-  
-  .profile-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;      
-    justify-content: center;   
-    margin-bottom: 32px;
-  }
-  
-  .profile-image {
-    display: block;             
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 50%;
-    background-color: #f3f4f6;
-    margin-right: 10px;
-  }
-  
-  .friend-name {
-    font-size: 16px;
-    font-weight: 700;
-    color: #111827;
-  }
-  
-  .pet-section {
-    margin-top: 24px;
-    text-align: left;
-  }
-  
-  .section-title {
-    font-size: 14px;
-    font-weight: 400;
-    color: #111827;
-    margin-bottom: 12px;
-  }
-  
-  .pet-list {
-    list-style: none;
-    padding: 16px;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    justify-content: flex-start;
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    box-sizing: border-box;
-  }
-  
-  .pet-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 60px;
-    gap: 6px;
-  }
-  
-  .pet-image {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 8px;
-    background-color: #f9fafb;
-  }
-  
-  .pet-name {
-    font-size: 12px;
-    font-weight: 500;
-    color: #0b0b0b;
-  }
-  
-  .empty-text {
-    width: 100%;
-    text-align: center;
-    background-color: #f3f4f6;
-    border-radius: 12px;
-    padding: 20px 12px;
-    font-size: 14px;
-    color: #6b7280;
-    font-weight: 500;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .pet-error-message {
-    color: red;
-    font-weight: 500;
-    text-align: center;
-    padding: 16px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+.frienddetail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Pretendard", sans-serif;
+}
+
+.frienddetail-modal-content {
+  background-color: white;
+  width: 90%;
+  max-width: 400px;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  position: relative;
+  text-align: center;
+}
+
+.frienddetail-close-button {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 24px;
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: #111827;
+  cursor: pointer;
+}
+
+.frienddetail-profile-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.frienddetail-profile-image {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: #f3f4f6;
+  margin-right: 10px;
+}
+
+.frienddetail-friend-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.frienddetail-pet-section {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.frienddetail-section-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.frienddetail-pet-list {
+  list-style: none;
+  padding: 16px;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.frienddetail-pet-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60px;
+  gap: 6px;
+}
+
+.frienddetail-pet-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #f9fafb;
+}
+
+.frienddetail-pet-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #0b0b0b;
+}
+
+.frienddetail-empty-text {
+  width: 100%;
+  text-align: center;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  padding: 20px 12px;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.frienddetail-pet-error-message {
+  color: red;
+  font-weight: 500;
+  text-align: center;
+  padding: 16px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

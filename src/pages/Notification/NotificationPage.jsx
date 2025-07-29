@@ -150,11 +150,11 @@ function NotificationPage() {
   return (
     <div className="notification-page">
       <NavBar title="알림" unreadCount={unreadCount} />
-      <div className="notification-tabBar">
+      <div className="notification-tab-bar">
         {categories.map((cat) => (
           <button
             key={cat}
-            className={`notification-tabButton ${
+            className={`notification-tab-button ${
               activeCategory === cat ? "active" : ""
             }`}
             onClick={() => setActiveCategory(cat)}
@@ -165,14 +165,14 @@ function NotificationPage() {
         ))}
       </div>
 
-      {error && <div className="error-message">❌ {error}</div>}
+      {error && <div className="notification-error-message">❌ {error}</div>}
 
       <div className="notification-list">
         {filteredNotifications.length === 0 ? (
-          <div className="empty-state">
-            <p className="empty-icon">📭</p>
-            <p className="empty-title">알림 목록이 없습니다</p>
-            <p className="empty-subtitle">
+          <div className="notification-empty-state">
+            <p className="notification-empty-icon">📭</p>
+            <p className="notification-empty-title">알림 목록이 없습니다</p>
+            <p className="notification-empty-subtitle">
               새로운 소식이 도착하면 알려드릴게요!
             </p>
           </div>
@@ -189,10 +189,10 @@ function NotificationPage() {
                 </div>
 
                 <div className="notification-text-area">
-                  <div className="notice-message">
+                  <div className="notification-message">
                     {typeMap[notice.noticeType]} 알림이 도착했습니다
                   </div>
-                  <div className="notice-time">
+                  <div className="notification-time">
                     {formatDistanceToNow(new Date(notice.createdAt), {
                       addSuffix: true,
                       locale: ko,
@@ -203,7 +203,7 @@ function NotificationPage() {
                 {!notice.read && (
                   <div className="notification-right">
                     <button
-                      className="mark-read-button"
+                      className="notification-mark-read-button"
                       onClick={(e) => {
                         e.stopPropagation();
                         markAsRead(notice.noticeId);

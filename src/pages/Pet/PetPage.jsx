@@ -91,46 +91,46 @@ const PetPage = () => {
     setPetSortIndex(0);
   };
 
-const loadPets = async () => {
-  const token = localStorage.getItem("accessToken");
+  const loadPets = async () => {
+    const token = localStorage.getItem("accessToken");
 
-  if (token) {
-    try {
-      const petList = await fetchMemberPets(); 
-      console.log("🐶 내 펫 리스트 응답:", petList); // 여기를 추가
-      setPets(petList);
-    } catch (error) {
-      setError("반려동물 정보를 불러오는 중 오류 발생");
-      console.error(error);
-    } finally {
+    if (token) {
+      try {
+        const petList = await fetchMemberPets();
+        console.log("🐶 내 펫 리스트 응답:", petList); // 여기를 추가
+        setPets(petList);
+      } catch (error) {
+        setError("반려동물 정보를 불러오는 중 오류 발생");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    } else {
+      setError("로그인이 필요합니다");
       setLoading(false);
     }
-  } else {
-    setError("로그인이 필요합니다");
-    setLoading(false);
-  }
-};
+  };
 
   useEffect(() => {
     loadPets();
   }, []);
 
-useEffect(() => {
-  const loadCaregiverPets = async () => {
-    try {
-      setCaregiverLoading(true);
-      const pets = await fetchCaregiverPets();
-      setCaregiverPets(pets);
-    } catch (err) {
-      setCaregiverError("돌보미 반려동물 정보를 불러오는 중 오류 발생");
-      console.error(err);
-    } finally {
-      setCaregiverLoading(false);
-    }
-  };
+  useEffect(() => {
+    const loadCaregiverPets = async () => {
+      try {
+        setCaregiverLoading(true);
+        const pets = await fetchCaregiverPets();
+        setCaregiverPets(pets);
+      } catch (err) {
+        setCaregiverError("돌보미 반려동물 정보를 불러오는 중 오류 발생");
+        console.error(err);
+      } finally {
+        setCaregiverLoading(false);
+      }
+    };
 
-  loadCaregiverPets();
-}, []);
+    loadCaregiverPets();
+  }, []);
 
   const handleOpenModal = () => setShowModal(true);
 
@@ -216,17 +216,17 @@ useEffect(() => {
           </button>
         </div>
 
-        <div className="petPage-top-bar">
-          <div className="petPage-sort-wrapper">
-            <button className="petPage-sort-button" onClick={rotatePetSort}>
+        <div className="petpage-top-bar">
+          <div className="petpage-sort-wrapper">
+            <button className="petpage-sort-button" onClick={rotatePetSort}>
               {currentPetSort.label}
             </button>
           </div>
 
-          <div className="petPage-register-wrapper">
+          <div className="petpage-register-wrapper">
             <button
               onClick={handleOpenModal}
-              className="petPage-register-button"
+              className="petpage-register-button"
             >
               펫 등록하기
             </button>
@@ -241,23 +241,23 @@ useEffect(() => {
           <>
             {activeTab === "mine" ? (
               pets.length > 0 ? (
-                <div className="petPage-petsSection">
-                  <div className="petPage-petsList">
+                <div className="petpage-pets-section">
+                  <div className="petpage-pets-list">
                     {paginatedPets.filter(Boolean).map((pet) => (
-                      <div key={pet.petId} className="petPage-pet-card-new">
-                        <div className="petPage-pet-card-header">
-                          <span className="petPage-pet-card-name">
+                      <div key={pet.petId} className="petpage-pet-card-new">
+                        <div className="petpage-pet-card-header">
+                          <span className="petpage-pet-card-name">
                             {pet.name}
                           </span>
 
                           <button
                             onClick={() => setSelectedPet(pet)}
-                            className="petPage-dot-button"
+                            className="petpage-dot-button"
                             onFocus={(e) => e.target.classList.add("open")}
                             onBlur={(e) => e.target.classList.remove("open")}
                           >
                             ⋮
-                            <div className="petPage-dropdown-menu">
+                            <div className="petpage-dropdown-menu">
                               <button
                                 onMouseDown={() => handleOpenEditModal(pet)}
                               >
@@ -285,7 +285,7 @@ useEffect(() => {
                           </button>
                         </div>
 
-                        <div className="petPage-pet-card-body">
+                        <div className="petpage-pet-card-body">
                           <img
                             src={
                               pet.image.startsWith("http") ||
@@ -294,9 +294,9 @@ useEffect(() => {
                                 : `${API_BASE_URL}${pet.image}`
                             }
                             alt={pet.name}
-                            className="petPage-pet-avatar"
+                            className="petpage-pet-avatar"
                           />
-                          <div className="petPage-pet-info">
+                          <div className="petpage-pet-info">
                             <div className="info-row">
                               <span className="label">종</span>
                               <span className="value">{pet.species}</span>
@@ -325,7 +325,7 @@ useEffect(() => {
                     ))}
                   </div>
                   {totalPages > 1 && (
-                    <div className="petPage-pagination-buttons">
+                    <div className="petpage-pagination-buttons">
                       {Array.from({ length: totalPages }, (_, i) => (
                         <button
                           key={i + 1}
@@ -339,33 +339,33 @@ useEffect(() => {
                   )}
                 </div>
               ) : (
-                <div className="petPage-empty-state">
-                  <p className="petPage-empty-icon">🐾</p>
-                  <p className="petPage-empty-text-main">
+                <div className="petpage-empty-state">
+                  <p className="petpage-empty-icon">🐾</p>
+                  <p className="petpage-empty-text-main">
                     등록된 반려동물이 없습니다
                   </p>
-                  <p className="petPage-empty-text-sub">
+                  <p className="petpage-empty-text-sub">
                     반려동물을 등록하면 이곳에 표시됩니다!
                   </p>
                 </div>
               )
             ) : (
-              <div className="petPage-petsSection">
+              <div className="petpage-pets-section">
                 {caregiverLoading ? (
                   <p>로딩 중...</p>
                 ) : caregiverError ? (
                   <p className="error">{caregiverError}</p>
                 ) : caregiverPets.length > 0 ? (
                   <>
-                    <div className="petPage-petsList">
+                    <div className="petpage-pets-list">
                       {caregiverPaginatedPets.map((pet) => (
-                        <div key={pet.petId} className="petPage-pet-card-new">
-                          <div className="petPage-pet-card-header">
-                            <span className="petPage-pet-card-name">
+                        <div key={pet.petId} className="petpage-pet-card-new">
+                          <div className="petpage-pet-card-header">
+                            <span className="petpage-pet-card-name">
                               {pet.name}
                             </span>
                           </div>
-                          <div className="petPage-pet-card-body">
+                          <div className="petpage-pet-card-body">
                             <img
                               src={
                                 pet.image &&
@@ -375,9 +375,9 @@ useEffect(() => {
                                   : `${API_BASE_URL}${pet.image}`
                               }
                               alt={pet.name}
-                              className="petPage-pet-avatar"
+                              className="petpage-pet-avatar"
                             />
-                            <div className="petPage-pet-info">
+                            <div className="petpage-pet-info">
                               <div className="info-row">
                                 <span className="label">종</span>
                                 <span className="value">{pet.species}</span>
@@ -406,7 +406,7 @@ useEffect(() => {
                       ))}
                     </div>
                     {caregiverTotalPages > 1 && (
-                      <div className="petPage-pagination-buttons">
+                      <div className="petpage-pagination-buttons">
                         {Array.from({ length: caregiverTotalPages }, (_, i) => (
                           <button
                             key={i + 1}
@@ -422,12 +422,12 @@ useEffect(() => {
                     )}
                   </>
                 ) : (
-                  <div className="petPage-empty-state">
-                    <p className=".petPage-empty-icon">🐾</p>
-                    <p className="petPage-empty-text-main">
+                  <div className="petpage-empty-state">
+                    <p className="petpage-empty-icon">🐾</p>
+                    <p className="petpage-empty-text-main">
                       등록된 돌보미 반려동물이 없습니다
                     </p>
-                    <p className="petPage-empty-text-sub">
+                    <p className="petpage-empty-text-sub">
                       친구의 반려동물을 등록하면 이곳에 표시됩니다!
                     </p>
                   </div>

@@ -91,9 +91,9 @@ const FriendPage = () => {
   }, [keyword]);
 
   return (
-    <div className="friendPageContainer">
+    <div className="friendpage">
       {/* 검색창 */}
-      <div className="friendSearchBar">
+      <div className="friendpage-search-bar">
         <input
           type="text"
           placeholder="친구의 이름 및 아이디를 검색해주세요"
@@ -101,7 +101,7 @@ const FriendPage = () => {
           onChange={(e) => setKeyword(e.target.value)}
         />
         <button
-          className="searchIconButton"
+          className="friendpage-search-icon-button"
           onClick={handleSearch}
           disabled={loading}
         >
@@ -111,35 +111,45 @@ const FriendPage = () => {
 
       {/* 검색 결과 */}
       {keyword && (
-        <div className="search-results">
-          {error && <div className="search-results-error-message">{error}</div>}
+        <div className="friendpage-search-results">
+          {error && (
+            <div className="friendpage-search-results-error-message">
+              {error}
+            </div>
+          )}
           {searchResults.length > 0 ? (
             <ul>
               {searchResults.map((member) => {
                 const isAlreadyFriend = friends.some((f) => f.id === member.id);
 
                 return (
-                  <li key={member.id} className="search-result-item">
-                    <div className="search-result-info">
+                  <li key={member.id} className="friendpage-search-result-item">
+                    <div className="friendpage-search-result-info">
                       <img
                         src={member.image || defaultProfilePic}
                         alt={member.name}
-                        className="profile-image"
+                        className="friendpage-profile-image"
                       />
                       <span>{member.name}</span>
                     </div>
 
                     {isAlreadyFriend ? (
-                      <button className="send-request-button disabled" disabled>
+                      <button
+                        className="friendpage-send-request-button disabled"
+                        disabled
+                      >
                         이미 친구입니다
                       </button>
                     ) : requestedIds.includes(member.id) ? (
-                      <button className="send-request-button disabled" disabled>
+                      <button
+                        className="friendpage-send-request-button disabled"
+                        disabled
+                      >
                         친구 요청중입니다
                       </button>
                     ) : (
                       <button
-                        className="send-request-button"
+                        className="friendpage-send-request-button"
                         onClick={() => handleSendRequest(member.id)}
                       >
                         친구 요청
@@ -150,7 +160,9 @@ const FriendPage = () => {
               })}
             </ul>
           ) : (
-            !loading && <p className="no-results">검색 결과가 없습니다.</p>
+            !loading && (
+              <p className="friendpage-no-results">검색 결과가 없습니다.</p>
+            )
           )}
         </div>
       )}
@@ -158,25 +170,31 @@ const FriendPage = () => {
       {/* 탭 메뉴 */}
       {!keyword && (
         <>
-          <div className="tabBar">
+          <div className="friendpage-tab-bar">
             <button
-              className={`tab ${activeTab === "friends" ? "active" : ""}`}
+              className={`friendpage-tab ${
+                activeTab === "friends" ? "active" : ""
+              }`}
               onClick={() => setActiveTab("friends")}
             >
-              <span className="tabLabel">
-                <span className="tabText">친구 목록</span>
-                <span className="friendCount">{friends.length}</span>
+              <span className="friendpage-tab-label">
+                <span className="friendpage-tab-text">친구 목록</span>
+                <span className="friendpage-friend-count">
+                  {friends.length}
+                </span>
               </span>
             </button>
             <button
-              className={`tab ${activeTab === "manage" ? "active" : ""}`}
+              className={`friendpage-tab ${
+                activeTab === "manage" ? "active" : ""
+              }`}
               onClick={() => setActiveTab("manage")}
             >
               <span>친구 요청 관리</span>
             </button>
           </div>
 
-          <div className="tabContent">
+          <div className="friendpage-tab-content">
             {activeTab === "friends" && (
               <FriendList friends={friends} title="친구 목록" />
             )}

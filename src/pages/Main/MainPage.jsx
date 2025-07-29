@@ -289,251 +289,251 @@ const deleteCategory = async (categoryId) => {
     });
 
   return (
-    <div className="mainpage">
-      <div className="mainpage-container">
-        <div className="mainpage-container-body">
-          {/* 사이드바 */}
-          <div className="mainpage-leftsection">
-            <div className="mainpage-buttons">
-              <button className="mainpage-category-button" onClick={openCategoryModal}>
-                카테고리 생성
+  <div className="mainpage">
+    <div className="mainpage-container">
+      <div className="mainpage-container-body">
+        {/* 사이드바 */}
+        <div className="mainpage-leftsection">
+          <div className="mainpage-buttons">
+            <button className="mainpage-category-button" onClick={openCategoryModal}>
+              카테고리 생성
+            </button>
+            <button className="mainpage-calendar-button" onClick={openScheduleModal}>
+              일정 생성
+            </button>
+          </div>
+
+          {/* 카테고리 섹션 */}
+          <div className="mainpage-filter-card mainpage-fixed-title">
+            <div className="mainpage-filter-title-row">
+              <h4 className="mainpage-filter-title">
+                내 카테고리{" "}
+                <span className="mainpage-item-count">{categories.length}</span>
+              </h4>
+              <button
+                className="mainpage-select-all-button"
+                onClick={selectAllCategories}
+              >
+                전체선택
               </button>
-              <button className="mainpage-calendar-button" onClick={openScheduleModal}>
-                일정 생성
-              </button>
             </div>
 
-            {/* 카테고리 섹션 */}
-            <div className="filter-card fixed-title">
-              <div className="filter-title-row">
-                <h4 className="filter-title">
-                  내 카테고리{" "}
-                  <span className="item-count">{categories.length}</span>
-                </h4>
-                <button
-                  className="select-all-button"
-                  onClick={selectAllCategories}
-                >
-                  전체선택
-                </button>
-              </div>
-
-              <div className="filter-scroll-area">
-                {categories.length === 0 ? (
-                  <div className="empty-message">
-                    등록된 카테고리가 없습니다
-                  </div>
-                ) : (
-                  <div className="category-grid">
-                    {categories.map((c) => (
-                      <div
-                        key={c.categoryId}
-                        className={`filter-item ${
-                          isCategorySelected(c.categoryId) ? "selected" : ""
-                        }`}
-                        onClick={() => toggleCategory(c.categoryId)}
-                      >
-                        <span className="category-name">{c.name}</span>
-                        <ClearIcon
-                          className="delete-icon"
-                          fontSize="small"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteCategory(c.categoryId);
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* 반려동물 섹션 */}
-            <div className="pets-grid">
-              <div className="filter-card fixed-title">
-                <div className="filter-title-row">
-                  <h4 className="filter-title">
-                    내 반려동물{" "}
-                    <span className="item-count">{pets.length}</span>
-                  </h4>
-                  <button
-                    className="select-all-button"
-                    onClick={selectAllMyPets}
-                  >
-                    전체선택
-                  </button>
-                </div>
-
-                <div className="filter-scroll-area">
-                  {pets.length === 0 ? (
-                    <div className="empty-message">
-                      등록된 반려동물이 없습니다
-                    </div>
-                  ) : (
-                    pets.map((p) => (
-                      <div
-                        key={p.petId}
-                        className={`filter-item ${
-                          isMyPetSelected(p.petId) ? "selected" : ""
-                        }`}
-                        onClick={() => toggleMyPet(p.petId)}
-                      >
-                        {p.name}
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              <div className="filter-card fixed-title">
-                <div className="filter-title-row">
-                  <h4 className="filter-title">
-                    돌보미 반려동물{" "}
-                    <span className="item-count">{careGiverPets.length}</span>
-                  </h4>
-                  <button
-                    className="select-all-button"
-                    onClick={selectAllCareGiverPets}
-                  >
-                    전체선택
-                  </button>
-                </div>
-
-                <div className="filter-scroll-area">
-                  {careGiverPets.length === 0 ? (
-                    <div className="empty-message">
-                      등록된 돌보미 반려동물이 없습니다
-                    </div>
-                  ) : (
-                    careGiverPets.map((p) => (
-                      <div
-                        key={p.petId}
-                        className={`filter-item ${
-                          isCareGiverPetSelected(p.petId) ? "selected" : ""
-                        }`}
-                        onClick={() => toggleCareGiverPet(p.petId)}
-                      >
-                        {p.name} ({p.breed})
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* 일정 목록 섹션 */}
-            <div className="filter-card fixed-title schedule-list">
-              <div className="filter-title-row schedule-header">
-                <div className="schedule-controls">
-                  <input
-                    type="text"
-                    placeholder="일정 이름 검색"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="schedule-search-input"
-                  />
-                  <button
-                    onClick={rotateSortMode}
-                    className="schedule-sort-button"
-                  >
-                    {sortMode === "timeAsc" && "시간↑"}
-                    {sortMode === "timeDesc" && "시간↓"}
-                    {sortMode === "priorityHigh" && "중요도↑"}
-                    {sortMode === "priorityLow" && "중요도↓"}
-                  </button>
-                </div>
-
-                <div className="schedule-title-center">
-                  <h4 className="filter-title">
-                    일정 목록{" "}
-                    <span className="item-count">
-                      {filteredAndSortedSchedules.length}
-                    </span>
-                  </h4>
-                </div>
-
-                <div className="schedule-actions">
-                  <button
-                    className="select-all-button"
-                    onClick={selectAllSchedules}
-                  >
-                    전체선택
-                  </button>
-                </div>
-              </div>
-
-              {filteredAndSortedSchedules.length === 0 ? (
-                <div className="schedule-empty-message">
-                  생성된 일정이 없습니다
+            <div className="mainpage-filter-scroll-area">
+              {categories.length === 0 ? (
+                <div className="mainpage-empty-message">
+                  등록된 카테고리가 없습니다
                 </div>
               ) : (
-                <div className="filter-scroll-area schedule-scroll-grid">
-                  {filteredAndSortedSchedules.map((s) => {
-                    const key = `${s.scheduleId}-${s.date}`;
-                    const isSelected = isScheduleSelected(key);
-                    return (
-                      <div
-                        key={key}
-                        className={`schedule-list-item ${
-                          isSelected ? "selected" : ""
-                        }`}
-                        onClick={() => toggleSchedule(key)}
-                      >
-                        <div
-                          className={`priority-indicator priority-${s.priority.toLowerCase()}`}
-                        />
-                        <button
-                          className="detail-icon-button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openScheduleDetailModal(s.scheduleId, s.date);
-                          }}
-                        >
-                          <InfoIcon fontSize="small" />
-                        </button>
-                        <p>{s.title}</p>
-                        <small>{new Date(s.date).toLocaleString()}</small>
-                      </div>
-                    );
-                  })}
+                <div className="mainpage-category-grid">
+                  {categories.map((c) => (
+                    <div
+                      key={c.categoryId}
+                      className={`mainpage-filter-item ${
+                        isCategorySelected(c.categoryId) ? "selected" : ""
+                      }`}
+                      onClick={() => toggleCategory(c.categoryId)}
+                    >
+                      <span className="mainpage-category-name">{c.name}</span>
+                      <ClearIcon
+                        className="mainpage-delete-icon"
+                        fontSize="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteCategory(c.categoryId);
+                        }}
+                      />
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
           </div>
 
-          {/* 캘린더 본문 */}
-          <div className="calendar-main">
-            <CalendarComponent
-              filteredSchedules={filteredSchedules}
-              onOpenDetail={openScheduleDetailModal}
-            />
+          {/* 반려동물 섹션 */}
+          <div className="mainpage-pets-grid">
+            <div className="mainpage-filter-card mainpage-fixed-title">
+              <div className="mainpage-filter-title-row">
+                <h4 className="mainpage-filter-title">
+                  내 반려동물{" "}
+                  <span className="mainpage-item-count">{pets.length}</span>
+                </h4>
+                <button
+                  className="mainpage-select-all-button"
+                  onClick={selectAllMyPets}
+                >
+                  전체선택
+                </button>
+              </div>
+
+              <div className="mainpage-filter-scroll-area">
+                {pets.length === 0 ? (
+                  <div className="mainpage-empty-message">
+                    등록된 반려동물이 없습니다
+                  </div>
+                ) : (
+                  pets.map((p) => (
+                    <div
+                      key={p.petId}
+                      className={`mainpage-filter-item ${
+                        isMyPetSelected(p.petId) ? "selected" : ""
+                      }`}
+                      onClick={() => toggleMyPet(p.petId)}
+                    >
+                      {p.name}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="mainpage-filter-card mainpage-fixed-title">
+              <div className="mainpage-filter-title-row">
+                <h4 className="mainpage-filter-title">
+                  돌보미 반려동물{" "}
+                  <span className="mainpage-item-count">{careGiverPets.length}</span>
+                </h4>
+                <button
+                  className="mainpage-select-all-button"
+                  onClick={selectAllCareGiverPets}
+                >
+                  전체선택
+                </button>
+              </div>
+
+              <div className="mainpage-filter-scroll-area">
+                {careGiverPets.length === 0 ? (
+                  <div className="mainpage-empty-message">
+                    등록된 돌보미 반려동물이 없습니다
+                  </div>
+                ) : (
+                  careGiverPets.map((p) => (
+                    <div
+                      key={p.petId}
+                      className={`mainpage-filter-item ${
+                        isCareGiverPetSelected(p.petId) ? "selected" : ""
+                      }`}
+                      onClick={() => toggleCareGiverPet(p.petId)}
+                    >
+                      {p.name} ({p.breed})
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* 일정 목록 섹션 */}
+          <div className="mainpage-filter-card mainpage-fixed-title mainpage-schedule-list">
+            <div className="mainpage-filter-title-row mainpage-schedule-header">
+              <div className="mainpage-schedule-controls">
+                <input
+                  type="text"
+                  placeholder="일정 이름 검색"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="mainpage-schedule-search-input"
+                />
+                <button
+                  onClick={rotateSortMode}
+                  className="mainpage-schedule-sort-button"
+                >
+                  {sortMode === "timeAsc" && "시간↑"}
+                  {sortMode === "timeDesc" && "시간↓"}
+                  {sortMode === "priorityHigh" && "중요도↑"}
+                  {sortMode === "priorityLow" && "중요도↓"}
+                </button>
+              </div>
+
+              <div className="mainpage-schedule-title-center">
+                <h4 className="mainpage-filter-title">
+                  일정 목록{" "}
+                  <span className="mainpage-item-count">
+                    {filteredAndSortedSchedules.length}
+                  </span>
+                </h4>
+              </div>
+
+              <div className="mainpage-schedule-actions">
+                <button
+                  className="mainpage-select-all-button"
+                  onClick={selectAllSchedules}
+                >
+                  전체선택
+                </button>
+              </div>
+            </div>
+
+            {filteredAndSortedSchedules.length === 0 ? (
+              <div className="mainpage-schedule-empty-message">
+                생성된 일정이 없습니다
+              </div>
+            ) : (
+              <div className="mainpage-filter-scroll-area mainpage-schedule-scroll-grid">
+                {filteredAndSortedSchedules.map((s) => {
+                  const key = `${s.scheduleId}-${s.date}`;
+                  const isSelected = isScheduleSelected(key);
+                  return (
+                    <div
+                      key={key}
+                      className={`mainpage-schedule-list-item ${
+                        isSelected ? "selected" : ""
+                      }`}
+                      onClick={() => toggleSchedule(key)}
+                    >
+                      <div
+                        className={`mainpage-priority-indicator mainpage-priority-${s.priority.toLowerCase()}`}
+                      />
+                      <button
+                        className="mainpage-detail-icon-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openScheduleDetailModal(s.scheduleId, s.date);
+                        }}
+                      >
+                        <InfoIcon fontSize="small" />
+                      </button>
+                      <p>{s.title}</p>
+                      <small>{new Date(s.date).toLocaleString()}</small>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </div>
-      </div>
 
-      {/* 모달들 */}
-      {isScheduleModalOpen && (
-        <ScheduleModal
-          onClose={closeScheduleModal}
-          pets={[...pets, ...careGiverPets]}
-          onScheduleCreated={loadSchedules}
-        />
-      )}
-      <CategoryModal
-        isOpen={isCategoryModalOpen}
-        onRequestClose={closeCategoryModal}
-        onCategoryCreated={loadCategories}
-      />
-      <ScheduleDetailModal
-        isOpen={isScheduleDetailModalOpen}
-        onRequestClose={closeScheduleDetailModal}
-        scheduleId={selectedScheduleId}
-        selectedDate={selectedDate}
-        onScheduleDeleted={loadSchedules}
-      />
+        {/* 캘린더 본문 */}
+        <div className="mainpage-calendar-main">
+          <CalendarComponent
+            filteredSchedules={filteredSchedules}
+            onOpenDetail={openScheduleDetailModal}
+          />
+        </div>
+      </div>
     </div>
-  );
+
+    {/* 모달들 */}
+    {isScheduleModalOpen && (
+      <ScheduleModal
+        onClose={closeScheduleModal}
+        pets={[...pets, ...careGiverPets]}
+        onScheduleCreated={loadSchedules}
+      />
+    )}
+    <CategoryModal
+      isOpen={isCategoryModalOpen}
+      onRequestClose={closeCategoryModal}
+      onCategoryCreated={loadCategories}
+    />
+    <ScheduleDetailModal
+      isOpen={isScheduleDetailModalOpen}
+      onRequestClose={closeScheduleDetailModal}
+      scheduleId={selectedScheduleId}
+      selectedDate={selectedDate}
+      onScheduleDeleted={loadSchedules}
+    />
+  </div>
+);
 }
 
 export default MainPage;

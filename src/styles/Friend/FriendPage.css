@@ -1,214 +1,214 @@
-/* 전체 페이지 레이아웃 조정 */
-.friendPageContainer {
-    min-width: 360px; 
-    max-width: 600px;
-    height: 80vh;
-    margin: 40px auto 0 auto;
-    padding: 30px;
-    padding-top: 40px;
-    font-family: 'Pretendard', sans-serif;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-  
-  .friendContentWrapper {
-    max-width: 720px;
-    margin: 0 auto;
-  }
-  
-  /* 검색 바 */
-  .friendSearchBar {
-    display: flex;
-    align-items: center;
-    padding: 0px;
-    margin-bottom: 16px;
-    width: 90%; 
-    margin: 0 auto 16px;
-  }
-  
-  .friendSearchBar input {
-    flex: 1;
-    padding: 12px 16px;
-    font-size: 12px;
-    font-weight: 500;
-    border: none;
-    border-radius: 6px;
-    background-color: #F5F5F5;
-    outline: none;
-    color: #111827;
-  }
-  
-  .friendSearchBar input::placeholder {
-    color: #9ca3af;
-  }
-  
-  .searchIconButton {
-    background: none;
-    border: none;
-    margin-left: -36px;
-    color: #000000;
-    cursor: pointer;
-  }
+.friendpage {
+  min-width: 360px;
+  max-width: 600px;
+  height: 80vh;
+  margin: 40px auto 0 auto;
+  padding: 30px;
+  padding-top: 40px;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  .searchIconButton svg {
-    font-size: 20px; 
-  }
-  
-  /* 탭바 */
-  .tabBar {
-    display: flex;
-    width: 90%;
-    gap: 12px;
-    padding: 6px;
-    margin: 12px auto 32px auto; 
-    background-color: #f1f3f5;
-    border-radius: 8px;
-    justify-content: space-between;
-  }
-  
-  .tab {
-    flex: 1;
-    padding: 12px 16px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #6b7280;
-    background-color: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .tab span {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .tab.active {
-    background-color: #ffffff;
-    color: #111827;
-    font-weight: 700;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-  }
-  
-  .tab.active span::after {
-    content: none !important;
-  }
+/* 검색 바 */
+.friendpage-search-bar {
+  display: flex;
+  align-items: center;
+  padding: 0px;
+  margin-bottom: 16px;
+  width: 90%;
+  margin: 0 auto 16px;
+}
 
-  .tabContent {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-  }
+.friendpage-search-bar input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background-color: #F5F5F5;
+  outline: none;
+  color: #111827;
+}
 
-  .tabLabel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-  }
-  
-  .tabText {
-    font-size: 14px;
-  }
-  
-  .friendCount {
-    color: #6b7280;
-    font-size: 12px;
-    padding: 2px 6px;
-  }
+.friendpage-search-bar input::placeholder {
+  color: #9ca3af;
+}
 
-  .friendCount::after {
-    content: none !important;
-  }
-  
-  /* 검색 결과 */
-  .search-results {
-    width: 90%;
-    min-height: 90%;
-    background-color: #f5f5f5;
-    border-radius: 8px;
-    padding: 24px;
-    margin: 12px auto;
-    margin-bottom: 12px;
-  }
-  
-  .search-results ul {
-    padding-left: 0;
-    margin: 0;
-  }
+.friendpage-search-icon-button {
+  background: none;
+  border: none;
+  margin-left: -36px;
+  color: #000000;
+  cursor: pointer;
+}
 
-  .search-result-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 8px;
-    padding: 20px 12px 20px 12px;
-    background-color: #ffffff;
-    margin: 0 auto 0 auto; 
-    width: 100%;
-    max-width: 600px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-  }
-  
-  .search-result-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    font-size: 15px;
-    font-weight: 600;
-    margin-left: 8px;
-  }
-  
-  .profile-image {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #f3f4f6;
-  }
+.friendpage-search-icon-button svg {
+  font-size: 20px;
+}
 
-  .send-request-button {
-    background-color: #5C5C5C;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    margin-right: 12px;
-  }
-  
-  .send-request-button:hover {
-    background-color: #4b4848;
-  }
+/* 검색 결과 */
+.friendpage-search-results {
+  width: 90%;
+  min-height: 90%;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 24px;
+  margin: 12px auto;
+  margin-bottom: 12px;
+}
 
-  .send-request-button.disabled {
-    background-color: #e5e7eb;
-    color: #9ca3af;
-    cursor: not-allowed;
-  }
+.friendpage-search-results ul {
+  padding-left: 0;
+  margin: 0;
+}
 
-  .search-results-error-message {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 15px;
-    color: #9ca3af;
-    font-weight: 500;
-  }
+.friendpage-search-result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 20px 12px 20px 12px;
+  background-color: #ffffff;
+  margin: 0 auto 0 auto;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
 
-  .no-results {
-    text-align: center;
-    margin-top: 40px;
-    font-size: 15px;
-    color: #9ca3af;
-    font-weight: 500;
-  }
+.friendpage-search-result-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.friendpage-profile-image {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+.friendpage-send-request-button {
+  background-color: #5C5C5C;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-right: 12px;
+}
+
+.friendpage-send-request-button:hover {
+  background-color: #4b4848;
+}
+
+.friendpage-send-request-button.disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.friendpage-search-results-error-message {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 15px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.friendpage-no-results {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 15px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* 탭바 */
+.friendpage-tab-bar {
+  display: flex;
+  width: 90%;
+  gap: 12px;
+  padding: 6px;
+  margin: 12px auto 32px auto;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  justify-content: space-between;
+}
+
+.friendpage-tab {
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.friendpage-tab span {
+  position: relative;
+  display: inline-block;
+}
+
+.friendpage-tab.active {
+  background-color: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.friendpage-tab.active span::after {
+  content: none !important;
+}
+
+.friendpage-tab-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.friendpage-tab-text {
+  font-size: 14px;
+}
+
+.friendpage-friend-count {
+  color: #6b7280;
+  font-size: 12px;
+  padding: 2px 6px;
+}
+
+.friendpage-friend-count::after {
+  content: none !important;
+}
+
+.friendpage-tab-content {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.friendpage-tab-content::-webkit-scrollbar {
+  display: none;
+}
