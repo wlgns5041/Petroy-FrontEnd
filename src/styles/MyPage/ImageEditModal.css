@@ -1,4 +1,4 @@
-.imageEdit-modal {
+.image-edit-modal {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
@@ -8,7 +8,7 @@
   z-index: 1000;
 }
 
-.imageEdit-modal-content {
+.image-edit-modal-content {
   background-color: white;
   border-radius: 20px;
   width: 90vw;
@@ -21,13 +21,7 @@
   box-sizing: border-box;
 }
 
-.imageEdit-step-indicator {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 12px;
-}
-
-.imageEdit-title {
+.image-edit-title {
   font-size: 18px;
   font-weight: 700;
   color: #111827;
@@ -35,7 +29,7 @@
   text-align: center;
 }
 
-.imageEdit-upload-box {
+.image-edit-upload-box {
   border: 2px dashed #d1d5db;
   border-radius: 16px;
   padding: 48px 0;
@@ -49,22 +43,22 @@
   transition: background-color 0.2s ease;
 }
 
-.imageEdit-upload-box:hover {
+.image-edit-upload-box:hover {
   background-color: #f9fafb;
 }
 
-.imageEdit-input-hidden {
+.image-edit-input-hidden {
   display: none;
 }
 
-.imageEdit-preview-section {
+.image-edit-preview-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
 }
 
-.imageEdit-preview-image {
+.image-edit-preview-image {
   width: 140px;
   height: 140px;
   border-radius: 20px;
@@ -72,7 +66,7 @@
   border: 1px solid #e5e7eb;
 }
 
-.imageEdit-reset-button {
+.image-edit-reset-button {
   background-color: #f3f4f6;
   color: #1f2937;
   padding: 10px 24px;
@@ -83,14 +77,14 @@
   cursor: pointer;
 }
 
-.imageEdit-footer {
+.image-edit-footer {
   display: flex;
   gap: 12px;
   margin-top: 40px;
   width: 100%;
 }
 
-.imageEdit-skip-button {
+.image-edit-skip-button {
   flex: 1;
   background-color: #f3f4f6;
   color: #1f2937;
@@ -102,7 +96,7 @@
   cursor: pointer;
 }
 
-.imageEdit-next-button {
+.image-edit-next-button {
   flex: 1;
   background-color: #10b981;
   color: white;
@@ -114,7 +108,7 @@
   cursor: pointer;
 }
 
-.imageEdit-next-button:disabled {
+.image-edit-next-button:disabled {
   background-color: #d1d5db;
   color: #9ca3af;
   cursor: not-allowed;

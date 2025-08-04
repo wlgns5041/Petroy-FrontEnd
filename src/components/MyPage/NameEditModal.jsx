@@ -56,13 +56,13 @@ const handleSave = async () => {
 };
 
   return (
-    <div className="nameEdit-modal show">
-      <div className="nameEdit-modal-content">
-        <div className="nameEdit-modal-header">
+    <div className="name-edit-modal">
+      <div className="name-edit-modal-content">
+        <div className="name-edit-modal-header">
           <h2>변경할 이름을 입력해주세요</h2>
         </div>
 
-        <div className="nameEdit-modal-body">
+        <div className="name-edit-modal-body">
           <div className="input-row">
             <input
               type="text"
@@ -77,7 +77,7 @@ const handleSave = async () => {
           </div>
           {nameError && (
             <p
-              className={`nameEdit-error ${
+              className={`name-edit-error ${
                 nameChecked ? 'valid' : 'invalid'
               }`}
             >
@@ -86,7 +86,7 @@ const handleSave = async () => {
           )}
         </div>
 
-        <div className="nameEdit-modal-footer">
+        <div className="name-edit-modal-footer">
           <button className="skip-button" onClick={onClose}>
             취소
           </button>

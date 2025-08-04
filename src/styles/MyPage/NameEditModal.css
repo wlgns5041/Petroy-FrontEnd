@@ -1,4 +1,4 @@
-.nameEdit-modal {
+.name-edit-modal {
   position: fixed;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.4);
@@ -8,7 +8,7 @@
   z-index: 1000;
 }
 
-.nameEdit-modal-content {
+.name-edit-modal-content {
   background-color: white;
   border-radius: 20px;
   padding: 32px 24px;
@@ -21,17 +21,17 @@
   gap: 24px;
 }
 
-.nameEdit-modal-header {
+.name-edit-modal-header {
   text-align: center;
 }
 
-.nameEdit-modal-header h2 {
+.name-edit-modal-header h2 {
   font-size: 18px;
   font-weight: 700;
   color: #111827;
 }
 
-.nameEdit-modal-body {
+.name-edit-modal-body {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -73,21 +73,21 @@
   background-color: #e5e7eb;
 }
 
-.nameEdit-error {
+.name-edit-error {
   font-size: 14px;
   margin-top: 24px;
   margin-bottom: -12px;
 }
 
-.nameEdit-error.invalid {
+.name-edit-error.invalid {
   color: #dc2626;
 }
 
-.nameEdit-error.valid {
+.name-edit-error.valid {
   color: #10b981;
 }
 
-.nameEdit-modal-footer {
+.name-edit-modal-footer {
   display: flex;
   gap: 12px;
   margin-top: 24px;

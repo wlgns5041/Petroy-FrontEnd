@@ -1,59 +1,59 @@
-.confirm-modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .confirm-modal {
-    background-color: white;
-    border-radius: 16px;
-    padding: 24px 20px;
-    width: 90%;
-    max-width: 360px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    font-family: 'Pretendard', sans-serif;
-    text-align: center;
-  }
-  
-  .confirm-message {
-    font-size: 16px;
-    font-weight: 500;
-    color: #000000;
-    margin-bottom: 12px;
-    padding: 24px;
-    white-space: pre-wrap; 
-  }
-  
-  .confirm-buttons {
-    display: flex;
-    gap: 12px;
-  }
-  
-  .cancel-button,
-  .confirm-button {
-    flex: 1;
-    padding: 12px 0;
-    font-size: 14px;
-    font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  
-  .cancel-button {
-    background-color: #f3f4f6;
-    color: #374151;
-  }
-  
-  .confirm-button {
-    background-color: #10b981;
-    color: white;
-  }
-  
-  .confirm-button:hover {
-    background-color: #059669;
-  }
+.my-page-confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.my-page-confirm-modal {
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px 20px;
+  width: 90%;
+  max-width: 360px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Pretendard', sans-serif;
+  text-align: center;
+}
+
+.my-page-confirm-message {
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+  margin-bottom: 12px;
+  padding: 24px;
+  white-space: pre-wrap;
+}
+
+.my-page-confirm-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.my-page-cancel-button,
+.my-page-confirm-button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.my-page-cancel-button {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.my-page-confirm-button {
+  background-color: #10b981;
+  color: white;
+}
+
+.my-page-confirm-button:hover {
+  background-color: #059669;
+}

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import '../../styles/MyPage/ImageEditModal.css';
+import React, { useState } from "react";
+import "../../styles/MyPage/ImageEditModal.css";
 
 const ImageEditModal = ({ onClose, onSave }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -31,35 +31,39 @@ const ImageEditModal = ({ onClose, onSave }) => {
   };
 
   return (
-    <div className="imageEdit-modal show">
-      <div className="imageEdit-modal-content">
-        <h2 className="imageEdit-title">변경할 이미지를 등록해주세요</h2>
+    <div className="image-edit-modal">
+      <div className="image-edit-modal-content">
+        <h2 className="image-edit-title">변경할 이미지를 등록해주세요</h2>
 
         {imagePreview ? (
-          <div className="imageEdit-preview-section">
-            <img src={imagePreview} alt="미리보기" className="imageEdit-preview-image" />
-            <button className="imageEdit-reset-button" onClick={handleReset}>
+          <div className="image-edit-preview-section">
+            <img
+              src={imagePreview}
+              alt="미리보기"
+              className="image-edit-preview-image"
+            />
+            <button className="image-edit-reset-button" onClick={handleReset}>
               선택 해제
             </button>
           </div>
         ) : (
-          <label className="imageEdit-upload-box">
+          <label className="image-edit-upload-box">
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="imageEdit-input-hidden"
+              className="image-edit-input-hidden"
             />
             이미지 선택
           </label>
         )}
 
-        <div className="imageEdit-footer">
-          <button className="imageEdit-skip-button" onClick={onClose}>
+        <div className="image-edit-footer">
+          <button className="image-edit-skip-button" onClick={onClose}>
             취소
           </button>
           <button
-            className="imageEdit-next-button"
+            className="image-edit-next-button"
             onClick={handleSave}
             disabled={!selectedImage}
           >
