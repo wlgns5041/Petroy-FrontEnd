@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/MyPage/NameEditModal.css';
-import { checkNameDuplicate } from "../../services/MemberService";
+import { checkNameDuplicate, updateMemberName } from "../../services/MemberService";
 
 const NameEditModal = ({ onClose, onSave }) => {
   const [newName, setNewName] = useState('');
@@ -37,16 +37,23 @@ const NameEditModal = ({ onClose, onSave }) => {
     }
   };
 
-  const handleSave = () => {
-    if (!nameChecked) {
-      alert('이름 중복 확인을 완료해주세요.');
-      return;
-    }
+const handleSave = async () => {
+  if (!nameChecked) {
+    alert('이름 중복 확인을 완료해주세요.');
+    return;
+  }
 
+  try {
+    const token = localStorage.getItem("accessToken"); 
+    await updateMemberName(token, newName);
     alert('이름을 변경했습니다');
     onSave(newName);
     onClose();
-  };
+  } catch (error) {
+    console.error("이름 변경 실패:", error);
+    alert("이름 변경에 실패했습니다. 다시 시도해주세요.");
+  }
+};
 
   return (
     <div className="nameEdit-modal show">
