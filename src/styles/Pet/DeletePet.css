@@ -1,115 +1,112 @@
-.petDelete-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .petDelete-container {
-    background-color: #fff;
-    width: 90%;
-    max-width: 420px;
-    height: auto;
-    padding: 32px 24px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    font-family: "Pretendard", sans-serif;
-    position: relative;
-  }
+.pet-delete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .petDelete-title {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    color: #111827;
-    margin-bottom: 16px;
-  }
-  
-  .petDelete-description {
-    font-size: 14px;
-    text-align: center;
-    color: #6b7280;
-    margin-bottom: 20px;
-  }
+.pet-delete-container {
+  background-color: #fff;
+  width: 90%;
+  max-width: 420px;
+  height: auto;
+  padding: 32px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+}
 
-  .petDelete-description strong {
-    font-weight: 600;
-    color: #111827;   
-  }
-  
-  .petDelete-input {
-    width: 100%;
-    padding: 12px 14px;
-    font-size: 12px;
-    border-radius: 8px;
-    border: none;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-    margin-bottom: 12px;
-    color: #111827;
-  }
-  
-  .petDelete-input:focus {
-    outline: none;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 2px #10b981;
-  }
-  
-  .petDelete-error {
-    color: #ef4444;
-    font-size: 14px;
-    text-align: center;
-    margin-bottom: 12px;
-  }
-  
-  .petDelete-button-row {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 16px;
-  }
-  
-  .petDelete-cancel-button,
-  .petDelete-confirm-button {
-    flex: 1;
-    height: 44px;
-    font-size: 14px;
-    font-weight: bold;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .petDelete-cancel-button {
-    background-color: #e5e7eb;
-    transition: background-color 0.3s ease;
-    color: #374151;
-    margin-right: 8px;
-  }
-  
-  .petDelete-cancel-button:hover {
-    background-color: #d1d5db;
-    transition: background-color 0.3s ease;
-  }
-  
-  .petDelete-confirm-button {
-    background-color: #414141;
-    transition: background-color 0.3s ease;
-    color: white;
-  }
-  
-  .petDelete-confirm-button:hover {
-    background-color: #2f2f2f;
-    transition: background-color 0.3s ease;
-  }
-  
-  .petDelete-confirm-button:disabled {
-    background-color: #fca5a5;
-    cursor: not-allowed;
-  }
+.pet-delete-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.pet-delete-description {
+  font-size: 14px;
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.pet-delete-description strong {
+  font-weight: 600;
+  color: #111827;
+}
+
+.pet-delete-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  color: #111827;
+}
+
+.pet-delete-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #10b981;
+}
+
+.pet-delete-error {
+  color: #ef4444;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.pet-delete-button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.pet-delete-cancel-button,
+.pet-delete-confirm-button {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pet-delete-cancel-button {
+  background-color: #e5e7eb;
+  color: #374151;
+  margin-right: 8px;
+}
+
+.pet-delete-cancel-button:hover {
+  background-color: #d1d5db;
+}
+
+.pet-delete-confirm-button {
+  background-color: #414141;
+  color: white;
+}
+
+.pet-delete-confirm-button:hover {
+  background-color: #2f2f2f;
+}
+
+.pet-delete-confirm-button:disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+}

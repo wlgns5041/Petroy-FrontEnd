@@ -1,102 +1,96 @@
 .schedule-detail-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .schedule-detail-modal-wrapper {
-    background-color: #fff;
-    border-radius: 20px;
-    padding: 24px;
-    width: 95%;
-    max-width: 600px;
-    max-height: 85vh;
-    overflow-y: auto;
-    font-family: 'SUIT', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  .schedule-detail-title {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 20px;
-  }
-  
-  .schedule-detail-section {
-    background-color: #f9f9f9;
-    padding: 24px;
-    border-radius: 16px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    row-gap: 16px;
-    column-gap: 16px;
-    font-size: 14px;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .schedule-detail-section .form-label {
-    font-weight: 600;
-    color: #333;
-    text-align: left;
-  }
-  
-  .schedule-detail-section .form-value {
-    text-align: left;
-    color: #444;
-    line-height: 1.5;
-    word-break: keep-all;
-  }
-  
-  .form-row.between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
-    font-size: 14px;
-  }
-  
-  .form-label {
-    font-weight: 500;
-    color: #444;
-  }
-  
-  .schedule-detail-button-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 20px;
-  }
-  
-  .submit-btn, .cancel-btn {
-    flex: 1;
-    padding: 12px;
-    font-size: 12px;
-    font-weight: 600;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .submit-btn.delete {
-    background-color: #ff5a3c;
-    color: white;
-  }
-  
-  .cancel-btn {
-    background-color: #eee;
-    color: #333;
-  }
-  
-  .loading-text, .error-text {
-    text-align: center;
-    margin: 20px 0;
-  }
+.schedule-detail-modal-wrapper {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  width: 95%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  font-family: 'SUIT', sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.schedule-detail-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.schedule-detail-section {
+  background-color: #f9f9f9;
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  row-gap: 16px;
+  column-gap: 16px;
+  font-size: 14px;
+}
+
+.schedule-detail-section .schedule-detail-label {
+  font-weight: 600;
+  color: #333;
+  text-align: left;
+}
+
+.schedule-detail-section .schedule-detail-value {
+  text-align: left;
+  color: #444;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.schedule-detail-label {
+  font-weight: 500;
+  color: #444;
+}
+
+.schedule-detail-button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.schedule-detail-delete-button,
+.schedule-detail-cancel-button {
+  flex: 1;
+  padding: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.schedule-detail-delete-button {
+  background-color: #ff5a3c;
+  color: white;
+}
+
+.schedule-detail-cancel-button {
+  background-color: #eee;
+  color: #333;
+}
+
+.schedule-detail-loading-text,
+.schedule-detail-error-text {
+  text-align: center;
+  margin: 20px 0;
+}

@@ -102,55 +102,62 @@ function ScheduleDetailModal({ isOpen, onRequestClose, scheduleId, selectedDate,
   if (!isOpen) return null;
 
   return (
-    <div className="schedule-detail-modal-overlay">
-      <div className="schedule-detail-modal-wrapper">
-        <h2 className="schedule-detail-title">일정 상세 정보</h2>
+  <div className="schedule-detail-modal-overlay">
+    <div className="schedule-detail-modal-wrapper">
+      <h2 className="schedule-detail-title">일정 상세 정보</h2>
 
-        {loading && <p className="loading-text">로딩 중...</p>}
-        {error && <p className="error-text">{error}</p>}
+      {loading && <p className="schedule-detail-loading-text">로딩 중...</p>}
+      {error && <p className="schedule-detail-error-text">{error}</p>}
 
-        {!loading && !error && (
-          <div className="schedule-detail-section">
-            <div className="form-label">카테고리</div>
-            <div className="form-value">{scheduleDetail.categoryName}</div>
-            <div className="form-label">제목</div>
-            <div className="form-value">{scheduleDetail.title}</div>
-            <div className="form-label">내용</div>
-            <div className="form-value">{scheduleDetail.content}</div>
-            <div className="form-label">우선순위</div>
-            <div className="form-value">
-              {getPriorityLabel(scheduleDetail.priority)}
-            </div>
-            <div className="form-label">반려동물</div>
-            <div className="form-value">
-              {scheduleDetail.petName.join(', ')}
-            </div>
-            <div className="form-label">알림 여부</div>
-            <div className="form-value">
-              {scheduleDetail.noticeYn ? '예' : '아니오'}
-            </div>
-            <div className="form-label">하루종일</div>
-            <div className="form-value">
-              {scheduleDetail.allDay ? '예' : '아니오'}
-            </div>
-            <div className="form-label">일정 시간</div>
-            <div className="form-value">
-              {new Date(scheduleDetail.scheduleAt).toLocaleString()}
-            </div>
+      {!loading && !error && (
+        <div className="schedule-detail-section">
+          <div className="schedule-detail-label">카테고리</div>
+          <div className="schedule-detail-value">{scheduleDetail.categoryName}</div>
+
+          <div className="schedule-detail-label">제목</div>
+          <div className="schedule-detail-value">{scheduleDetail.title}</div>
+
+          <div className="schedule-detail-label">내용</div>
+          <div className="schedule-detail-value">{scheduleDetail.content}</div>
+
+          <div className="schedule-detail-label">우선순위</div>
+          <div className="schedule-detail-value">
+            {getPriorityLabel(scheduleDetail.priority)}
           </div>
-        )}
 
-        <div className="schedule-detail-button-container">
-          <button onClick={handleDelete} className="submit-btn delete">
-            일정 삭제
-          </button>
-          <button onClick={handleClose} className="cancel-btn">
-            닫기
-          </button>
+          <div className="schedule-detail-label">반려동물</div>
+          <div className="schedule-detail-value">
+            {scheduleDetail.petName.join(', ')}
+          </div>
+
+          <div className="schedule-detail-label">알림 여부</div>
+          <div className="schedule-detail-value">
+            {scheduleDetail.noticeYn ? '예' : '아니오'}
+          </div>
+
+          <div className="schedule-detail-label">하루종일</div>
+          <div className="schedule-detail-value">
+            {scheduleDetail.allDay ? '예' : '아니오'}
+          </div>
+
+          <div className="schedule-detail-label">일정 시간</div>
+          <div className="schedule-detail-value">
+            {new Date(scheduleDetail.scheduleAt).toLocaleString()}
+          </div>
         </div>
+      )}
+
+      <div className="schedule-detail-button-container">
+        <button onClick={handleDelete} className="schedule-detail-delete-button">
+          일정 삭제
+        </button>
+        <button onClick={handleClose} className="schedule-detail-cancel-button">
+          닫기
+        </button>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default ScheduleDetailModal;

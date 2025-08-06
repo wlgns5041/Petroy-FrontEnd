@@ -1,0 +1,62 @@
+/* CommunityPage.css */
+.community-page {
+  padding: 20px;
+  font-family: 'SUIT', sans-serif;
+}
+
+.community-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.create-post-button {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.community-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.post-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.06);
+  padding: 20px;
+}
+
+.post-image {
+  width: 20%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.post-card img.post-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.post-footer {
+  margin-top: 10px;
+}

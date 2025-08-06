@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../../styles/Pet/DeletePet.css";
 import { deletePet } from "../../services/PetService";
 
-
 const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState(null);
@@ -42,10 +41,10 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
   };
 
   return (
-    <div className="petDelete-overlay">
-      <div className="petDelete-container">
-        <h2 className="petDelete-title">정말로 삭제하시겠습니까?</h2>
-        <p className="petDelete-description">
+    <div className="pet-delete-overlay">
+      <div className="pet-delete-container">
+        <h2 className="pet-delete-title">정말로 삭제하시겠습니까?</h2>
+        <p className="pet-delete-description">
           <strong>반려동물 삭제</strong>를 원하시면{" "}
           <strong>반려동물의 이름</strong>을 입력해주세요
         </p>
@@ -59,22 +58,22 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
               handleDelete();
             }
           }}
-          className="petDelete-input"
+          className="pet-delete-input"
           placeholder={pet.name}
         />
 
-        {error && <p className="petDelete-error">{error}</p>}
+        {error && <p className="pet-delete-error">{error}</p>}
 
-        <div className="petDelete-button-row">
+        <div className="pet-delete-button-row">
           <button
-            className="petDelete-cancel-button"
+            className="pet-delete-cancel-button"
             onClick={onClose}
             disabled={loading}
           >
             취소
           </button>
           <button
-            className="petDelete-confirm-button"
+            className="pet-delete-confirm-button"
             onClick={handleDelete}
             disabled={loading || nameInput !== pet.name}
           >

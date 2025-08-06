@@ -1,133 +1,130 @@
-  .petAssign-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Pretendard', sans-serif;
-  }
-  
-  .petAssign-container {
-    background-color: white;
-    width: 90%;
-    max-height: 60%;
-    max-width: 600px;
-    border-radius: 12px;
-    padding: 60px 32px;
-    position: relative;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  }
-  
-  .petAssign-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 24px;
-    color: #aaa;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .petAssign-close:hover {
-    color: #10b981;
-  }
-  
-  .petAssign-title {
-    font-size: 16px;
-    font-weight: 400;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    text-align: center;
-    color: #111827;
-  }
-  
-  .petAssign-loading,
-  .petAssign-error,
-  .petAssign-no-friends {
-    text-align: center;
-    color: #6b7280;
-    font-size: 16px;
-    margin-top: 16px;
-  }
-  
-  .petAssign-friends-grid {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    max-height: 300px;
-    overflow-y: auto;
-    padding-right: 4px; 
-    scrollbar-width: none;        
-    -ms-overflow-style: none;     
-  }
-  
-  .petAssign-friends-grid::-webkit-scrollbar {
-    display: none; 
-  }
-  
-  .petAssign-friend-card {
-    min-width: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 16px;
-    background-color: #f5f5f5; 
-    transition: background-color 0.3s ease;
-  }
+.pet-assign-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+}
 
-  .petAssign-friend-card:hover {
-    background-color: #eeeeee;
-    transition: background-color 0.3s ease;
-  }
+.pet-assign-container {
+  background-color: white;
+  width: 90%;
+  max-height: 60%;
+  max-width: 600px;
+  border-radius: 12px;
+  padding: 60px 32px;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
 
-  .petAssign-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  
-  .petAssign-friend-image {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 12px;
-  }
-  
-  .petAssign-friend-name {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
-  .petAssign-button {
-    background-color: #414141;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  
-  .petAssign-button:hover {
-    background-color: #2f2f2f;
-    transition: background-color 0.3s ease;
-  }
+.pet-assign-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 24px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
-  .petAssign-button:disabled {
-    background-color: #9ca3af !important;
-    cursor: default !important;
-  }
+.pet-assign-close:hover {
+  color: #10b981;
+}
+
+.pet-assign-title {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #111827;
+}
+
+.pet-assign-loading,
+.pet-assign-error,
+.pet-assign-no-friends {
+  text-align: center;
+  color: #6b7280;
+  font-size: 16px;
+  margin-top: 16px;
+}
+
+.pet-assign-friends-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.pet-assign-friends-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.pet-assign-friend-card {
+  min-width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease;
+}
+
+.pet-assign-friend-card:hover {
+  background-color: #eeeeee;
+}
+
+.pet-assign-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pet-assign-friend-image {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.pet-assign-friend-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pet-assign-button {
+  background-color: #414141;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pet-assign-button:hover {
+  background-color: #2f2f2f;
+}
+
+.pet-assign-button:disabled {
+  background-color: #9ca3af !important;
+  cursor: default !important;
+}

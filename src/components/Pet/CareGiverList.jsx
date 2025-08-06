@@ -3,7 +3,10 @@ import "../../styles/Pet/CareGiverList.css";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import noCaregiverImg from "../../assets/images/dogpaw.png";
 import { fetchAcceptedFriends } from "../../services/FriendService";
-import {fetchCaregiversByPet, deleteCaregiver} from "../../services/PetService";
+import {
+  fetchCaregiversByPet,
+  deleteCaregiver,
+} from "../../services/PetService";
 
 const CareGiverList = ({ pet, onClose }) => {
   const [caregiversList, setCaregiversList] = useState([]);
@@ -66,30 +69,30 @@ const CareGiverList = ({ pet, onClose }) => {
   };
 
   return (
-    <div className="CareGiverList-overlay">
-      <div className="CareGiverList-modal">
-        <button className="CareGiverList-close" onClick={onClose}>
+    <div className="care-giver-list-overlay">
+      <div className="care-giver-list-modal">
+        <button className="care-giver-list-close" onClick={onClose}>
           &times;
         </button>
-        <h2 className="CareGiverList-title">
+        <h2 className="care-giver-list-title">
           <strong>{pet.name}</strong>의 돌보미 친구목록
         </h2>
         {error ? (
-          <p className="CareGiverList-error">{error}</p>
+          <p className="care-giver-list-error">{error}</p>
         ) : caregiversList.length > 0 ? (
-          <ul className="CareGiverList-list">
+          <ul className="care-giver-list-list">
             {caregiversList.map((cg) => (
-              <li key={cg.memberId} className="CareGiverList-card">
-                <div className="CareGiverList-left">
+              <li key={cg.memberId} className="care-giver-list-card">
+                <div className="care-giver-list-left">
                   <img
                     src={cg.image || defaultProfilePic}
                     alt={cg.name}
-                    className="CareGiverList-friend-image"
+                    className="care-giver-list-friend-image"
                   />
-                  <span className="CareGiverList-name">{cg.memberName}</span>
+                  <span className="care-giver-list-name">{cg.memberName}</span>
                 </div>
                 <button
-                  className="CareGiverList-button"
+                  className="care-giver-list-button"
                   onClick={() =>
                     handleDeleteCareGiver(cg.memberId, cg.memberName)
                   }
@@ -100,13 +103,13 @@ const CareGiverList = ({ pet, onClose }) => {
             ))}
           </ul>
         ) : (
-          <div className="CareGiverList-empty">
+          <div className="care-giver-list-empty">
             <img
-               src={noCaregiverImg}
+              src={noCaregiverImg}
               alt="no caregiver"
-              className="CareGiverList-empty-img"
+              className="care-giver-list-empty-img"
             />
-            <p className="CareGiverList-empty-text">
+            <p className="care-giver-list-empty-text">
               아직 등록된 돌보미가 없어요.
               <br />
               친구를 돌보미로 등록해보세요!

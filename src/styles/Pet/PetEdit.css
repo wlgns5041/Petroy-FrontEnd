@@ -1,328 +1,301 @@
+.fade-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 300ms ease-in-out;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 300ms ease-in-out;
+}
 
-  .fade-enter {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  .fade-enter-active {
-    opacity: 1;
-    transform: translateX(0);
-    transition: all 300ms ease-in-out;
-  }
-  .fade-exit {
-    opacity: 1;
-  }
-  .fade-exit-active {
-    opacity: 0;
-    transform: translateX(-20px);
-    transition: all 300ms ease-in-out;
-  }
+.pet-edit-modal-overlay {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .petEdit-modal-overlay {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .petEdit-modal-content {
-    background-color: white;
-    width: 90%;
-    max-width: 420px;
-    height: 480px;
-    max-height: 90vh;
-    padding: 32px 24px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    font-family: "Pretendard", sans-serif;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+.pet-edit-modal-content {
+  background-color: white;
+  width: 90%;
+  max-width: 420px;
+  height: 480px;
+  max-height: 90vh;
+  padding: 32px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
 
-  .petEdit-step-wrapper {
-    flex: 1;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  
-  .petEdit-close {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    font-size: 24px;
-    color: #aaa;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
+.pet-edit-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 24px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.pet-edit-close:hover {
+  color: #10b981;
+}
 
-  .petEdit-close:hover {
-    color: #10b981;
-  }
-  
-  .petEdit-back {
-    position: absolute;
-    top: 18px;
-    left: 18px;
-    font-size: 24px;
-    color: #4b5563;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  .petEdit-back:hover {
-    color: #10b981;
-  }
-  
-  .petEdit-title {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 24px;
-    margin-bottom: 32px;
-    color: #111827;
-    text-align: center;
-  }
+.pet-edit-back-button {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #4b5563;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pet-edit-back-button:hover {
+  color: #10b981;
+}
 
-  .petEdit-step-content {
-    margin-top: 0;      
-    padding-top: 0;       
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;  
-  }
-  
-  .petEdit-step-indicator {
-    font-size: 14px;
-    color: #9ca3af;
-    margin-bottom: 8px;
-    text-align: center;
-  }
+.pet-edit-step-indicator {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-  .petEdit-step1-group {
-    margin-top: 40px;
-  }
+.pet-edit-step-wrapper {
+  flex: 1;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  .petEdit-step2-group {
-    margin-top: 40px;
-  }
-  
-  .petEdit-form-inline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    gap: 12px;
-  }
-  
-  .petEdit-inline-label {
-    width: 60px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-  }
-  
-  .petEdit-inline-select {
-    flex: 1;
-    padding: 12px 14px;
-    font-size: 12px;
-    border: none;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-    appearance: none; 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='black' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 16px;
-  }
+.pet-edit-step-content {
+  margin-top: 0;
+  padding-top: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  .petEdit-input {
-    flex: 1;
-    padding: 12px 14px;
-    font-size: 13px;
-    border-radius: 8px;
-    border: none;
-    background-color: #f9f9f9;
-    box-sizing: border-box;
-    transition: all 0.1s ease-in-out;
-    color: #111827;
-    border: 1px solid transparent;
-  }
-  
-  .petEdit-inline-select:focus,
-  .petEdit-input:focus {
-    outline: none;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 2px #10b981;
-  }
-  
-  .petEdit-image-box {
-    width: 100%;
-    margin-top: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-  }
-  
-  .petEdit-image-placeholder {
-    width: 80%;
-    height: 180px;
-    border: 2px dashed #d1d5db;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .petEdit-image-preview {
-    width: 120px;
-    height: 120px;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .petEdit-image-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .petEdit-file-button {
-    background-color: #f3f4f6;
-    color: #374151;
-    border: none;
-    padding: 14px 0;
-    width: 40%;
-    max-width: 100%;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .petEdit-file-button input[type="file"] {
-    display: none;
-  }
-  
-  .petEdit-file-clear {
-    width: 120px;
-    background-color: #e5e7eb;
-    color: #111827;
-    border: none;
-    padding: 10px 0;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-  
-  .petEdit-button-row {
-    position: absolute;
-    bottom: 24px;
-    left: 24px;
-    right: 24px;
-    display: flex;
-    justify-content: center;
-  }
-  
-  .petEdit-next-button {
-    width: 100%;
-    height: 48px;
-    background-color: #10b981;
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
+.pet-edit-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 24px;
+  margin-bottom: 60px;
+  color: #111827;
+  text-align: center;
+}
 
-  .petEdit-next-button:disabled {
-    background-color: #e5e7eb !important;
-    color: #9ca3af !important;
-    cursor: not-allowed;
-  }
+.pet-edit-step2-group {
+  margin-top: 40px;
+}
 
-  .petEdit-next-button:hover {
-    background-color: #059669;
-    }
-  
-  .petEdit-back-button {
-    position: absolute;
-    top: 18px;
-    left: 18px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #4b5563;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .petEdit-back-button:hover {
-    color: #10b981;
-  }
-  
-  
-  .petEdit-content-textarea {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex: none;              
-    margin-top: 20px;
-  }
-  
-  .petEdit-textarea {
-    width: 95%;
-    height: 140px;
-    padding: 50px 16px 16px 16px;
-    font-size: 14px;
-    line-height: 1.6;
-    text-align: center;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #e5e7eb;
-    box-sizing: border-box;
-    color: #111827;
-    font-family: inherit;
-    resize: none;
-  }
+.pet-edit-form-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
 
-  .petEdit-textarea:focus {
-    outline: none;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 2px #10b981;
-  }
+.pet-edit-inline-label {
+  width: 60px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
 
-  .petEdit-error {
-    color: #ef4444;
-    margin-top: 10px;
-    font-size: 14px;
-    text-align: center;
-  }
+.pet-edit-inline-select {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='black' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+}
+
+.pet-edit-input {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  transition: all 0.1s ease-in-out;
+  color: #111827;
+  border: 1px solid transparent;
+}
+
+.pet-edit-inline-select:focus,
+.pet-edit-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #10b981;
+}
+
+.pet-edit-image-box {
+  width: 100%;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.pet-edit-image-placeholder {
+  width: 80%;
+  height: 180px;
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pet-edit-file-button {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 14px 0;
+  width: 40%;
+  max-width: 100%;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.pet-edit-file-button input[type="file"] {
+  display: none;
+}
+
+.pet-edit-image-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pet-edit-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pet-edit-file-clear {
+  width: 120px;
+  background-color: #e5e7eb;
+  color: #111827;
+  border: none;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pet-edit-content-textarea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: none;
+  margin-top: 20px;
+}
+
+.pet-edit-textarea {
+  width: 95%;
+  height: 140px;
+  padding: 50px 16px 16px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #e5e7eb;
+  box-sizing: border-box;
+  color: #111827;
+  font-family: inherit;
+  resize: none;
+}
+.pet-edit-textarea:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #10b981;
+}
+
+.pet-edit-error {
+  color: #ef4444;
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.pet-edit-button-row {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.pet-edit-next-button {
+  width: 100%;
+  height: 48px;
+  background-color: #10b981;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.pet-edit-next-button:disabled {
+  background-color: #e5e7eb !important;
+  color: #9ca3af !important;
+  cursor: not-allowed;
+}
+.pet-edit-next-button:hover {
+  background-color: #059669;
+}

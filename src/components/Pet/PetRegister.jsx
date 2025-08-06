@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/Pet/PetRegister.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import {fetchSpeciesList, fetchBreedList, registerPet} from "../../services/PetService";
-
+import {
+  fetchSpeciesList,
+  fetchBreedList,
+  registerPet,
+} from "../../services/PetService";
 
 const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [step, setStep] = useState(1);
@@ -113,14 +116,14 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
   };
 
   return (
-    <div className="petRegister-modal-overlay">
-      <div className="petRegister-modal-content">
-        <button className="petRegister-close" onClick={onClose}>
+    <div className="pet-register-modal-overlay">
+      <div className="pet-register-modal-content">
+        <button className="pet-register-close" onClick={onClose}>
           &times;
         </button>
         {step !== 1 && (
           <button
-            className="petRegister-back-button"
+            className="pet-register-back-button"
             onClick={() => setStep(step - 1)}
           >
             &#x2039;
@@ -128,23 +131,23 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
         )}
         <SwitchTransition>
           <CSSTransition key={step} timeout={300} classNames="fade">
-            <div className="petRegister-step-wrapper">
+            <div className="pet-register-step-wrapper">
               {step === 1 && (
                 <>
-                  <p className="petRegister-step-indicator">1 / 4</p>
-                  <h2 className="petRegister-title">
+                  <p className="pet-register-step-indicator">1 / 4</p>
+                  <h2 className="pet-register-title">
                     반려동물의 종을 선택해주세요
                   </h2>
 
-                  <div className="petRegister-step-center">
+                  <div className="pet-register-step-center">
                     {/* 종 선택 */}
-                    <div className="petRegister-form-inline">
-                      <label className="petRegister-inline-label">종</label>
+                    <div className="pet-register-form-inline">
+                      <label className="pet-register-inline-label">종</label>
                       <select
                         name="speciesId"
                         value={petInfo.speciesId}
                         onChange={handleChange}
-                        className="petRegister-inline-select"
+                        className="pet-register-inline-select"
                       >
                         <option value="">선택</option>
                         {speciesOptions.map((opt) => (
@@ -156,13 +159,13 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                     </div>
 
                     {/* 품종 선택 */}
-                    <div className="petRegister-form-inline">
-                      <label className="petRegister-inline-label">품종</label>
+                    <div className="pet-register-form-inline">
+                      <label className="pet-register-inline-label">품종</label>
                       <select
                         name="breedId"
                         value={petInfo.breedId}
                         onChange={handleChange}
-                        className="petRegister-inline-select"
+                        className="pet-register-inline-select"
                         disabled={!petInfo.speciesId}
                       >
                         <option value="">선택</option>
@@ -175,43 +178,43 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                     </div>
                   </div>
 
-                  <div className="petRegister-button-fixed">
+                  <div className="pet-register-button-fixed">
                     <button
-                      className="petRegister-step-button"
+                      className="pet-register-step-button"
                       onClick={handleNext}
                       disabled={!petInfo.speciesId || !petInfo.breedId}
                     >
                       다음으로
                     </button>
-                    {error && <p className="petRegister-error">{error}</p>}
+                    {error && <p className="pet-register-error">{error}</p>}
                   </div>
                 </>
               )}
 
               {step === 2 && (
                 <>
-                  <div className="petRegister-step-content">
-                    <p className="petRegister-step-indicator">2 / 4</p>
-                    <h2 className="petRegister-title">
+                  <div className="pet-register-step-content">
+                    <p className="pet-register-step-indicator">2 / 4</p>
+                    <h2 className="pet-register-title">
                       이름, 나이, 성별을 입력해주세요
                     </h2>
-                    <div className="petRegister-form-inline">
+                    <div className="pet-register-form-inline">
                       <input
                         type="text"
                         name="name"
                         value={petInfo.name}
                         onChange={handleChange}
-                        className="petRegister-input"
+                        className="pet-register-input"
                         placeholder="반려동물 이름"
                       />
                     </div>
-                    <div className="petRegister-form-inline">
-                      <label className="petRegister-inline-label">나이</label>
+                    <div className="pet-register-form-inline">
+                      <label className="pet-register-inline-label">나이</label>
                       <select
                         name="age"
                         value={petInfo.age}
                         onChange={handleChange}
-                        className="petRegister-inline-select"
+                        className="pet-register-inline-select"
                       >
                         <option value="">선택</option>
                         {Array.from({ length: 20 }, (_, i) => (
@@ -221,13 +224,13 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                         ))}
                       </select>
                     </div>
-                    <div className="petRegister-form-inline">
-                      <label className="petRegister-inline-label">성별</label>
+                    <div className="pet-register-form-inline">
+                      <label className="pet-register-inline-label">성별</label>
                       <select
                         name="gender"
                         value={petInfo.gender}
                         onChange={handleChange}
-                        className="petRegister-inline-select"
+                        className="pet-register-inline-select"
                       >
                         <option value="">선택</option>
                         <option value="MALE">남자</option>
@@ -235,9 +238,9 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                       </select>
                     </div>
                   </div>
-                  <div className="petRegister-button-fixed">
+                  <div className="pet-register-button-fixed">
                     <button
-                      className="petRegister-step-button"
+                      className="pet-register-step-button"
                       onClick={handleNext}
                       disabled={
                         !petInfo.name || !petInfo.age || !petInfo.gender
@@ -251,15 +254,15 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
               {step === 3 && (
                 <>
-                  <div className="petRegister-step-content">
-                    <p className="petRegister-step-indicator">3 / 4</p>
-                    <h2 className="petRegister-title">
+                  <div className="pet-register-step-content">
+                    <p className="pet-register-step-indicator">3 / 4</p>
+                    <h2 className="pet-register-title">
                       반려동물의 이미지를 등록해주세요
                     </h2>
-                    <div className="petRegister-image-box">
+                    <div className="pet-register-image-box">
                       {!petInfo.image ? (
-                        <div className="petRegister-image-placeholder">
-                          <label className="petRegister-file-button">
+                        <div className="pet-register-image-placeholder">
+                          <label className="pet-register-file-button">
                             이미지 선택
                             <input
                               type="file"
@@ -275,7 +278,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                         </div>
                       ) : (
                         <>
-                          <div className="petRegister-image-preview">
+                          <div className="pet-register-image-preview">
                             <img
                               src={URL.createObjectURL(petInfo.image)}
                               alt="미리보기"
@@ -283,7 +286,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                           </div>
                           <button
                             type="button"
-                            className="petRegister-file-clear"
+                            className="pet-register-file-clear"
                             onClick={() =>
                               setPetInfo((prev) => ({ ...prev, image: null }))
                             }
@@ -294,10 +297,10 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                       )}
                     </div>
                   </div>
-                  <div className="petRegister-button-row">
+                  <div className="pet-register-button-row">
                     <button
                       type="button"
-                      className="petRegister-skip-button"
+                      className="pet-register-skip-button"
                       onClick={() => {
                         setPetInfo((prev) => ({ ...prev, image: "" }));
                         setStep(step + 1);
@@ -307,7 +310,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                       건너뛰기
                     </button>
                     <button
-                      className="petRegister-next-button"
+                      className="pet-register-next-button"
                       onClick={() => setStep(step + 1)}
                       disabled={!petInfo.image}
                     >
@@ -319,33 +322,33 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
               {step === 4 && (
                 <>
-                  <div className="petRegister-step-content">
-                    <p className="petRegister-step-indicator">4 / 4</p>
-                    <h2 className="petRegister-title">
+                  <div className="pet-register-step-content">
+                    <p className="pet-register-step-indicator">4 / 4</p>
+                    <h2 className="pet-register-title">
                       마지막이예요! <br /> 반려동물에 대한 특징을 남겨주세요
                     </h2>
-                    <div className="petRegister-content-textarea">
+                    <div className="pet-register-content-textarea">
                       <textarea
                         name="memo"
                         value={petInfo.memo}
                         onChange={handleChange}
-                        className="petRegister-textarea"
+                        className="pet-register-textarea"
                         placeholder="메모를 입력해주세요"
                         rows={5}
                       />
                     </div>
                   </div>
-                  <div className="petRegister-button-row">
+                  <div className="pet-register-button-row">
                     <button
                       type="button"
-                      className="petRegister-skip-button"
+                      className="pet-register-skip-button"
                       onClick={handleRegister}
                       disabled={!!petInfo.memo}
                     >
                       건너뛰고 등록하기
                     </button>
                     <button
-                      className="petRegister-next-button"
+                      className="pet-register-next-button"
                       onClick={handleRegister}
                       disabled={!petInfo.memo}
                     >

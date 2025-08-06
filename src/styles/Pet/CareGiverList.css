@@ -1,148 +1,152 @@
-.CareGiverList-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Pretendard', sans-serif;
-  }
-  
-  .CareGiverList-modal {
-    background-color: white;
-    width: 90%;
-    max-height: 60%;
-    max-width: 600px;
-    border-radius: 12px;
-    padding: 60px 32px;
-    position: relative;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    align-items: center;
-  }
+.care-giver-list-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Pretendard', sans-serif;
+}
 
-  .CareGiverList-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    font-size: 24px;
-    color: #aaa;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .CareGiverList-close:hover {
-    color: #10b981;
-  }
+.care-giver-list-modal {
+  background-color: white;
+  width: 90%;
+  max-height: 60%;
+  max-width: 600px;
+  border-radius: 12px;
+  padding: 60px 32px;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  align-items: center;
+}
 
-  .CareGiverList-title {
-    font-size: 16px;
-    font-weight: 400;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    text-align: center;
-    color: #111827;
-  }
-  
-  .CareGiverList-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    max-height: 300px;
-    overflow-y: auto;
-    padding-right: 4px; 
-    scrollbar-width: none;        
-    -ms-overflow-style: none;   
-  }
-  
-  .CareGiverList-list::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
-  }
-  
-  .CareGiverList-card {
-    min-width: 70%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 16px;
-    background-color: #f5f5f5; 
-    transition: background-color 0.3s ease;
-  }
-  
-  .CareGiverList-card:hover {
-    background-color: #eeeeee;
-    transition: background-color 0.3s ease;
-  }
+.care-giver-list-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 24px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
-  .CareGiverList-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.care-giver-list-close:hover {
+  color: #10b981;
+}
 
-  .CareGiverList-friend-image {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 12px;
-  }
-  
-  .CareGiverList-name {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  
-  .CareGiverList-button {
-    background-color: #414141;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 14px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 12px;
-    font-weight: 500;
-  }
-  
-  .CareGiverList-button:hover {
-    background-color: #2f2f2f;
-    transition: background-color 0.3s ease;
-  }
+.care-giver-list-title {
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #111827;
+}
 
-  .CareGiverList-empty {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 40px 20px;
-    margin: 30px auto 0 auto; 
-    background-color: #f4f4f4;
-    border-radius: 20px;
-    width: 70%; 
-    max-width: 400px;
-  }
-  
-  .CareGiverList-empty-img {
-    width: 80px;
-    height: auto;
-    margin: 20px;
-    opacity: 0.8;
-  }
+.care-giver-list-error {
+  text-align: center;
+  color: #6b7280;
+  font-size: 16px;
+  margin-top: 16px;
+}
 
-  .CareGiverList-empty-text {
-    font-size: 14px;
-    color: #2e2f30; 
-    font-weight: 600;
-  }
+.care-giver-list-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.care-giver-list-list::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+.care-giver-list-card {
+  min-width: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  background-color: #f5f5f5;
+  transition: background-color 0.3s ease;
+}
+
+.care-giver-list-card:hover {
+  background-color: #eeeeee;
+}
+
+.care-giver-list-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.care-giver-list-friend-image {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.care-giver-list-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.care-giver-list-button {
+  background-color: #414141;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.care-giver-list-button:hover {
+  background-color: #2f2f2f;
+}
+
+.care-giver-list-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  margin: 30px auto 0 auto;
+  background-color: #f4f4f4;
+  border-radius: 20px;
+  width: 70%;
+  max-width: 400px;
+}
+
+.care-giver-list-empty-img {
+  width: 80px;
+  height: auto;
+  margin: 20px;
+  opacity: 0.8;
+}
+
+.care-giver-list-empty-text {
+  font-size: 14px;
+  color: #2e2f30;
+  font-weight: 600;
+}
