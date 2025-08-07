@@ -1,62 +1,279 @@
-/* CommunityPage.css */
-.community-page {
-  padding: 20px;
-  font-family: 'SUIT', sans-serif;
+.communitypage-container {
+  padding: 0px 20px 40px 20px;
+  width: 40%;
+  margin: 60px auto;
+  background-color: #f8f9fb;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
-.community-header {
+.communitypage-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  padding: 16px 24px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.create-post-button {
-  background-color: #10b981;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.community-posts {
+.communitypage-header-left {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 24px;
 }
 
-.post-card {
-  background-color: #fff;
+.communitypage-header-title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.communitypage-tab-bar {
+  position: relative;
+  display: flex;
+  background-color: #f0f2f5;
   border-radius: 12px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.06);
-  padding: 20px;
+  padding: 4px;
+  margin: 16px auto;
+  justify-content: center;
+  width: fit-content;
+  overflow: hidden;
 }
 
-.post-image {
-  width: 20%;
-  max-width: 400px;
-  height: auto;
+.communitypage-tab-background {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3); 
+  height: calc(100% - 8px);
+  background-color: white;
   border-radius: 10px;
-  margin-top: 12px;
-  object-fit: cover;
-  display: block;
+  transition: transform 0.3s ease;
+  z-index: 0;
 }
 
-.post-header {
+.communitypage-tab-button {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  font-size: 13px;
+  width: 60px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #6b7280;
+  font-weight: 500;
+  z-index: 1;
+  position: relative;
+  white-space: nowrap;
+}
+
+.communitypage-tab-button.active {
+  color: #111827;
+  font-weight: 700;
+}
+
+.communitypage-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.communitypage-header-profile-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.communitypage-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.communitypage-post-card {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 20px;
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.communitypage-post-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.communitypage-post-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.communitypage-post-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.communitypage-post-profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.communitypage-post-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.communitypage-post-author {
   font-weight: 600;
-  margin-bottom: 8px;
+  font-size: 14px;
 }
 
-.post-card img.post-image {
-  max-width: 100%;
+.communitypage-post-time {
+  color: #aaa;
+  font-size: 12px;
+}
+
+.communitypage-post-category-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.communitypage-post-category {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  background-color: #f0f2f5;
+  padding: 6px 12px;
   border-radius: 8px;
-  margin-top: 12px;
+  display: inline-block;
 }
 
-.post-footer {
-  margin-top: 10px;
+.communitypage-post-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.communitypage-post-menu {
+  position: relative;
+}
+
+.communitypage-menu-button {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  position: relative;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.communitypage-menu-button:hover {
+  background-color: #d1d5db;
+}
+
+.communitypage-post-dropdown {
+  display: flex; /* 중요: 항상 flex */
+  position: absolute;
+  align-items: center;  /* 이 부분이 핵심! */
+  justify-content: center;
+  top: 36px;
+  right: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  width: 80px;
+  flex-direction: column;
+  padding: 6px;
+  border: none;
+}
+
+/* 메뉴가 열렸을 때 보이도록 */
+.communitypage-post-menu.open .communitypage-post-dropdown,
+.communitypage-menu-button:focus + .communitypage-post-dropdown {
+  display: flex;
+}
+
+/* 메뉴 안의 버튼들 */
+.communitypage-post-dropdown button {
+  padding: 10px 0;
+  background: none;
+  border: none;
+  text-align: center;   
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  width: 100%;        
+  margin-bottom: 2px;  
+}
+
+.communitypage-post-dropdown button:hover {
+  background-color: #e5e7eb;
+}
+
+.communitypage-post-main-image {
+  width: 100%;
+  height: auto;
+  margin-top: 8px;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 4px;
+  background-color: #f0f2f5;
+}
+
+.communitypage-post-content {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
+}
+
+.communitypage-post-footer-buttons {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+.communitypage-post-footer-buttons button {
+  flex: 1;
+  text-align: center;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+  
+}
+
+.communitypage-post-footer-buttons button:hover {
+  background-color: #f9f9f9;
 }
