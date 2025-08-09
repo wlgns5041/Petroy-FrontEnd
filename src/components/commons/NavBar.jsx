@@ -81,7 +81,7 @@ export default function NavBar() {
     { label: "마이페이지", icon: myIcon, path: "/myPage" },
     { label: "펫", icon: petIcon, path: "/petPage" },
     { label: "친구", icon: friendIcon, path: "/friendPage" },
-    { label: "커뮤니티", icon: communityIcon, path: "/communityPage" },
+    { label: "펫스타그램", icon: communityIcon, path: "/communityPage" },
   ];
 
   return (

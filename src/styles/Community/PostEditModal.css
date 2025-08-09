@@ -16,7 +16,6 @@
   transition: all 300ms ease-in-out;
 }
 
-/* Overlay (배경) */
 .post-edit-overlay {
   position: fixed;
   z-index: 1000;
@@ -30,7 +29,6 @@
   align-items: center;
 }
 
-/* 모달 본체 */
 .post-edit-container {
   background-color: white;
   width: 90%;
@@ -47,7 +45,6 @@
   flex-direction: column;
 }
 
-/* 닫기 버튼 */
 .post-edit-close {
   position: absolute;
   top: 18px;

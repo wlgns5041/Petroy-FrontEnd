@@ -163,7 +163,7 @@
 }
 
 .communitypage-post-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
   color: #222;
   font-family: 'Pretendard', sans-serif;
@@ -193,9 +193,9 @@
 }
 
 .communitypage-post-dropdown {
-  display: flex; /* 중요: 항상 flex */
+  display: flex; 
   position: absolute;
-  align-items: center;  /* 이 부분이 핵심! */
+  align-items: center;  
   justify-content: center;
   top: 36px;
   right: 0;
@@ -209,13 +209,11 @@
   border: none;
 }
 
-/* 메뉴가 열렸을 때 보이도록 */
 .communitypage-post-menu.open .communitypage-post-dropdown,
 .communitypage-menu-button:focus + .communitypage-post-dropdown {
   display: flex;
 }
 
-/* 메뉴 안의 버튼들 */
 .communitypage-post-dropdown button {
   padding: 10px 0;
   background: none;
@@ -247,6 +245,7 @@
 
 .communitypage-post-content {
   font-size: 14px;
+  font-weight: 500;
   color: #333;
   margin-bottom: 14px;
   display: flex;

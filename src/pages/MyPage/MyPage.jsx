@@ -6,7 +6,7 @@ import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import NameEditModal from "../../components/MyPage/NameEditModal.jsx";
 import ImageEditModal from "../../components/MyPage/ImageEditModal.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPaw, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
 import { fetchFriendCount } from "../../services/FriendService";
@@ -18,7 +18,6 @@ const MyPage = () => {
   const navigate = useNavigate(); // 리다이렉트 핸들러 함수
   const [userInfo, setUserInfo] = useState({}); // 사용자 정보
   const [pets, setPets] = useState([]); // 펫 목록
-  const [posts, setPosts] = useState([]); // 작성 글 목록
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [showNameModal, setShowNameModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -34,7 +33,7 @@ const MyPage = () => {
       const fetchData = async () => {
         try {
           // 사용자 정보, 펫 목록, 포스트 목록을 동시에 가져오기 (토큰 서비스에 있음)
-          const [userResponse, petsResponse, postsResponse] = await Promise.all(
+          const [userResponse, petsResponse] = await Promise.all(
             [
               fetchCurrentMember(token),
               fetchMemberPets(),
@@ -45,7 +44,6 @@ const MyPage = () => {
           // 가져온 데이터를 상태에 저장
           setUserInfo(userResponse);
           setPets(petsResponse);
-          setPosts(postsResponse?.content || []); // 포스트 목록이 없을 경우 빈 배열로 초기화\
 
           const count = await fetchFriendCount(token); // 🔥 이렇게 수정
           setFriendsCount(count);
@@ -231,39 +229,6 @@ const MyPage = () => {
             ))}
           </div>
         )}
-      </div>
-      <div className="mypage-post-section">
-        <h3 className="mypage-post-section-title">
-          <div className="mypage-icon-withtext">
-            <FontAwesomeIcon icon={faPen} />내 글
-          </div>
-          <span
-            className="mypage-post-section-link"
-            onClick={() => handleNavigation("/communityPage")}
-          >
-            커뮤니티 바로가기
-          </span>
-        </h3>
-        <ul>
-          {posts.length === 0 ? (
-            <div className="mypage-empty-state">
-              <p className="mypage-empty-text-main">
-                작성한 글이 없습니다.
-                <span className="mypage-empty-text-sub">
-                  게시글을 작성하면 이곳에 표시됩니다!
-                </span>
-              </p>
-            </div>
-          ) : (
-            posts.map((post) => (
-              <li key={post.postId}>
-                <strong>{post.title}</strong>
-                <br />
-                {post.content}
-              </li>
-            ))
-          )}
-        </ul>
       </div>
 
       {showNameModal && (

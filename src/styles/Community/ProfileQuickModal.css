@@ -1,0 +1,202 @@
+
+.communityprofile-overlay {
+  position: fixed; 
+  inset: 0; 
+  background: rgba(0,0,0,0.35);
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 1000;
+}
+
+.communityprofile-modal {
+  width: 90%; 
+  max-width: 680px; 
+  max-height: 85vh; 
+  overflow: auto;
+  background: #fff; 
+  border-radius: 16px; 
+  padding: 20px; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  font-family: 'Pretendard', sans-serif;
+}
+
+.communityprofile-header { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  position: relative; 
+  margin-bottom: 24px; 
+}
+
+.communityprofile-avatar { 
+  width: 56px; 
+  height: 56px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  margin-right: 12px; 
+}
+
+.communityprofile-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start; 
+}
+
+.communityprofile-name { 
+  font-weight: 700; 
+  font-size: 18px; 
+}
+
+.communityprofile-phone { 
+  font-weight: 500; 
+  font-size: 12px; 
+  color: #6b7280; 
+}
+
+.communityprofile-close-btn {   
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 16px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer; 
+}
+
+.communityprofile-close-btn:hover {
+  color: #10b981;
+}
+
+.communityprofile-pet-section { 
+  margin-top: 16px; 
+}
+
+.communityprofile-pet-lable { 
+  font-size: 14px; 
+  font-weight: 700; 
+  margin-bottom: 16px; 
+  margin-left: 8px;
+  justify-self: flex-start; 
+}
+
+.communityprofile-empty { 
+  font-size: 13px; 
+  color: #6b7280; 
+  padding: 12px 0; 
+}
+
+.communityprofile-pet-list { 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+  display: grid; 
+  grid-template-columns: 1fr 1fr;
+  gap: 10px; 
+  background-color: #f2f2f2;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.communityprofile-pet-item { 
+  display: flex; 
+  gap: 24px; 
+  align-items: center; 
+  background: #f9fafb; 
+  border-radius: 12px; 
+  padding: 8px; 
+}
+
+.communityprofile-pet-image { 
+  width: 48px; 
+  height: 48px; 
+  border-radius: 10px; 
+  object-fit: cover; 
+}
+
+.communityprofile-pet-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  gap: 2px; 
+}
+
+.communityprofile-pet-name { 
+  font-size: 14px; 
+  font-weight: 600;
+}
+
+.communityprofile-pet-sub { 
+  font-size: 12px; 
+  font-weight: 400;
+  color: #6b7280; 
+}
+
+.communityprofile-post-section { 
+  margin-top: 24px; 
+}
+
+.communityprofile-post-lable { 
+  font-size: 14px; 
+  font-weight: 700; 
+  margin-bottom: 16px; 
+  margin-left: 8px;
+  justify-self: flex-start; 
+}
+
+.communityprofile-post-list { 
+  list-style: none; 
+  padding: 0; 
+  margin: 0; 
+  display: grid; 
+  grid-template-columns: 1fr 1fr;
+  gap: 12px; 
+  background-color: #f2f2f2;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.communityprofile-post-item {
+  display: flex;
+  gap: 24px;           
+  align-items: center; 
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+.communityprofile-post-image {
+  flex: 0 0 48px;      
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #fff;
+}
+
+.communityprofile-post-info {
+  flex: 1;                 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  
+  gap: 6px;
+  margin-top: 2px;          
+}
+
+.communityprofile-post-title { 
+  font-size: 14px; 
+  font-weight: 600;
+}
+
+.communityprofile-post-content { 
+  font-size: 12px; 
+  font-weight: 400;
+  color: #6b7280; 
+}
+
+.communityprofile-loading { 
+  text-align: center; 
+  padding: 40px 0; 
+}

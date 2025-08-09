@@ -3,24 +3,31 @@ import axios from "axios";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 // 정보 조회
-export const fetchCurrentMember = async (token) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/members`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `${token}`,
-            },
-        });
+export const fetchCurrentMember = async () => {
+  const token = localStorage.getItem("accessToken");
+  if (!token) {
+    console.error("토큰 없음: 로그인 필요");
+    return null;
+  }
 
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('회원 정보를 찾을 수 없습니다', errorText);
-        }
+  try {
+    const response = await fetch(`${API_BASE_URL}/members`, {
+      method: 'GET',
+      headers: { 'Authorization': `${token}` },
+    });
 
-        return await response.json();
-    } catch (error) {
-        console.error('회원 정보를 불러오는 중 오류 발생:', error);
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('회원 정보를 찾을 수 없습니다', errorText);
+      return null;
     }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('회원 정보를 불러오는 중 오류 발생:', error);
+    return null;
+  }
 };
 
 // 로그인 요청
