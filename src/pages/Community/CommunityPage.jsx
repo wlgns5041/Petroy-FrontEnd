@@ -19,88 +19,232 @@ import defaultPetPic from "../../assets/images/DefaultImage.png";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import { InputBase, Paper, IconButton } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import ThumbUpOutlined from "@mui/icons-material/ThumbUpRounded";
+import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
+import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
+import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissatisfiedRounded";
+import SentimentVeryDissatisfiedRoundedIcon from "@mui/icons-material/SentimentVeryDissatisfiedRounded";
+
+/* -------------------- 유틸 -------------------- */
+
+// 공백 정규화
+const normalizeName = (v) => (v ?? "").toString().trim().replace(/\s+/g, " ");
+
+// 게시글 ID 추출 (일관성 있게 사용)
+const getPostId = (p) => p?.post?.postId ?? p?.postId ?? p?.id ?? null;
+
+// 토큰에서 내 이름 추출
+const getMyNameFromToken = () => {
+  const token = localStorage.getItem("accessToken");
+  if (!token) return "";
+  try {
+    const base64Url = token.split(".")[1];
+    if (!base64Url) return "";
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+    const payload = JSON.parse(atob(padded));
+
+    const keys = [
+      "name",
+      "memberName",
+      "username",
+      "preferred_username",
+      "displayName",
+      "given_name",
+    ];
+    for (const k of keys) if (payload?.[k]) return normalizeName(payload[k]);
+
+    if (payload?.given_name || payload?.family_name) {
+      return normalizeName(
+        `${payload?.family_name ?? ""} ${payload?.given_name ?? ""}`
+      );
+    }
+    return "";
+  } catch {
+    return "";
+  }
+};
+
+// 게시글 객체에서 작성자 이름 추출
+const getAuthorNameFromPost = (p) =>
+  normalizeName(
+    p?.member?.name ??
+      p?.post?.member?.name ??
+      p?.post?.memberName ??
+      p?.memberName ??
+      p?.author?.name ??
+      p?.writer?.name ??
+      p?.post?.author?.name ??
+      p?.post?.writer?.name ??
+      ""
+  );
+
+// 친구 탭용: 작성자 ID 추출
+const getAuthorIdFromPost = (p) =>
+  String(
+    p?.memberId ??
+      p?.authorId ??
+      p?.writerId ??
+      p?.createdBy ??
+      p?.member?.id ??
+      p?.member?.memberId ??
+      p?.author?.id ??
+      p?.author?.memberId ??
+      p?.writer?.id ??
+      p?.writer?.memberId ??
+      p?.post?.memberId ??
+      p?.post?.authorId ??
+      p?.post?.writerId ??
+      p?.post?.createdBy ??
+      p?.post?.member?.id ??
+      p?.post?.member?.memberId ??
+      p?.post?.author?.id ??
+      p?.post?.author?.memberId ??
+      p?.post?.writer?.id ??
+      p?.post?.writer?.memberId ??
+      ""
+  );
+
+/* -------------------- 컴포넌트 -------------------- */
 
 const CommunityPage = () => {
+  // 내 프로필/친구/카테고리/게시글
   const [me, setMe] = useState(null);
+  const [myName, setMyName] = useState("");
   const [profileUser, setProfileUser] = useState(null);
-
   const [allPosts, setAllPosts] = useState([]);
   const [categoryMap, setCategoryMap] = useState({});
   const [friendIds, setFriendIds] = useState([]);
 
+  // UI 상태
   const [openComments, setOpenComments] = useState({});
   const [menuOpenIndex, setMenuOpenIndex] = useState(null);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState(null);
 
+  // 탭
   const [activeTab, setActiveTab] = useState("전체");
   const [tabIndex, setTabIndex] = useState(0);
 
-  // 게시글에서 작성자 ID 추출
-  const getAuthorIdFromPost = (p) =>
-    String(
-      p?.memberId ??
-        p?.authorId ??
-        p?.writerId ??
-        p?.createdBy ??
-        p?.member?.id ??
-        p?.member?.memberId ??
-        p?.author?.id ??
-        p?.author?.memberId ??
-        p?.writer?.id ??
-        p?.writer?.memberId ??
-        p?.post?.memberId ??
-        p?.post?.authorId ??
-        p?.post?.writerId ??
-        p?.post?.createdBy ??
-        p?.post?.member?.id ??
-        p?.post?.member?.memberId ??
-        p?.post?.author?.id ??
-        p?.post?.author?.memberId ??
-        p?.post?.writer?.id ??
-        p?.post?.writer?.memberId ??
-        ""
-    );
+  // 좋아요, 북마크
+  const [likedMap, setLikedMap] = useState({});
+  const [likeCountMap, setLikeCountMap] = useState({});
+  const [bookmarkedMap, setBookmarkedMap] = useState({});
+  const [reactionMap, setReactionMap] = useState({});
+  const [reactionPickerId, setReactionPickerId] = useState(null);
 
-  // 카테고리명
+  /* ---------- 함수 ---------- */
+
   const getCategoryName = (p) => {
     const id = p?.post?.categoryId;
     if (id == null) return "카테고리";
     return categoryMap[String(id)] || "카테고리";
   };
 
-  // 메뉴/댓글 토글
   const toggleMenu = (idx) =>
     setMenuOpenIndex((prev) => (prev === idx ? null : idx));
+
   const toggleComments = (postId) =>
     setOpenComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
+
   const handleProfileClick = (member) => setProfileUser(member);
 
-  // 글 새로고침
+  const jumpToPost = (postId) => {
+    const el = document.getElementById(`post-${postId}`);
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("communitypage-post-card--highlight");
+    setTimeout(
+      () => el.classList.remove("communitypage-post-card--highlight"),
+      1600
+    );
+  };
+
+  const REACTION_OPTIONS = [
+    { key: "LIKE", label: "좋아요", icon: <ThumbUpOutlined /> },
+    {
+      key: "BEST",
+      label: "최고예요",
+      icon: <SentimentVerySatisfiedRoundedIcon />,
+    },
+    { key: "FUNNY", label: "웃겨요", icon: <SentimentSatisfiedRoundedIcon /> },
+    { key: "SAD", label: "슬퍼요", icon: <SentimentDissatisfiedRoundedIcon /> },
+    {
+      key: "ANGRY",
+      label: "화나요",
+      icon: <SentimentVeryDissatisfiedRoundedIcon />,
+    },
+  ];
+
+  const hasReacted = (pid) => Boolean(reactionMap[pid]);
+
+  const onHeartClick = (pid) => {
+    if (reactionPickerId === pid) {
+      setReactionPickerId(null);
+      return;
+    }
+
+    if (hasReacted(pid)) {
+      setReactionMap((prev) => {
+        const next = { ...prev };
+        delete next[pid];
+        return next;
+      });
+      setLikedMap((prev) => ({ ...prev, [pid]: false }));
+      setLikeCountMap((prev) => ({
+        ...prev,
+        [pid]: Math.max((prev[pid] ?? 1) - 1, 0),
+      }));
+      setReactionPickerId(null);
+    } else {
+      setReactionPickerId(pid);
+    }
+  };
+
+  const onSelectReaction = (pid, key) => {
+    const wasReacted = hasReacted(pid);
+
+    setReactionMap((prev) => ({ ...prev, [pid]: key }));
+    setLikedMap((prev) => ({ ...prev, [pid]: true }));
+
+    if (!wasReacted) {
+      setLikeCountMap((prev) => ({ ...prev, [pid]: (prev[pid] ?? 0) + 1 }));
+    }
+    setReactionPickerId(null);
+  };
+
+  // 북마크 토글 함수
+  const toggleBookmark = (postId) => {
+    setBookmarkedMap((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
+
   const reloadPosts = async () => {
     const data = await fetchCommunityPosts();
     const list = Array.isArray(data) ? data : data?.content ?? [];
     setAllPosts(list);
 
-    // me가 존재하지만 id가 비어있다면, 새 글 기준으로 다시 유추
-    setMe((prev) => {
-      if (!prev) return prev;
-      if (prev.id) return prev;
-      const myPost = list.find((p) => {
-        const m = p?.member ?? p?.post?.member ?? null;
-        const nameMatch = (m?.name ?? "") === (prev?.name ?? "");
-        const phoneMatch =
-          (m?.phone ?? m?.mobile ?? "") === (prev?.phone ?? "");
-        return (phoneMatch && prev?.phone) || (nameMatch && !prev?.phone);
-      });
-      if (!myPost) return prev;
-      const authorId = getAuthorIdFromPost(myPost);
-      return { ...prev, id: authorId || prev.id || "" };
+    // 좋아요 초기값 세팅
+    const likeInit = {};
+    const likeCntInit = {};
+    list.forEach((p) => {
+      const id = getPostId(p);
+      if (id == null) return;
+      likeInit[id] = Boolean(p?.liked);
+      likeCntInit[id] = Number(p?.likeTotal) || 0;
     });
+    setLikedMap(likeInit);
+    setLikeCountMap(likeCntInit);
   };
 
   const handlePostCreated = () => {
@@ -127,7 +271,7 @@ const CommunityPage = () => {
     reloadPosts();
   };
 
-  // 초기 로드: 글/카테고리/내정보/친구를 한 번에 가져오고, me.id 유추 주입
+  /* ---------- 초기 로딩 ---------- */
   useEffect(() => {
     (async () => {
       const [postData, categories, rawMe, friends] = await Promise.all([
@@ -137,9 +281,20 @@ const CommunityPage = () => {
         fetchAcceptedFriends().catch(() => []),
       ]);
 
-      // 게시글
+      // 게시글/좋아요 초기화
       const list = Array.isArray(postData) ? postData : postData?.content ?? [];
       setAllPosts(list);
+
+      const likeInit = {};
+      const likeCntInit = {};
+      list.forEach((p) => {
+        const id = getPostId(p);
+        if (id == null) return;
+        likeInit[id] = Boolean(p?.liked);
+        likeCntInit[id] = Number(p?.likeTotal) || 0;
+      });
+      setLikedMap(likeInit);
+      setLikeCountMap(likeCntInit);
 
       // 카테고리 맵
       const map = Object.fromEntries(
@@ -150,7 +305,7 @@ const CommunityPage = () => {
       );
       setCategoryMap(map);
 
-      // 친구 ID 배열
+      // 친구 ID 리스트
       const ids = (friends || [])
         .map((f) =>
           String(
@@ -165,48 +320,52 @@ const CommunityPage = () => {
         .filter(Boolean);
       setFriendIds(ids);
 
-      // 내 정보 + id 유추
-      if (rawMe) {
-        let meWithId = { ...rawMe };
-        if (!meWithId.id) {
-          const myPost = list.find((p) => {
-            const m = p?.member ?? p?.post?.member ?? null;
-            const nameMatch = (m?.name ?? "") === (rawMe?.name ?? "");
-            const phoneMatch =
-              (m?.phone ?? m?.mobile ?? "") === (rawMe?.phone ?? "");
-            return (phoneMatch && rawMe?.phone) || (nameMatch && !rawMe?.phone);
-          });
-          if (myPost) {
-            const authorId = getAuthorIdFromPost(myPost);
-            meWithId = { ...meWithId, id: authorId || "" };
-          }
-        }
-        setMe(meWithId);
-      } else {
-        setMe(null);
-      }
+      // 내 정보/이름
+      setMe(rawMe ?? null);
+      const tokenName = getMyNameFromToken();
+      if (tokenName) setMyName(tokenName);
+      else if (rawMe?.name) setMyName(normalizeName(rawMe.name));
+      else setMyName("");
     })();
   }, []);
 
-  // 탭 필터링
+  useEffect(() => {
+    if (reactionPickerId == null) return;
+    const onDocClick = (e) => {
+      // 말풍선/하트 영역 밖 클릭 시 닫기
+      const target = e.target;
+      if (!target.closest) return setReactionPickerId(null);
+      if (
+        !target.closest(`#post-${reactionPickerId} .communitypage-like-area`)
+      ) {
+        setReactionPickerId(null);
+      }
+    };
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [reactionPickerId]);
+
+  /* ---------- 탭 필터링 ---------- */
   const filteredPosts = useMemo(() => {
     if (!allPosts?.length) return [];
     if (activeTab === "전체") return allPosts;
 
     if (activeTab === "나") {
-      const myId = me?.id ? String(me.id) : "";
-      if (!myId) return [];
-      return allPosts.filter((p) => getAuthorIdFromPost(p) === myId);
+      const mine = normalizeName(myName);
+      if (!mine) return [];
+      return allPosts.filter(
+        (p) => normalizeName(getAuthorNameFromPost(p)) === mine
+      );
     }
 
     if (activeTab === "친구") {
       if (!friendIds.length) return [];
-      const set = new Set(friendIds.map(String));
-      return allPosts.filter((p) => set.has(getAuthorIdFromPost(p)));
+      const idSet = new Set(friendIds.map(String));
+      return allPosts.filter((p) => idSet.has(getAuthorIdFromPost(p)));
     }
 
     return allPosts;
-  }, [activeTab, allPosts, me, friendIds]);
+  }, [activeTab, allPosts, myName, friendIds]);
 
   return (
     <div className="communitypage-container">
@@ -293,93 +452,187 @@ const CommunityPage = () => {
       </div>
 
       <div className="communitypage-posts">
-        {filteredPosts.map((post, idx) => (
-          <div key={post.post?.postId ?? idx} className="communitypage-post-card">
-            <div className="communitypage-post-header">
-              {/* 왼쪽 영역 */}
-              <div className="communitypage-post-header-left">
-                {/* 프로필/작성자/시간 */}
-                <div className="communitypage-post-profile">
-                  <img
-                    src={
-                      post.member?.image ||
-                      post.member?.profileImage ||
-                      defaultPetPic
-                    }
-                    alt="프로필"
-                    className="communitypage-post-profile-img"
-                    onClick={() => handleProfileClick(post.member)}
-                    style={{ cursor: "pointer" }}
-                  />
-                  <div className="communitypage-post-profile-info">
-                    <div className="communitypage-post-author">
-                      {post.member?.name}
+        {filteredPosts.map((post, idx) => {
+          const pid = getPostId(post) ?? idx;
+
+          return (
+            <div
+              key={pid}
+              id={`post-${pid}`}
+              className="communitypage-post-card"
+            >
+              <div className="communitypage-post-header">
+                {/* 왼쪽 영역 */}
+                <div className="communitypage-post-header-left">
+                  {/* 프로필/작성자/시간 */}
+                  <div className="communitypage-post-profile">
+                    <img
+                      src={
+                        post.member?.image ||
+                        post.member?.profileImage ||
+                        defaultPetPic
+                      }
+                      alt="프로필"
+                      className="communitypage-post-profile-img"
+                      onClick={() => handleProfileClick(post.member)}
+                      style={{ cursor: "pointer" }}
+                    />
+                    <div className="communitypage-post-profile-info">
+                      <div className="communitypage-post-author">
+                        {post.member?.name}
+                      </div>
+                      <div className="communitypage-post-time">
+                        {formatDistanceToNow(new Date(post.post.createdAt), {
+                          addSuffix: true,
+                          locale: ko,
+                        })}
+                      </div>
                     </div>
-                    <div className="communitypage-post-time">
-                      {formatDistanceToNow(new Date(post.post.createdAt), {
-                        addSuffix: true,
-                        locale: ko,
-                      })}
+                  </div>
+
+                  {/* 카테고리/타이틀 */}
+                  <div className="communitypage-post-category-title">
+                    <div className="communitypage-post-category">
+                      {getCategoryName(post)}
+                    </div>
+                    <div className="communitypage-post-title">
+                      {post.post.title}
                     </div>
                   </div>
                 </div>
 
-                {/* 카테고리/타이틀 */}
-                <div className="communitypage-post-category-title">
-                  <div className="communitypage-post-category">
-                    {getCategoryName(post)}
-                  </div>
-                  <div className="communitypage-post-title">
-                    {post.post.title}
-                  </div>
+                {/* 우측 메뉴 */}
+                <div className="communitypage-post-menu">
+                  <button
+                    className="communitypage-menu-button"
+                    onClick={() => toggleMenu(idx)}
+                  >
+                    ⋯
+                  </button>
+                  {menuOpenIndex === idx && (
+                    <div className="communitypage-post-dropdown">
+                      <button onClick={() => handleEdit(post)}>수정</button>
+                      <button onClick={() => handleDelete(post.post.postId)}>
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* 우측 메뉴 */}
-              <div className="communitypage-post-menu">
-                <button
-                  className="communitypage-menu-button"
-                  onClick={() => toggleMenu(idx)}
-                >
-                  ⋯
-                </button>
-                {menuOpenIndex === idx && (
-                  <div className="communitypage-post-dropdown">
-                    <button onClick={() => handleEdit(post)}>수정</button>
-                    <button onClick={() => handleDelete(post.post.postId)}>
-                      삭제
+              {/* 이미지 */}
+              {post.postImageDtoList?.length > 0 && (
+                <img
+                  src={post.postImageDtoList[0].imageUrl}
+                  alt="게시글 이미지"
+                  className="communitypage-post-main-image"
+                />
+              )}
+
+              {/* 본문 */}
+              <p className="communitypage-post-content">{post.post.content}</p>
+
+              {/* 하단 액션바 */}
+              <div className="communitypage-post-actions">
+                <div className="communitypage-post-actions-left">
+                  {/* 하트 + 말풍선 래퍼 */}
+                  <div
+                    className="communitypage-like-area"
+                    style={{ position: "relative", display: "inline-flex" }}
+                  >
+                    <button
+                      type="button"
+                      className={`communitypage-action-btn ${
+                        likedMap[pid] ? "is-liked" : ""
+                      }`}
+                      aria-label="좋아요"
+                      onClick={() => onHeartClick(pid)}
+                      title={
+                        reactionMap[pid]
+                          ? REACTION_OPTIONS.find(
+                              (o) => o.key === reactionMap[pid]
+                            )?.label
+                          : "좋아요"
+                      }
+                    >
+                      {likedMap[pid] ? (
+                        <FavoriteIcon className="communitypage-action-icon" />
+                      ) : (
+                        <FavoriteBorderIcon className="communitypage-action-icon" />
+                      )}
+                      <span className="communitypage-action-count">
+                        {likeCountMap[pid] ?? 0}
+                      </span>
                     </button>
+
+                    {/* 감정 선택 말풍선 */}
+                    {reactionPickerId === pid && (
+                      <div
+                        className="communitypage-reaction-picker"
+                        role="menu"
+                        aria-label="감정 선택"
+                      >
+                        {REACTION_OPTIONS.map((opt) => (
+                          <button
+                            key={opt.key}
+                            type="button"
+                            className={`communitypage-reaction-item ${
+                              reactionMap[pid] === opt.key ? "active" : ""
+                            }`}
+                            onClick={() => onSelectReaction(pid, opt.key)}
+                            title={opt.label}
+                          >
+                            <span className="communitypage-reaction-emoji">
+                              {opt.icon}
+                            </span>
+                            <span className="communitypage-reaction-label">
+                              {opt.label}
+                            </span>
+                          </button>
+                        ))}
+                        <div className="communitypage-reaction-arrow" />
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  {/* 댓글 버튼은 그대로 */}
+                  <button
+                    type="button"
+                    className="communitypage-action-btn"
+                    aria-label="댓글"
+                    onClick={() => toggleComments(post.post.postId)}
+                  >
+                    <ChatBubbleOutlineIcon className="communitypage-action-icon" />
+                    <span className="communitypage-action-count">
+                      {post.commentTotal ?? 0}
+                    </span>
+                  </button>
+                </div>
+                <div className="communitypage-post-actions-right">
+                  <button
+                    type="button"
+                    className="communitypage-action-btn"
+                    aria-label="저장"
+                    onClick={() => toggleBookmark(pid)}
+                  >
+                    {bookmarkedMap[pid] ? (
+                      <BookmarkIcon className="communitypage-action-icon bookmarked" />
+                    ) : (
+                      <BookmarkBorderIcon className="communitypage-action-icon" />
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* 이미지 */}
-            {post.postImageDtoList?.length > 0 && (
-              <img
-                src={post.postImageDtoList[0].imageUrl}
-                alt="게시글 이미지"
-                className="communitypage-post-main-image"
+              {/* 댓글 섹션 */}
+              <CommentSection
+                postId={post.post.postId}
+                open={Boolean(openComments[post.post.postId])}
+                onClose={() => toggleComments(post.post.postId)}
               />
-            )}
-
-            {/* 본문 */}
-            <p className="communitypage-post-content">{post.post.content}</p>
-
-            {/* 하단 버튼 */}
-            <div className="communitypage-post-footer-buttons">
-              <button>감정 달기</button>
-              <button onClick={() => toggleComments(post.post.postId)}>
-                댓글 {post.commentTotal}
-              </button>
             </div>
-
-            {/* 댓글 섹션 */}
-            {openComments[post.post.postId] && (
-              <CommentSection postId={post.post.postId} />
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {isModalOpen && (
@@ -401,6 +654,7 @@ const CommunityPage = () => {
         <ProfileQuickModal
           user={profileUser}
           onClose={() => setProfileUser(null)}
+          onJumpToPost={jumpToPost}
         />
       )}
     </div>

@@ -94,10 +94,24 @@
   margin: 0; 
   display: grid; 
   grid-template-columns: 1fr 1fr;
-  gap: 10px; 
+  gap: 16px; 
   background-color: #f2f2f2;
   padding: 12px;
   border-radius: 8px;
+  max-height: 240px;          
+  overflow: auto;              
+  -ms-overflow-style: none;    
+  scrollbar-width: none;      
+  overscroll-behavior: contain;
+}
+
+.communityprofile-pet-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.communityprofile-pet-list {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .communityprofile-pet-item { 
@@ -152,10 +166,24 @@
   margin: 0; 
   display: grid; 
   grid-template-columns: 1fr 1fr;
-  gap: 12px; 
+  gap: 16px; 
   background-color: #f2f2f2;
   padding: 12px;
   border-radius: 8px;
+  max-height: 240px;           
+  overflow: auto;              
+  -ms-overflow-style: none;    
+  scrollbar-width: none;       
+  overscroll-behavior: contain;
+}
+
+.communityprofile-post-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.communityprofile-post-list {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .communityprofile-post-item {
@@ -165,6 +193,12 @@
   background: #f9fafb;
   border-radius: 12px;
   padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.5s ease;
+}
+
+.communityprofile-post-item:hover {
+  background-color: #ffffff;      
 }
 
 .communityprofile-post-image {

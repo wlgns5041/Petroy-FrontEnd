@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {fetchMemberPosts} from "../../services/CommunityService.jsx";
+import { fetchMemberPosts } from "../../services/CommunityService.jsx";
 import "../../styles/MyPage/MyPage.css";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import NameEditModal from "../../components/MyPage/NameEditModal.jsx";
 import ImageEditModal from "../../components/MyPage/ImageEditModal.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,8 +9,12 @@ import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
 import { fetchFriendCount } from "../../services/FriendService";
-import { fetchCurrentMember, uploadMemberImage, deleteMember } from "../../services/MemberService";
-import { fetchMemberPets } from "../../services/PetService.jsx"
+import {
+  fetchCurrentMember,
+  uploadMemberImage,
+  deleteMember,
+} from "../../services/MemberService";
+import { fetchMemberPets } from "../../services/PetService.jsx";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const MyPage = () => {
@@ -23,6 +26,7 @@ const MyPage = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [friendsCount, setFriendsCount] = useState(0);
   const [confirmAction, setConfirmAction] = useState(null);
+  const [displayImage, setDisplayImage] = useState(null);
 
   // 컴포넌트가 마운트될 때 실행
   useEffect(() => {
@@ -33,13 +37,11 @@ const MyPage = () => {
       const fetchData = async () => {
         try {
           // 사용자 정보, 펫 목록, 포스트 목록을 동시에 가져오기 (토큰 서비스에 있음)
-          const [userResponse, petsResponse] = await Promise.all(
-            [
-              fetchCurrentMember(token),
-              fetchMemberPets(),
-              fetchMemberPosts(token),
-            ]
-          );
+          const [userResponse, petsResponse] = await Promise.all([
+            fetchCurrentMember(token),
+            fetchMemberPets(),
+            fetchMemberPosts(token),
+          ]);
 
           // 가져온 데이터를 상태에 저장
           setUserInfo(userResponse);
@@ -60,15 +62,47 @@ const MyPage = () => {
     }
   }, []); // 빈 배열을 의존성으로 설정하여 컴포넌트 마운트 시 처음에 한 번만 실행
 
+  const normalizeUrl = (u) => {
+    if (!u) return "";
+    if (u.startsWith("http") || u.startsWith("data:")) return u;
+    return `${API_BASE_URL}${u}`;
+  };
+
   // 이미지 변경 함수
-  const handleImageUpload = async (newImage) => {
+  const handleImageUpload = async (file, preview) => {
     const token = localStorage.getItem("accessToken");
+
+    if (preview) setDisplayImage(preview);
+
     try {
-      const imageUrl = await uploadMemberImage(token, newImage);
-      setUserInfo((prev) => ({ ...prev, image: imageUrl }));
+      const savedPath = await uploadMemberImage(token, file);
+      const finalUrlBase = normalizeUrl(savedPath);
+      const stamp = Date.now();
+      const finalUrl = finalUrlBase.includes("?")
+        ? `${finalUrlBase}&v=${stamp}`
+        : `${finalUrlBase}?v=${stamp}`;
+
       alert("이미지를 변경했습니다.");
-    } catch (error) {
-      console.error("이미지 업로드 실패:", error);
+
+      const swapWhenReady = (tries = 6, delay = 250) => {
+        const probe = new Image();
+        probe.onload = () => {
+          setUserInfo((prev) => ({ ...prev, image: finalUrl }));
+          setDisplayImage(finalUrl);
+        };
+        probe.onerror = () => {
+          if (tries > 1) {
+            setTimeout(() => swapWhenReady(tries - 1, delay * 1.5), delay);
+          }
+        };
+        const r = Math.random().toString(36).slice(2);
+        probe.src = `${finalUrl}${finalUrl.includes("?") ? "&" : "?"}r=${r}`;
+      };
+
+      swapWhenReady();
+    } catch (e) {
+      console.error(e);
+      alert("이미지 업로드 실패");
     }
   };
 
@@ -128,7 +162,7 @@ const MyPage = () => {
       <div className="mypage-profile">
         <div className="mypage-profile-card">
           <img
-            src={userInfo.image || defaultProfilePic}
+            src={displayImage ?? normalizeUrl(userInfo.image)}
             alt="profile"
             className="mypage-profile-image"
           />
@@ -192,7 +226,10 @@ const MyPage = () => {
           <div className="mypage-icon-withtext">
             <FontAwesomeIcon icon={faPaw} />내 펫
           </div>
-          <span className="mypage-pet-section-link" onClick={() => handleNavigation("/petPage")}>
+          <span
+            className="mypage-pet-section-link"
+            onClick={() => handleNavigation("/petPage")}
+          >
             펫 바로가기
           </span>
         </h3>
@@ -223,7 +260,9 @@ const MyPage = () => {
                 />
                 <div className="mypage-pet-info">
                   <div className="mypage-pet-name">{pet.name}</div>
-                  <div className="mypage-pet-species">{pet.breed || "종 미등록"}</div>
+                  <div className="mypage-pet-species">
+                    {pet.breed || "종 미등록"}
+                  </div>
                 </div>
               </li>
             ))}

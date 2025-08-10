@@ -7,7 +7,7 @@ import { fetchMemberPets } from "../../services/PetService";
 import { fetchMemberPosts, fetchCommunityPosts } from "../../services/CommunityService";
 import { fetchCurrentMember } from "../../services/MemberService";
 
-const ProfileQuickModal = ({ user, onClose }) => {
+const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
   const [me, setMe] = useState(null);          // 로그인한 나
   const [target, setTarget] = useState(null);   // 보여줄 대상(나 또는 다른 사람)
   const [pets, setPets] = useState([]);         // 대상의 펫
@@ -171,21 +171,28 @@ const ProfileQuickModal = ({ user, onClose }) => {
           {myPosts.length === 0 ? (
             <div className="communityprofile-empty">작성한 글이 없습니다</div>
           ) : (
-            <ul className="communityprofile-post-list">
-              {myPosts.slice(0, 10).map((p) => (
-                <li key={p.postId} className="communityprofile-post-item">
-                  <img
-                    src={p.postImageDtoList?.[0]?.imageUrl || defaultPetPic}
-                    alt="thumbnail"
-                    className="communityprofile-post-image"
-                  />
-                  <div className="communityprofile-post-info">
-                    <div className="communityprofile-post-title">{p.title}</div>
-                    <div className="communityprofile-post-content one-line">{p.content}</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
+<ul className="communityprofile-post-list">
+  {myPosts.slice(0, 10).map((p) => (
+    <li
+      key={p.postId}
+      className="communityprofile-post-item"
+      onClick={() => {
+        onClose?.(); // 모달 닫기
+        onJumpToPost?.(p.postId); // 메인 페이지에서 해당 글로 스크롤
+      }}
+    >
+      <img
+        src={p.postImageDtoList?.[0]?.imageUrl || defaultPetPic}
+        alt="thumbnail"
+        className="communityprofile-post-image"
+      />
+      <div className="communityprofile-post-info">
+        <div className="communityprofile-post-title">{p.title}</div>
+        <div className="communityprofile-post-content one-line">{p.content}</div>
+      </div>
+    </li>
+  ))}
+</ul>
           )}
         </section>
       </div>
