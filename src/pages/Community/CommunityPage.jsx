@@ -112,6 +112,38 @@ const getAuthorIdFromPost = (p) =>
       ""
   );
 
+const getMemberFromPost = (p) => {
+  const m =
+    p?.member ??
+    p?.post?.member ??
+    p?.author ??
+    p?.writer ??
+    p?.post?.author ??
+    p?.post?.writer ??
+    {};
+
+  return {
+    id:
+      m?.id ??
+      m?.memberId ??
+      p?.memberId ??
+      p?.authorId ??
+      p?.writerId ??
+      p?.post?.memberId ??
+      p?.post?.authorId ??
+      p?.post?.writerId ??
+      null,
+    name:
+      m?.name ??
+      p?.memberName ??
+      p?.post?.memberName ??
+      p?.author?.name ??
+      p?.writer?.name ??
+      "",
+    image: m?.image ?? m?.profileImage ?? null,
+  };
+};
+
 /* -------------------- 컴포넌트 -------------------- */
 
 const CommunityPage = () => {
@@ -269,6 +301,18 @@ const CommunityPage = () => {
     setEditModalOpen(false);
     setSelectedPost(null);
     reloadPosts();
+  };
+
+  const isMyPost = (p) => {
+    const myId = String(me?.id ?? me?.memberId ?? "");
+    const authorId = String(getAuthorIdFromPost(p) ?? "");
+    if (myId && authorId) return myId === authorId;
+
+    const mine = normalizeName(myName);
+    const authorName = normalizeName(getAuthorNameFromPost(p));
+    if (mine && authorName) return mine === authorName;
+
+    return false;
   };
 
   /* ---------- 초기 로딩 ---------- */
@@ -454,6 +498,7 @@ const CommunityPage = () => {
       <div className="communitypage-posts">
         {filteredPosts.map((post, idx) => {
           const pid = getPostId(post) ?? idx;
+          const author = getMemberFromPost(post);
 
           return (
             <div
@@ -467,15 +512,28 @@ const CommunityPage = () => {
                   {/* 프로필/작성자/시간 */}
                   <div className="communitypage-post-profile">
                     <img
-                      src={
-                        post.member?.image ||
-                        post.member?.profileImage ||
-                        defaultPetPic
-                      }
+                      src={author.image || defaultPetPic}
                       alt="프로필"
                       className="communitypage-post-profile-img"
-                      onClick={() => handleProfileClick(post.member)}
+                      onClick={() =>
+                        handleProfileClick(
+                          isMyPost(post) ? me ?? author : author
+                        )
+                      }
                       style={{ cursor: "pointer" }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) =>
+                        (e.key === "Enter" || e.key === " ") &&
+                        handleProfileClick(
+                          isMyPost(post) ? me ?? author : author
+                        )
+                      }
+                      aria-label={
+                        isMyPost(post)
+                          ? "내 프로필 빠른 보기"
+                          : "사용자 프로필 빠른 보기"
+                      }
                     />
                     <div className="communitypage-post-profile-info">
                       <div className="communitypage-post-author">
@@ -502,22 +560,25 @@ const CommunityPage = () => {
                 </div>
 
                 {/* 우측 메뉴 */}
-                <div className="communitypage-post-menu">
-                  <button
-                    className="communitypage-menu-button"
-                    onClick={() => toggleMenu(idx)}
-                  >
-                    ⋯
-                  </button>
-                  {menuOpenIndex === idx && (
-                    <div className="communitypage-post-dropdown">
-                      <button onClick={() => handleEdit(post)}>수정</button>
-                      <button onClick={() => handleDelete(post.post.postId)}>
-                        삭제
-                      </button>
-                    </div>
-                  )}
-                </div>
+                {isMyPost(post) && (
+                  <div className="communitypage-post-menu">
+                    <button
+                      className="communitypage-menu-button"
+                      onClick={() => toggleMenu(idx)}
+                      aria-label="게시글 메뉴"
+                    >
+                      ⋯
+                    </button>
+                    {menuOpenIndex === idx && (
+                      <div className="communitypage-post-dropdown">
+                        <button onClick={() => handleEdit(post)}>수정</button>
+                        <button onClick={() => handleDelete(post.post.postId)}>
+                          삭제
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* 이미지 */}

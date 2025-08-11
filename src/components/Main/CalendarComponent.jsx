@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/CalendarComponent.css";
+import "../../styles/Main/CalendarComponent.css";
 import "font-awesome/css/font-awesome.min.css";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";

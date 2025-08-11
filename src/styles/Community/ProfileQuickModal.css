@@ -21,12 +21,12 @@
   font-family: 'Pretendard', sans-serif;
 }
 
-.communityprofile-header { 
-  display: flex; 
-  align-items: center; 
-  gap: 12px; 
-  position: relative; 
-  margin-bottom: 24px; 
+.communityprofile-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  /* position: relative;  ← 불필요하면 제거 */
 }
 
 .communityprofile-avatar { 
@@ -55,19 +55,61 @@
   color: #6b7280; 
 }
 
-.communityprofile-close-btn {   
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  font-size: 16px;
-  color: #aaa;
-  background: none;
-  border: none;
-  cursor: pointer; 
+.communityprofile-header-actions {
+  margin-left: auto;  
+  margin-bottom: 24px;       
+  display: flex;
+  align-items: center;
+  gap: 8px;                 
 }
 
-.communityprofile-close-btn:hover {
-  color: #10b981;
+.communityprofile-friend-btn {
+  margin-right: 0;            
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #f3f4f6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.communityprofile-friend-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.communityprofile-friend-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.communityprofile-friend-btn.is-friend {
+  background: #e7f7ef; 
+}
+
+.communityprofile-friend-btn.is-pending {
+  background: #fff7e6; 
+}
+
+.communityprofile-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  color: #6b7280;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+}
+
+.communityprofile-close-btn:hover { 
+  background: #e5e7eb; 
+  color: #10b981; 
 }
 
 .communityprofile-pet-section { 

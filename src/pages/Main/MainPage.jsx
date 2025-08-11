@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import CalendarComponent from "../../components/commons/CalendarComponent.jsx";
-import CategoryModal from "../../components/Schedule/CategoryModal.jsx";
-import ScheduleModal from "../../components/Schedule/ScheduleModal.jsx";
-import ScheduleDetailModal from "../../components/Schedule/ScheduleDetailModal.jsx";
+import CalendarComponent from "../../components/Main/CalendarComponent.jsx";
+import CategoryModal from "../../components/Main/CategoryModal.jsx";
+import ScheduleModal from "../../components/Main/ScheduleModal.jsx";
+import ScheduleDetailModal from "../../components/Main/ScheduleDetailModal.jsx";
 import { fetchMemberPets, fetchCaregiverPets } from "../../services/PetService.jsx";
 import { fetchScheduleCategories, fetchAllSchedules, deleteScheduleCategory } from "../../services/ScheduleService.jsx";
 import "../../styles/Main/MainPage.css";
