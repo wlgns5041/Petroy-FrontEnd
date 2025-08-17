@@ -9,6 +9,7 @@ import {
 } from "../../services/ScheduleService";
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
+import TimeSelect from "../../components/Main/TimeSelect";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -947,18 +948,27 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                               선택한 일정 시간을 자정으로 설정합니다
                             </div>
                           ) : (
-                            <div className="schedule-create-time-setting">
-                              <input
-                                className="schedule-create-time-input"
-                                type="time"
-                                value={formData.scheduleTime || "00:00"}
-                                onChange={(e) =>
-                                  setFormData({
-                                    ...formData,
-                                    scheduleTime: e.target.value,
-                                  })
-                                }
-                              />
+                            <div
+                              className="schedule-create-time-setting"
+                              style={{ width: "100%" }}
+                            >
+                              {formData.isAllDay ? (
+                                <div className="schedule-create-time-allday-text">
+                                  선택한 일정 시간을 자정으로 설정합니다
+                                </div>
+                              ) : (
+                                <TimeSelect
+                                  value={formData.scheduleTime || "00:00"}
+                                  onChange={(v) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      scheduleTime: v,
+                                    }))
+                                  }
+                                  step={5}
+                                  disabled={false}
+                                />
+                              )}
                             </div>
                           )}
                         </div>
@@ -1046,9 +1056,6 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
                         {formData.noticeYn && (
                           <div className="schedule-create-alert-row">
-                            <label className="schedule-create-alert-label2">
-                              알림 시간
-                            </label>
                             <select
                               name="noticeAt"
                               value={formData.noticeAt}
