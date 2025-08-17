@@ -7,31 +7,39 @@
 
 html, body { overflow: hidden; height: 100%; }
 
-.mainpage { height: calc(100dvh - var(--navbar-h)); overflow: hidden; }
-
-.mainpage-container {
-  flex: 1;
+.mainpage {
+  height: calc(100svh - var(--navbar-h));
   display: flex;
   flex-direction: column;
-  gap: var(--gap-v);
-  padding: var(--pad-v);
-  padding-bottom: calc(var(--pad-v) + var(--btm-space));
+  overflow: hidden; 
+}
+
+.mainpage-container {
   background: #f8f9fb;
   border-radius: 12px;
+  padding: var(--pad-v);        
+  padding-bottom: var(--pad-v); 
+  height: 100%;
+  min-height: 0;
+  flex: 1;
 }
+
 .mainpage-container-body{
-  height: calc(100% - var(--footer-gap));
-  display: grid;
-  grid-template-columns: minmax(280px, 500px) 1fr;
-  gap: 24px;
-  min-height: 0; min-width: 0;
+  display:grid;
+  grid-template-columns:minmax(280px,500px) 1fr;
+  gap:24px;
+  height:100%;
+  min-height:0;
+  align-items:stretch;
+  overflow: hidden;     
 }
 
 .mainpage-leftsection {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-height: 0;         
+  min-height: 0;       
+  height: 100%;   
 }
 
 .mainpage-buttons {
@@ -260,7 +268,7 @@ html, body { overflow: hidden; height: 100%; }
 
 /* 일정 목록 */
 .mainpage-schedule-list{
-  flex: 0 0 clamp(300px, 34svh, 440px);
+  flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -398,12 +406,18 @@ html, body { overflow: hidden; height: 100%; }
 
 /* 캘린더 본문 */
 .mainpage-calendar-main {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px 24px 36px;
-  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+  display: flex;                 
+  flex-direction: column;
+  flex: 1 1 auto;   
   min-height: 0;
-  overflow: hidden;
+  height: auto;     
+  padding-bottom: var(--footer-gap); 
+  overflow: hidden;             
+  background: #fff;              
+  border-radius: 12px;
+  padding: 24px 24px 24px 24px;         
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+  overflow:hidden;     
 }
 
 /* 공통 selected 클래스는 그대로 유지 */
