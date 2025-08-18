@@ -1,8 +1,27 @@
+:root {
+  --friend-navbar-h: 64px;
+}
+
+.friendpage, .friendpage * , .friendpage *::before, .friendpage *::after {
+  box-sizing: border-box;
+}
+
+.friendpage-viewport {
+  min-height: calc(100svh - var(--friend-navbar-h));
+  min-height: calc(100dvh - var(--friend-navbar-h));
+  min-height: calc(100vh  - var(--friend-navbar-h));
+  display: grid;
+  place-items: center;
+  padding: 24px 12px;     
+  box-sizing: border-box;
+}
+
 .friendpage {
   min-width: 360px;
   max-width: 600px;
-  height: 80vh;
-  margin: 40px auto 0 auto;
+  width: 100%;
+  height: 70vh;
+  margin: 0 auto;         
   padding: 30px;
   padding-top: 40px;
   font-family: 'Pretendard', sans-serif;
@@ -11,7 +30,6 @@
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 /* 검색 바 */
@@ -54,18 +72,21 @@
 
 /* 검색 결과 */
 .friendpage-search-results {
+  flex: 1;        
+  min-height: 0;  
+  overflow: auto; 
+  margin: 12px auto; 
   width: 90%;
-  min-height: 90%;
+  padding: 24px;
   background-color: #f5f5f5;
   border-radius: 8px;
-  padding: 24px;
-  margin: 12px auto;
-  margin-bottom: 12px;
 }
 
 .friendpage-search-results ul {
   padding-left: 0;
   margin: 0;
+  display: grid;
+  gap: 20px;
 }
 
 .friendpage-search-result-item {
@@ -73,13 +94,12 @@
   align-items: center;
   justify-content: space-between;
   border-radius: 8px;
-  padding: 20px 12px 20px 12px;
+  padding: 20px 12px;
   background-color: #ffffff;
-  margin: 0 auto 0 auto;
   width: 100%;
-  max-width: 600px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+  max-width: 100%;             
+  margin: 0 auto;              
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .friendpage-search-result-info {
@@ -141,6 +161,8 @@
 /* 탭바 */
 .friendpage-tab-bar {
   display: flex;
+  position: relative;      
+  overflow: hidden;        
   width: 90%;
   gap: 12px;
   padding: 6px;
@@ -150,8 +172,22 @@
   justify-content: space-between;
 }
 
+.friendpage-tab-background {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: calc((100% - 12px) / 2);
+  height: calc(100% - 12px);
+  background-color: #ffffff;
+  border-radius: 6px;
+  transition: transform .3s ease; 
+  z-index: 0;
+}
+
 .friendpage-tab {
   flex: 1;
+  position: relative;  
+  z-index: 1;          
   padding: 12px 16px;
   border: none;
   border-radius: 6px;

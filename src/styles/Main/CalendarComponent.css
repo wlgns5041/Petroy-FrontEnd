@@ -115,15 +115,31 @@
 }
 
 .calendar-view-tabs {
+  position: relative;             
   display: flex;
   background-color: #f0f2f5;
   border-radius: 12px;
   padding: 4px;
   gap: 4px;
   margin-left: auto;
+  overflow: hidden;                  
+}
+
+.calendar-tab-background {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 2);    
+  height: calc(100% - 8px);
+  background-color: #ffffff;
+  border-radius: 10px;
+  transition: transform 0.3s ease;   
+  z-index: 0;
 }
 
 .calendar-view-tab {
+  position: relative;              
+  z-index: 1;                       
   border: none;
   background-color: transparent;
   font-size: 13px;
@@ -131,14 +147,13 @@
   border-radius: 10px;
   cursor: pointer;
   color: #6b7280;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;       
 }
 
 .calendar-view-tab.active {
-  background-color: white;
   color: #111827;
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: none;                 
 }
 
 /* ---------- 달력 요일/일 ---------- */
@@ -162,14 +177,13 @@
   border-radius: 8px;
   background-color: #f9fafb;
   padding: 10px;
-  min-height: 0px;
+  min-height: 90px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   transition: background 0.3s;
   box-sizing: border-box;
-  height: 100% !important; 
+  height: 15vh;
   text-align: left;
-  display: flex;
-  flex-direction: column;
+  margin-top: 1px;
 }
 
 .calendar-days {

@@ -12,7 +12,6 @@ import {
 } from "../../services/FriendService";
 
 const FriendPage = () => {
-  const [activeTab, setActiveTab] = useState("friends");
   const [friends, setFriends] = useState([]);
   const [requests, setRequests] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -20,6 +19,8 @@ const FriendPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [requestedIds, setRequestedIds] = useState([]);
   const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState("friends");
+  const friendTabIndex = activeTab === "friends" ? 0 : 1;
 
   const loadFriends = async () => {
     const data = await fetchAcceptedFriends();
@@ -91,125 +92,138 @@ const FriendPage = () => {
   }, [keyword]);
 
   return (
-    <div className="friendpage">
-      {/* 검색창 */}
-      <div className="friendpage-search-bar">
-        <input
-          type="text"
-          placeholder="친구의 이름 및 아이디를 검색해주세요"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <button
-          className="friendpage-search-icon-button"
-          onClick={handleSearch}
-          disabled={loading}
-        >
-          <SearchIcon />
-        </button>
-      </div>
-
-      {/* 검색 결과 */}
-      {keyword && (
-        <div className="friendpage-search-results">
-          {error && (
-            <div className="friendpage-search-results-error-message">
-              {error}
-            </div>
-          )}
-          {searchResults.length > 0 ? (
-            <ul>
-              {searchResults.map((member) => {
-                const isAlreadyFriend = friends.some((f) => f.id === member.id);
-
-                return (
-                  <li key={member.id} className="friendpage-search-result-item">
-                    <div className="friendpage-search-result-info">
-                      <img
-                        src={member.image || defaultProfilePic}
-                        alt={member.name}
-                        className="friendpage-profile-image"
-                      />
-                      <span>{member.name}</span>
-                    </div>
-
-                    {isAlreadyFriend ? (
-                      <button
-                        className="friendpage-send-request-button disabled"
-                        disabled
-                      >
-                        이미 친구입니다
-                      </button>
-                    ) : requestedIds.includes(member.id) ? (
-                      <button
-                        className="friendpage-send-request-button disabled"
-                        disabled
-                      >
-                        친구 요청중입니다
-                      </button>
-                    ) : (
-                      <button
-                        className="friendpage-send-request-button"
-                        onClick={() => handleSendRequest(member.id)}
-                      >
-                        친구 요청
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            !loading && (
-              <p className="friendpage-no-results">검색 결과가 없습니다.</p>
-            )
-          )}
+    <main className="friendpage-viewport">
+      <div className="friendpage">
+        {/* 검색창 */}
+        <div className="friendpage-search-bar">
+          <input
+            type="text"
+            placeholder="친구의 이름 및 아이디를 검색해주세요"
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+          <button
+            className="friendpage-search-icon-button"
+            onClick={handleSearch}
+            disabled={loading}
+          >
+            <SearchIcon />
+          </button>
         </div>
-      )}
 
-      {/* 탭 메뉴 */}
-      {!keyword && (
-        <>
-          <div className="friendpage-tab-bar">
-            <button
-              className={`friendpage-tab ${
-                activeTab === "friends" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("friends")}
-            >
-              <span className="friendpage-tab-label">
-                <span className="friendpage-tab-text">친구 목록</span>
-                <span className="friendpage-friend-count">
-                  {friends.length}
-                </span>
-              </span>
-            </button>
-            <button
-              className={`friendpage-tab ${
-                activeTab === "manage" ? "active" : ""
-              }`}
-              onClick={() => setActiveTab("manage")}
-            >
-              <span>친구 요청 관리</span>
-            </button>
-          </div>
-
-          <div className="friendpage-tab-content">
-            {activeTab === "friends" && (
-              <FriendList friends={friends} title="친구 목록" />
+        {/* 검색 결과 */}
+        {keyword && (
+          <div className="friendpage-search-results">
+            {error && (
+              <div className="friendpage-search-results-error-message">
+                {error}
+              </div>
             )}
-            {activeTab === "manage" && (
-              <FriendList
-                friends={requests}
-                onAccept={(id) => handleRequestAction(id, "ACCEPTED")}
-                onReject={(id) => handleRequestAction(id, "REJECTED")}
-                title="친구 요청 관리"
+            {searchResults.length > 0 ? (
+              <ul>
+                {searchResults.map((member) => {
+                  const isAlreadyFriend = friends.some(
+                    (f) => f.id === member.id
+                  );
+
+                  return (
+                    <li
+                      key={member.id}
+                      className="friendpage-search-result-item"
+                    >
+                      <div className="friendpage-search-result-info">
+                        <img
+                          src={member.image || defaultProfilePic}
+                          alt={member.name}
+                          className="friendpage-profile-image"
+                        />
+                        <span>{member.name}</span>
+                      </div>
+
+                      {isAlreadyFriend ? (
+                        <button
+                          className="friendpage-send-request-button disabled"
+                          disabled
+                        >
+                          이미 친구입니다
+                        </button>
+                      ) : requestedIds.includes(member.id) ? (
+                        <button
+                          className="friendpage-send-request-button disabled"
+                          disabled
+                        >
+                          친구 요청중입니다
+                        </button>
+                      ) : (
+                        <button
+                          className="friendpage-send-request-button"
+                          onClick={() => handleSendRequest(member.id)}
+                        >
+                          친구 요청
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              !loading && (
+                <p className="friendpage-no-results">검색 결과가 없습니다.</p>
+              )
+            )}
+          </div>
+        )}
+
+        {/* 탭 메뉴 */}
+        {!keyword && (
+          <>
+            <div className="friendpage-tab-bar">
+              <div
+                className="friendpage-tab-background"
+                style={{ transform: `translateX(${friendTabIndex * 100}%)` }}
               />
-            )}
-          </div>
-        </>
-      )}
-    </div>
+
+              <button
+                className={`friendpage-tab ${
+                  activeTab === "friends" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("friends")}
+              >
+                <span className="friendpage-tab-label">
+                  <span className="friendpage-tab-text">친구 목록</span>
+                  <span className="friendpage-friend-count">
+                    {friends.length}
+                  </span>
+                </span>
+              </button>
+
+              <button
+                className={`friendpage-tab ${
+                  activeTab === "manage" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("manage")}
+              >
+                <span>친구 요청 관리</span>
+              </button>
+            </div>
+
+            <div className="friendpage-tab-content">
+              {activeTab === "friends" && (
+                <FriendList friends={friends} title="친구 목록" />
+              )}
+              {activeTab === "manage" && (
+                <FriendList
+                  friends={requests}
+                  onAccept={(id) => handleRequestAction(id, "ACCEPTED")}
+                  onReject={(id) => handleRequestAction(id, "REJECTED")}
+                  title="친구 요청 관리"
+                />
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    </main>
   );
 };
 

@@ -10,6 +10,7 @@ import { fetchAcceptedFriends } from "../../services/FriendService";
 
 import PostCreateModal from "../../components/Community/PostCreateModal";
 import PostEditModal from "../../components/Community/PostEditModal";
+import PostDeleteModal from "../../components/Community/PostDeleteModal";
 import CommentSection from "../../components/Community/CommentSection";
 import ProfileQuickModal from "../../components/Community/ProfileQuickModal";
 
@@ -155,6 +156,11 @@ const CommunityPage = () => {
   const [categoryMap, setCategoryMap] = useState({});
   const [friendIds, setFriendIds] = useState([]);
 
+  // 게시글 삭제
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
   // UI 상태
   const [openComments, setOpenComments] = useState({});
   const [menuOpenIndex, setMenuOpenIndex] = useState(null);
@@ -198,6 +204,29 @@ const CommunityPage = () => {
       () => el.classList.remove("communitypage-post-card--highlight"),
       1600
     );
+  };
+
+  const openDeleteModal = (post) => {
+    setDeleteTarget(post);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const token = localStorage.getItem("accessToken");
+      const pid = deleteTarget.post?.postId ?? deleteTarget.postId;
+      const ok = await deletePost(pid, token);
+      if (ok) {
+        await reloadPosts();
+         alert("삭제가 완료되었습니다.");
+        setDeleteModalOpen(false);
+        setDeleteTarget(null);
+      }
+    } finally {
+      setDeleting(false);
+    }
   };
 
   const REACTION_OPTIONS = [
@@ -282,14 +311,6 @@ const CommunityPage = () => {
   const handlePostCreated = () => {
     setIsModalOpen(false);
     reloadPosts();
-  };
-
-  const handleDelete = async (postId) => {
-    const token = localStorage.getItem("accessToken");
-    if (window.confirm("게시글을 삭제할까요?")) {
-      const success = await deletePost(postId, token);
-      if (success) reloadPosts();
-    }
   };
 
   const handleEdit = (post) => {
@@ -572,7 +593,7 @@ const CommunityPage = () => {
                     {menuOpenIndex === idx && (
                       <div className="communitypage-post-dropdown">
                         <button onClick={() => handleEdit(post)}>수정</button>
-                        <button onClick={() => handleDelete(post.post.postId)}>
+                        <button onClick={() => openDeleteModal(post)}>
                           삭제
                         </button>
                       </div>
@@ -700,6 +721,18 @@ const CommunityPage = () => {
         <PostCreateModal
           onClose={() => setIsModalOpen(false)}
           onPostCreated={handlePostCreated}
+        />
+      )}
+
+      {deleteModalOpen && deleteTarget && (
+        <PostDeleteModal
+          postTitle={deleteTarget?.post?.title ?? ""}
+          onClose={() => {
+            setDeleteModalOpen(false);
+            setDeleteTarget(null);
+          }}
+          onConfirm={confirmDelete}
+          loading={deleting}
         />
       )}
 

@@ -1,29 +1,61 @@
-.petpage {
-  max-width: 600px;
-  margin: 0 auto;
-  padding-top: 40px;
+:root {
+  --pet-navbar-h: 64px;
 }
 
-.petpage-container {
-  min-height: 840px;
+.petpage-viewport{
+  min-height: calc(100svh - var(--pet-navbar-h));
+  min-height: calc(100dvh - var(--pet-navbar-h));
+  min-height: calc(100vh  - var(--pet-navbar-h));
+  display: grid;
+  place-items: center;
+  padding: 24px 12px;
+  box-sizing: border-box;
+}
+
+.petpage {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.petpage-container{
+  min-height: 80vh;                      
+  display: flex;
+  flex-direction: column;
   background-color: rgb(249, 250, 251);
   border-radius: 12px;
-  padding: 24px 24px 0px 24px;
+  padding: 24px 24px 24px;
 }
 
 /* 탭 바 */
 .petpage-tab-bar {
+  position: relative;         
   display: flex;
   justify-content: center;
   gap: 12px;
   padding: 6px;
   margin: 0px auto 20px;
-  width: 100%;
+  width: 95%;
   background-color: #f1f3f5;
   border-radius: 8px;
+  overflow: hidden;          
+}
+
+.petpage-tab-background {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: calc((100% - 12px) / 2);
+  height: calc(100% - 12px);
+  background: #ffffff;
+  border-radius: 6px;
+  transition: transform .3s ease;   
+  z-index: 0;
 }
 
 .petpage-tab {
+  position: relative;         
+  z-index: 1;                 
   flex: 1;
   text-align: center;
   padding: 10px 0;
@@ -34,14 +66,13 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: color .2s ease;  
 }
 
 .petpage-tab.active {
-  background-color: #ffffff;
   color: #111827;
   font-weight: 700;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: none;           
 }
 
 .petpage-tab-count {
@@ -115,10 +146,27 @@
   transition: background-color 0.3s ease;
 }
 
-.petpage-pets-list {
+.petpage-pets-section{
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.petpage-pets-list{
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow-y: auto;
+}
+
+.petpage-footer{
+  height: 48px;               
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 펫 카드 */

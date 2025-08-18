@@ -1,0 +1,120 @@
+.post-delete-overlay {
+  position: fixed; 
+  inset:0; 
+  width:100%; 
+  height:100%;
+  background: rgba(0,0,0,.4);
+  display:flex; 
+  align-items:center; 
+  justify-content:center;
+  z-index:1000;
+}
+
+.post-delete-container {
+  background:#fff; 
+  width:90%;
+  max-width:420px; 
+  padding:32px 24px;
+  border-radius:12px; 
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+  font-family:Pretendard, sans-serif; 
+  position:relative;
+}
+
+.post-delete-title { 
+  font-size:20px; 
+  font-weight:700; 
+  text-align:center; 
+  color:#111827; 
+  margin-bottom:16px; 
+}
+
+.post-delete-description { 
+  font-size:14px; 
+  text-align:center; 
+  color:#6b7280; 
+  margin-bottom:20px; 
+}
+
+.post-delete-description strong { 
+  color:#111827; 
+  font-weight:600; 
+}
+
+.post-delete-input {
+  width:100%; 
+  padding:12px 14px; 
+  font-size:12px; 
+  border:none;
+  border-radius:8px; 
+  background:#f9f9f9; 
+  color:#111827;
+  box-sizing:border-box; 
+  margin:24px 0;
+}
+
+.post-delete-input:focus { 
+  outline:none; 
+  background:#fff; 
+  box-shadow:0 0 0 2px #10b981; 
+}
+
+.post-delete-error { 
+  color:#ef4444; 
+  font-size:14px; 
+  text-align:center; 
+  margin-bottom:12px; 
+}
+
+.post-delete-button-row { 
+  display:flex; 
+  justify-content:space-between; 
+  margin-top:16px; 
+
+}
+
+.post-delete-cancel-button {
+  flex:1; 
+  height:44px; 
+  font-size:14px; 
+  font-weight:700; 
+  border:none; 
+  border-radius:8px; 
+  cursor:pointer; 
+  transition:background-color .2s;
+} 
+
+.post-delete-confirm-button {
+  flex:1; 
+  height:44px; 
+  font-size:14px; 
+  font-weight:700; 
+  border:none; 
+  border-radius:8px; 
+  cursor:pointer; 
+  transition:background-color .2s;
+}
+
+.post-delete-cancel-button { 
+  background:#e5e7eb; 
+  color:#374151; 
+  margin-right:8px; 
+}
+
+.post-delete-cancel-button:hover { 
+  background:#d1d5db; 
+}
+
+.post-delete-confirm-button {
+  background:#414141; 
+  color:#fff; 
+}
+
+.post-delete-confirm-button:hover { 
+  background:#2f2f2f; 
+}
+
+.post-delete-confirm-button:disabled {
+  background:#fca5a5; 
+  cursor:not-allowed; 
+}

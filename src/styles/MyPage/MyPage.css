@@ -1,12 +1,26 @@
+:root {
+  --mypage-navbar-h: 64px;
+}
+
+.mypage-viewport {
+  min-height: calc(100svh - var(--mypage-navbar-h));
+  min-height: calc(100dvh - var(--mypage-navbar-h));
+  min-height: calc(100vh  - var(--mypage-navbar-h));
+  display: grid;
+  place-items: center;
+  padding: 24px 12px;
+  box-sizing: border-box;
+}
+
 .mypage {
-    max-width: 480px;
-    padding: 20px 16px 20px;
-    background-color: #f9f9f9;
-    font-family: 'Pretendard', sans-serif;
-    margin: 0 auto;
-    margin-top: 80px;
-    border-radius: 8px;
-  }
+  max-width: 480px;
+  width: 80%;
+  padding: 20px 16px 20px;
+  background-color: #f9f9f9;
+  font-family: 'Pretendard', sans-serif;
+  margin: 0 auto;        
+  border-radius: 8px;
+}
 
   .mypage ul {
     padding-left: 0;

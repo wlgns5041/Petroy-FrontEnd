@@ -11,6 +11,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL;
 const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
   const [viewMode, setViewMode] = useState("week");
   const [currentDate, setCurrentDate] = useState(new Date());
+  const tabIndex = viewMode === "week" ? 0 : 1;
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -135,6 +136,11 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
         )}
 
         <div className="calendar-view-tabs">
+          <div
+            className="calendar-tab-background"
+            style={{ transform: `translateX(${tabIndex * 100}%)` }}
+          />
+
           <button
             className={`calendar-view-tab ${
               viewMode === "week" ? "active" : ""
