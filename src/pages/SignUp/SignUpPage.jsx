@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SignUp/SignUpPage.css";
-import careImage from "../../assets/images/dogpaw.png";
+import logo from "../../assets/icons/logo-without-text.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import {FaCheck, FaTimes, FaCheckCircle, FaExclamationCircle} from "react-icons/fa";
 import {checkEmailDuplicate, checkNameDuplicate, registerMember} from "../../services/MemberService";
@@ -203,7 +203,7 @@ function SignUpPage() {
       <div className="signuppage-container">
         <div className="signuppage-leftsection">
           <img
-            src={careImage}
+            src={logo}
             alt="Signup Illustration"
             className="signuppage-logoimage"
           />

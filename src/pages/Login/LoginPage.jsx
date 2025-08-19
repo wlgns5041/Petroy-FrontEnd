@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Login/LoginPage.css";
-import careImage from "../../assets/images/dogpaw.png";
+import logo from "../../assets/icons/logo-without-text.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { loginUser } from "../../services/MemberService";
@@ -72,7 +72,7 @@ function LoginPage() {
       <div className="loginpage-container">
         <div className="loginpage-leftsection">
           <img
-            src={careImage}
+            src={logo}
             alt="Login Illustration"
             className="loginpage-leftsection-image"
           />
