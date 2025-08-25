@@ -1,9 +1,9 @@
-// src/pages/Community/CommunityPage.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import {
   fetchCommunityPosts,
   deletePost,
   fetchCategories,
+  searchCommunityPosts,
 } from "../../services/CommunityService";
 import { fetchCurrentMember } from "../../services/MemberService";
 import { fetchAcceptedFriends } from "../../services/FriendService";
@@ -26,6 +26,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import SearchIcon from "@mui/icons-material/Search";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import AddIcon from "@mui/icons-material/Add";
 import ThumbUpOutlined from "@mui/icons-material/ThumbUpRounded";
 import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
@@ -145,6 +146,34 @@ const getMemberFromPost = (p) => {
   };
 };
 
+const mergeAdjacentHighlights = (html) => {
+  if (!html || typeof html !== "string") return html;
+  const mergedEm = html.replace(/<\/em>\s*<em>/g, "");
+  const mergedMark = mergedEm.replace(/<\/mark>\s*<mark>/g, "");
+  return mergedMark;
+};
+
+const normalizeHighlightedPost = (p) => {
+  const post = p.post ?? p;
+
+  const imageList =
+    post.postImage ??
+    post.postImageDtoList ??
+    post.images ??
+    post.imageList ??
+    null;
+
+  return {
+    ...p,
+    post: {
+      ...post,
+      title: mergeAdjacentHighlights(post.title),
+      content: mergeAdjacentHighlights(post.content),
+      postImageDtoList: imageList,
+    },
+  };
+};
+
 /* -------------------- 컴포넌트 -------------------- */
 
 const CommunityPage = () => {
@@ -179,6 +208,19 @@ const CommunityPage = () => {
   const [reactionMap, setReactionMap] = useState({});
   const [reactionPickerId, setReactionPickerId] = useState(null);
 
+  // 검색
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchMode, setSearchMode] = useState(false);
+
+  // 정렬
+  const SORT_CHAIN = ["latest", "sympathy", "comments"];
+  const SORT_LABEL = {
+    latest: "최신순",
+    sympathy: "공감순",
+    comments: "댓글순",
+  };
+  const [sortKey, setSortKey] = useState("latest");
+
   /* ---------- 함수 ---------- */
 
   const getCategoryName = (p) => {
@@ -195,7 +237,15 @@ const CommunityPage = () => {
 
   const handleProfileClick = (member) => setProfileUser(member);
 
-  const jumpToPost = (postId) => {
+  const jumpToPost = async (postId) => {
+    if (searchMode) {
+      setActiveTab("전체");
+      setTabIndex(0);
+      setSearchKeyword("");
+      await reloadPosts();
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+
     const el = document.getElementById(`post-${postId}`);
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -220,7 +270,7 @@ const CommunityPage = () => {
       const ok = await deletePost(pid, token);
       if (ok) {
         await reloadPosts();
-         alert("삭제가 완료되었습니다.");
+        alert("삭제가 완료되었습니다.");
         setDeleteModalOpen(false);
         setDeleteTarget(null);
       }
@@ -295,7 +345,6 @@ const CommunityPage = () => {
     const list = Array.isArray(data) ? data : data?.content ?? [];
     setAllPosts(list);
 
-    // 좋아요 초기값 세팅
     const likeInit = {};
     const likeCntInit = {};
     list.forEach((p) => {
@@ -306,6 +355,8 @@ const CommunityPage = () => {
     });
     setLikedMap(likeInit);
     setLikeCountMap(likeCntInit);
+
+    setSearchMode(false);
   };
 
   const handlePostCreated = () => {
@@ -335,6 +386,52 @@ const CommunityPage = () => {
 
     return false;
   };
+
+  const handleSearchSubmit = async (e) => {
+    e?.preventDefault?.();
+    const keyword = searchKeyword.trim();
+
+    if (!keyword) {
+      await reloadPosts();
+      return;
+    }
+
+    try {
+      const list = await searchCommunityPosts(keyword);
+      const normalized = (Array.isArray(list) ? list : []).map(
+        normalizeHighlightedPost
+      );
+      setAllPosts(normalized);
+      setSearchMode(true);
+    } catch (err) {
+      console.error("검색 실패:", err);
+    }
+  };
+
+  const handleReset = async () => {
+    setActiveTab("전체");
+    setTabIndex(0);
+
+    if (searchKeyword) setSearchKeyword("");
+    if (searchMode) setSearchMode(false);
+
+    await reloadPosts();
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const cycleSort = () => {
+    const idx = SORT_CHAIN.indexOf(sortKey);
+    const next = SORT_CHAIN[(idx + 1) % SORT_CHAIN.length];
+    setSortKey(next);
+  };
+
+  // 정렬용 안전 getter
+  const getCreatedAt = (p) => p?.post?.createdAt ?? p?.createdAt ?? null;
+  const getCommentCount = (p) =>
+    Number(p?.commentTotal ?? p?.commentCount ?? 0);
+  const getSympathyCount = (p) =>
+    Number(p?.sympathyTotal ?? p?.sympathyCount ?? p?.likeTotal ?? 0);
 
   /* ---------- 초기 로딩 ---------- */
   useEffect(() => {
@@ -413,24 +510,37 @@ const CommunityPage = () => {
   /* ---------- 탭 필터링 ---------- */
   const filteredPosts = useMemo(() => {
     if (!allPosts?.length) return [];
-    if (activeTab === "전체") return allPosts;
 
+    let base = allPosts;
     if (activeTab === "나") {
       const mine = normalizeName(myName);
-      if (!mine) return [];
-      return allPosts.filter(
-        (p) => normalizeName(getAuthorNameFromPost(p)) === mine
-      );
+      base = mine
+        ? allPosts.filter(
+            (p) => normalizeName(getAuthorNameFromPost(p)) === mine
+          )
+        : [];
+    } else if (activeTab === "친구") {
+      if (!friendIds.length) base = [];
+      else {
+        const idSet = new Set(friendIds.map(String));
+        base = allPosts.filter((p) => idSet.has(getAuthorIdFromPost(p)));
+      }
     }
 
-    if (activeTab === "친구") {
-      if (!friendIds.length) return [];
-      const idSet = new Set(friendIds.map(String));
-      return allPosts.filter((p) => idSet.has(getAuthorIdFromPost(p)));
+    const sorted = base.slice();
+    if (sortKey === "latest") {
+      sorted.sort((a, b) => {
+        const ta = getCreatedAt(a) ? new Date(getCreatedAt(a)).getTime() : 0;
+        const tb = getCreatedAt(b) ? new Date(getCreatedAt(b)).getTime() : 0;
+        return tb - ta;
+      });
+    } else if (sortKey === "sympathy") {
+      sorted.sort((a, b) => getSympathyCount(b) - getSympathyCount(a));
+    } else if (sortKey === "comments") {
+      sorted.sort((a, b) => getCommentCount(b) - getCommentCount(a));
     }
-
-    return allPosts;
-  }, [activeTab, allPosts, myName, friendIds]);
+    return sorted;
+  }, [activeTab, allPosts, myName, friendIds, sortKey]);
 
   return (
     <div className="communitypage-container">
@@ -466,13 +576,13 @@ const CommunityPage = () => {
             sx={{
               display: "flex",
               alignItems: "center",
-              width: 200,
+              width: 150,
               borderRadius: "8px",
               backgroundColor: "#f0f2f5",
               padding: "6px",
               boxShadow: "none",
             }}
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSearchSubmit}
           >
             <InputBase
               sx={{
@@ -481,6 +591,8 @@ const CommunityPage = () => {
                 fontFamily: "Pretendard, sans-serif",
                 fontSize: "12px",
               }}
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
               placeholder="게시물 검색"
               inputProps={{ "aria-label": "search" }}
             />
@@ -488,6 +600,47 @@ const CommunityPage = () => {
               <SearchIcon />
             </IconButton>
           </Paper>
+
+          {/* 새로고침 버튼 */}
+          <IconButton
+            type="button"
+            onClick={handleReset}
+            sx={{
+              ml: -1,
+              backgroundColor: "#f0f2f5",
+              borderRadius: "8px",
+              width: 40,
+              height: 40,
+              "&:hover": { backgroundColor: "#e4e6eb" },
+            }}
+            aria-label="새로고침"
+            title="새로고침"
+          >
+            <RestartAltIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+
+          <button
+            type="button"
+            onClick={cycleSort}
+            style={{
+              marginLeft: -8,
+              backgroundColor: "#f0f2f5",
+              border: "none",
+              borderRadius: 8,
+              height: 40,
+              padding: "0 10px",
+              fontSize: 11,
+              fontWeight : 500,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            aria-label={`정렬: ${SORT_LABEL[sortKey]}`}
+            title={`정렬: ${SORT_LABEL[sortKey]}`}
+          >
+            {SORT_LABEL[sortKey]}
+          </button>
 
           <img
             src={(me?.image || me?.profileImage) ?? defaultPetPic}
@@ -561,10 +714,12 @@ const CommunityPage = () => {
                         {post.member?.name}
                       </div>
                       <div className="communitypage-post-time">
-                        {formatDistanceToNow(new Date(post.post.createdAt), {
-                          addSuffix: true,
-                          locale: ko,
-                        })}
+                        {post.post.createdAt
+                          ? formatDistanceToNow(new Date(post.post.createdAt), {
+                              addSuffix: true,
+                              locale: ko,
+                            })
+                          : "방금"}
                       </div>
                     </div>
                   </div>
@@ -574,9 +729,10 @@ const CommunityPage = () => {
                     <div className="communitypage-post-category">
                       {getCategoryName(post)}
                     </div>
-                    <div className="communitypage-post-title">
-                      {post.post.title}
-                    </div>
+                    <div
+                      className="communitypage-post-title"
+                      dangerouslySetInnerHTML={{ __html: post.post.title }}
+                    />
                   </div>
                 </div>
 
@@ -603,16 +759,23 @@ const CommunityPage = () => {
               </div>
 
               {/* 이미지 */}
-              {post.postImageDtoList?.length > 0 && (
+              {(post?.postImageDtoList?.[0]?.imageUrl ??
+                post?.post?.postImage?.[0]?.imageUrl) && (
                 <img
-                  src={post.postImageDtoList[0].imageUrl}
+                  src={
+                    post?.postImageDtoList?.[0]?.imageUrl ??
+                    post?.post?.postImage?.[0]?.imageUrl
+                  }
                   alt="게시글 이미지"
                   className="communitypage-post-main-image"
                 />
               )}
 
               {/* 본문 */}
-              <p className="communitypage-post-content">{post.post.content}</p>
+              <p
+                className="communitypage-post-content"
+                dangerouslySetInnerHTML={{ __html: post.post.content }}
+              />
 
               {/* 하단 액션바 */}
               <div className="communitypage-post-actions">
