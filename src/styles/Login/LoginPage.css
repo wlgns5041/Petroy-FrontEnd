@@ -10,7 +10,7 @@
 }
 
 .loginpage {
-    background-color: #f4f5f7;
+    background-color: #FAFAF8;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -98,17 +98,17 @@
   .loginpage-form input:hover {
     background-color: #f3f4f6;
   }
+
+  .loginpage-form input::placeholder {
+    color: #9ca3af;   
+    font-size: 12px;  
+    font-weight: 500;
+  }
   
   .loginpage-form input:focus {
     outline: none;
-    background-color: #ffffff;
-    border: 1px solid transparent; 
-    box-shadow: 0 0 0 2px #111827;
-  }
-  
-  .loginpage-form input.filled {
-    border: 1px solid #e5e7eb;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
+    border: 2px solid #000000; 
   }
 
   .loginpage-password {

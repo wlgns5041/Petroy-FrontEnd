@@ -54,19 +54,29 @@ export default function NavBar() {
 
     const fetchUnreadCount = async () => {
       try {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/notification`,
-          {
-            headers: { Authorization: `${token}` },
-          }
-        );
-        const data = await response.json();
-        const unread = (data.content || []).filter((n) => !n.read).length;
-        setUnreadCount(unread);
+        const raw = localStorage.getItem("accessToken");
+        const bearer = raw?.startsWith("Bearer ") ? raw : `Bearer ${raw}`;
+        let page = 0;
+        const size = 50; 
+        let total = 0;
+        let hasMore = true;
+
+        while (hasMore) {
+          const res = await fetch(
+            `${process.env.REACT_APP_API_URL}/notification?page=${page}&size=${size}&sort=createdAt,desc`,
+            { headers: { Authorization: bearer } }
+          );
+          const data = await res.json();
+          total += (data.content || []).filter((n) => !n.read).length;
+          hasMore = data && data.last === false; 
+          page += 1;
+        }
+        setUnreadCount(total);
       } catch (err) {
         console.error("🔔 알림 수 불러오기 실패:", err);
       }
     };
+
     fetchUnreadCount();
 
     const sse = subscribeNotification((count) => setUnreadCount(count));
@@ -125,11 +135,11 @@ export default function NavBar() {
           alignItems: "center",
           gap: 1,
           height: 44,
-          px: 1, 
-          py: 1, 
+          px: 1,
+          py: 1,
           borderRadius: 2,
-          backgroundColor: "#3a3a3a", 
-          marginBottom:0.3
+          backgroundColor: "#3a3a3a",
+          marginBottom: 0.3,
         }}
       >
         {/* 네비 아이콘: 이미지로 표시 */}

@@ -43,26 +43,50 @@ function NotificationPage() {
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
 
+  // ✅ 추가: 공통 리로드 함수 (기존 기능 변경 없음)
+  const reload = async () => {
+    try {
+      const data = await fetchNotifications();
+      setNotifications(data);
+    } catch (err) {
+      console.error("❌ 알림 로딩 실패:", err);
+      setError(err.message);
+    }
+  };
+
   useEffect(() => {
-    const eventSource = subscribeNotification();
+    const eventSource = subscribeNotification((count) => {
+      // 서비스에서 숫자 또는 data.unReadCount를 넘길 수도 있으니 안전 처리
+      const next =
+        typeof count === "number"
+          ? count
+          : count && typeof count === "object" && "unReadCount" in count
+          ? count.unReadCount
+          : 0;
+      setUnreadCount(Number(next) || 0);
+      reload(); // ✅ 카운트 갱신되면 목록 재조회
+    });
 
     eventSource.addEventListener("unReadCount", (event) => {
       console.log("📩 수신한 unreadCount:", event.data);
       const unreadCount = parseInt(event.data, 10);
-      setUnreadCount(unreadCount);
+      setUnreadCount(isNaN(unreadCount) ? 0 : unreadCount);
+
+      // ✅ 추가: 카운트 수신 시 목록 즉시 갱신
+      reload();
     });
 
     return () => {
       eventSource.close();
       window.__eventSourceInstance = null;
     };
-  }, []);
+  }, []); // 기존 유지
 
   useEffect(() => {
     const unread = (notifications || []).filter((n) => !n.read).length;
     setUnreadCount(unread);
     localStorage.setItem("unreadCount", unread);
-  }, [notifications]);
+  }, [notifications]); // 기존 유지
 
   useEffect(() => {
     const loadNotifications = async () => {
@@ -75,8 +99,8 @@ function NotificationPage() {
       }
     };
 
-    loadNotifications();
-  }, []);
+    loadNotifications(); // 기존 유지
+  }, []); // 기존 유지
 
   const markAsRead = async (noticeId) => {
     try {

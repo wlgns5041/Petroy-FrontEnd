@@ -1,28 +1,35 @@
-import './App.css';
-import { useEffect } from 'react';
-import Routing from './routes/Routing';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { subscribeNotification } from './services/NotificationService.jsx';
+import "./App.css";
+import { useEffect } from "react";
+import Routing from "./routes/Routing";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { subscribeNotification } from "./services/NotificationService.jsx";
 
 function App() {
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
 
-    if (!token) return; 
+    if (!token) return;
 
-    subscribeNotification(); 
+    subscribeNotification();
 
-    return () => {
-    };
+    return () => {};
   }, []);
 
   return (
     <div className="App">
-      <main>
-        <Routing />
-        <ToastContainer position="top-right" autoClose={5000} />
-      </main>
+      <Routing />
+      <ToastContainer
+        containerId="global-toasts"
+        position="top-right"
+        newestOnTop
+        closeOnClick={false}
+        pauseOnHover
+        draggable
+        className="toast-portal"
+        toastClassName="toast-card"
+        bodyClassName="toast-body"
+      />
     </div>
   );
 }

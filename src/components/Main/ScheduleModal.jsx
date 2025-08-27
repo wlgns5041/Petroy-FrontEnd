@@ -348,14 +348,12 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
         }),
       };
     } else {
-      requestData.selectedDates = formData.selectedDates.map((d) => d.date); // yyyy-mm-dd 형식으로 전송
+      requestData.selectedDates = formData.selectedDates.map((d) => d.date); 
     }
 
     if (formData.noticeYn) {
       requestData.noticeAt = formData.noticeAt;
     }
-
-    console.log("최종 요청 데이터:", requestData);
 
     try {
       const response = await createSchedule(requestData);

@@ -32,6 +32,34 @@
   font-family: 'Pretendard', sans-serif;
 }
 
+.toast-portal {
+  position: fixed !important;
+  top: 32px !important;        
+  right: 12px !important;       
+  z-index: 99999 !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-end;        
+  width: auto;                  
+  pointer-events: none;         
+}
+
+.toast-portal .Toastify__toast {
+  background: transparent !important; 
+  box-shadow: none !important;
+  margin-bottom: 10px !important;
+  align-self: flex-end;          
+  width: auto !important;        
+  max-width: 520px;           
+  padding: 0 !important;
+  pointer-events: auto;          
+}
+
+.toast-portal .Toastify__toast-body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
