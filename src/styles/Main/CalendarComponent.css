@@ -5,6 +5,7 @@
 
 :root{
   --week-row-h: clamp(140px, 18svh, 220px);
+  --month-body-h: clamp(560px, 80svh, 820px); 
 }
 
 .calendar{
@@ -181,7 +182,6 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   transition: background 0.3s;
   box-sizing: border-box;
-  height: 15vh;
   text-align: left;
   margin-top: 1px;
 }
@@ -192,10 +192,50 @@
   gap: 8px;
 }
 
+.calendar-days.calendar-view-week .calendar-day {
+  height: 18vh;              
+}
+
+.calendar-days.calendar-view-month .calendar-week {
+    display: flex;
+  align-items: stretch;
+  flex: 1 1 0;    
+  gap: 0;         
+  min-height: 0;          
+}
+
+.calendar-days.calendar-view-month .calendar-day {
+  display: flex;
+  flex-direction: column;
+  height: auto;    
+  min-height: 0;   
+  overflow: hidden; 
+}
+
+.calendar-days.calendar-view-month .calendar-day .calendar-day-number {
+  flex: 0 0 auto;
+  margin-bottom: 6px;
+}
+
+.calendar-days.calendar-view-month .calendar-schedule-details {
+  flex: 1 1 auto;
+  min-height: 0;       
+  overflow-y: auto;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+.calendar-days.calendar-view-month .calendar-schedule-details::-webkit-scrollbar {
+  display: none; 
+}
+
 .calendar-days.calendar-view-month {
   display: flex;
   flex-direction: column;
-  gap: 0px;
+  gap: 0;
+  height: var(--month-body-h);    
+  min-height: 0;
+  padding-bottom: 6px;
 }
 
 .calendar-days.calendar-view-week{

@@ -10,7 +10,7 @@
   }
 
   .signuppage {
-    background-color: #f4f5f7;
+    background-color: #F9F9F9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,7 +35,7 @@
   /* 좌측 로고 */
   .signuppage-leftsection {
     flex: 1;
-    background-color: #e8e9ec;
+    background-color: #E8E9EC;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,6 +66,7 @@
   .signuppage-textarea h2 {
     font-size: 20px;
     font-weight: 800;
+    color: #000000;
     margin-bottom: 6px;
     text-align: left;
     line-height: 1.4;
@@ -96,9 +97,15 @@
     transition: all 0.1s ease-in-out;
     color: #111827;
   }
+
+    .signuppage-formgroup input::placeholder {
+    color: #9CA3AF;   
+    font-size: 12px;  
+    font-weight: 500;
+  }
   
   .signuppage-formgroup input:hover {
-    background-color: #f3f4f6;
+    background-color: #E8E9EC;
   }
   
   .signuppage-formgroup input:focus {
@@ -161,7 +168,7 @@
   /* 이메일, 이름 중복체크 */
   .signuppage-checkbutton {
     padding: 12px 14px;
-    background-color: #1e293b;
+    background-color: #10B981;
     color: white;
     font-weight: 600;
     font-size: 12px;
@@ -173,7 +180,7 @@
   }
   
   .signuppage-checkbutton:hover {
-    background-color: #0f172a;
+    background-color: #2A9C76;
   }
 
   /* 실시간 안내메시지 */
@@ -300,18 +307,18 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #1e293b;
+    background-color: #10B981;
     color: #fff;
     transition: background-color 0.3s ease;
   }
   
   .signuppage-buttongroup button:hover {
-    background-color: #0f172a;
+    background-color: #2A9C76;
   }
   
   .signuppage-buttongroup button:disabled {
-    background-color: #d1d5db;
-    color: #9ca3af;
+    background-color: #E8E9EC;
+    color: #C0C0C0;
     cursor: not-allowed;
   }
 
@@ -319,7 +326,7 @@
   .signuppage-bottomtext {
     margin-top: 20px;
     font-size: 13px;
-    color: #888;
+    color: #6B7280;
     text-align: center;
   }
   
@@ -327,7 +334,7 @@
     margin-top: 12px;
     text-align: center;
     font-size: 13px;
-    color: #888;
+    color: #6B7280;
   }
   
   .signuppage-bottomtext-prompt {
@@ -337,7 +344,7 @@
   
   .signuppage-bottomtext-link {
     font-weight: 600;
-    color: #272727;
+    color: #000000;
     cursor: pointer;
     transition: color 0.2s ease;
   }

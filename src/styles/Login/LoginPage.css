@@ -10,7 +10,7 @@
 }
 
 .loginpage {
-    background-color: #FAFAF8;
+    background-color: #F9F9F9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -34,7 +34,7 @@
 
 .loginpage-leftsection {
     flex: 1;
-    background-color: #e8e9ec;
+    background-color: #E8E9EC;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,7 +55,7 @@
     flex-direction: column;
     justify-content: center;
     padding: 120px;
-    background-color: ffffff;
+    background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     gap: 8px;
@@ -67,6 +67,7 @@
     margin-bottom: 6px;
     text-align: left;
     line-height: 1.4;
+    color: #000000;
   }
   
   .loginpage-title p {
@@ -86,21 +87,22 @@
     width: 100%;
     padding: 12px 14px;
     font-size: 13px;
+    font-weight: 500;
     border-radius: 8px;
     border: none;
     background-color: #f9f9f9;
     box-sizing: border-box;
     transition: all 0.1s ease-in-out;
-    color: #111827;
+    color: #000000;
     border: 1px solid transparent;  
   }
   
   .loginpage-form input:hover {
-    background-color: #f3f4f6;
+    background-color: #E8E9EC;
   }
 
   .loginpage-form input::placeholder {
-    color: #9ca3af;   
+    color: #9CA3AF;   
     font-size: 12px;  
     font-weight: 500;
   }
@@ -147,7 +149,7 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #1e293b; 
+    background-color: #10B981; 
     color: #fff;
     transition: background-color 0.3s ease;
   }
@@ -160,22 +162,22 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #1e293b; 
+    background-color: #10B981; 
     color: #fff;
     transition: background-color 0.3s ease;
   }
   
   .loginpage-homebutton:hover {
-    background-color: #0f172a;
+    background-color: #2A9C76;
   }
 
   .loginpage-loginbutton:hover {
-    background-color: #0f172a;
+    background-color: #2A9C76;
   }
 
   .loginpage-loginbutton:disabled {
-    background-color: #d1d5db;
-    color: #9ca3af;
+    background-color: #E8E9EC;
+    color: #C0C0C0;
     cursor: not-allowed;
   }
 
@@ -183,7 +185,7 @@
     margin-top: 30px;
     text-align: center;
     font-size: 13px;
-    color: #888;
+    color: #6B7280;
   }
   
   .loginpage-signup-title {
@@ -193,7 +195,7 @@
   
   .loginpage-signup-link {
     font-weight: 600;
-    color: #272727;
+    color: #000000;
     cursor: pointer;
     transition: color 0.2s ease;
   }
@@ -259,13 +261,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #bfbfbf;
-    color: #3C1E1E;
+    background-color: #10B981;
+    color: #FFFFFF;
     transition: background-color 0.3s ease;
   }
   
   .loginpage-guest-button:hover {
-    background-color: #999;
+    background-color: #2A9C76;
   }
 
   .loginpage-error {
