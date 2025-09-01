@@ -109,8 +109,8 @@
   
   .loginpage-form input:focus {
     outline: none;
-    background-color: #f9f9f9;
-    border: 2px solid #000000; 
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px #111827;
   }
 
   .loginpage-password {
@@ -149,7 +149,7 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #10B981; 
+    background-color: #57687C; 
     color: #fff;
     transition: background-color 0.3s ease;
   }
@@ -162,17 +162,17 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #10B981; 
+    background-color: #57687C; 
     color: #fff;
     transition: background-color 0.3s ease;
   }
   
   .loginpage-homebutton:hover {
-    background-color: #2A9C76;
+    background-color: #343F4D;
   }
 
   .loginpage-loginbutton:hover {
-    background-color: #2A9C76;
+    background-color: #343F4D;
   }
 
   .loginpage-loginbutton:disabled {
@@ -261,13 +261,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #10B981;
+    background-color: #57687C;
     color: #FFFFFF;
     transition: background-color 0.3s ease;
   }
   
   .loginpage-guest-button:hover {
-    background-color: #2A9C76;
+    background-color: #343F4D;
   }
 
   .loginpage-error {

@@ -168,7 +168,7 @@
   /* 이메일, 이름 중복체크 */
   .signuppage-checkbutton {
     padding: 12px 14px;
-    background-color: #10B981;
+    background-color: #57687C;
     color: white;
     font-weight: 600;
     font-size: 12px;
@@ -180,11 +180,10 @@
   }
   
   .signuppage-checkbutton:hover {
-    background-color: #2A9C76;
+    background-color: #343F4D;
   }
 
   /* 실시간 안내메시지 */
-
   .signuppage-message.hidden {
     visibility: hidden; 
   }
@@ -307,13 +306,13 @@
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #10B981;
+    background-color: #57687C;
     color: #fff;
     transition: background-color 0.3s ease;
   }
   
   .signuppage-buttongroup button:hover {
-    background-color: #2A9C76;
+    background-color: #343F4D;
   }
   
   .signuppage-buttongroup button:disabled {

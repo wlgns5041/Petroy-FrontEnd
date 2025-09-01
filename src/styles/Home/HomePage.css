@@ -249,21 +249,21 @@ html, body {
 .homepage-textarea-title {
     font-size: 2.8rem;
     font-weight: 900;
-    color: #e58f65;
+    color: #000000;
     margin-bottom: 20px;
 }
 
 .homepage-textarea-subtitle {
     font-size: 1.6rem;
     font-weight: 700;
-    color: #555;
+    color: #000;
     margin-bottom: 15px;
 }
 
 .homepage-textarea-description {
-    font-size: 1rem;
+    font-size: 16px;
     font-weight: 500;
-    color: #777;
+    color: #6b7280;
     line-height: 1.8;
 }
 
@@ -376,12 +376,13 @@ html, body {
     box-sizing: border-box;
     display: block;
     height: 56px;
-
-    font-weight: 500;
     letter-spacing: -0.3px;
     line-height: 28px;
     text-align: center;
-    color: rgb(119, 119, 119);
+    font-size: 16px;
+    font-weight: 500;
+    color: #6b7280;
+    line-height: 1.8;
     word-break: break-all;
     margin-top: 40px;
 }
@@ -462,17 +463,18 @@ html, body {
 .homepage-middle-card-content {
     height: 10%;
     width: 100%;
-    font-weight: 500;
     line-height: 24px;
     text-align: center;
-    color: rgb(119, 119, 119);
+    font-size: 16px;
+    font-weight: 500;
+    color: #6b7280;
     margin-bottom: 15px;
     height: 50%; 
 }
 
 .homepage-middle-card-title {
-    color: rgb(218, 137, 83);
-    font-weight: 900;
+    color: #000000;
+    font-weight: 800;
     font-size: 22px;
     margin-bottom: 10px;
 }
@@ -565,7 +567,7 @@ html, body {
     text-align: center;
     color: rgb(255, 255, 255);
     text-decoration: none;
-    background-color: rgb(214, 116, 35);
+    background-color: rgb(56, 56, 56);
     border-radius: 50px;
     cursor: pointer;
     transition-property: all;
@@ -577,7 +579,7 @@ html, body {
 }
 
 .homepage-bottom-button:hover {
-    background-color: rgba(44, 42, 42, 0.8);
+    background-color: rgba(17, 16, 16, 0.8);
 }
 
 @media screen and (max-width: 768px) {
