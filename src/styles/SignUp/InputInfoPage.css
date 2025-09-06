@@ -1,112 +1,109 @@
+/* ===== 전체 레이아웃 ===== */
 .inputinfopage {
-    background-color: #F2F2F2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  background-color: #F9F9F9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .inputinfopage-container {
-    width: 30vw;
-    height: 60vh;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 30px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    text-align: center;
+  width: 100%;
+  max-width: 520px;
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 32px 32px;
 }
 
+/* ===== 타이틀 / 서브텍스트 ===== */
 .inputinfopage-title {
-    flex: 20%;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #333;
-    margin-top: 10%;
+  font-size: 1.5rem;
+  font-weight: 800;        
+  color: #000000;         
+  margin: 0 0 6px;
+  text-align: left;
 }
 
+.inputinfopage-subtext {
+  font-size: 0.95rem;
+  font-weight: 600;          
+  color: #6B7280;           
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+/* ===== 폼 ===== */
 .inputinfopage-form {
-    flex: 80%;
-    width: 100%;
-    max-width: 350px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10%;
+  width: 100%;
+}
+
+.inputinfopage-label { 
+  position: absolute;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); border: 0;
 }
 
 .inputinfopage-group {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2rem;
+  width: 100%;
+  margin-bottom: 16px;
 }
 
-.inputinfopage-label {
-    font-weight: 600;
-    color: #000;
-    text-align: left;
-    margin-bottom: 0.5rem;
-}
-
+/* 인풋 */
 .inputinfopage-input {
-    width: 100%;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: #e8e8e8;
-    box-sizing: border-box;
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid #9CA3AF;  
+  background: #F8FAFC;
+  font-size: 16px;
+  color: #111827;
+  outline: none;
+  transition: box-shadow .2s ease, border-color .2s ease;
 }
 
+.inputinfopage-input::placeholder {
+  color: #9CA3AF;             
+  font-weight: 600;           
+}
+
+.inputinfopage-input:focus {
+  border-color: #00CBA8;
+  box-shadow: 0 0 0 3px rgba(0,203,168,0.25);
+}
+
+/* ===== 버튼 ===== */
 .inputinfopage-buttongroup {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 350px;
-    margin-top: 1.5rem;
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.inputinfopage-cancelbutton,
+.inputinfopage-submitbutton {
+  flex: 1;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;         
+  transition: transform .05s ease, filter .15s ease;
 }
 
 .inputinfopage-cancelbutton {
-    flex: 1;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.8s ease;
-    text-align: center;
-    padding: 15px;
-    font-size: 14px;
-    background-color: #5c5c5c;
-    color: #ffffff;
-    margin-right: 10px;
-    font-weight: 700;
+  background-color: #3A3A3A;  
+  color: #FFFFFF;
 }
-
-.inputinfopage-cancelbutton:hover {
-    background-color: #333333;
-}
+.inputinfopage-cancelbutton:hover { filter: brightness(1.05); }
 
 .inputinfopage-submitbutton {
-    flex: 1;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.8s ease;
-    text-align: center;
-    padding: 15px;
-    font-size: 14px;
-    background-color: #57687c;
-    color: #ffffff;
-    font-weight: 700;
+  background-color: #00CBA8;  
+  color: #FFFFFF;
 }
+.inputinfopage-submitbutton:hover { filter: brightness(1.05); }
 
-.inputinfopage-submitbutton:hover {
-    background-color: #2C3E50;
-}
+.inputinfopage-cancelbutton:active,
+.inputinfopage-submitbutton:active { transform: translateY(1px); }

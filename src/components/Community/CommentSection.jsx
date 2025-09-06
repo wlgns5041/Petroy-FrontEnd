@@ -30,19 +30,19 @@ const CommentSection = ({ postId, open, onClose }) => {
     // 더미 데이터
     setComments([
       {
-        memberName: "김지훈",
+        memberName: "임혁",
         profileImage: defaultProfile,
         content: "첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 ",
         createdAt: Date.now() - 42 * 60 * 1000, // 42분 전
       },
       {
-        memberName: "조기환",
+        memberName: "한찬우",
         profileImage: defaultProfile,
         content: "반갑습니다 😀",
         createdAt: Date.now() - 5 * 60 * 1000, // 5분 전
       },
       {
-        memberName: "손지민",
+        memberName: "이호연",
         profileImage: defaultProfile,
         content: "테스트",
         createdAt: Date.now() - 70 * 1000, // 1분 전
