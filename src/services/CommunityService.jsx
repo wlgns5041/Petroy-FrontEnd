@@ -106,38 +106,6 @@ export const deletePost = async (postId, token) => {
   }
 };
 
-export const fetchComments = async (postId) => {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/community/posts/${postId}/comments`
-    );
-    return response.ok ? await response.json() : [];
-  } catch (err) {
-    console.error("댓글 조회 실패:", err);
-    return [];
-  }
-};
-
-export const createComment = async (postId, content, token) => {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/community/posts/${postId}/comments`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content }),
-      }
-    );
-    return response.ok;
-  } catch (err) {
-    console.error("댓글 작성 실패:", err);
-    return false;
-  }
-};
-
 // 게시글 검색
 export const searchCommunityPosts = async (keyword) => {
   if (!keyword || !keyword.trim()) return [];
@@ -198,5 +166,93 @@ export const fetchCommunityPostsSorted = async ({
   } catch (err) {
     console.error("정렬 조회 오류:", err);
     return [];
+  }
+};
+
+// 댓글 등록
+export const createComment = async (postId, content, token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/comments`, {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ postId, content }),
+    });
+
+    if (!response.ok) return null;
+
+    return await response.json(); 
+  } catch (err) {
+    console.error("댓글 작성 실패:", err);
+    return null;
+  }
+};
+
+// 댓글 수정
+export const updateComment = async (commentId, content, token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/comments/${commentId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ content }), 
+    });
+    return response.ok;
+  } catch (err) {
+    console.error("댓글 수정 실패:", err);
+    return false;
+  }
+};
+
+// 댓글 삭제
+export const deleteComment = async (commentId, token) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/community/comments/${commentId}`,
+      {
+        method: "DELETE",
+        headers: { Authorization: token },
+      }
+    );
+    return response.ok;
+  } catch (err) {
+    console.error("댓글 삭제 실패:", err);
+    return false;
+  }
+};
+
+// 공감 등록, 변경
+export const registerSympathy = async (postId, type, token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/sympathy/${postId}`, {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ type }),
+    });
+    return response.ok;
+  } catch (err) {
+    console.error("공감 등록/변경 실패:", err);
+    return false;
+  }
+};
+
+// 공감 취소
+export const deleteSympathy = async (postId, token) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/community/sympathy/${postId}`, {
+      method: "DELETE",
+      headers: { Authorization: token },
+    });
+    return response.ok;
+  } catch (err) {
+    console.error("공감 취소 실패:", err);
+    return false;
   }
 };

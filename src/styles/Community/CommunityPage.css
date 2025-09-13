@@ -377,10 +377,6 @@ body { overflow-y: scroll; }
   vertical-align: middle;
 }
 
-.communitypage-reaction-item:hover .MuiSvgIcon-root {
-  color: #ff5a3c;
-}
-
 .communitypage-reaction-label { 
   white-space: nowrap; 
 }

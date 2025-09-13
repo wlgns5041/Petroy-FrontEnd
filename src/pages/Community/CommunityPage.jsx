@@ -4,6 +4,8 @@ import {
   deletePost,
   fetchCategories,
   searchCommunityPosts,
+  registerSympathy,
+  deleteSympathy,
 } from "../../services/CommunityService";
 import { fetchCurrentMember } from "../../services/MemberService";
 import { fetchAcceptedFriends } from "../../services/FriendService";
@@ -32,7 +34,7 @@ import ThumbUpOutlined from "@mui/icons-material/ThumbUpRounded";
 import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVerySatisfiedRounded";
 import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
 import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissatisfiedRounded";
-import SentimentVeryDissatisfiedRoundedIcon from "@mui/icons-material/SentimentVeryDissatisfiedRounded";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 
 /* -------------------- 유틸 -------------------- */
 
@@ -259,6 +261,7 @@ const CommunityPage = () => {
   const openDeleteModal = (post) => {
     setDeleteTarget(post);
     setDeleteModalOpen(true);
+    setMenuOpenIndex(null);
   };
 
   const confirmDelete = async () => {
@@ -282,54 +285,55 @@ const CommunityPage = () => {
   const REACTION_OPTIONS = [
     { key: "LIKE", label: "좋아요", icon: <ThumbUpOutlined /> },
     {
-      key: "BEST",
-      label: "최고예요",
+      key: "AWESOME",
+      label: "멋져요",
       icon: <SentimentVerySatisfiedRoundedIcon />,
     },
     { key: "FUNNY", label: "웃겨요", icon: <SentimentSatisfiedRoundedIcon /> },
     { key: "SAD", label: "슬퍼요", icon: <SentimentDissatisfiedRoundedIcon /> },
-    {
-      key: "ANGRY",
-      label: "화나요",
-      icon: <SentimentVeryDissatisfiedRoundedIcon />,
-    },
+    { key: "USEFUL", label: "유용해요", icon: <LightbulbOutlinedIcon /> },
   ];
 
-  const hasReacted = (pid) => Boolean(reactionMap[pid]);
-
   const onHeartClick = (pid) => {
-    if (reactionPickerId === pid) {
-      setReactionPickerId(null);
-      return;
-    }
-
-    if (hasReacted(pid)) {
-      setReactionMap((prev) => {
-        const next = { ...prev };
-        delete next[pid];
-        return next;
-      });
-      setLikedMap((prev) => ({ ...prev, [pid]: false }));
-      setLikeCountMap((prev) => ({
-        ...prev,
-        [pid]: Math.max((prev[pid] ?? 1) - 1, 0),
-      }));
-      setReactionPickerId(null);
-    } else {
-      setReactionPickerId(pid);
-    }
+    // 하트 누르면 그냥 말풍선만 열기/닫기
+    setReactionPickerId((prev) => (prev === pid ? null : pid));
   };
 
-  const onSelectReaction = (pid, key) => {
-    const wasReacted = hasReacted(pid);
+  const onSelectReaction = async (pid, key) => {
+    const token = localStorage.getItem("accessToken");
+    const current = reactionMap[pid];
 
-    setReactionMap((prev) => ({ ...prev, [pid]: key }));
-    setLikedMap((prev) => ({ ...prev, [pid]: true }));
-
-    if (!wasReacted) {
-      setLikeCountMap((prev) => ({ ...prev, [pid]: (prev[pid] ?? 0) + 1 }));
+    if (current === key) {
+      // 같은 공감을 다시 누르면 → 해제
+      const ok = await deleteSympathy(pid, token);
+      if (ok) {
+        setReactionMap((prev) => {
+          const next = { ...prev };
+          delete next[pid];
+          return next;
+        });
+        setLikedMap((prev) => ({ ...prev, [pid]: false }));
+        setLikeCountMap((prev) => ({
+          ...prev,
+          [pid]: Math.max((prev[pid] ?? 1) - 1, 0),
+        }));
+      }
+    } else {
+      // 새로운 공감 선택 → 등록/변경
+      const ok = await registerSympathy(pid, key, token);
+      if (ok) {
+        setReactionMap((prev) => ({ ...prev, [pid]: key }));
+        setLikedMap((prev) => ({ ...prev, [pid]: true }));
+        if (!current) {
+          setLikeCountMap((prev) => ({
+            ...prev,
+            [pid]: (prev[pid] ?? 0) + 1,
+          }));
+        }
+      }
     }
-    setReactionPickerId(null);
+
+    setReactionPickerId(null); // 선택 후 말풍선 닫기
   };
 
   // 북마크 토글 함수
@@ -367,6 +371,7 @@ const CommunityPage = () => {
   const handleEdit = (post) => {
     setSelectedPost(post);
     setEditModalOpen(true);
+    setMenuOpenIndex(null);
   };
 
   const handleEditSuccess = () => {
@@ -492,20 +497,32 @@ const CommunityPage = () => {
   }, []);
 
   useEffect(() => {
-    if (reactionPickerId == null) return;
     const onDocClick = (e) => {
-      // 말풍선/하트 영역 밖 클릭 시 닫기
       const target = e.target;
-      if (!target.closest) return setReactionPickerId(null);
-      if (
-        !target.closest(`#post-${reactionPickerId} .communitypage-like-area`)
-      ) {
-        setReactionPickerId(null);
+
+      if (reactionPickerId != null) {
+        if (
+          !target.closest?.(
+            `#post-${reactionPickerId} .communitypage-like-area`
+          )
+        ) {
+          setReactionPickerId(null);
+        }
+      }
+
+      if (menuOpenIndex != null) {
+        if (!target.closest?.(".communitypage-post-menu")) {
+          setMenuOpenIndex(null);
+        }
       }
     };
-    document.addEventListener("click", onDocClick);
+
+    if (reactionPickerId != null || menuOpenIndex != null) {
+      document.addEventListener("click", onDocClick);
+    }
+
     return () => document.removeEventListener("click", onDocClick);
-  }, [reactionPickerId]);
+  }, [reactionPickerId, menuOpenIndex]);
 
   /* ---------- 탭 필터링 ---------- */
   const filteredPosts = useMemo(() => {
@@ -630,7 +647,7 @@ const CommunityPage = () => {
               height: 40,
               padding: "0 10px",
               fontSize: 11,
-              fontWeight : 500,
+              fontWeight: 500,
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
@@ -790,14 +807,14 @@ const CommunityPage = () => {
                       className={`communitypage-action-btn ${
                         likedMap[pid] ? "is-liked" : ""
                       }`}
-                      aria-label="좋아요"
+                      aria-label="공감"
                       onClick={() => onHeartClick(pid)}
                       title={
                         reactionMap[pid]
                           ? REACTION_OPTIONS.find(
                               (o) => o.key === reactionMap[pid]
                             )?.label
-                          : "좋아요"
+                          : "공감"
                       }
                     >
                       {likedMap[pid] ? (

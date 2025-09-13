@@ -1,14 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import "../../styles/Community/CommentSection.css";
 import defaultProfile from "../../assets/images/DefaultImage.png";
 
+import {
+  createComment,
+  updateComment,
+  deleteComment,
+} from "../../services/CommunityService";
+
 const CommentSection = ({ postId, open, onClose }) => {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [menuOpenId, setMenuOpenId] = useState(null);
   const inputRef = useRef(null);
+
+  const token = localStorage.getItem("accessToken");
 
   const getCreatedAt = (c) =>
     c?.createdAt ?? c?.created_at ?? c?.createdDate ?? c?.created ?? null;
@@ -17,7 +28,7 @@ const CommentSection = ({ postId, open, onClose }) => {
     if (!ts) return "";
     try {
       return formatDistanceToNow(new Date(ts), {
-        addSuffix: true,  
+        addSuffix: true,
         locale: ko,
       });
     } catch {
@@ -27,29 +38,7 @@ const CommentSection = ({ postId, open, onClose }) => {
 
   useEffect(() => {
     if (!open) return;
-    // 더미 데이터
-    setComments([
-      {
-        memberName: "임혁",
-        profileImage: defaultProfile,
-        content: "첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 첫 번째 댓글 ",
-        createdAt: Date.now() - 42 * 60 * 1000, // 42분 전
-      },
-      {
-        memberName: "한찬우",
-        profileImage: defaultProfile,
-        content: "반갑습니다 😀",
-        createdAt: Date.now() - 5 * 60 * 1000, // 5분 전
-      },
-      {
-        memberName: "이호연",
-        profileImage: defaultProfile,
-        content: "테스트",
-        createdAt: Date.now() - 70 * 1000, // 1분 전
-      },
-    ]);
 
-    // 포커스 & ESC 닫기
     const t = setTimeout(() => inputRef.current?.focus(), 120);
     const onKey = (e) => e.key === "Escape" && onClose?.();
     window.addEventListener("keydown", onKey);
@@ -59,22 +48,68 @@ const CommentSection = ({ postId, open, onClose }) => {
     };
   }, [open, postId, onClose]);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    if (menuOpenId == null) return;
+
+    const onDocClick = (e) => {
+      const target = e.target;
+      if (!target.closest(".comment-menu")) {
+        setMenuOpenId(null);
+      }
+    };
+
+    document.addEventListener("click", onDocClick);
+    return () => document.removeEventListener("click", onDocClick);
+  }, [menuOpenId]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const val = content.trim();
     if (!val) return;
 
-    setComments((prev) => [
-      ...prev,
-      {
-        memberName: "나",
-        profileImage: defaultProfile,
-        content: val,
-        createdAt: Date.now(),
-      },
-    ]);
-    setContent("");
+    if (editingId) {
+      // 수정
+      const ok = await updateComment(editingId, val, token);
+      if (ok) {
+        setComments((prev) =>
+          prev.map((c) =>
+            c.commentId === editingId ? { ...c, content: val } : c
+          )
+        );
+        setEditingId(null);
+        setContent("");
+      }
+    } else {
+      // 등록
+      const ok = await createComment(postId, val, token);
+      if (ok) {
+        const newComment = {
+          commentId: Date.now(),
+          memberName: "나",
+          profileImage: defaultProfile,
+          content: val,
+          createdAt: new Date().toISOString(),
+        };
+        setComments((prev) => [...prev, newComment]);
+        setContent("");
+      }
+    }
     inputRef.current?.focus();
+  };
+
+  const handleDelete = async (commentId) => {
+    const ok = await deleteComment(commentId, token);
+    if (ok) {
+      setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+    }
+    setMenuOpenId(null);
+  };
+
+  const handleEditStart = (comment) => {
+    setEditingId(comment.commentId);
+    setContent(comment.content);
+    inputRef.current?.focus();
+    setMenuOpenId(null);
   };
 
   return (
@@ -108,24 +143,74 @@ const CommentSection = ({ postId, open, onClose }) => {
             </div>
           ) : (
             <ul className="comment-sheet-list">
-              {comments.map((c, i) => (
-                <li key={i} className="comment-sheet-item">
+              {comments.map((c) => (
+                <li
+                  key={c.commentId}
+                  className={`comment-sheet-item ${
+                    editingId === c.commentId ? "editing" : ""
+                  }`}
+                >
                   <img
                     src={c.profileImage || defaultProfile}
                     alt=""
                     className="comment-sheet-avatar"
                   />
                   <div className="comment-sheet-main">
-                    <div className="comment-sheet-meta">
-                      <span className="comment-sheet-name">{c.memberName}</span>
-                      {getCreatedAt(c) && (
-                        <>
+                    <div className="comment-sheet-header-row">
+                      <div className="comment-sheet-meta">
+                        <span className="comment-sheet-name">
+                          {c.memberName}
+                        </span>
+                        {getCreatedAt(c) && (
                           <span className="comment-sheet-time">
                             {timeAgo(getCreatedAt(c))}
                           </span>
-                        </>
-                      )}
+                        )}
+                      </div>
+
+                      {/* ... 버튼 */}
+                      <div className="comment-menu">
+                        <button
+                          className="comment-menu-button"
+                          onClick={() =>
+                            setMenuOpenId((prev) =>
+                              prev === c.commentId ? null : c.commentId
+                            )
+                          }
+                          aria-label="댓글 메뉴"
+                        >
+                          <MoreHorizIcon fontSize="small" />
+                        </button>
+                        {menuOpenId === c.commentId && (
+                          <div className="comment-menu-dropdown">
+                            {editingId === c.commentId ? (
+                              <button
+                                onClick={() => {
+                                  setEditingId(null);
+                                  setContent("");
+                                  setMenuOpenId(null);
+                                }}
+                              >
+                                수정취소
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => {
+                                  handleEditStart(c);
+                                  setMenuOpenId(null);
+                                }}
+                              >
+                                수정
+                              </button>
+                            )}
+                            <button onClick={() => handleDelete(c.commentId)}>
+                              삭제
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
+
                     <div className="comment-sheet-text">{c.content}</div>
                   </div>
                 </li>
@@ -144,7 +229,7 @@ const CommentSection = ({ postId, open, onClose }) => {
               className="comment-sheet-input"
             />
             <button type="submit" className="comment-sheet-submit">
-              등록
+              {editingId ? "수정" : "등록"}
             </button>
           </form>
         </footer>
