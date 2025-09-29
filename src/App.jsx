@@ -1,35 +1,69 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Routing from "./routes/Routing";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { subscribeNotification } from "./services/NotificationService.jsx";
+import SplashScreen from "./pages/SplashScreen.jsx";
+import { AnimatePresence, motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const location = useLocation(); 
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 2000); 
+      return () => clearTimeout(timer);
+    } else {
+      setShowSplash(false);
+    }
+  }, [location.pathname]);
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-
     if (!token) return;
-
     subscribeNotification();
-
-    return () => {};
   }, []);
 
   return (
     <div className="App">
-      <Routing />
-      <ToastContainer
-        containerId="global-toasts"
-        position="top-right"
-        newestOnTop
-        closeOnClick={false}
-        pauseOnHover
-        draggable
-        className="toast-portal"
-        toastClassName="toast-card"
-        bodyClassName="toast-body"
-      />
+      <AnimatePresence mode="wait">
+        {showSplash && location.pathname === "/" ? (
+          <motion.div
+            key="splash"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0 }}
+          >
+            <SplashScreen />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="routing"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+          >
+            <Routing />
+            <ToastContainer
+              containerId="global-toasts"
+              position="top-right"
+              newestOnTop
+              closeOnClick={false}
+              pauseOnHover
+              draggable
+              className="toast-portal"
+              toastClassName="toast-card"
+              bodyClassName="toast-body"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -10,10 +10,15 @@ import PetPage from "../pages/Pet/PetPage.jsx";
 import FriendPage from "../pages/Friend/FriendPage.jsx";
 import CommunityPage from "../pages/Community/CommunityPage.jsx";
 import NotificationPage from "../pages/Notification/NotificationPage.jsx";
+import SplashScreen from "../pages/SplashScreen.jsx";
 
 const Routing = () => {
   return (
     <Routes>
+
+      {/* 스플래시 */}
+      <Route path="/splash" element={<SplashScreen />} />
+      
       {/* NavBar 없는 라우트 */}
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />

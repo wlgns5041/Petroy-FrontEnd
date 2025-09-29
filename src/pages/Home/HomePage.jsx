@@ -1,79 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Lottie from "lottie-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Home/HomePage.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import lottie1 from "../../assets/images/lottie1.json";
+import lottie2 from "../../assets/images/lottie2.json";
+import lottie3 from "../../assets/images/lottie3.json";
 
 function HomePage() {
   const navigate = useNavigate();
   const [activeSlide, setActiveSlide] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const timerRef = useRef(null);
 
   const slides = [
     {
       id: 0,
-      image: require("../../assets/images/home1.jpg"),
+      lottie: lottie2,
       title: "펫토리,",
       subtitle: "반려동물의 일상과 관리를 한 번에",
     },
     {
       id: 1,
-      image: require("../../assets/images/home2.jpg"),
-      title: "안전한 서비스,",
+      lottie: lottie3,
+      title: "쉽고 간편한 관리,",
       subtitle: "반려동물 관리를 위한 최고의 선택",
     },
     {
       id: 2,
-      image: require("../../assets/images/home3.jpg"),
-      title: "쉽고 간편한 관리,",
-      subtitle: "당신의 펫 라이프를 지원합니다",
+      lottie: lottie1,
+      title: "함께하는 커뮤니티,",
+      subtitle: "반려동물과 사람을 이어주는 특별한 인연",
     },
   ];
 
-  const middleSlides = [
-  {
-    id: 0,
-    image: require("../../assets/images/calendar.png"),
-    title: "캘린더 관리",
-    subtitle: "일정을 등록하고 반려동물을 손쉽게 관리하세요",
-  },
-  {
-    id: 1,
-    image: require("../../assets/images/care.jpg"),
-    title: "돌보미 기능",
-    subtitle: "믿을 수 있는 돌보미와 함께\n반려동물을 안전하게 케어하세요",
-  },
-  {
-    id: 2,
-    image: require("../../assets/images/sns.png"),
-    title: "커뮤니티",
-    subtitle: "반려동물에 대한 정보를 공유하고 소통하며\n새로운 인연을 만들어 보세요",
-  },
-];
+  const loginWithKakao = () => {
+    if (window.Kakao) {
+      window.Kakao.Auth.authorize({
+        redirectUri: `${process.env.REACT_APP_API_URL}/oauth/kakao/callback`,
+      });
+    } else {
+      console.error("Kakao SDK를 로드하지 못했습니다.");
+    }
+  };
 
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      easing: "ease-in-out",
-      once: true,
-      offset: 120,
-    });
-  }, []);
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      handleSlideChange((activeSlide + 1) % slides.length);
-    }, 5000);
+    timerRef.current = setTimeout(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timerRef.current);
   }, [activeSlide, slides.length]);
 
-  const handleSlideChange = (index) => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setActiveSlide(index);
-      setIsAnimating(false);
-    }, 800);
+  const handleBulletClick = (index) => {
+    setActiveSlide(index);
   };
 
   const handleLoginClick = () => navigate("/login");
@@ -101,76 +85,108 @@ function HomePage() {
 
   return (
     <div className="homepage-container">
-      <header className="homepage-header" data-aos="fade-down">
-        <h1 className="homepage-logo">PETORY</h1>
-        <div className="homepage-button-group">
-          <button className="homepage-button" onClick={handleLoginClick}>
-            로그인
-          </button>
-          <button className="homepage-button" onClick={handleSignUpClick}>
-            회원가입
-          </button>
-        </div>
-      </header>
-
       <div className="homepage-top" data-aos="fade-up">
         <div className="homepage-top-box">
           <div className="homepage-content">
-            <div className="homepage-controls">
-              <div className="homepage-slides">
-                <div className="homepage-pagination">
-                  <span className="homepage-pagination-current">
-                    {activeSlide + 1}
-                  </span>
-                  <span className="homepage-pagination-total">
-                    {slides.length}
-                  </span>
-                </div>
-                <div className="homepage-progress">
-                  <span className="homepage-bar"></span>
-                </div>
-              </div>
-              <div
-                className={`homepage-textarea fade ${
-                  isAnimating ? "fade-out" : "fade-in"
-                }`}
-              >
-                <h1 className="homepage-textarea-title">
-                  {slides[activeSlide].title}
-                </h1>
-                <h2 className="homepage-textarea-subtitle">
-                  {slides[activeSlide].subtitle}
-                </h2>
-                <p className="homepage-textarea-description">
-                  반려동물을 위한, 반려동물의 삶을 더 쉽고
-                  <br />
-                  간단하게 관리해보세요
-                </p>
-              </div>
-            </div>
-            <div
-              className={`homepage-slider fade ${
-                isAnimating ? "fade-out" : "fade-in"
-              }`}
-            >
-              <img
-                className="homepage-slider-image"
-                src={slides[activeSlide].image}
-                alt={`Slide ${activeSlide + 1}`}
-              />
-            </div>
-          </div>
+            <div className="homepage-left">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="homepage-textarea"
+                >
+                  <h1 className="homepage-textarea-title">
+                    {slides[activeSlide].title}
+                  </h1>
+                  <h2 className="homepage-textarea-subtitle">
+                    {slides[activeSlide].subtitle}
+                  </h2>
+                </motion.div>
+              </AnimatePresence>
 
-          <div className="homepage-bullets-wrap">
-            {slides.map((slide, index) => (
-              <span
-                key={slide.id}
-                className={`homepage-bullets ${
-                  activeSlide === index ? "homepage-bullets-on" : ""
-                }`}
-                onClick={() => handleSlideChange(index)}
-              ></span>
-            ))}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="homepage-slider"
+                >
+                  <Lottie
+                    animationData={slides[activeSlide].lottie}
+                    loop
+                    style={{ width: 400, height: 400 }}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="homepage-bullets-wrap">
+                {slides.map((slide, index) => (
+                  <span
+                    key={slide.id}
+                    className={`homepage-bullets ${
+                      activeSlide === index ? "homepage-bullets-on" : ""
+                    }`}
+                    onClick={() => handleBulletClick(index)}
+                  ></span>
+                ))}
+              </div>
+            </div>
+
+            <div className="homepage-right">
+              <div className="homepage-logo-box">
+                <div className="homepage-logo-wrapper">
+                  <img
+                    src={require("../../assets/icons/icon.png")}
+                    alt="Petory Logo"
+                    className="homepage-logo-icon"
+                  />
+                </div>
+                <h1 className="homepage-logo-text">PETORY</h1>
+              </div>
+
+              <div className="homepage-right-buttons">
+                <div className="homepage-row">
+                  <button className="btn-login" onClick={handleLoginClick}>
+                    로그인
+                  </button>
+                  <button className="btn-signup" onClick={handleSignUpClick}>
+                    회원가입
+                  </button>
+                </div>
+
+                <div className="homepage-sns">
+                  <div className="homepage-sns-title">
+                    <hr />
+                    <span>SNS 로그인</span>
+                    <hr />
+                  </div>
+
+                  <div className="homepage-sns-buttons">
+                    <button
+                      type="button"
+                      onClick={loginWithKakao}
+                      className="homepage-kakao-button"
+                    >
+                      <RiKakaoTalkFill size={18} color="#191919" />
+                      <span>카카오 로그인</span>
+                    </button>
+                    <button type="button" className="homepage-guest-button">
+                      <img
+                        src={require("../../assets/icons/my-icon.png")}
+                        alt="게스트 아이콘"
+                        className="homepage-guest-icon"
+                      />
+                      <span>게스트 로그인</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -242,49 +258,58 @@ function HomePage() {
           </button>
         </div>
       </div>
-<div className="onboarding">
-  {/* 불릿 */}
-  <div className="onboarding-bullets">
-    {middleSlides.map((_, index) => (
-      <span
-        key={index}
-        className={activeSlide === index ? "active" : ""}
-        onClick={() => setActiveSlide(index)}
-      ></span>
-    ))}
-  </div>
 
-  {/* 이미지 */}
-<div className="onboarding-image-wrapper">
-  <img
-    key={middleSlides[activeSlide].id}
-    src={middleSlides[activeSlide].image}
-    alt={middleSlides[activeSlide].title}
-    className="active"
-  />
-</div>
+      <div className="onboarding">
+        <div className="onboarding-logo-box">
+          <div className="onboarding-logo-wrapper">
+            <img
+              src={require("../../assets/icons/icon.png")}
+              alt="Petory Logo"
+              className="onboarding-logo-icon"
+            />
+          </div>
+          <h1 className="onboarding-logo-text">PETORY</h1>
+        </div>
 
-  {/* 텍스트 */}
-  <h2 className="onboarding-title">{middleSlides[activeSlide].title}</h2>
-  <p className="onboarding-subtitle">
-    {middleSlides[activeSlide].subtitle.split("\n").map((line, i) => (
-      <span key={i}>
-        {line}
-        <br />
-      </span>
-    ))}
-  </p>
+        <div className="onboarding-buttons">
+          <div className="onboarding-row">
+            <button className="btn-login" onClick={handleLoginClick}>
+              로그인
+            </button>
+            <button className="btn-signup" onClick={handleSignUpClick}>
+              회원가입
+            </button>
+          </div>
+        </div>
 
-  {/* 버튼 */}
-  <div className="onboarding-buttons">
-    <div className="onboarding-row">
-      <button className="btn-login">로그인</button>
-      <button className="btn-signup">회원가입</button>
-    </div>
-    <button className="btn-kakao">카카오 로그인</button>
-    <button className="btn-guest">게스트 로그인</button>
-  </div>
-</div>
+        <div className="onboarding-sns">
+          <div className="onboarding-sns-title">
+            <hr />
+            <span>SNS 로그인</span>
+            <hr />
+          </div>
+
+          <div className="onboarding-buttons">
+            <button
+              type="button"
+              className="homepage-kakao-button"
+              onClick={loginWithKakao}
+            >
+              <RiKakaoTalkFill size={18} color="#191919" />
+              <span>카카오 로그인</span>
+            </button>
+
+            <button type="button" className="homepage-guest-button">
+              <img
+                src={require("../../assets/icons/my-icon.png")}
+                alt="게스트 아이콘"
+                className="homepage-guest-icon"
+              />
+              <span>게스트 로그인</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
