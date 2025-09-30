@@ -10,25 +10,29 @@ import { useLocation } from "react-router-dom";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
-  const location = useLocation(); 
+  const location = useLocation();
 
   useEffect(() => {
     const setAppHeight = () => {
+      const appHeight = window.visualViewport?.height || window.innerHeight;
       document.documentElement.style.setProperty(
         "--app-height",
-        `${window.innerHeight}px`
+        `${appHeight}px`
       );
     };
-    window.addEventListener("resize", setAppHeight);
+
     setAppHeight();
-    return () => window.removeEventListener("resize", setAppHeight);
+    window.visualViewport?.addEventListener("resize", setAppHeight);
+    return () => {
+      window.visualViewport?.removeEventListener("resize", setAppHeight);
+    };
   }, []);
 
   useEffect(() => {
     if (location.pathname === "/") {
       const timer = setTimeout(() => {
         setShowSplash(false);
-      }, 2000); 
+      }, 2000);
       return () => clearTimeout(timer);
     } else {
       setShowSplash(false);

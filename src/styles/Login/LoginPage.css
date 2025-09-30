@@ -79,7 +79,7 @@
   }
   
   .loginpage-form input:hover {
-    background-color: #E8E9EC;
+    background-color: #f3f4f6;
   }
 
   .loginpage-form input::placeholder {
@@ -242,7 +242,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #E8E9EC;
+    background-color: #F9F9F9;
     color: #000000;
     transition: background-color 0.5s ease;
   }
@@ -263,3 +263,106 @@
     font-weight: 500;
     color: #ff0000;
   }
+
+@media screen and (max-width: 768px) {
+  .loginpage {
+    height: 100dvh; 
+  }
+
+  .loginpage-container {
+    width: 100%;         
+    height: auto;        
+    min-height: 100%;    
+    border-radius: 0;    
+    box-shadow: none;    
+    padding: 20px;       
+  }
+
+  .loginpage-section {
+    padding: 24px;       
+    border-radius: 12px;
+    box-shadow: none;   
+  }
+
+  .loginpage-title h2 {
+    font-size: 14px;
+  }
+
+  .loginpage-title p {
+    font-size: 10px;
+    margin-bottom: 20px;
+  }
+
+  .loginpage-form input {
+    font-size: 10px;
+  }
+
+  .loginpage-form input::placeholder {
+    font-size: 10px;  
+  }
+
+  .loginpage-button {
+    flex-direction: row; 
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .loginpage-homebutton,
+  .loginpage-loginbutton {
+    width: 100%;
+    font-size: 12px;
+  }
+
+  .loginpage-signup-wrapper {
+    margin-top: 20px;
+  }
+  
+  .loginpage-signup-title {
+    margin-right: 8px;
+    font-size: 11px;
+    cursor: default; 
+  }
+
+  .loginpage-signup-link {
+    font-weight: 600;
+    font-size: 11px;
+    color: #000000;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .loginpage-signup-link:hover {
+    color: #555;
+  }
+  
+  .loginpage-sns-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0 20px;
+    font-size: 10px;
+    color: #6b7280;
+  }
+  
+  .loginpage-sns-title hr {
+    flex: 1;
+    height: 1px;
+    background-color: #e5e7eb;
+    border: none;
+  }
+  
+  .loginpage-sns-buttons {
+    flex-direction: column; 
+    gap: 12px;
+  }
+
+  .loginpage-kakao-button,
+  .loginpage-guest-button {
+    flex: none;    
+    padding: 12px 0;
+    border: none;   
+    font-size: 12px; 
+    transition: background-color 0.5s ease;
+  }
+}

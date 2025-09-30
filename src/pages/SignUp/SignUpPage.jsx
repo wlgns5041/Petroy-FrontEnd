@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SignUp/SignUpPage.css";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import {
   FaCheck,
   FaTimes,
@@ -15,6 +15,16 @@ import {
 } from "../../services/MemberService";
 
 function SignUpPage() {
+  function setAppHeight() {
+    document.documentElement.style.setProperty(
+      "--app-height",
+      `${window.innerHeight}px`
+    );
+  }
+
+  window.addEventListener("resize", setAppHeight);
+  setAppHeight();
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -39,6 +49,10 @@ function SignUpPage() {
     age: false,
     marketing: false,
   });
+
+  const [agreementsOpen, setAgreementsOpen] = useState(false);
+
+  const toggleAgreements = () => setAgreementsOpen(!agreementsOpen);
 
   const allRequiredAgreed =
     agreements.terms && agreements.privacy && agreements.age;
@@ -151,6 +165,12 @@ function SignUpPage() {
     const { name, checked } = e.target;
     setAgreements((prev) => ({ ...prev, [name]: checked }));
   };
+
+  const allChecked =
+    agreements.terms &&
+    agreements.privacy &&
+    agreements.age &&
+    agreements.marketing;
 
   const handleCheckEmail = async () => {
     if (!formData.email) {
@@ -447,43 +467,76 @@ function SignUpPage() {
               </div>
             </div>
 
-            <div className="signuppage-agreements">
-              <label className="agreement-item">
-                <input
-                  type="checkbox"
-                  name="terms"
-                  checked={agreements.terms}
-                  onChange={handleAgreementChange}
-                />
-                (필수) 이용약관 동의
-              </label>
-              <label className="agreement-item">
-                <input
-                  type="checkbox"
-                  name="privacy"
-                  checked={agreements.privacy}
-                  onChange={handleAgreementChange}
-                />
-                (필수) 개인정보 수집 및 이용 동의
-              </label>
-              <label className="agreement-item">
-                <input
-                  type="checkbox"
-                  name="age"
-                  checked={agreements.age}
-                  onChange={handleAgreementChange}
-                />
-                (필수) 만 14세 이상 확인
-              </label>
-              <label className="agreement-item">
-                <input
-                  type="checkbox"
-                  name="marketing"
-                  checked={agreements.marketing}
-                  onChange={handleAgreementChange}
-                />
-                (선택) 마케팅 정보 수신 동의
-              </label>
+            <div className="signuppage-agreements-wrapper">
+              <div
+                className="signuppage-agreements-header"
+                onClick={toggleAgreements}
+              >
+                <span className="agreements-title">약관동의</span>
+                <div className="agreements-right">
+                  <span
+                    className={`check-all-text ${allChecked ? "active" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const newChecked = !allChecked;
+                      setAgreements({
+                        terms: newChecked,
+                        privacy: newChecked,
+                        age: newChecked,
+                        marketing: newChecked,
+                      });
+                    }}
+                  >
+                    전체선택
+                  </span>
+                  {agreementsOpen ? (
+                    <FiChevronUp className="arrow-icon" />
+                  ) : (
+                    <FiChevronDown className="arrow-icon" />
+                  )}
+                </div>
+              </div>
+
+              {agreementsOpen && (
+                <div className="signuppage-agreements">
+                  <label className="agreement-item">
+                    <input
+                      type="checkbox"
+                      name="terms"
+                      checked={agreements.terms}
+                      onChange={handleAgreementChange}
+                    />
+                    (필수) 이용약관 동의
+                  </label>
+                  <label className="agreement-item">
+                    <input
+                      type="checkbox"
+                      name="privacy"
+                      checked={agreements.privacy}
+                      onChange={handleAgreementChange}
+                    />
+                    (필수) 개인정보 수집 및 이용 동의
+                  </label>
+                  <label className="agreement-item">
+                    <input
+                      type="checkbox"
+                      name="age"
+                      checked={agreements.age}
+                      onChange={handleAgreementChange}
+                    />
+                    (필수) 만 14세 이상 확인
+                  </label>
+                  <label className="agreement-item">
+                    <input
+                      type="checkbox"
+                      name="marketing"
+                      checked={agreements.marketing}
+                      onChange={handleAgreementChange}
+                    />
+                    (선택) 마케팅 정보 수신 동의
+                  </label>
+                </div>
+              )}
             </div>
 
             <div className="signuppage-buttongroup">

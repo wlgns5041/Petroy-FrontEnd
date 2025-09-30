@@ -1,8 +1,6 @@
-/* 기본 앱 높이를 window.innerHeight 기준으로 맞춤 */
 html, body, #root, .App {
-  margin: 0;
-  padding: 0;
-  height: var(--app-height); /* JS에서 동적으로 세팅됨 */
+  height: var(--app-height);
+  min-height: var(--app-height);
 }
 
 /* 텍스트 정렬 */

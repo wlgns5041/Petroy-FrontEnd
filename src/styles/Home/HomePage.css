@@ -694,7 +694,7 @@ html, body {
     height: 50px;
     border-radius: 6px;
     border: none;
-    background-color: #E8E9EC;
+    background-color: #F9F9F9;
     color: #000000;
     font-weight: 700;
     font-size: 14px;
@@ -713,9 +713,9 @@ html, body {
   }
 
   .homepage-bottom-text {
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 500;
-    color: #000000;
+    color: #9d9d9d;
     margin-top: 50px;
   }
 }
