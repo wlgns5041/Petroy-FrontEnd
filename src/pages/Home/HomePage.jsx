@@ -309,6 +309,7 @@ function HomePage() {
             </button>
           </div>
         </div>
+        <h className="homepage-bottom-text">반려동물의 일상과 관리를 한 번에</h>
       </div>
     </div>
   );

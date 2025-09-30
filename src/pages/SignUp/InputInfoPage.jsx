@@ -8,6 +8,9 @@ function InputInfo() {
   const [accessToken, setAccessToken] = useState(null);
   const navigate = useNavigate();
 
+  const isFormValid =
+    userData.email.trim() !== "" && userData.phone.trim() !== "";
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
@@ -47,63 +50,70 @@ function InputInfo() {
   return (
     <div className="inputinfopage">
       <div className="inputinfopage-container">
-        <h1 className="inputinfopage-title">
-          카카오 로그인을 위한 추가 정보를 입력해주세요
-        </h1>
-        <p className="inputinfopage-subtext">기존의 이메일 아이디와 연동됩니다</p>
-
-        <form onSubmit={handleSubmit} className="inputinfopage-form">
-          <div className="inputinfopage-group">
-            {/* 화면에는 숨기고 접근성만 유지 */}
-            <label className="inputinfopage-label" htmlFor="email">
-              이메일
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="inputinfopage-input"
-              placeholder="이메일"
-              value={userData.email}
-              onChange={(e) =>
-                setUserData((prev) => ({ ...prev, email: e.target.value }))
-              }
-              autoComplete="email"
-              required
-            />
+        <div className="inputinfopage-section">
+          <div className="inputinfopage-title">
+            카카오 로그인을 위한 추가 정보를 입력해주세요
+          </div>
+          <div className="inputinfopage-subtext">
+            최초 1회 기존의 이메일 아이디와 연동됩니다
           </div>
 
-          <div className="inputinfopage-group">
-            <label className="inputinfopage-label" htmlFor="phone">
-              휴대폰 번호
-            </label>
-            <input
-              id="phone"
-              type="tel"
-              className="inputinfopage-input"
-              placeholder="휴대폰 번호"
-              value={userData.phone}
-              onChange={(e) =>
-                setUserData((prev) => ({ ...prev, phone: e.target.value }))
-              }
-              inputMode="tel"
-              autoComplete="tel"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="inputinfopage-form">
+            <div className="inputinfopage-group">
+              <label className="inputinfopage-label" htmlFor="email">
+                이메일
+              </label>
+              <input
+                id="email"
+                type="email"
+                className="inputinfopage-input"
+                placeholder="이메일"
+                value={userData.email}
+                onChange={(e) =>
+                  setUserData((prev) => ({ ...prev, email: e.target.value }))
+                }
+                autoComplete="email"
+                required
+              />
+            </div>
 
-          <div className="inputinfopage-buttongroup">
-            <button
-              type="button"
-              className="inputinfopage-cancelbutton"
-              onClick={() => navigate("/")}
-            >
-              홈으로
-            </button>
-            <button type="submit" className="inputinfopage-submitbutton">
-              완료
-            </button>
-          </div>
-        </form>
+            <div className="inputinfopage-group">
+              <label className="inputinfopage-label" htmlFor="phone">
+                휴대폰 번호
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                className="inputinfopage-input"
+                placeholder="휴대폰 번호"
+                value={userData.phone}
+                onChange={(e) =>
+                  setUserData((prev) => ({ ...prev, phone: e.target.value }))
+                }
+                inputMode="tel"
+                autoComplete="tel"
+                required
+              />
+            </div>
+
+            <div className="inputinfopage-buttongroup">
+              <button
+                type="button"
+                className="inputinfopage-cancelbutton"
+                onClick={() => navigate("/")}
+              >
+                홈으로
+              </button>
+              <button
+                type="submit"
+                className="inputinfopage-submitbutton"
+                disabled={!isFormValid}
+              >
+                완료
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

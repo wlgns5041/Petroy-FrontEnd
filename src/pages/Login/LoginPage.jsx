@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Login/LoginPage.css";
-import logo from "../../assets/icons/logo-without-text.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { loginUser } from "../../services/MemberService";
@@ -70,14 +69,7 @@ function LoginPage() {
   return (
     <div className="loginpage">
       <div className="loginpage-container">
-        <div className="loginpage-leftsection">
-          <img
-            src={logo}
-            alt="Login Illustration"
-            className="loginpage-leftsection-image"
-          />
-        </div>
-        <div className="loginpage-rightsection">
+        <div className="loginpage-section">
           <div className="loginpage-title">
             <h2>
               로그인을 통해
@@ -163,7 +155,12 @@ function LoginPage() {
               <span> 카카오 로그인</span>
             </button>
             <button type="button" className="loginpage-guest-button">
-              게스트 로그인
+              <img
+                src={require("../../assets/icons/my-icon.png")}
+                alt="게스트 아이콘"
+                className="loginpage-guest-icon"
+              />
+              <span>게스트 로그인</span>
             </button>
           </div>
         </div>

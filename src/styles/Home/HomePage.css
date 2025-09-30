@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Eommakkaturi';
+  src: url('https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_13@1.0/Katuri.woff') format('woff');
+  font-weight: normal;
+  font-display: swap;
+}
+
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
@@ -10,12 +17,6 @@
     }
 }
 
-@media screen and (min-width: 769px) {
-  .onboarding {
-    display: none !important;
-  }
-}
-
 html, body {
     width: 100%;
     height: 100%;
@@ -24,11 +25,18 @@ html, body {
 
 .homepage-container {
     background: #ffffff;
-    height: 100vh;
+    height: 100dvh;
+    height: auto;                  
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+}
+
+@media screen and (min-width: 769px) {
+  .onboarding {
+    display: none !important;
+  }
 }
 
 /*    --------------------------- top ---------------------------    */
@@ -155,13 +163,14 @@ html, body {
 .homepage-logo-icon {
   width: 80px;
   height: 70px;
-  margin-left: 2px;
 }
 
 .homepage-logo-text {
   font-size: 1.5rem;
   font-weight: 800;
   color: #ffffff;
+  letter-spacing: 1px;
+  font-family: 'Eommakkaturi', sans-serif;
 }
 
 .homepage-right-buttons {
@@ -531,10 +540,9 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;          
+    height: 100dvh;
     align-items: center;
     font-family: 'Pretendard', sans-serif;
-    padding: 0 20px;          
   }
 
   .homepage-top,
@@ -558,7 +566,8 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 120px;
+    margin-bottom: 80px;
+    margin-top: 60px;
   }
 
   .onboarding-logo-wrapper {
@@ -574,8 +583,7 @@ html, body {
 
   .onboarding-logo-icon {
     width: 80px;
-    height: 75px;
-    margin-left: 2px;
+    height: 70px;
   }
 
   .onboarding-logo-text {
@@ -583,7 +591,8 @@ html, body {
     font-weight: 900;
     color: #000;
     margin-top: 12px;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
+    font-family: 'Eommakkaturi', sans-serif;
   }
 
   .onboarding-buttons {
@@ -666,7 +675,7 @@ html, body {
     background-color: #FEE500;
     border: none;
     border-radius: 6px;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
     color: #191919;
     cursor: pointer;
@@ -683,11 +692,11 @@ html, body {
     justify-content: center;
     gap: 8px;
     height: 50px;
-    border-radius: 8px;
+    border-radius: 6px;
     border: none;
     background-color: #E8E9EC;
     color: #000000;
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
     cursor: pointer;
     transition: background-color 0.5s ease;
@@ -701,5 +710,12 @@ html, body {
     width: 18px;
     height: 18px;
     object-fit: contain;
+  }
+
+  .homepage-bottom-text {
+    font-size: 10px;
+    font-weight: 500;
+    color: #000000;
+    margin-top: 50px;
   }
 }

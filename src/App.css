@@ -1,7 +1,16 @@
+/* 기본 앱 높이를 window.innerHeight 기준으로 맞춤 */
+html, body, #root, .App {
+  margin: 0;
+  padding: 0;
+  height: var(--app-height); /* JS에서 동적으로 세팅됨 */
+}
+
+/* 텍스트 정렬 */
 .App {
   text-align: center;
 }
 
+/* 로고 */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -13,9 +22,10 @@
   }
 }
 
+/* 헤더 */
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  min-height: var(--app-height); 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -24,14 +34,17 @@
   color: white;
 }
 
+/* 링크 */
 .App-link {
   color: #61dafb;
 }
 
+/* 폰트 */
 * {
   font-family: 'Pretendard', sans-serif;
 }
 
+/* 토스트 컨테이너 */
 .toast-portal {
   position: fixed !important;
   top: 32px !important;        
@@ -60,6 +73,7 @@
   padding: 0 !important;
 }
 
+/* 로고 회전 */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

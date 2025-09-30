@@ -13,6 +13,18 @@ function App() {
   const location = useLocation(); 
 
   useEffect(() => {
+    const setAppHeight = () => {
+      document.documentElement.style.setProperty(
+        "--app-height",
+        `${window.innerHeight}px`
+      );
+    };
+    window.addEventListener("resize", setAppHeight);
+    setAppHeight();
+    return () => window.removeEventListener("resize", setAppHeight);
+  }, []);
+
+  useEffect(() => {
     if (location.pathname === "/") {
       const timer = setTimeout(() => {
         setShowSplash(false);

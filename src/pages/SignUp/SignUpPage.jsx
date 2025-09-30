@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SignUp/SignUpPage.css";
-import logo from "../../assets/icons/logo-without-text.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import {FaCheck, FaTimes, FaCheckCircle, FaExclamationCircle} from "react-icons/fa";
-import {checkEmailDuplicate, checkNameDuplicate, registerMember} from "../../services/MemberService";
+import {
+  FaCheck,
+  FaTimes,
+  FaCheckCircle,
+  FaExclamationCircle,
+} from "react-icons/fa";
+import {
+  checkEmailDuplicate,
+  checkNameDuplicate,
+  registerMember,
+} from "../../services/MemberService";
 
 function SignUpPage() {
   const navigate = useNavigate();
@@ -24,6 +32,16 @@ function SignUpPage() {
     number: false,
     specialChar: false,
   });
+
+  const [agreements, setAgreements] = useState({
+    terms: false,
+    privacy: false,
+    age: false,
+    marketing: false,
+  });
+
+  const allRequiredAgreed =
+    agreements.terms && agreements.privacy && agreements.age;
 
   const [emailChecked, setEmailChecked] = useState(false);
   const [nameChecked, setNameChecked] = useState(false);
@@ -50,7 +68,8 @@ function SignUpPage() {
     formData.password === formData.confirmPassword &&
     emailChecked &&
     nameChecked &&
-    phoneValid;
+    phoneValid &&
+    allRequiredAgreed;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -128,6 +147,11 @@ function SignUpPage() {
     });
   };
 
+  const handleAgreementChange = (e) => {
+    const { name, checked } = e.target;
+    setAgreements((prev) => ({ ...prev, [name]: checked }));
+  };
+
   const handleCheckEmail = async () => {
     if (!formData.email) {
       setEmailChecked(false);
@@ -201,14 +225,7 @@ function SignUpPage() {
   return (
     <div className="signuppage">
       <div className="signuppage-container">
-        <div className="signuppage-leftsection">
-          <img
-            src={logo}
-            alt="Signup Illustration"
-            className="signuppage-logoimage"
-          />
-        </div>
-        <div className="signuppage-rightsection">
+        <div className="signuppage-section">
           <form onSubmit={handleSubmit}>
             <div className="signuppage-textarea">
               <h2>
@@ -224,7 +241,9 @@ function SignUpPage() {
                   type="email"
                   name="email"
                   placeholder="이메일"
-                  className={!emailChecked && emailGuide ? "signuppage-error" : ""}
+                  className={
+                    !emailChecked && emailGuide ? "signuppage-error" : ""
+                  }
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -240,7 +259,9 @@ function SignUpPage() {
 
               <div
                 className={`signuppage-message ${!emailGuide ? "hidden" : ""} ${
-                  emailChecked ? "signuppage-success-message" : "signuppage-error-message"
+                  emailChecked
+                    ? "signuppage-success-message"
+                    : "signuppage-error-message"
                 }`}
               >
                 {emailChecked ? (
@@ -367,7 +388,9 @@ function SignUpPage() {
                   type="text"
                   name="name"
                   placeholder="이름"
-                  className={!nameChecked && nameGuide ? "signuppage-error" : ""}
+                  className={
+                    !nameChecked && nameGuide ? "signuppage-error" : ""
+                  }
                   value={formData.name}
                   onChange={handleChange}
                   required
@@ -383,7 +406,9 @@ function SignUpPage() {
 
               <div
                 className={`signuppage-message ${!nameGuide ? "hidden" : ""} ${
-                  nameChecked ? "signuppage-success-message" : "signuppage-error-message"
+                  nameChecked
+                    ? "signuppage-success-message"
+                    : "signuppage-error-message"
                 }`}
               >
                 {nameChecked ? (
@@ -408,7 +433,9 @@ function SignUpPage() {
 
               <div
                 className={`signuppage-message ${!phoneError ? "hidden" : ""} ${
-                  phoneValid ? "signuppage-success-message" : "signuppage-error-message"
+                  phoneValid
+                    ? "signuppage-success-message"
+                    : "signuppage-error-message"
                 }`}
               >
                 {phoneValid ? (
@@ -420,8 +447,51 @@ function SignUpPage() {
               </div>
             </div>
 
+            <div className="signuppage-agreements">
+              <label className="agreement-item">
+                <input
+                  type="checkbox"
+                  name="terms"
+                  checked={agreements.terms}
+                  onChange={handleAgreementChange}
+                />
+                (필수) 이용약관 동의
+              </label>
+              <label className="agreement-item">
+                <input
+                  type="checkbox"
+                  name="privacy"
+                  checked={agreements.privacy}
+                  onChange={handleAgreementChange}
+                />
+                (필수) 개인정보 수집 및 이용 동의
+              </label>
+              <label className="agreement-item">
+                <input
+                  type="checkbox"
+                  name="age"
+                  checked={agreements.age}
+                  onChange={handleAgreementChange}
+                />
+                (필수) 만 14세 이상 확인
+              </label>
+              <label className="agreement-item">
+                <input
+                  type="checkbox"
+                  name="marketing"
+                  checked={agreements.marketing}
+                  onChange={handleAgreementChange}
+                />
+                (선택) 마케팅 정보 수신 동의
+              </label>
+            </div>
+
             <div className="signuppage-buttongroup">
-              <button type="button" onClick={() => navigate("/")}>
+              <button
+                className="signuppage-homebutton"
+                type="button"
+                onClick={() => navigate("/")}
+              >
                 홈으로
               </button>
               <button type="submit" disabled={!isFormValid}>
@@ -431,8 +501,13 @@ function SignUpPage() {
 
             <div className="signuppage-bottomtext">
               <div className="signuppage-bottomtext-wrapper">
-                <span className="signuppage-bottomtext-prompt">이미 계정이 있나요?</span>
-                <span className="signuppage-bottomtext-link" onClick={() => navigate("/login")}>
+                <span className="signuppage-bottomtext-prompt">
+                  이미 계정이 있나요?
+                </span>
+                <span
+                  className="signuppage-bottomtext-link"
+                  onClick={() => navigate("/login")}
+                >
                   로그인하러가기
                 </span>
               </div>

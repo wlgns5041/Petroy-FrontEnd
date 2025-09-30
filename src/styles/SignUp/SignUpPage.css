@@ -10,7 +10,6 @@
   }
 
   .signuppage {
-    background-color: #F9F9F9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,43 +19,24 @@
   
   .signuppage-container {
     display: flex;
-    width: 60vw;
-    height: 70vh;
+    width: 30vw;
+    height: 90vh;
     background-color: #ffffff;
     border-radius: 24px;
     overflow: hidden;
-    padding: 24px;
+    padding: 12px;
     opacity: 0;
-    transform: translateY(20px);
     animation: fadeIn 0.8s ease forwards;
     gap: 24px;
   }
-
-  /* 좌측 로고 */
-  .signuppage-leftsection {
-    flex: 1;
-    background-color: #E8E9EC;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  }
-  
-  .signuppage-logoimage {
-    max-width: 30%;
-    max-height: 30%;
-    object-fit: cover;
-  }
   
   /* 우측 입력 폼 */
-  .signuppage-rightsection {
+  .signuppage-section {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 120px; 
+    padding: 80px; 
     background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
@@ -76,7 +56,7 @@
     font-size: 12px;
     font-weight: 400;
     color: #6b7280;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     text-align: left;
   }
   
@@ -115,13 +95,12 @@
   }
 
   .signuppage-formgroup input.input-error {
-    border: 2px solid #ef4444 !important;
+    box-shadow: 0 0 0 2px #ef4444;  
     background-color: #fff;
   }
   
   .signuppage-formgroup input.input-error:focus {
-    border: 2px solid #ef4444 !important;
-    box-shadow: none !important;
+    box-shadow: 0 0 0 2px #ef4444;  
     outline: none !important;
     background-color: #fff;
   }
@@ -168,7 +147,7 @@
   /* 이메일, 이름 중복체크 */
   .signuppage-checkbutton {
     padding: 12px 14px;
-    background-color: #57687C;
+    background-color: #00CBA8;
     color: white;
     font-weight: 600;
     font-size: 12px;
@@ -176,11 +155,11 @@
     border-radius: 8px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.5s ease;
   }
   
   .signuppage-checkbutton:hover {
-    background-color: #343F4D;
+    background-color: #13BA9D;
   }
 
   /* 실시간 안내메시지 */
@@ -193,8 +172,9 @@
     align-items: center;
     color: #ef4444;
     font-size: 12px;
-    margin-top: 6px;
+    margin-top: 8px;
     margin-left: 5px;
+    margin-bottom: 12px;
     gap: 6px;
   }
   
@@ -209,6 +189,7 @@
     font-size: 12px;
     margin-top: 8px;
     margin-left: 5px;
+    margin-bottom: 12px;
     gap: 6px;
   }
   
@@ -216,12 +197,11 @@
     font-size: 13px;
   }
 
-  .signuppage-error:focus {
-    box-shadow: none !important;
-    outline: none !important;
-    border: 2px solid #ef4444 !important; 
-    background-color: #ffffff;
-  }
+input.signuppage-error:focus {
+  box-shadow: 0 0 0 2px #ef4444;  
+  outline: none !important;
+  background-color: #ffffff;
+}
   
   .errorText {
     color: #ef4444;
@@ -244,12 +224,11 @@
   .signuppage-password-icon {
     position: absolute;
     right: 12px;
-    top: 50%;
+    top: 55%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #000000;
-    font-size: 18px;
-    transition: color 0.5s ease;
+    font-size: 16px;
   }
 
   .signuppage-password-criteria {
@@ -290,11 +269,63 @@
     font-size: 16px;
   }
 
+.signuppage-agreements {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 11px;
+  color: #111827;
+}
+
+.signuppage-agreements .agreement-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111827;
+  cursor: pointer;
+}
+
+.signuppage-agreements input[type="checkbox"] {
+  appearance: none;       
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 14px;             
+  height: 14px;
+  border: none;
+  border-radius: 4px;     
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.signuppage-agreements input[type="checkbox"]:checked {
+  background-color: #00CBA8;
+  border: none;            
+  position: relative;
+}
+
+.signuppage-agreements input[type="checkbox"]:checked::after {
+  content: "✔";           
+  color: white;
+  font-size: 9px;          
+}
+
+
+
   /* 하단 버튼 */
   .signuppage-buttongroup {
     display: flex;
     gap: 20px;
-    margin-top: 1rem;
+    margin-top: 2rem;
     width: 100%;
   }
 
@@ -302,17 +333,27 @@
     flex: 1;
     padding: 12px 0;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    background-color: #57687C;
+    background-color: #00CBA8;
     color: #fff;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.5s ease;
+  }
+
+  .signuppage-homebutton {
+    background-color: #3a3a3a !important; 
+    color: #fff;
+    transition: background-color 0.5s ease;
+  }
+
+  .signuppage-homebutton:hover {
+    background-color: #000000 !important;
   }
   
   .signuppage-buttongroup button:hover {
-    background-color: #343F4D;
+    background-color: #13BA9D;
   }
   
   .signuppage-buttongroup button:disabled {
@@ -323,14 +364,13 @@
 
   /* 하단 바로가기 텍스트 */
   .signuppage-bottomtext {
-    margin-top: 20px;
+    margin-top: 30px;
     font-size: 13px;
     color: #6B7280;
     text-align: center;
   }
   
   .signuppage-bottomtext-wrapper {
-    margin-top: 12px;
     text-align: center;
     font-size: 13px;
     color: #6B7280;
