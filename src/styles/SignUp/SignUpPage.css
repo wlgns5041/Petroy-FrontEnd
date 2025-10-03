@@ -184,7 +184,7 @@
   }
   
   .signuppage-error-icon {
-    font-size: 13px;
+    font-size: 13px; 
   }
 
   .signuppage-success-message {
@@ -215,7 +215,6 @@
     display: block;
   }
 
-  /* 패스워드 + 패스워드 확인 */
   .signuppage-password {
     position: relative;
     width: 100%;
