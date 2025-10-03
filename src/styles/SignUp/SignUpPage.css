@@ -215,6 +215,7 @@
     display: block;
   }
 
+  /* 패스워드 + 패스워드 확인 */
   .signuppage-password {
     position: relative;
     width: 100%;
