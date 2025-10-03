@@ -5,6 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'   
         DOCKERHUB_REPO = 'sonii26/petory-frontend'       
         CONTAINER_NAME = 'petory-frontend'
+        NODE_OPTIONS = "--max_old_space_size=4096"
     }
 
     stages {
