@@ -8,14 +8,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'develop',
-                    credentialsId: 'github-credentials', 
-                    url: 'https://github.com/SJ-Petory/Petroy-FrontEnd.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
