@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SignUp/SignUpPage.css";
 import { FiEye, FiEyeOff, FiChevronDown, FiChevronUp } from "react-icons/fi";
@@ -15,15 +15,27 @@ import {
 } from "../../services/MemberService";
 
 function SignUpPage() {
+useEffect(() => {
   function setAppHeight() {
-    document.documentElement.style.setProperty(
-      "--app-height",
-      `${window.innerHeight}px`
-    );
+    const vh = window.visualViewport?.height || window.innerHeight;
+    document.documentElement.style.setProperty("--app-height", `${vh}px`);
   }
 
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", setAppHeight);
+    window.visualViewport.addEventListener("scroll", setAppHeight);
+  }
   window.addEventListener("resize", setAppHeight);
   setAppHeight();
+
+  return () => {
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener("resize", setAppHeight);
+      window.visualViewport.removeEventListener("scroll", setAppHeight);
+    }
+    window.removeEventListener("resize", setAppHeight);
+  };
+}, []);
 
   const navigate = useNavigate();
 

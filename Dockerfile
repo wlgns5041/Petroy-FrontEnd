@@ -12,7 +12,7 @@ RUN npm ci
 COPY . .
 
 # 빌드 시 Node.js 메모리 제한 확장
-RUN NODE_OPTIONS="--max_old_space_size=4096" npm run build
+RUN CI=true NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
 
 # --- Nginx Serve Stage ---

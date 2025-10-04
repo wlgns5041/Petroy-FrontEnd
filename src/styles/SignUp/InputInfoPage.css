@@ -29,7 +29,6 @@
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  gap: 8px;
 }
 
 /* ===== 타이틀 / 서브텍스트 ===== */
@@ -112,9 +111,13 @@
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  background-color: #00CBA8;
-  color: #fff;
+  background-color: #3A3A3A;  
+  color: #FFFFFF;
   transition: background-color 0.5s ease;
+}
+
+.inputinfopage-cancelbutton:hover { 
+  background-color: #000000;
 }
 
 .inputinfopage-submitbutton {
@@ -125,23 +128,9 @@
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  background-color: #00CBA8;
-  color: #fff;
-  transition: background-color 0.5s ease;
-}
-
-.inputinfopage-cancelbutton {
-  background-color: #3A3A3A;  
-  color: #FFFFFF;
-}
-
-.inputinfopage-cancelbutton:hover { 
-  background-color: #000000;
- }
-
-.inputinfopage-submitbutton {
   background-color: #00CBA8;  
   color: #FFFFFF;
+  transition: background-color 0.5s ease;
 }
 
 .inputinfopage-submitbutton:hover { 
@@ -152,4 +141,62 @@
   background-color: #E8E9EC;
   color: #C0C0C0;
   cursor: not-allowed;
+}
+
+/* ===== 반응형 ===== */
+@media screen and (max-width: 768px) {
+  .inputinfopage {
+    height: var(--app-height); /* 모바일 브라우저 주소창 고려 */
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .inputinfopage-container {
+    width: 100%;      
+    height: auto;
+    border-radius: 0;
+    box-shadow: none;
+    flex-direction: column;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  .inputinfopage-section {
+    padding: 24px;       
+    border-radius: 12px;
+    box-shadow: none;   
+  }
+
+  .inputinfopage-title {
+    font-size: 14px;
+  }
+
+  .inputinfopage-subtext {
+    font-size: 10px;
+    margin-bottom: 20px;
+  }
+
+  .inputinfopage-form {
+    margin-bottom: 20px;
+  }
+
+  .inputinfopage-input {
+    font-size: 10px;
+    padding: 10px 12px;
+  }
+
+  .inputinfopage-input::placeholder {
+    font-size: 10px;
+  }
+
+  .inputinfopage-buttongroup {
+    flex-direction: row;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .inputinfopage-buttongroup button {
+    font-size: 12px;
+    padding: 10px 0;
+  }
 }
