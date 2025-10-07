@@ -9,7 +9,7 @@ import defaultPetPic from "../../assets/images/DefaultImage.png";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
-  const [viewMode, setViewMode] = useState("week");
+  const [viewMode, setViewMode] = useState("month");
   const [currentDate, setCurrentDate] = useState(new Date());
   const tabIndex = viewMode === "week" ? 0 : 1;
 
