@@ -464,6 +464,7 @@ function MainPage() {
               </div>
 
               <motion.div
+                className="mainpage-section-body"
                 initial={false}
                 animate={{
                   height: openSchedule ? "auto" : 0,
@@ -583,6 +584,7 @@ function MainPage() {
               </div>
 
               <motion.div
+              className="mainpage-section-body"
                 initial={false}
                 animate={{
                   height: openCategory ? "auto" : 0,
@@ -679,6 +681,7 @@ function MainPage() {
                 </div>
 
                 <motion.div
+                className="mainpage-section-body"
                   initial={false}
                   animate={{
                     height: openMyPets ? "auto" : 0,
@@ -756,6 +759,7 @@ function MainPage() {
                 </div>
 
                 <motion.div
+                className="mainpage-section-body"
                   initial={false}
                   animate={{
                     height: openCarePets ? "auto" : 0,

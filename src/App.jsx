@@ -13,13 +13,12 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    const setAppHeight = () => {
-      const appHeight = window.visualViewport?.height || window.innerHeight;
-      document.documentElement.style.setProperty(
-        "--app-height",
-        `${appHeight}px`
-      );
-    };
+    function setAppHeight() {
+      const doc = document.documentElement;
+      doc.style.setProperty("--app-height", `${window.innerHeight}px`);
+    }
+    window.addEventListener("resize", setAppHeight);
+    setAppHeight();
 
     setAppHeight();
     window.visualViewport?.addEventListener("resize", setAppHeight);

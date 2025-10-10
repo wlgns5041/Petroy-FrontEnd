@@ -448,7 +448,6 @@ html, body { overflow: hidden; height: 100%; }
     display: none;
   }
 
-  /* 페이지 전체 높이 체인 확립 */
   html, body {
     height: 100%;
     overflow: hidden;
@@ -478,16 +477,13 @@ html, body { overflow: hidden; height: 100%; }
     overflow: hidden;
   }
 
-  /* ✅ 왼쪽 전체를 세로 스크롤 가능하도록 */
   .mainpage-leftsection {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
+    flex: 1 1 auto;
+    min-height: 0;                 
+    overflow: hidden; 
+    gap: 16px;
   }
 
   .mainpage-leftsection::-webkit-scrollbar {
@@ -499,26 +495,37 @@ html, body { overflow: hidden; height: 100%; }
     border-radius: 4px;
   }
 
-  /* ✅ 위의 버튼 줄은 고정 */
   .mainpage-buttons {
     flex-shrink: 0;
   }
 
-  /* ✅ 각 섹션(일정, 카테고리, 펫 등) 내부에서 개별 스크롤 가능 */
   .mainpage-filter-card {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
     min-height: 0;
+    overflow: hidden;
+  }
+
+  .mainpage-section-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto; 
+    min-height: 0;  
+    overflow: hidden;
   }
 
   .mainpage-filter-scroll-area,
   .mainpage-schedule-scroll-grid {
     flex: 1 1 auto;
-    overflow-y: auto !important;
     min-height: 0;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
+    overflow-y: auto !important; 
+    overflow-x: hidden;
+    scrollbar-width: none;    
+  }
+
+  .mainpage-schedule-scroll-grid::-webkit-scrollbar {
+    display: none;  
   }
 
   .mainpage-filter-scroll-area::-webkit-scrollbar,
@@ -532,13 +539,11 @@ html, body { overflow: hidden; height: 100%; }
     border-radius: 4px;
   }
 
-  /* ✅ 펫 영역 높이 자동 조절 */
   .mainpage-pets-grid {
     flex-shrink: 0;
     min-height: auto;
   }
 
-  /* ✅ 캘린더 본문은 고정 (스크롤 X) */
   .mainpage-calendar-main {
     overflow: hidden;
   }

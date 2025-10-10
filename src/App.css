@@ -80,3 +80,16 @@ html, body, #root, .App {
     transform: rotate(360deg);
   }
 }
+
+@media screen and (max-width: 768px) {
+  html,
+  body {
+    background-color: #f9f9f9;
+   
+  }
+
+  #root,
+  .App {
+    background-color: #f9f9f9;
+  }
+}

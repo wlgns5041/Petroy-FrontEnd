@@ -307,7 +307,7 @@
   height: 26px;
   font-size: 12px;
   line-height: 26px;
-  background-color: #373737;
+  background-color: #3a3a3a;
   color: white;
   border-radius: 50%;
   font-weight: 600;
@@ -384,6 +384,22 @@
   margin-bottom: 16px;
 }
 
+.calendar-mini-weekdays {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 9px;
+  font-weight: 400;
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.calendar-mini-weekday {
+  width: 32px;
+  text-align: center;
+}
+
 .calendar-mini-week-row {
   display: flex;
   justify-content: space-between;
@@ -409,26 +425,40 @@
 }
 
 .calendar-mini-day.calendar-selected-date {
-  background-color: rgba(0, 0, 0, 0.2) !important;
-  color: rgb(0, 0, 0) !important;
+  background-color: #E8E9EC !important;
+  color: #000000 !important;
   font-weight: bold;
 }
 
 .calendar-mini-day.calendar-highlight-week {
-  background-color: #3b82f6;
-  color: white;
+  background-color: #E8E9EC;
+  color: #000000;
 }
 
+/* 기존 배경 유지하면서, today일 때 숫자 부분만 원형 표시 */
 .calendar-mini-day.calendar-mini-today {
-  background-color: #f87171;
-  color: white;
-  font-weight: bold;
+  position: relative;
+  z-index: 1;
 }
 
-.calendar-mini-day.calendar-highlight-week.calendar-mini-today {
-  background-color: #f87171;
-  color: #ffffff;
+.calendar-mini-day.calendar-mini-today::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;       
+  height: 16px;
+  border-radius: 50%;
+  background-color: #3a3a3a;
+  z-index: -1;      
+}
+
+/* 텍스트는 흰색으로 */
+.calendar-mini-day.calendar-mini-today {
+  color: white !important;
   font-weight: bold;
+  font-size: 8px;
 }
 
 /* ---------- 주간 달력 본체 ---------- */
@@ -534,7 +564,7 @@
   font-size: 13px;
   font-weight: 600;
   color: #6d6d6d;
-  min-width: 180px;
+  min-width: 540px;
   align-items: flex-start;
   text-align: left;
 }
@@ -560,7 +590,7 @@
   flex-direction: column;
   flex: 1;
   gap: 8px;
-  min-width: 200px;
+  min-width: 40px;
   align-items: flex-start;
   text-align: left;
 }
@@ -775,7 +805,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
   }
 
@@ -809,8 +839,8 @@
     z-index: 1;                       
     border: none;
     background-color: transparent;
-    font-size: 10px;
-    padding: 6px 5px;
+    font-size: 8px;
+    padding: 6px 9px;
     cursor: pointer;
     color: #aaa;
     transition: color 0.2s ease;
@@ -841,15 +871,13 @@
 
   .calendar-day {
     flex: 1;
-    border-radius: 4px;
+    border-radius: 6px !important;
     background-color: #f9fafb;
-    padding: 0px;
-    min-height: 90px;
+    padding: 2px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     transition: background 0.3s;
     box-sizing: border-box;
     text-align: left;
-    margin-top: 1px;
   }
 
   .calendar-days {
@@ -859,7 +887,13 @@
   }
 
   .calendar-days.calendar-view-week .calendar-day {
-    height: 18vh;              
+    height: 9vh;    
+    flex: 0 0 calc(100% / 7);
+    box-sizing: border-box;    
+  }
+
+  .calendar-days.calendar-view-week .calendar-day .calendar-day-number {
+    margin-bottom: 0px;
   }
 
   .calendar-days.calendar-view-month .calendar-week {
@@ -878,7 +912,7 @@
 
   .calendar-days.calendar-view-month .calendar-day .calendar-day-number {
     flex: 0 0 auto;
-    margin-bottom: 6px;
+    margin-bottom: 0px;
   }
 
   .calendar-days.calendar-view-month .calendar-schedule-details {
@@ -902,21 +936,22 @@
     padding-bottom: 0px;
   }
 
-  .calendar-days.calendar-view-week{
-    height: var(--week-row-h);
-    min-height: 0;
-  }
+.calendar-days.calendar-view-week {
+  height: auto !important; 
+  min-height: 0;
+}
 
-  .calendar-week {
-    display: flex;
-    align-items: stretch;   
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    gap: 0;
-    padding: 0;
-    margin: 0;
-  }
+.calendar-week {
+  display: flex;
+  align-items: flex-start !important; 
+  width: 100%;
+  height: auto !important; 
+  min-height: 0;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  flex-wrap: nowrap;
+}
 
   .calendar-days.calendar-view-week .calendar-day {
     display: flex;
@@ -954,7 +989,7 @@
     width: 12px;
     height: 12px;
     line-height: 0px;
-    font-size: 8px;
+    font-size: 7px;
     font-weight: 600;
     color: #374151;
     text-align: center;
@@ -962,16 +997,15 @@
     justify-content: center;
     align-items: center;
     flex: 0 0 auto;
-    margin-left: 4px;
-    margin-top: 4px;
+    margin-left: 3px;
+    margin-top: 3px;
   }
 
   .calendar-day-number.calendar-today {
     width: 12px;
     height: 12px;
-    font-size: 8px;
-    line-height: 0px;
-    background-color: #373737;
+    font-size: 6px;
+    background-color: #3a3a3a;
     color: white;
     border-radius: 50%;
     font-weight: 600;
@@ -994,11 +1028,11 @@
   }
 
   .calendar-schedule-box {
-    font-size: 6px;
+    font-size: 5px;
     font-weight: 600;
     padding: 2px 4px 2px 4px;
-    margin-bottom: 4px;
-    border-radius: 4px;
+    margin-bottom: 2px;
+    border-radius: 2px;
     color: white;
     text-align: center;
     align-items: center;
@@ -1006,7 +1040,6 @@
     cursor: pointer;
     transition: background-color 0.2s;
     width: 28px;
-    
   }
 
   .calendar-priority-high {
@@ -1029,4 +1062,214 @@
   }
 
   .calendar-priority-low:hover { filter: brightness(0.9); }
+
+  /* 모바일에서 미니캘린더가 부모 영역 안에 맞게 들어가도록 조정 */
+.calendar-top-section {
+  flex-direction: column;
+  gap: 8px; 
+  width: 100%;
+  overflow: hidden; 
+}
+
+/* 미니 캘린더 크기 자동 조정 */
+.calendar-mini-month-calendar {
+  width: 100%;
+  min-width: unset;
+  box-sizing: border-box;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+.calendar-mini-month-header {
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.calendar-mini-weekdays {
+  color: #3a3a3a;
+  font-size: 8px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.calendar-mini-weekday {
+  width: 28px;
+}
+
+/* 미니 달력 주 단위 행의 간격도 축소 */
+.calendar-mini-week-row {
+  height: 40px; 
+}
+
+/* 날짜 셀 크기 축소 */
+.calendar-mini-day {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  font-size: 8px;
+}
+
+/* 본 달력 영역도 부모에 맞게 */
+.calendar-content {
+  width: 100%;
+  padding: 12px 8px;
+  box-sizing: border-box;
+  gap: 0px;
+  height: auto;
+  border-radius: 0px;
+}
+
+.calendar-week {
+    height: auto;
+}
+
+ .calendar-weekly-summary-table-rows {
+    margin-top: 12px;
+    padding: 0px;
+    background: transparent;
+    box-shadow: none;
+    gap: 8px;
+    align-items: center; 
+  }
+
+.calendar-summary-date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 12px;
+  border: none;
+  padding: 8px;
+  gap: 4px;
+  width: 100%;                
+  margin: 0 auto;            
+  box-sizing: border-box;
+}
+
+  .calendar-summary-date-column {
+    display: none !important;
+  }
+
+  .calendar-weekday-text {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ef4444;
+  }
+
+  .calendar-day-number-large {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .calendar-summary-schedule-blocks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    min-height: auto;
+    width: 100%;
+  }
+
+  .calendar-schedule-divider-hr {
+    display: none !important;
+  }
+
+  .calendar-schedule-card-wide {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px 8px 8px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    border-radius: 8px;
+    gap: 8px;
+    background: #f9fafb;
+  }
+
+  .calendar-summary-time-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    font-size: 8px;
+    color: #666;
+    min-width: 140px;
+  }
+
+  .calendar-summary-icon {
+    transform: scale(0.8); 
+    margin-right: 4px !important;     
+  }
+
+  .calendar-summary-title-pets {
+    flex: 1;
+    align-items: center;
+    text-align: left;
+    gap: 6px;
+    min-width: 30px;
+    max-width: 60px;
+  }
+
+  .calendar-schedule-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #111;
+    margin-left: 0;
+  }
+
+  .calendar-schedule-pets {
+    gap: 4px;
+  }
+
+  .calendar-pet-circle-with-name {
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: -2px;
+  }
+
+  .calendar-pet-circle {
+    width: 12px;
+    height: 12px;
+  }
+
+  .calendar-pet-name {
+    font-size: 8px;
+  }
+
+  .calendar-summary-actions {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+  }
+
+  .calendar-priority-badge {
+    font-size: 6px;
+    padding: 4px;
+    min-width: 26px;
+    border-radius: 2px;
+    align-items: center;
+  }
+
+  .calendar-styled-detail-button {
+    padding: 2px;
+    border-radius: 6px;
+    background-color: #FFFFFF;
+    box-shadow: none;
+  }
+
+  .calendar-detail-text {
+    display: none;
+  }
+
+  .calendar-styled-detail-icon {
+    transform: scale(0.7);
+  }
 }

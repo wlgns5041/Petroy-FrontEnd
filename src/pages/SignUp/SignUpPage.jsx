@@ -254,6 +254,30 @@ useEffect(() => {
     }
   };
 
+useEffect(() => {
+  // 모든 input 요소 가져오기
+  const inputs = document.querySelectorAll("input, textarea");
+
+  // 포커스 시 해당 input을 화면 중앙으로 스크롤
+  const handleFocus = (e) => {
+    e.target.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
+  };
+
+  inputs.forEach((input) => {
+    input.addEventListener("focus", handleFocus);
+  });
+
+  return () => {
+    inputs.forEach((input) => {
+      input.removeEventListener("focus", handleFocus);
+    });
+  };
+}, []);
+
   return (
     <div className="signuppage">
       <div className="signuppage-container">

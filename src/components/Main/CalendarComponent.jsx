@@ -53,7 +53,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
   const getCurrentWeekDates = () => {
     const baseDate = new Date(currentDate);
     const week = [];
-    for (let i = -3; i <= 3; i++) {
+    for (let i = 0; i <= 6; i++) {
       const date = new Date(baseDate);
       date.setDate(baseDate.getDate() + i);
       week.push(date);
@@ -168,6 +168,13 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
         <div className="calendar-top-section">
           <div className="calendar-mini-month-calendar">
             <div className="calendar-mini-month-header">{currentMonthStr}</div>
+            <div className="calendar-mini-weekdays">
+              {["일", "월", "화", "수", "목", "금", "토"].map((day, idx) => (
+                <div key={idx} className="calendar-mini-weekday">
+                  {day}
+                </div>
+              ))}
+            </div>
             {groupDatesByWeek(getStartOfMonth(), getEndOfMonth()).map(
               (week, i) => (
                 <div key={i} className="calendar-mini-week-row">
@@ -376,6 +383,8 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                 }) === localDateStr
             );
 
+            if (window.innerWidth <= 768 && schedules.length === 0) return null;
+
             return (
               <div key={idx} className="calendar-summary-date-block">
                 <div className="calendar-summary-date-column">
@@ -396,27 +405,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                         )}
                         <div className="calendar-schedule-card-wide">
                           {/* 시간 + 카테고리 */}
-                          <div className="calendar-summary-time-category">
-                            <div className="calendar-date-text">
-                              <AccessTimeFilledRoundedIcon
-                                fontSize="small"
-                                className="calendar-summary-icon"
-                              />
-                              {new Date(s.date).toLocaleDateString("ko-KR", {
-                                timeZone: "Asia/Seoul",
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              })}
-                            </div>
-                            <div className="calendar-category-text">
-                              <CategoryRoundedIcon
-                                fontSize="small"
-                                className="calendar-summary-icon"
-                              />
-                              {s.categoryName || "카테고리 없음"}
-                            </div>
-                          </div>
+
 
                           {/* 제목 + 펫 */}
                           <div className="calendar-summary-title-pets">
@@ -454,6 +443,28 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                             </div>
                           </div>
 
+                                                    <div className="calendar-summary-time-category">
+                            <div className="calendar-date-text">
+                              <AccessTimeFilledRoundedIcon
+                                fontSize="small"
+                                className="calendar-summary-icon"
+                              />
+                              {new Date(s.date).toLocaleDateString("ko-KR", {
+                                timeZone: "Asia/Seoul",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              })}
+                            </div>
+                            <div className="calendar-category-text">
+                              <CategoryRoundedIcon
+                                fontSize="small"
+                                className="calendar-summary-icon"
+                              />
+                              {s.categoryName || "카테고리 없음"}
+                            </div>
+                          </div>
+
                           {/* 중요도 + 상세보기 */}
                           <div className="calendar-summary-actions">
                             <span
@@ -465,7 +476,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                               className="calendar-styled-detail-button"
                               onClick={() => onOpenDetail(s.scheduleId, s.date)}
                             >
-                              상세보기
+                              <span className="calendar-detail-text">
+                                상세보기
+                              </span>
                               <InfoRoundedIcon
                                 className="calendar-styled-detail-icon"
                                 fontSize="small"

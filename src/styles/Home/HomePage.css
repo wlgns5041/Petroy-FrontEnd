@@ -543,6 +543,7 @@ html, body {
     height: 100dvh;
     align-items: center;
     font-family: 'Pretendard', sans-serif;
+    padding: 0px 40px 0px 40px !important;
   }
 
   .homepage-top,

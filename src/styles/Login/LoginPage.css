@@ -266,20 +266,20 @@
 
 @media screen and (max-width: 768px) {
   .loginpage {
-    height: 100dvh; 
+    height: 100%;
   }
 
   .loginpage-container {
     width: 100%;         
     height: auto;        
-    min-height: 100%;    
+    min-height: var(--app-height); 
     border-radius: 0;    
     box-shadow: none;    
     padding: 20px;       
   }
 
   .loginpage-section {
-    padding: 24px;       
+    padding: 20px;       
     border-radius: 12px;
     box-shadow: none;   
   }
