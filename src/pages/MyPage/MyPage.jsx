@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchMemberPosts } from "../../services/CommunityService.jsx";
 import "../../styles/MyPage/MyPage.css";
@@ -15,10 +15,13 @@ import {
   deleteMember,
 } from "../../services/MemberService";
 import { fetchMemberPets } from "../../services/PetService.jsx";
+import ArrowCircleRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const MyPage = () => {
-  const navigate = useNavigate(); // 리다이렉트 핸들러 함수
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({}); // 사용자 정보
   const [pets, setPets] = useState([]); // 펫 목록
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -27,6 +30,10 @@ const MyPage = () => {
   const [friendsCount, setFriendsCount] = useState(0);
   const [confirmAction, setConfirmAction] = useState(null);
   const [displayImage, setDisplayImage] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const dropdownRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef(null);
 
   // 컴포넌트가 마운트될 때 실행
   useEffect(() => {
@@ -62,11 +69,46 @@ const MyPage = () => {
     }
   }, []); // 빈 배열을 의존성으로 설정하여 컴포넌트 마운트 시 처음에 한 번만 실행
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      // 드롭다운이 열려 있고, 클릭한 곳이 드롭다운 내부가 아니면 닫기
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // cleanup
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showMenu]);
+
   const normalizeUrl = (u) => {
     if (!u) return "";
     if (u.startsWith("http") || u.startsWith("data:")) return u;
     return `${API_BASE_URL}${u}`;
   };
+
+  useEffect(() => {
+    const scrollEl = scrollRef.current;
+    if (!scrollEl) return;
+
+    const handleScroll = () => {
+      const bannerWidth = scrollEl.firstChild?.offsetWidth || 0; // 각 배너 실제 폭
+      const gap = 14;
+      const newIndex = Math.round(scrollEl.scrollLeft / (bannerWidth + gap));
+      setActiveIndex(newIndex);
+    };
+
+    scrollEl.addEventListener("scroll", handleScroll);
+    return () => scrollEl.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // 이미지 변경 함수
   const handleImageUpload = async (file, preview) => {
@@ -144,10 +186,6 @@ const MyPage = () => {
   // 로딩 중일 때 메시지 표시
   if (loading) return <p>잠시만 기다려주세요...</p>;
 
-  const handleNavigation = (path) => {
-    navigate(path);
-  };
-
   const handleConfirm = async () => {
     if (confirmAction?.type === "logout") {
       handleLogout();
@@ -157,83 +195,147 @@ const MyPage = () => {
     setConfirmAction(null); // 모달 닫기
   };
 
+  const banners = [
+    {
+      title: "내 작성 글",
+      sub: "반려동물에 대한 정보를 공유하고 소통하며<br />새로운 인연을 만들어보세요",
+      image: require("../../assets/icons/post logo.png"),
+      count: 2,
+      link: "/communityPage",
+    },
+    {
+      title: "내 카테고리",
+      sub: "카테고리를 추가해서 일정을 분류해보세요",
+      image: require("../../assets/icons/category logo.png"),
+      count: 3,
+      link: "/mainPage",
+    },
+    {
+      title: "내 일정",
+      sub: "일정을 통해 반려동물을 손쉽게 관리해보세요",
+      image: require("../../assets/icons/schedule logo.png"),
+      count: 12,
+      link: "/mainPage",
+    },
+  ];
+
   return (
     <main className="mypage-viewport">
       <div className="mypage">
         <div className="mypage-profile">
           <div className="mypage-profile-card">
+            {/* 왼쪽: 프로필 이미지 */}
             <img
               src={displayImage ?? normalizeUrl(userInfo.image)}
               alt="profile"
               className="mypage-profile-image"
             />
+
+            {/* 오른쪽: 정보 영역 */}
             <div className="mypage-profile-info">
-              <div className="name">{userInfo.name}</div>
-              <div className="phone">{userInfo.phone}</div>
-              <div className="counts">
-                <div>
-                  <span
-                    className="text"
-                    onClick={() => handleNavigation("/friendPage")}
-                  >
-                    친구
-                  </span>
-                  <span>{friendsCount}</span>
-                </div>
+              <div className="mypage-profile-name">{userInfo.name}</div>
+              <div className="mypage-profile-phone">{userInfo.phone}</div>
+              <div className="mypage-profile-friends">
+                친구 <span>{friendsCount}</span>
               </div>
             </div>
-          </div>
 
-          <div className="mypage-button-group">
-            <button
-              className="mypage-button"
-              onClick={() => setShowNameModal(true)}
-            >
-              이름 변경
-            </button>
-            <button
-              className="mypage-button"
-              onClick={() => setShowImageModal(true)}
-            >
-              이미지 변경
-            </button>
-            <button
-              className="mypage-button gray"
-              onClick={() =>
-                setConfirmAction({
-                  type: "logout",
-                  message: "정말 로그아웃 하시겠어요?",
-                })
-              }
-            >
-              로그아웃
-            </button>
-            <button
-              className="mypage-button gray"
-              onClick={() =>
-                setConfirmAction({
-                  type: "delete",
-                  message:
-                    "정말 탈퇴하시겠어요? \n이 작업은 되돌릴 수 없습니다.",
-                })
-              }
-            >
-              회원 탈퇴
-            </button>
+            <div className="mypage-profile-menu" ref={dropdownRef}>
+              <button
+                className="mypage-profile-more"
+                onClick={() => setShowMenu((prev) => !prev)}
+              >
+                <MoreHorizRoundedIcon sx={{ fontSize: 20, color: "#000" }} />
+              </button>
+
+              {showMenu && (
+                <div className="mypage-dropdown">
+                  <div onClick={() => setShowNameModal(true)}>이름 변경</div>
+                  <div onClick={() => setShowImageModal(true)}>이미지 변경</div>
+                </div>
+              )}
+            </div>
           </div>
+        </div>
+        <div className="mypage-profile-buttons">
+          <button
+            className="mypage-button logout"
+            onClick={() =>
+              setConfirmAction({
+                type: "logout",
+                message: "정말 로그아웃 하시겠어요?",
+              })
+            }
+          >
+            로그아웃
+          </button>
+          <button
+            className="mypage-button delete"
+            onClick={() =>
+              setConfirmAction({
+                type: "delete",
+                message: "정말 탈퇴하시겠어요? \n이 작업은 되돌릴 수 없습니다.",
+              })
+            }
+          >
+            회원 탈퇴
+          </button>
+        </div>
+
+        <div className="mypage-banner-section">
+          <div className="mypage-banner-scroll" ref={scrollRef}>
+            {banners.map((banner, i) => (
+              <div className="mypage-banner" key={i}>
+                <img
+                  src={banner.image}
+                  alt="banner"
+                  className="mypage-banner-image"
+                />
+                <div className="mypage-banner-content">
+                  <div className="mypage-banner-title">
+                    {banner.title}
+                    <span className="mypage-banner-count">{banner.count}</span>
+                  </div>
+                  <p
+                    className="mypage-banner-sub"
+                    dangerouslySetInnerHTML={{ __html: banner.sub }}
+                  ></p>
+                </div>
+                <button
+                  className="mypage-banner-link"
+                  onClick={() => navigate(banner.link)}
+                >
+                  <ArrowCircleRightRoundedIcon
+                    sx={{
+                      fontSize: 20,
+                      color: "#000000",
+                      "&:hover": {
+                        backgroundcolor: "#f9f9f9",
+                      },
+                    }}
+                  />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="mypage-banner-dots">
+          {banners.map((_, i) => (
+            <span
+              key={i}
+              className={`mypage-banner-dot ${
+                i === activeIndex ? "active" : ""
+              }`}
+            ></span>
+          ))}
         </div>
 
         <div className="mypage-pet-section">
           <h3 className="mypage-pet-section-title">
             <div className="mypage-icon-withtext">
               <FontAwesomeIcon icon={faPaw} />내 펫
+              <span className="mypage-pet-count">{pets.length}</span>
             </div>
-            <span
-              className="mypage-pet-section-link"
-              onClick={() => handleNavigation("/petPage")}
-            >
-              펫 바로가기
-            </span>
           </h3>
           {pets.length === 0 ? (
             <div className="mypage-empty-state">

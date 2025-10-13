@@ -1,155 +1,327 @@
-:root {
-  --mypage-navbar-h: 64px;
-}
-
-.mypage-viewport {
-  min-height: calc(100svh - var(--mypage-navbar-h));
-  min-height: calc(100dvh - var(--mypage-navbar-h));
-  min-height: calc(100vh  - var(--mypage-navbar-h));
-  display: grid;
-  place-items: center;
-  padding: 24px 12px;
-  box-sizing: border-box;
-}
-
-.mypage {
-  max-width: 480px;
-  width: 80%;
-  padding: 20px 16px 20px;
-  background-color: #f9f9f9;
-  font-family: 'Pretendard', sans-serif;
-  margin: 0 auto;        
-  border-radius: 8px;
-}
-
-  .mypage ul {
-    padding-left: 0;
-    list-style: none;
+  :root {
+    --mypage-navbar-h: 60px;
   }
 
-  /* 상단 프로필 카드 */
+  .mypage-viewport {
+    min-height: calc(100svh - var(--mypage-navbar-h));
+    min-height: calc(100dvh - var(--mypage-navbar-h));
+    min-height: calc(100vh  - var(--mypage-navbar-h));
+    display: grid;
+    place-items: center;
+    padding: 24px 12px;
+    box-sizing: border-box;
+  }
+
+  .mypage {
+    max-width: 480px;
+    width: 80%;
+    padding: 24px;
+    background-color: #f9f9f9;
+    font-family: 'Pretendard', sans-serif;
+    margin: 0 auto;        
+    border-radius: 6px;
+  }
+
+  /* 프로필 카드 */
   .mypage-profile {
     background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
-    transition: box-shadow 0.3s ease;
-    margin-bottom: 40px;
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin: 0 auto;
+    width: 90%;
+    max-width: 480px;
   }
-  
+
+  /* 내부 구조 */
   .mypage-profile-card {
     display: flex;
-    align-items: flex-start;
-    gap: 50px; 
-    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    gap: 32px;
   }
-  
+
+  /* 왼쪽 이미지 */
   .mypage-profile-image {
     width: 80px;
     height: 80px;
-    object-fit: cover;
     border-radius: 50%;
+    object-fit: cover;
     border: 1px solid #eee;
   }
-  
+
+  /* 오른쪽 정보 */
   .mypage-profile-info {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: flex-start;
+    justify-content: center;
+    align-items: flex-start; 
+    gap: 4px;
+    text-align: left;        
   }
-  
-  .mypage-profile-info .name {
+
+  .mypage-profile-name {
     font-size: 18px;
     font-weight: 700;
+    color: #111;
   }
-  
-  .mypage-profile-info .phone {
+
+  .mypage-profile-phone {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+    margin-top: 2px;
+  }
+
+  .mypage-profile-friends {
     font-size: 14px;
-    color: #777;
-    margin-bottom: 10px;
-  }
-  
-  .mypage-profile-info .counts {
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-    width: 100%;
-  }
-  
-  .mypage-profile-info .counts div {
-    font-size: 14px;
-    color: #333;
-    font-weight: bold;
-  }
-  
-  .mypage-profile-info .counts span {
-    font-size: 14px;
+    font-weight: 500;
     color: #000;
-    margin-right: 5px;
+    margin-top: 4px;
   }
 
-  .mypage-profile-info .counts span:last-child {
-    background-color: #e0e0e0;
-    color: #333;
-    padding: 2px 8px;
+  .mypage-profile-friends span {
+    background-color: #f9f9f9;
     border-radius: 4px;
-    font-size: 11px;
+    padding: 4px 8px;
+    margin-left: 2px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #6B7280;
   }
-  
-  .mypage-profile-info .counts .text {
-    font-weight: normal;
+
+  .mypage-profile-menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* ...버튼 */
+  .mypage-profile-more {
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: 900;
+    position: relative;
     cursor: pointer;
-  }
-
-  .mypage-profile-info .counts .text:hover {
-    color: #ff4e50;
-    font-weight: bold;
-  }
-
-  /* 상단 프로필 버튼 (이름변경, 이미지변경, 로그아웃, 회원탈퇴) */
-  .mypage-button-group {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
     display: flex;
-    justify-content: space-evenly;
-    margin-top: 24px;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .mypage-profile-more:hover {
+    background-color: #f9f9f9; 
+  }
+
+  /* 드롭다운 */
+  .mypage-dropdown {
+    display: flex;
+    position: absolute;
+    top: 30px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    width: 90px;
+    flex-direction: column;
+    padding: 6px;
+    border: none;
+  }
+
+  .mypage-profile-menu.open .mypage-dropdown,
+  .mypage-profile-more:focus + .mypage-dropdown {
+    display: flex;
+  }
+
+  /* 드롭다운 내부 버튼 */
+  .mypage-dropdown div {
+    padding: 10px 0;
+    background: none;
+    border: none;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .mypage-dropdown div:hover {
+    background-color: #f3f4f6;
+  }
+
+  .mypage-dropdown div:last-child {
+    margin-bottom: 0;
+  }
+
+  .mypage-profile-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center;     
+    gap: 24px;
+    margin-top: 20px;
     width: 100%;
   }
 
-  .mypage-button-group button {
-    flex-grow: 1;
-    margin: 0 8px;
-  }
-  
   .mypage-button {
-    flex-grow: 1;
-    padding: 8px 12px;
+    width: 100%;
     border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 10px;
+    border-radius: 6px;
+    padding: 16px;
+    font-weight: 700;
+    font-size: 14px;
     cursor: pointer;
-    background-color: #ff4e50;
+    transition: all 0.2s ease;
+  }
+
+  .mypage-button.logout {
+    background-color: #00cba8;
     color: white;
-    text-align: center;
-    transition: all 0.3s ease;
+  }
+
+  .mypage-button.delete {
+    background-color: #333;
+    color: white;
   }
 
   .mypage-button:hover {
-    transform: scale(1.05);
     opacity: 0.9;
   }
-  
-  .mypage-button.gray {
-    background-color: #e0e0e0;
-    color: #333;
+
+  .mypage-banner-section {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    margin: 20px 0 12px;
+  }
+
+  .mypage-banner-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding: 0 12px;
+    scroll-behavior: smooth;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .mypage-banner-scroll::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .mypage-banner {
+    flex: 0 0 95%;
+    scroll-snap-align: center;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 6px;
+    padding: 20px;
+    position: relative;
+    min-height: 100px;
+    transition: transform 0.3s ease;
+  }
+
+  .mypage-banner:hover {
+    transform: scale(1.02);
+  }
+
+  .mypage-banner-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin-right: 16px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 12px;
+  }
+
+  .mypage-banner-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; 
+    gap: 6px;
+  }
+
+  .mypage-banner-title {
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    gap: 6px;
+  }
+
+  .mypage-banner-count {
+    color: #00cba8;
+    font-weight: 600;
+    font-size: 14px;
+    align-items: center;
+    display: flex;
+  }
+
+  .mypage-banner-sub {
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+    margin-top: 4px;
+    text-align: left;
+  }
+
+  .mypage-banner-link {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mypage-banner-link:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+
+  .mypage-banner-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .mypage-banner-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+  }
+
+  .mypage-banner-dot.active {
+    background-color: #00cba8;
   }
 
   /* 펫 카드 */
   .mypage-pet-section {
     background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08); 
+    border-radius: 6px;
+    padding: 10px 20px 20px 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     transition: box-shadow 0.3s ease;
   }
 
@@ -159,7 +331,8 @@
     align-items: center;
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
+    margin-left: 4px;
   }
 
   .mypage-icon-withtext {
@@ -168,17 +341,12 @@
     gap: 8px;
   }
 
-  .mypage-pet-section-link {
-    color: #888;
-    font-size: 12px;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: 500;
-  }
-
-  .mypage-pet-section-link:hover {
-    color: #ff4e50;
-    font-weight: bold;
+  .mypage-pet-count {
+    color: #00cba8;
+    font-weight: 600;
+    font-size: 14px;
+    align-items: center;
+    display: flex;
   }
 
   .mypage-pet-list {
@@ -196,7 +364,7 @@
     background: #fafafa;
     border: none;
     border-radius: 10px;
-    padding: 20px;
+    padding: 20px 20px 20px 40px;
     font-size: 14px;
   }
 
@@ -209,7 +377,8 @@
   .mypage-pet-image {
     max-width: 40px; 
     height: 40px;
-    margin-right: 16px; 
+    margin-right: 0px; 
+    border-radius: 50%;
   }
   
   .mypage-pet-info {
@@ -217,6 +386,7 @@
     flex-direction: column;
     justify-content: space-between;
     flex-grow: 1;
+    gap: 2px;
   }
   
   .mypage-pet-name {
@@ -225,7 +395,8 @@
   
   .mypage-pet-species {
     font-size: 12px;
-    color: #777;
+    font-weight: 400;
+    color: #6B7280;
   }
 
   .mypage-empty-state {
@@ -246,13 +417,451 @@
     font-size: 14px;
     font-weight: 600;
     margin: 0;
-    color: #333;
+    color: #000;
   }
 
   .mypage-empty-text-sub {
     display: block;
     font-size: 12px;
     font-weight: 400;
-    color: #999;
+    color: #6B7280;
     margin-top: 2px;
   }
+
+  /* --------------------  모바일  -------------------- */
+  @media screen and (max-width: 768px) {
+
+  html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* 강제로 가로 스크롤 차단 */
+  }
+
+  .mypage-viewport {
+    width: 100%;
+    min-height: calc(100dvh - var(--mypage-navbar-h));
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0 0 72px 0; 
+    overflow-x: hidden;
+  }
+
+  .mypage {
+    width: 100%;
+    max-width: 480px; 
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: 0 16px; 
+    background-color: #f9f9f9;
+    font-family: 'Pretendard', sans-serif;
+  }
+
+  /* 프로필 카드 */
+  .mypage-profile {
+    width: 100%;
+    box-sizing: border-box; 
+    padding: 24px 16px;     
+    margin: 0;  
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  /* 내부 구조 */
+  .mypage-profile-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    gap: 32px;
+  }
+
+  /* 왼쪽 이미지 */
+  .mypage-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #eee;
+    margin-left: 20px;
+  }
+
+  /* 오른쪽 정보 */
+  .mypage-profile-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; 
+    gap: 4px;
+    text-align: left;        
+  }
+
+  .mypage-profile-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .mypage-profile-phone {
+    font-size: 10px;
+    font-weight: 400;
+    color: #6B7280;
+    margin-top: 2px;
+  }
+
+  .mypage-profile-friends {
+    font-size: 12px;
+    font-weight: 500;
+    color: #000;
+    margin-top: 4px;
+  }
+
+  .mypage-profile-friends span {
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-left: 2px;
+    font-size: 8px;
+    font-weight: 600;
+    color: #6B7280;
+  }
+
+  .mypage-profile-menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* ...버튼 */
+  .mypage-profile-more {
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    font-weight: 900;
+    position: relative;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .mypage-profile-more:hover {
+    background-color: #f9f9f9; 
+  }
+
+  /* 드롭다운 */
+  .mypage-dropdown {
+    display: flex;
+    position: absolute;
+    top: 30px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    width: 90px;
+    flex-direction: column;
+    padding: 6px;
+    border: none;
+  }
+
+  .mypage-profile-menu.open .mypage-dropdown,
+  .mypage-profile-more:focus + .mypage-dropdown {
+    display: flex;
+  }
+
+  /* 드롭다운 내부 버튼 */
+  .mypage-dropdown div {
+    padding: 10px 0;
+    background: none;
+    border: none;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border-radius: 6px;
+    width: 100%;
+    margin-bottom: 2px;
+  }
+
+  .mypage-dropdown div:hover {
+    background-color: #f3f4f6;
+  }
+
+  .mypage-dropdown div:last-child {
+    margin-bottom: 0;
+  }
+
+  .mypage-profile-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center;     
+    gap: 24px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .mypage-button {
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-weight: 800;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mypage-button.logout {
+    background-color: #00cba8;
+    color: white;
+  }
+
+  .mypage-button.delete {
+    background-color: #333;
+    color: white;
+  }
+
+  .mypage-button:hover {
+    opacity: 0.9;
+  }
+
+  .mypage-banner-section {
+    width: 100%;
+    overflow: visible;
+    position: relative;
+    margin: 20px 0 12px;
+  }
+
+  .mypage-banner-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding: 0 12px;
+    scroll-behavior: smooth;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .mypage-banner-scroll::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .mypage-banner {
+    flex: 0 0 95%;
+    scroll-snap-align: center;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 6px;
+    padding: 0px 20px;
+    position: relative;
+    min-height: 100px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .mypage-banner:hover {
+    transform: scale(1.02);
+  }
+
+  .mypage-banner-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-right: 16px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    padding: 12px;
+  }
+
+  .mypage-banner-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; 
+    gap: 6px;
+  }
+
+  .mypage-banner-title {
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    gap: 6px;
+  }
+
+  .mypage-banner-count {
+    color: #00cba8;
+    font-weight: 600;
+    font-size: 12px;
+    align-items: center;
+    display: flex;
+  }
+
+  .mypage-banner-sub {
+    font-size: 10px;
+    font-weight: 400;
+    color: #6B7280;
+    margin-top: 4px;
+    text-align: left;
+  }
+
+  .mypage-banner-link {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mypage-banner-link:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+  }
+
+  .mypage-banner-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .mypage-banner-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #d1d5db;
+  }
+
+  .mypage-banner-dot.active {
+    background-color: #00cba8;
+  }
+
+  /* 펫 카드 */
+  .mypage-pet-section {
+    background: white;
+    border-radius: 6px;
+    padding: 4px 12px 4px 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .mypage-pet-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    margin-left: 4px;
+  }
+
+  .mypage-icon-withtext {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 12px;
+  }
+
+  .mypage-pet-count {
+    color: #00cba8;
+    font-weight: 600;
+    font-size: 12px;
+    align-items: center;
+    display: flex;
+  }
+
+  .mypage-pet-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    padding: 12px;
+    list-style: none;
+  }
+
+  .mypage-pet-section li {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    background: #fafafa;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  .mypage-pet-section li:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .mypage-pet-image {
+    max-width: 32px; 
+    height: 32px;
+    margin-left: 12px; 
+    border-radius: 50%;
+  }
+  
+  .mypage-pet-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    gap: 2px;
+  }
+  
+  .mypage-pet-name {
+    font-weight: bold;
+  }
+  
+  .mypage-pet-species {
+    font-size: 10px;
+    font-weight: 400;
+    color: #6B7280;
+  }
+
+  .mypage-empty-state {
+    width: 100%;
+    background-color: #f9f9f9;
+    padding: 40px 20px;
+    border-radius: 8px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 12px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .mypage-empty-text-main {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    color: #000;
+  }
+
+  .mypage-empty-text-sub {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: #6B7280;
+    margin-top: 2px;
+  }
+}

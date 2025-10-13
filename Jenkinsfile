@@ -40,12 +40,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh """
-                        docker stop $CONTAINER_NAME || true
-                        docker rm $CONTAINER_NAME || true
-                        docker pull ${DOCKERHUB_REPO}:latest
-                        docker run -d --name $CONTAINER_NAME -p 80:80 ${DOCKERHUB_REPO}:latest
-                    """
+                    def running = sh(script: "docker ps --filter name=$CONTAINER_NAME --format '{{.Names}}'", returnStdout: true).trim()
+                    if (running == "") {
+                        sh """
+                            docker pull ${DOCKERHUB_REPO}:latest
+                            docker run -d --name $CONTAINER_NAME -p 80:80 ${DOCKERHUB_REPO}:latest
+                        """
+                    } else {
+                        echo "Container $CONTAINER_NAME already running. Skipping deployment."
+                    }
                 }
             }
         }

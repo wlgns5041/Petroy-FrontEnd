@@ -435,6 +435,12 @@
   color: #000000;
 }
 
+.calendar-mini-day.calendar-highlight-week.calendar-has-schedule {
+  background-color: #00CBA8 !important;
+  color: #ffffff !important;
+  font-weight: bold;
+}
+
 /* 기존 배경 유지하면서, today일 때 숫자 부분만 원형 표시 */
 .calendar-mini-day.calendar-mini-today {
   position: relative;

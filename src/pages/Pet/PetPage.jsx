@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PetRegister from "../../components/Pet/PetRegister.jsx";
 import PetEdit from "../../components/Pet/PetEdit.jsx";
 import DeletePet from "../../components/Pet/DeletePet.jsx";
@@ -8,6 +8,7 @@ import {
   fetchMemberPets,
   fetchCaregiverPets,
 } from "../../services/PetService.jsx";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import "../../styles/Pet/PetPage.css";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
@@ -22,6 +23,9 @@ const PetPage = () => {
   const [pets, setPets] = useState([]);
   const [caregiverPets, setCaregiverPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPetId, setMenuPetId] = useState(null);
+  const dropdownRef = useRef(null);
 
   const [loading, setLoading] = useState(true);
   const [caregiverLoading, setCaregiverLoading] = useState(false);
@@ -129,6 +133,24 @@ const PetPage = () => {
     };
     loadCaregiver();
   }, []);
+
+useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      e.stopPropagation(); 
+      setShowMenu(false);
+      setMenuPetId(null);
+    }
+  };
+
+  if (showMenu) {
+    document.addEventListener("click", handleClickOutside, true); 
+  }
+
+  return () => {
+    document.removeEventListener("click", handleClickOutside, true);
+  };
+}, [showMenu]);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -245,51 +267,6 @@ const PetPage = () => {
                       <div className="petpage-pets-list">
                         {paginatedPets.filter(Boolean).map((pet) => (
                           <div key={pet.petId} className="petpage-pet-card-new">
-                            <div className="petpage-pet-card-header">
-                              <span className="petpage-pet-card-name">
-                                {pet.name}
-                              </span>
-                              <button
-                                onClick={() => setSelectedPet(pet)}
-                                className="petpage-dot-button"
-                                onFocus={(e) => e.target.classList.add("open")}
-                                onBlur={(e) =>
-                                  e.target.classList.remove("open")
-                                }
-                              >
-                                ⋮
-                                <div className="petpage-dropdown-menu">
-                                  <button
-                                    onMouseDown={() => handleOpenEditModal(pet)}
-                                  >
-                                    반려동물 정보 수정
-                                  </button>
-                                  <button
-                                    onMouseDown={() =>
-                                      handleOpenDeleteModal(pet)
-                                    }
-                                  >
-                                    반려동물 삭제
-                                  </button>
-                                  <button
-                                    onMouseDown={() =>
-                                      handleOpenAssignModal(pet)
-                                    }
-                                  >
-                                    돌보미 등록
-                                  </button>
-                                  <button
-                                    onMouseDown={() => {
-                                      setSelectedPet(pet);
-                                      setShowCareGiverList(true);
-                                    }}
-                                  >
-                                    돌보미 조회
-                                  </button>
-                                </div>
-                              </button>
-                            </div>
-
                             <div className="petpage-pet-card-body">
                               <img
                                 src={
@@ -302,6 +279,10 @@ const PetPage = () => {
                                 className="petpage-pet-avatar"
                               />
                               <div className="petpage-pet-info">
+                                <div className="info-row">
+                                  <span className="label">이름</span>
+                                  <span className="value">{pet.name}</span>
+                                </div>
                                 <div className="info-row">
                                   <span className="label">종</span>
                                   <span className="value">{pet.species}</span>
@@ -324,6 +305,78 @@ const PetPage = () => {
                                   <span className="label">메모</span>
                                   <span className="value">{pet.memo}</span>
                                 </div>
+                              </div>
+                              <div
+                                className="petpage-dot-container"
+                                ref={dropdownRef}
+                              >
+                                <button
+                                  className="petpage-dot-button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setMenuPetId(pet.petId);
+                                    setShowMenu((prev) =>
+                                      prev && menuPetId === pet.petId
+                                        ? false
+                                        : true
+                                    );
+
+                                    const cards = document.querySelectorAll(
+                                      ".petpage-pet-card-new"
+                                    );
+                                    cards.forEach((card) =>
+                                      card.classList.remove("active")
+                                    );
+                                    e.currentTarget
+                                      .closest(".petpage-pet-card-new")
+                                      ?.classList.add("active");
+                                  }}
+                                >
+                                  <MoreHorizRoundedIcon
+                                    sx={{ fontSize: 22, color: "#333" }}
+                                  />
+                                </button>
+                                {showMenu && menuPetId === pet.petId && (
+                                  <div className="petpage-dropdown-menu">
+                                    <div
+                                      onMouseDown={() => {
+                                        handleOpenEditModal(pet);
+                                        setShowMenu(false);
+                                        setMenuPetId(null);
+                                      }}
+                                    >
+                                      반려동물 정보 수정
+                                    </div>
+                                    <div
+                                      onMouseDown={() => {
+                                        handleOpenDeleteModal(pet);
+                                        setShowMenu(false);
+                                        setMenuPetId(null);
+                                      }}
+                                    >
+                                      반려동물 삭제
+                                    </div>
+                                    <div
+                                      onMouseDown={() => {
+                                        handleOpenAssignModal(pet);
+                                        setShowMenu(false);
+                                        setMenuPetId(null);
+                                      }}
+                                    >
+                                      돌보미 등록
+                                    </div>
+                                    <div
+                                      onMouseDown={() => {
+                                        setSelectedPet(pet);
+                                        setShowCareGiverList(true);
+                                        setShowMenu(false);
+                                        setMenuPetId(null);
+                                      }}
+                                    >
+                                      돌보미 조회
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -374,11 +427,6 @@ const PetPage = () => {
                       <div className="petpage-pets-list">
                         {caregiverPaginatedPets.map((pet) => (
                           <div key={pet.petId} className="petpage-pet-card-new">
-                            <div className="petpage-pet-card-header">
-                              <span className="petpage-pet-card-name">
-                                {pet.name}
-                              </span>
-                            </div>
                             <div className="petpage-pet-card-body">
                               <img
                                 src={
@@ -392,6 +440,10 @@ const PetPage = () => {
                                 className="petpage-pet-avatar"
                               />
                               <div className="petpage-pet-info">
+                                <div className="info-row">
+                                  <span className="label">이름</span>
+                                  <span className="value">{pet.name}</span>
+                                </div>
                                 <div className="info-row">
                                   <span className="label">종</span>
                                   <span className="value">{pet.species}</span>
@@ -454,7 +506,7 @@ const PetPage = () => {
                           친구의 반려동물을 등록하면 이곳에 표시됩니다!
                         </p>
                       </div>
-                      <div className="petpage-footer" /> {/* 동일 높이 확보 */}
+                      <div className="petpage-footer" />
                     </>
                   )}
                 </section>

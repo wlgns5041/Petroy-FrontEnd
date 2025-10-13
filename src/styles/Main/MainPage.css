@@ -549,7 +549,7 @@ html, body { overflow: hidden; height: 100%; }
   }
 }
 
-/* -------------------- 📱 모바일 카드형 섹션 (슬라이드 애니메이션 포함) -------------------- */
+/* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
   html, body {
     height: auto !important;
@@ -564,10 +564,10 @@ html, body { overflow: hidden; height: 100%; }
 
   .mainpage-container {
     background: #f9fafb;
-    padding: 16px;
+    padding: 2px 16px 16px 16px;
     height: auto;
     overflow-y: auto;
-    padding-bottom: 80px !important;
+    padding-bottom: 80px !important;    
   }
 
   .mainpage-container-body{   
