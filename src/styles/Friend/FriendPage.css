@@ -1,5 +1,5 @@
 :root {
-  --friend-navbar-h: 64px;
+  --friend-navbar-h: 60px;
 }
 
 .friendpage, .friendpage * , .friendpage *::before, .friendpage *::after {
@@ -248,3 +248,250 @@
 .friendpage-tab-content::-webkit-scrollbar {
   display: none;
 }
+
+  /* --------------------  모바일  -------------------- */
+  @media screen and (max-width: 768px) {
+
+.friendpage-viewport {
+  min-height: calc(100svh - var(--friend-navbar-h));
+  min-height: calc(100dvh - var(--friend-navbar-h));
+  min-height: calc(100vh  - var(--friend-navbar-h));
+  display: grid;
+  place-items: center;
+  padding: 0 0 80px 0;     
+  box-sizing: border-box;
+}
+
+.friendpage {
+  min-width: 360px;
+  max-width: 600px;
+  width: 100%;
+  height: 80vh;
+  margin: 0 auto;         
+  padding: 20px;
+  padding-top: 0px;
+  font-family: 'Pretendard', sans-serif;
+  background-color: #f9f9f9;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 검색 바 */
+.friendpage-search-bar {
+  display: flex;
+  align-items: center;
+  padding: 0px;
+  margin-bottom: 16px;
+  width: 100%;
+  margin: 0 auto 16px;
+}
+
+.friendpage-search-bar input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 9px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  background-color: #FFFFFF;
+  outline: none;
+  color: #111827;
+  width: 100%;
+}
+
+.friendpage-search-bar input::placeholder {
+  color: #9ca3af;
+}
+
+.friendpage-search-icon-button {
+  background: none;
+  border: none;
+  margin-left: -30px;
+  color: #000000;
+  cursor: pointer;
+}
+
+.friendpage-search-icon-button svg {
+  font-size: 16px;
+}
+
+/* 검색 결과 */
+.friendpage-search-results {
+  flex: 1;        
+  min-height: 0;  
+  overflow: auto; 
+  margin: 12px auto; 
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.friendpage-search-results ul {
+  padding-left: 0;
+  margin: 0;
+  display: grid;
+  gap: 20px;
+}
+
+.friendpage-search-result-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 20px 8px;
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 100%;             
+  margin: 0 auto;              
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.friendpage-search-result-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.friendpage-profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+.friendpage-send-request-button {
+  background-color: #00CBA8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-right: 12px;
+}
+
+.friendpage-send-request-button:hover {
+  background-color: #13BA9D;
+}
+
+.friendpage-send-request-button.disabled {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.friendpage-search-results-error-message {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 15px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.friendpage-no-results {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 15px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* 탭바 */
+.friendpage-tab-bar {
+  display: flex;
+  position: relative;      
+  overflow: hidden;        
+  width: 100%;
+  gap: 12px;
+  padding: 6px 12px;
+  margin: 0px auto 32px auto;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  justify-content: space-between;
+}
+
+.friendpage-tab-background {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: calc((100% - 12px) / 2);
+  height: calc(100% - 12px);
+  background-color: #ffffff;
+  border-radius: 6px;
+  transition: transform .3s ease; 
+  z-index: 0;
+}
+
+.friendpage-tab {
+  flex: 1;
+  position: relative;  
+  z-index: 1;          
+  padding: 12px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.friendpage-tab span {
+  position: relative;
+  display: inline-block;
+}
+
+.friendpage-tab.active {
+  background-color: #ffffff;
+  color: #111827;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.friendpage-tab.active span::after {
+  content: none !important;
+}
+
+.friendpage-tab-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.friendpage-tab-text {
+  font-size: 12px;
+}
+
+.friendpage-friend-count {
+  color: #6b7280;
+  font-size: 11px;
+  padding: 2px 6px;
+}
+
+.friendpage-friend-count::after {
+  content: none !important;
+}
+
+.friendpage-tab-content {
+  flex: 1;
+  display: flex;
+  overflow-y: auto;
+  flex-direction: column;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.friendpage-tab-content::-webkit-scrollbar {
+  display: none;
+}
+  }

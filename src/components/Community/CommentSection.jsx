@@ -144,74 +144,52 @@ const CommentSection = ({ postId, open, onClose }) => {
           ) : (
             <ul className="comment-sheet-list">
               {comments.map((c) => (
-                <li
-                  key={c.commentId}
-                  className={`comment-sheet-item ${
-                    editingId === c.commentId ? "editing" : ""
-                  }`}
-                >
+                <li className="comment-sheet-item">
                   <img
                     src={c.profileImage || defaultProfile}
                     alt=""
                     className="comment-sheet-avatar"
                   />
-                  <div className="comment-sheet-main">
-                    <div className="comment-sheet-header-row">
-                      <div className="comment-sheet-meta">
-                        <span className="comment-sheet-name">
-                          {c.memberName}
-                        </span>
-                        {getCreatedAt(c) && (
-                          <span className="comment-sheet-time">
-                            {timeAgo(getCreatedAt(c))}
-                          </span>
-                        )}
-                      </div>
 
-                      {/* ... 버튼 */}
-                      <div className="comment-menu">
-                        <button
-                          className="comment-menu-button"
-                          onClick={() =>
-                            setMenuOpenId((prev) =>
-                              prev === c.commentId ? null : c.commentId
-                            )
-                          }
-                          aria-label="댓글 메뉴"
-                        >
-                          <MoreHorizIcon fontSize="small" />
-                        </button>
-                        {menuOpenId === c.commentId && (
-                          <div className="comment-menu-dropdown">
-                            {editingId === c.commentId ? (
-                              <button
-                                onClick={() => {
-                                  setEditingId(null);
-                                  setContent("");
-                                  setMenuOpenId(null);
-                                }}
-                              >
-                                수정취소
-                              </button>
-                            ) : (
-                              <button
-                                onClick={() => {
-                                  handleEditStart(c);
-                                  setMenuOpenId(null);
-                                }}
-                              >
-                                수정
-                              </button>
-                            )}
-                            <button onClick={() => handleDelete(c.commentId)}>
-                              삭제
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                  <div className="comment-sheet-content">
+                    <div className="comment-sheet-meta">
+                      <span className="comment-sheet-name">{c.memberName}</span>
+                      <span className="comment-sheet-time">
+                        {timeAgo(getCreatedAt(c))}
+                      </span>
                     </div>
-
                     <div className="comment-sheet-text">{c.content}</div>
+                  </div>
+
+                  <div className="comment-menu">
+                    <button
+                      className="comment-menu-button"
+                      onClick={() =>
+                        setMenuOpenId((prev) =>
+                          prev === c.commentId ? null : c.commentId
+                        )
+                      }
+                      aria-label="댓글 메뉴"
+                    >
+                      <MoreHorizIcon fontSize="small" />
+                    </button>
+
+                    {menuOpenId === c.commentId && (
+                      <div className="comment-menu-dropdown">
+                        {editingId === c.commentId ? (
+                          <button onClick={() => setEditingId(null)}>
+                            수정취소
+                          </button>
+                        ) : (
+                          <button onClick={() => handleEditStart(c)}>
+                            수정
+                          </button>
+                        )}
+                        <button onClick={() => handleDelete(c.commentId)}>
+                          삭제
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </li>
               ))}

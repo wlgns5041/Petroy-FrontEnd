@@ -35,6 +35,7 @@ import SentimentVerySatisfiedRoundedIcon from "@mui/icons-material/SentimentVery
 import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
 import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissatisfiedRounded";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import { useMediaQuery } from "@mui/material";
 
 /* -------------------- 유틸 -------------------- */
 
@@ -179,6 +180,9 @@ const normalizeHighlightedPost = (p) => {
 /* -------------------- 컴포넌트 -------------------- */
 
 const CommunityPage = () => {
+  // 반응형
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   // 내 프로필/친구/카테고리/게시글
   const [me, setMe] = useState(null);
   const [myName, setMyName] = useState("");
@@ -222,6 +226,12 @@ const CommunityPage = () => {
     comments: "댓글순",
   };
   const [sortKey, setSortKey] = useState("latest");
+
+  // 북마크 토글
+  const [isHeaderBookmarked, setIsHeaderBookmarked] = useState(false);
+  const toggleHeaderBookmark = () => {
+    setIsHeaderBookmarked((prev) => !prev);
+  };
 
   /* ---------- 함수 ---------- */
 
@@ -561,129 +571,235 @@ const CommunityPage = () => {
 
   return (
     <div className="communitypage-container">
-      <div className="communitypage-header">
-        <div className="communitypage-header-left">
-          <h2 className="communitypage-header-title">펫스타그램</h2>
+      <div className={`communitypage-header ${isMobile ? "mobile" : ""}`}>
+        {isMobile ? (
+          <>
+            {/* 상단줄: 검색 + 새로고침 + 프로필 + 글쓰기 */}
+            <div className="communitypage-header-top">
+              <div className="communitypage-search-wrapper">
+                <input
+                  type="text"
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  placeholder="게시글 검색"
+                  className="communitypage-search-input"
+                />
+                <button
+                  type="submit"
+                  className="communitypage-search-button"
+                  onClick={handleSearchSubmit}
+                >
+                  <SearchIcon />
+                </button>
+              </div>
 
-          <div className="communitypage-tab-bar">
-            <div
-              className="communitypage-tab-background"
-              style={{ transform: `translateX(${tabIndex * 100}%)` }}
-            />
-            {["전체", "친구", "나"].map((tab, index) => (
+              <IconButton
+                onClick={handleReset}
+                className="communitypage-mobile-icon"
+                aria-label="새로고침"
+              >
+                <RestartAltIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+
+              <img
+                src={(me?.image || me?.profileImage) ?? defaultPetPic}
+                alt="내 프로필"
+                className="communitypage-header-profile-img"
+                onClick={() => handleProfileClick(me)}
+              />
+
+              <IconButton
+                className="communitypage-mobile-icon add"
+                onClick={() => setIsModalOpen(true)}
+                aria-label="게시글 작성"
+              >
+                <AddIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+            </div>
+
+            <div className="communitypage-header-bottom">
+              <div className="communitypage-header-bottom-left">
+                <div className="communitypage-tab-bar">
+                  <div
+                    className="communitypage-tab-background"
+                    style={{ transform: `translateX(${tabIndex * 100}%)` }}
+                  />
+                  {["전체", "친구", "나"].map((tab, index) => (
+                    <button
+                      key={tab}
+                      className={`communitypage-tab-button ${
+                        activeTab === tab ? "active" : ""
+                      }`}
+                      onClick={() => {
+                        setActiveTab(tab);
+                        setTabIndex(index);
+                      }}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  className={`communitypage-bookmark-toggle ${
+                    isHeaderBookmarked ? "active" : ""
+                  }`}
+                  onClick={toggleHeaderBookmark}
+                  title={
+                    isHeaderBookmarked
+                      ? "북마크 모드 활성화"
+                      : "북마크 모드 비활성화"
+                  }
+                >
+                  <BookmarkIcon
+                    sx={{
+                      fontSize: 20,
+                      color:"#3a3a3a",
+                    }}
+                  />
+                </button>
+              </div>
+
               <button
-                key={tab}
-                className={`communitypage-tab-button ${
-                  activeTab === tab ? "active" : ""
+                type="button"
+                onClick={cycleSort}
+                className="communitypage-sort-button"
+                aria-label={`정렬: ${SORT_LABEL[sortKey]}`}
+                title={`정렬: ${SORT_LABEL[sortKey]}`}
+              >
+                {SORT_LABEL[sortKey]}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="communitypage-header-left">
+              <div className="communitypage-tab-bar">
+                <div
+                  className="communitypage-tab-background"
+                  style={{ transform: `translateX(${tabIndex * 100}%)` }}
+                />
+                {["전체", "친구", "나"].map((tab, index) => (
+                  <button
+                    key={tab}
+                    className={`communitypage-tab-button ${
+                      activeTab === tab ? "active" : ""
+                    }`}
+                    onClick={() => {
+                      setActiveTab(tab);
+                      setTabIndex(index);
+                    }}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+              <button
+                className={`communitypage-bookmark-toggle ${
+                  isHeaderBookmarked ? "active" : ""
                 }`}
-                onClick={() => {
-                  setActiveTab(tab);
-                  setTabIndex(index);
+                onClick={toggleHeaderBookmark}
+              >
+                <BookmarkIcon sx={{ fontSize: 24, color: "#111827" }} />
+              </button>
+            </div>
+
+            <div className="communitypage-header-right">
+              <Paper
+                component="form"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: 150,
+                  borderRadius: "8px",
+                  backgroundColor: "#f0f2f5",
+                  padding: "6px",
+                  boxShadow: "none",
+                }}
+                onSubmit={handleSearchSubmit}
+              >
+                <InputBase
+                  sx={{
+                    ml: 1,
+                    flex: 1,
+                    fontFamily: "Pretendard, sans-serif",
+                    fontSize: "12px",
+                  }}
+                  value={searchKeyword}
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  placeholder="게시물 검색"
+                  inputProps={{ "aria-label": "search" }}
+                />
+                <IconButton type="submit" sx={{ p: "1px" }} aria-label="search">
+                  <SearchIcon />
+                </IconButton>
+              </Paper>
+
+              <IconButton
+                type="button"
+                onClick={handleReset}
+                sx={{
+                  ml: -1,
+                  backgroundColor: "#f0f2f5",
+                  borderRadius: "8px",
+                  width: 40,
+                  height: 40,
+                  "&:hover": { backgroundColor: "#e4e6eb" },
+                }}
+                aria-label="새로고침"
+                title="새로고침"
+              >
+                <RestartAltIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+
+              <button
+                type="button"
+                onClick={cycleSort}
+                style={{
+                  marginLeft: -8,
+                  backgroundColor: "#f0f2f5",
+                  border: "none",
+                  borderRadius: 8,
+                  height: 40,
+                  padding: "0 10px",
+                  fontSize: 11,
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                aria-label={`정렬: ${SORT_LABEL[sortKey]}`}
+              >
+                {SORT_LABEL[sortKey]}
+              </button>
+
+              <img
+                src={(me?.image || me?.profileImage) ?? defaultPetPic}
+                alt="내 프로필"
+                className="communitypage-header-profile-img"
+                onClick={() => handleProfileClick(me)}
+              />
+
+              <IconButton
+                aria-label="create-post"
+                onClick={() => setIsModalOpen(true)}
+                sx={{
+                  backgroundColor: "#333333",
+                  color: "white",
+                  ml: 0,
+                  width: 32,
+                  height: 32,
+                  borderRadius: "4px",
+                  padding: 1,
+                  "&:hover": { backgroundColor: "#6d6d6d" },
                 }}
               >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="communitypage-header-right">
-          <Paper
-            component="form"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              width: 150,
-              borderRadius: "8px",
-              backgroundColor: "#f0f2f5",
-              padding: "6px",
-              boxShadow: "none",
-            }}
-            onSubmit={handleSearchSubmit}
-          >
-            <InputBase
-              sx={{
-                ml: 1,
-                flex: 1,
-                fontFamily: "Pretendard, sans-serif",
-                fontSize: "12px",
-              }}
-              value={searchKeyword}
-              onChange={(e) => setSearchKeyword(e.target.value)}
-              placeholder="게시물 검색"
-              inputProps={{ "aria-label": "search" }}
-            />
-            <IconButton type="submit" sx={{ p: "1px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
-
-          {/* 새로고침 버튼 */}
-          <IconButton
-            type="button"
-            onClick={handleReset}
-            sx={{
-              ml: -1,
-              backgroundColor: "#f0f2f5",
-              borderRadius: "8px",
-              width: 40,
-              height: 40,
-              "&:hover": { backgroundColor: "#e4e6eb" },
-            }}
-            aria-label="새로고침"
-            title="새로고침"
-          >
-            <RestartAltIcon sx={{ fontSize: 20 }} />
-          </IconButton>
-
-          <button
-            type="button"
-            onClick={cycleSort}
-            style={{
-              marginLeft: -8,
-              backgroundColor: "#f0f2f5",
-              border: "none",
-              borderRadius: 8,
-              height: 40,
-              padding: "0 10px",
-              fontSize: 11,
-              fontWeight: 500,
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            aria-label={`정렬: ${SORT_LABEL[sortKey]}`}
-            title={`정렬: ${SORT_LABEL[sortKey]}`}
-          >
-            {SORT_LABEL[sortKey]}
-          </button>
-
-          <img
-            src={(me?.image || me?.profileImage) ?? defaultPetPic}
-            alt="내 프로필"
-            className="communitypage-header-profile-img"
-            onClick={() => handleProfileClick(me)}
-            style={{ cursor: "pointer" }}
-          />
-
-          <IconButton
-            aria-label="create-post"
-            onClick={() => setIsModalOpen(true)}
-            sx={{
-              backgroundColor: "#333333",
-              color: "white",
-              ml: 0,
-              width: 32,
-              height: 32,
-              borderRadius: "4px",
-              padding: 1,
-              "&:hover": { backgroundColor: "#6d6d6d" },
-            }}
-          >
-            <AddIcon sx={{ fontSize: 20 }} />
-          </IconButton>
-        </div>
+                <AddIcon sx={{ fontSize: 20 }} />
+              </IconButton>
+            </div>
+          </>
+        )}
       </div>
 
       <div className="communitypage-posts">

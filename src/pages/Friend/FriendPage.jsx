@@ -203,7 +203,12 @@ const FriendPage = () => {
                 }`}
                 onClick={() => setActiveTab("manage")}
               >
-                <span>친구 요청 관리</span>
+                <span className="friendpage-tab-label">
+                  <span className="friendpage-tab-text">친구 요청 관리</span>
+                  <span className="friendpage-friend-count">
+                    {requests.length}
+                  </span>
+                </span>
               </button>
             </div>
 

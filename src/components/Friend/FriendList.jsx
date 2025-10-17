@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendList.css";
-import InfoIcon from "@mui/icons-material/Info";
+import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import FriendDetail from "./FriendDetail";
 
 const FriendList = ({ friends, onAccept, onReject }) => {
   const [openDetailId, setOpenDetailId] = useState(null);
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  // ✅ 현재 "열려 있는" 메뉴 하나만 추적
+  const openMenuRef = useRef(null);
 
   const isRequest = onAccept && onReject;
+
+  // ✅ 외부 클릭은 "열린 메뉴 ref"만 검사
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (!openMenuId) return;
+      if (openMenuRef.current && !openMenuRef.current.contains(e.target)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [openMenuId]);
 
   return (
     <div className="friendlist-container">
@@ -27,9 +43,7 @@ const FriendList = ({ friends, onAccept, onReject }) => {
               <div className="friendlist-info-section">
                 <div className="friendlist-name">{friend.name}</div>
                 <div className="friendlist-pets">
-                  {friend.pets?.length > 0
-                    ? friend.pets.join(", ")
-                    : "등록된 펫 없음"}
+                  {friend.pets?.length > 0 ? friend.pets.join(", ") : "등록된 펫 없음"}
                 </div>
               </div>
 
@@ -49,23 +63,54 @@ const FriendList = ({ friends, onAccept, onReject }) => {
                   </button>
                 </div>
               ) : (
-                <button
-                  className="friendlist-detail-button"
-                  onClick={() => setOpenDetailId(friend.id)}
-                  aria-label="친구 정보 보기"
+                <div
+                  className="friendlist-menu"
+                  // ✅ 열린 카드에만 ref 연결
+                  ref={openMenuId === friend.id ? openMenuRef : null}
                 >
-                  <InfoIcon />
-                </button>
-              )}
+                  <button
+                    className="friendlist-more-button"
+                    onClick={() =>
+                      setOpenMenuId((prev) => (prev === friend.id ? null : friend.id))
+                    }
+                  >
+                    <MoreHorizRoundedIcon sx={{ fontSize: 20, color: "#000" }} />
+                  </button>
 
-              {openDetailId === friend.id && (
-                <FriendDetail
-                  memberId={Number(friend.id)}
-                  onClose={() => setOpenDetailId(null)}
-                />
+                  {openMenuId === friend.id && (
+                    <div
+                      className="friendlist-dropdown"
+                      onClick={(e) => e.stopPropagation()} // 내부 클릭은 전파 차단
+                    >
+                      <div
+                        onClick={() => {
+                          setOpenDetailId(friend.id);
+                          setOpenMenuId(null);
+                        }}
+                      >
+                        상세보기
+                      </div>
+                      <div
+                        onClick={() => {
+                          alert("친구 삭제 기능은 추후 구현 예정입니다.");
+                          setOpenMenuId(null);
+                        }}
+                      >
+                        친구 삭제
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           ))}
+
+          {openDetailId && (
+            <FriendDetail
+              memberId={Number(openDetailId)}
+              onClose={() => setOpenDetailId(null)}
+            />
+          )}
         </div>
       ) : (
         <div className="friendlist-empty-state">
@@ -74,9 +119,7 @@ const FriendList = ({ friends, onAccept, onReject }) => {
             {isRequest ? "친구 요청이 없습니다." : "친구가 없습니다."}
           </p>
           <p className="friendlist-empty-message-sub">
-            {isRequest
-              ? "받은 친구 요청이 이곳에 표시됩니다!"
-              : "친구를 추가하면 이곳에 표시됩니다!"}
+            {isRequest ? "받은 친구 요청이 이곳에 표시됩니다!" : "친구를 추가하면 이곳에 표시됩니다!"}
           </p>
         </div>
       )}
@@ -94,7 +137,7 @@ FriendList.propTypes = {
   ).isRequired,
   onAccept: PropTypes.func,
   onReject: PropTypes.func,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
 };
 
 export default FriendList;

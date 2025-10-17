@@ -116,6 +116,64 @@
   transition: background-color 0.2s ease;
 }
 
+/* --- 공통 메뉴 구조 --- */
+.friendlist-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.friendlist-more-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.friendlist-more-button:hover {
+  background-color: #f3f4f6;
+}
+
+/* 드롭다운 */
+.friendlist-dropdown {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  z-index: 10;
+  width: 100px;
+  padding: 8px;
+  gap: 4px;
+}
+
+.friendlist-dropdown div {
+  padding: 8px 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.friendlist-dropdown div:hover {
+  background-color: #f9f9f9;
+}
+
+.friendlist-dropdown div:last-child {
+  margin-bottom: 0;
+}
+
 .friendlist-empty-state {
   text-align: center;
   margin-top: 60px;
@@ -138,3 +196,169 @@
   font-size: 14px;
   color: #888;
 }
+
+
+  /* --------------------  모바일  -------------------- */
+  @media screen and (max-width: 768px) {
+
+.friendlist-container {
+  width: 100%;
+  min-height: 92%;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 0 0px;
+  margin: 0 auto;
+}
+
+.friendlist-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.friendlist-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  margin-bottom: 12px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.friendlist-image-wrapper {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.friendlist-image {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.friendlist-info-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1;
+  margin-left: 12px;
+}
+
+.friendlist-name {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #111827;
+}
+
+.friendlist-pets {
+  font-size: 10px;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.friendlist-detail-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.friendlist-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.friendlist-accept-button {
+  padding: 6px 12px;
+  font-size: 9px;
+  font-weight: 600;
+  border: none;
+  background-color: #00CBA8;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.friendlist-accept-button:hover {
+  background-color: #13BA9D;
+  color: #f1f1f1;
+  transition: background-color 0.2s ease;
+}
+
+.friendlist-reject-button {
+  padding: 6px 12px;
+  font-size: 9px;
+  font-weight: 600;
+  border: none;
+  background-color: #3a3a3a;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+.friendlist-reject-button:hover {
+  background-color: #000000;
+  color: #f1f1f1;
+  transition: background-color 0.2s ease;
+}
+
+  .friendlist-more-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .friendlist-dropdown {
+    top: 28px;
+    right: 0;
+    width: 90px;
+    padding: 8px;
+  }
+
+  .friendlist-dropdown div {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 8px;
+  }
+
+.friendlist-empty-state {
+  text-align: center;
+  margin-top: 60px;
+  color: #555;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.friendlist-empty-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.friendlist-empty-message-main {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.friendlist-empty-message-sub {
+  font-size: 12px;
+  color: #888;
+}
+  }

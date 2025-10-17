@@ -20,7 +20,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKERHUB_REPO}:latest", ".")
+                    sh 'docker system prune -af || true'
+                    docker.build("${DOCKERHUB_REPO}:${env.BUILD_NUMBER}", "--no-cache .")
                 }
             }
         }

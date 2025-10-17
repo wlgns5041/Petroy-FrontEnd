@@ -21,12 +21,7 @@ body { overflow-y: scroll; }
 .communitypage-header-left {
   display: flex;
   align-items: center;
-  gap: 24px;
-}
-
-.communitypage-header-title {
-  font-size: 16px;
-  font-weight: 700;
+  gap: 12px;
 }
 
 .communitypage-tab-bar {
@@ -72,6 +67,24 @@ body { overflow-y: scroll; }
 .communitypage-tab-button.active {
   color: #111827;
   font-weight: 700;
+}
+
+.communitypage-bookmark-toggle {
+  background: #f3f4f6 !important;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.5s ease;
+}
+
+.communitypage-bookmark-toggle.active {
+  background: #E8E9EC !important;
+  transition: background 0.5s ease;
+}
+
+.communitypage-bookmark-toggle:hover {
+  background: #e5e7eb;
 }
 
 .communitypage-header-right {
@@ -420,4 +433,465 @@ body { overflow-y: scroll; }
 .comment-sheet-mask.open {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* ---------- 모바일 ---------- */
+@media screen and (max-width: 768px) {
+
+.communitypage-container {
+  padding: 0 16px 80px;
+  max-width: 750px;
+  width: min(750px, 90vw); 
+  margin: 0px auto;
+  background: #f9f9f9;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+  .communitypage-header {
+    flex-direction: column;
+    padding: 0px;
+    gap: 0px;
+    background-color: #f9f9f9;
+  }
+
+  .communitypage-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+  }
+
+.communitypage-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 200px; 
+  background-color: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.communitypage-search-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px 48px 12px 12px;
+  font-size: 10px;
+  outline: none;
+  color: #111827;
+}
+
+.communitypage-search-button {
+  position: absolute;
+  right: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3a3a3a;
+  transition: color 0.2s ease;
+}
+
+.communitypage-search-button svg {
+  font-size: 16px;
+}
+
+  .communitypage-mobile-icon {
+    background-color: #ffffff !important;
+    color: #3a3a3a;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .communitypage-mobile-icon.add {
+    background-color: #3a3a3a !important;
+    color: white;
+  }
+
+.communitypage-header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0px;
+  box-sizing: border-box;
+  flex-direction: row; 
+}
+
+/* 좌측: 탭바 + 북마크 */
+.communitypage-header-bottom-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.communitypage-tab-bar {
+  position: relative;
+  display: flex;
+  background-color: #f0f2f5;
+  border-radius: 8px;
+  padding: 4px;
+  margin: 16px auto;
+  justify-content: center;
+  width: fit-content;
+  overflow: hidden;
+}
+
+.communitypage-tab-background {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3); 
+  height: calc(100% - 8px);
+  background-color: white;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  z-index: 0;
+  border-radius: 8px;
+}
+
+.communitypage-tab-button {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  font-size: 11px;
+  width: 60px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #6b7280;
+  font-weight: 500;
+  z-index: 1;
+  position: relative;
+  white-space: nowrap;
+}
+
+.communitypage-tab-button.active {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* 정렬 버튼 */
+.communitypage-sort-button {
+  background-color: #f3f4f6;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #111827;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.communitypage-sort-button:hover {
+  background-color: #e5e7eb;
+}
+
+.communitypage-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.communitypage-post-card {
+  position: relative;     
+  overflow: hidden; 
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 16px;
+  position: relative;
+  width: auto;
+  margin: 0 auto;
+}
+
+.communitypage-post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.communitypage-post-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.communitypage-post-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.communitypage-post-profile-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.communitypage-post-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+}
+
+.communitypage-post-author {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.communitypage-post-time {
+  color: #aaa;
+  font-size: 10px;
+}
+
+.communitypage-post-category-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.communitypage-post-category {
+  font-size: 10px;
+  font-weight: 600;
+  color: #3a3a3a;
+  background-color: #f9f9f9;
+  padding: 6px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.communitypage-post-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3a3a3a;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.communitypage-post-title em {
+  font-style: normal;        
+  font-weight: 700;          
+  color: #00CBA8;             
+  background-color: #f9f9f9;  
+  padding: 4px;            
+  border-radius: 4px;        
+}
+
+.communitypage-post-menu {
+  position: relative;
+}
+
+.communitypage-menu-button {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: 900;
+  position: relative;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.communitypage-menu-button:hover {
+  background-color: #f9f9f9;
+}
+
+.communitypage-post-dropdown {
+  display: flex; 
+  position: absolute;
+  align-items: center;  
+  justify-content: center;
+  top: 32px;
+  right: 0;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  width: 72px;
+  flex-direction: column;
+  padding: 4px;
+  border: none;
+}
+
+.communitypage-post-menu.open .communitypage-post-dropdown,
+.communitypage-menu-button:focus + .communitypage-post-dropdown {
+  display: flex;
+}
+
+.communitypage-post-dropdown button {
+  padding: 10px;
+  background: none;
+  border: none;
+  text-align: center;   
+  font-size: 10px;
+  font-weight: 600;
+  color: #3a3a3a;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 8px;
+  width: 100%;        
+  margin-bottom: 0px;  
+}
+
+.communitypage-post-dropdown button:hover {
+  background-color: #f9f9f9;
+}
+
+.communitypage-post-main-image {
+  width: 60%;
+  height: auto;
+  margin-top: 4px;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 4px;
+  background-color: #f0f2f5;
+}
+
+.communitypage-post-content {
+  font-size: 10px;
+  font-weight: 500;
+  color: #3a3a3a;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
+}
+
+.communitypage-post-content em {       
+  font-weight: 700;          
+  color: #00CBA8;             
+  background-color: #f9f9f9;  
+  padding: 4px;            
+  border-radius: 4px;          
+}
+
+/* 하단 액션 바 */
+.communitypage-post-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6px;
+  border-top: 1px solid #eee;
+}
+
+.communitypage-post-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+.communitypage-post-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.communitypage-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 8px;            
+  border-radius: 8px;
+  transition: transform 0.12s ease, background-color 0.12s ease;
+}
+
+.communitypage-action-icon {
+  font-size: 16px !important;
+}
+
+.communitypage-action-count {
+  font-size: 10px;
+  margin-left: 0px;
+}
+
+.communitypage-action-btn:hover {
+  background-color: #f9f9f9;
+}
+
+.communitypage-action-btn:active {
+  transform: scale(0.96);
+}
+
+.communitypage-reaction-picker {
+  position: absolute;
+  bottom: 32px;
+  left: 0;
+  background: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  gap: 0px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 20;
+  animation: communitypage-pop-in 120ms ease-out;
+}
+
+.communitypage-reaction-arrow {
+  position: absolute;
+  bottom: -6px;
+  left: 18px;
+  width: 10px; height: 10px;
+  background: #ffffff;
+  border-left: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  transform: rotate(45deg);
+}
+
+.communitypage-reaction-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 9px;
+  color: #111827;
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+
+.communitypage-reaction-item:hover {
+  background: #f3f4f6;
+}
+
+.communitypage-reaction-item:active {
+  transform: scale(0.98);
+}
+
+.communitypage-reaction-item.active {
+  background: #E8E9EC;
+  border-radius: 6px;
+}
+
+.communitypage-reaction-emoji .MuiSvgIcon-root {
+  font-size: 14px;
+  color: #3a3a3a;
+  vertical-align: middle;
+}
+
+.communitypage-reaction-label { 
+  white-space: nowrap; 
+}
+
 }
