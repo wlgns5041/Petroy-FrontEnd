@@ -1,0 +1,369 @@
+.dts-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.dts-field {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-radius: 8px;
+  border: none;
+  background-color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  color: #111827;
+  cursor: pointer;
+  padding: 0 12px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.dts-field:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.dts-caret {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 16px;
+  color: #000;
+}
+
+.dts-popover {
+  position: fixed;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 24px 16px;
+  width: 320px;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+}
+
+.dts-calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+  margin-bottom: 16px;
+  font-weight: bold;
+  grid-column: 1 / span 3;
+}
+
+.dts-nav-btn {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.dts-nav-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.dts-nav-btn svg {
+  font-size: 24px;
+}
+
+.dts-month-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dts-calendar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  grid-column: 1 / span 3;
+  margin-bottom: 12px;
+  padding: 8px 24px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.dts-week-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dts-day {
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dts-day:hover {
+  background-color: #e5e7eb;
+}
+
+.dts-day.selected {
+  background-color: #d1d5db;
+  color: black;
+  font-weight: bold;
+}
+
+.dts-day.today {
+  background-color: #f87171;
+  color: white;
+  font-weight: bold;
+}
+
+.dts-day.today-selected {
+  background-color: #dc2626;
+  color: white;
+  font-weight: bold;
+}
+
+.dts-column {
+  max-height: 120px;
+  overflow-y: auto;
+  border-radius: 8px;
+  background: #f9f9f9;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.dts-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dts-column::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 3px;
+}
+
+.dts-option {
+  display: block;
+  width: 100%;
+  padding: 10px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dts-option:hover {
+  background-color: #f3f4f6;
+}
+
+.dts-option.selected {
+  background-color: #3a3a3a;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+.dts-wrapper {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+.dts-field {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-radius: 8px;
+  border: none;
+  background-color: #fff;
+  font-size: 10px;
+  font-weight: 500;
+  color: #111827;
+  cursor: pointer;
+  padding: 0 12px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.dts-field:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.dts-caret {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 16px;
+  color: #000;
+}
+
+.dts-popover {
+  position: fixed;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 9999;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 16px;
+  width: 240px;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dts-calendar-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 60px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  grid-column: 1 / span 3;
+}
+
+.dts-nav-btn {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0px;
+  cursor: pointer;
+}
+
+.dts-nav-btn:hover {
+  background-color: #f3f4f6;
+}
+
+.dts-nav-btn svg {
+  font-size: 24px;
+}
+
+.dts-month-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dts-calendar-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  grid-column: 1 / span 3;
+  margin-bottom: 8px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.dts-week-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dts-day {
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 24px;
+  border-radius: 6px;
+  font-size: 9px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dts-day:hover {
+  background-color: #e5e7eb;
+}
+
+.dts-day.selected {
+  background-color: #d1d5db;
+  color: black;
+  font-weight: bold;
+}
+
+.dts-day.today {
+  background-color: #f87171;
+  color: white;
+  font-weight: bold;
+}
+
+.dts-day.today-selected {
+  background-color: #dc2626;
+  color: white;
+  font-weight: bold;
+}
+
+.dts-column {
+  max-height: 110px;
+  overflow-y: auto;
+  border-radius: 8px;
+  background: #f9f9f9;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.dts-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dts-column::-webkit-scrollbar-thumb {
+  background: #cfcfcf;
+  border-radius: 3px;
+}
+
+.dts-option {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dts-option:hover {
+  background-color: #f3f4f6;
+}
+
+.dts-option.selected {
+  background-color: #3a3a3a;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+}

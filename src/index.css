@@ -11,3 +11,19 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, select, button {
+  color: inherit;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+button:focus, select:focus, input:focus {
+  outline: none;
+  box-shadow: none;
+}

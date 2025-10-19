@@ -26,7 +26,8 @@ const CategoryModal = ({ isOpen, onRequestClose, onCategoryCreated }) => {
   return (
     <div className="category-modal-overlay">
       <div className="category-modal-wrapper">
-        <h2 className="category-modal-title">카테고리 추가</h2>
+          <h2 className="category-modal-title">카테고리 추가</h2>
+          <div className="category-modal-subtitle">카테고리를 추가해서 일정을 분류해보세요</div>
         <div className="category-modal-form-section">
           <input
             type="text"
@@ -47,7 +48,7 @@ const CategoryModal = ({ isOpen, onRequestClose, onCategoryCreated }) => {
             className="category-modal-btn category-modal-submit"
             onClick={handleSubmit}
           >
-            생성
+            카테고리 생성
           </button>
         </div>
       </div>

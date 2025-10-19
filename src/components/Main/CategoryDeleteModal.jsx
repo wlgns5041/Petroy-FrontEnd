@@ -24,10 +24,12 @@ const CategoryDeleteModal = ({
   return (
     <div className="category-delete-overlay" role="dialog" aria-modal="true">
       <div className="category-delete-container">
-        <h2 className="category-delete-title">정말로 삭제하시겠습니까?</h2>
-        <p className="category-delete-description">
-          <strong>카테고리 삭제</strong>를 원하시면{" "}
-          <strong>카테고리의 이름</strong>을 입력해주세요
+        <h2 className="category-delete-title">카테고리 삭제</h2>
+        <p className="category-delete-subtitle">
+          카테고리 삭제를 원하시면 <strong>카테고리의 이름</strong>을
+          입력해주세요
+          <br />
+          해당 카테고리의 일정이 존재하면 삭제되지 않습니다
         </p>
 
         <input

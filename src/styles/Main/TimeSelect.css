@@ -36,8 +36,8 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 14px;
+  color: #000000;
 }
 
 /* 팝오버: 위치/크기(top/left)는 JS에서 style로 주입됨 */
@@ -56,10 +56,14 @@
 /* 각 열 */
 .cts-column{
   max-height: 220px;
-  overflow: auto;
-  border-radius: 6px;
-  background: #f9fafb;
-  padding: 6px;
+  overflow-y: auto;
+  border-radius: 8px;
+  background: #f9f9f9;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 /* 옵션 버튼 */
@@ -69,12 +73,103 @@
   padding: 10px 10px;
   border: none;
   background: transparent;
-  border-radius: 6px;
+  border-radius: 8px;
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
 }
 .cts-option:hover{ background: #eef2f7; }
+
 .cts-option.selected{
-  background: #111827; color: #fff; font-weight: 700;
+    background: #3a3a3a; 
+  color: #fff; 
+  font-weight: 700;
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+
+  /* 래퍼 */
+.cts-wrapper{
+  position: relative;
+  display: block;        
+  width: 100%;
+  overflow: visible;
+}
+
+/* 필드(버튼) - 카드 중앙 정렬 & 높이/너비 맞춤 */
+.cts-field{
+  width: 100%;
+  height: 100%;
+  display: flex;             
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px 0 4px;
+  border: 0;
+  outline: none;
+  border-radius: 8px;
+  background: transparent;    
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.cts-disabled{ background: #f3f4f6; color:#9ca3af; cursor: not-allowed; }
+
+/* 우측 화살표(세로 가운데) */
+.cts-caret{
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 12px;
+  color: #000000;
+}
+
+/* 팝오버: 위치/크기(top/left)는 JS에서 style로 주입됨 */
+.cts-popover{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+  width: 280px;
+  background: #fff;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+/* 각 열 */
+.cts-column{
+  max-height: 200px;
+  overflow: auto;
+  border-radius: 8px;
+  background: #f9f9f9;
+  padding: 8px;
+}
+
+/* 옵션 버튼 */
+.cts-option{
+  display: block;
+  width: 100%;
+  padding: 10px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cts-option:hover{ background: #eef2f7; }
+
+.cts-option.selected{
+  background: #3a3a3a; color: #fff; font-weight: 700;
+}
 }

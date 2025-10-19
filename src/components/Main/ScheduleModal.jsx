@@ -10,6 +10,9 @@ import {
 import { ko } from "date-fns/locale";
 import { format } from "date-fns";
 import TimeSelect from "../../components/Main/TimeSelect";
+import DateTimeSelect from "../../components/Main/DateTimeSelect";
+import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -41,6 +44,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
   const calendarRef = useRef(null);
   const [syncedHeight, setSyncedHeight] = useState(0);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showFrequencyDropdown, setShowFrequencyDropdown] = useState(false);
 
   useEffect(() => {
     if (calendarRef.current) {
@@ -348,7 +353,7 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
         }),
       };
     } else {
-      requestData.selectedDates = formData.selectedDates.map((d) => d.date); 
+      requestData.selectedDates = formData.selectedDates.map((d) => d.date);
     }
 
     if (formData.noticeYn) {
@@ -482,20 +487,42 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                         >
                           카테고리
                         </label>
-                        <select
-                          id="categoryId"
-                          name="categoryId"
-                          className="schedule-create-inline-select"
-                          value={formData.categoryId || ""}
-                          onChange={handleChange}
-                        >
-                          <option value="">선택</option>
-                          {categories.map((c) => (
-                            <option key={c.categoryId} value={c.categoryId}>
-                              {c.name}
-                            </option>
-                          ))}
-                        </select>
+
+                        <div className="schedule-create-inline-select-wrapper">
+                          <div
+                            className="schedule-create-inline-select"
+                            onClick={() => setShowDropdown((prev) => !prev)}
+                          >
+                            {formData.categoryId
+                              ? categories.find(
+                                  (c) => c.categoryId === formData.categoryId
+                                )?.name || "선택"
+                              : "선택"}
+                            <span className="schedule-create-inline-arrow">
+                              ▼
+                            </span>
+                          </div>
+
+                          {showDropdown && (
+                            <ul className="schedule-create-inline-dropdown">
+                              {categories.map((c) => (
+                                <li
+                                  key={c.categoryId}
+                                  className="schedule-create-inline-option"
+                                  onClick={() => {
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      categoryId: c.categoryId,
+                                    }));
+                                    setShowDropdown(false);
+                                  }}
+                                >
+                                  {c.name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
                       </div>
 
                       <div className="schedule-create-form-inline">
@@ -516,15 +543,16 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                         />
                       </div>
 
-                      <div className="schedule-create-form-inline"></div>
-                      <textarea
-                        id="content"
-                        name="content"
-                        className="schedule-create-textarea"
-                        value={formData.content || ""}
-                        onChange={handleChange}
-                        placeholder="일정에 대한 내용을 작성하세요"
-                      />
+                      <div className="schedule-create-form-inline">
+                        <textarea
+                          id="content"
+                          name="content"
+                          className="schedule-create-textarea"
+                          value={formData.content || ""}
+                          onChange={handleChange}
+                          placeholder="일정에 대한 내용을 작성하세요"
+                        />
+                      </div>
                     </div>
                   )}
 
@@ -575,135 +603,188 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                     </div>
                   )}
 
-                  {step === 3 && (
-                    <>
-                      <div className="schedule-create-tab-wrapper">
-                        <div className="schedule-create-tab-buttons">
-                          <button
-                            type="button"
-                            className={`schedule-create-tab-button ${
-                              formData.repeatYn ? "active" : ""
-                            }`}
-                            onClick={() =>
-                              setFormData((prev) => ({
-                                ...prev,
-                                repeatYn: true,
-                              }))
-                            }
-                          >
-                            <div className="schedule-create-tab-label-with-tooltip">
-                              반복 선택
-                              <div className="schedule-create-tooltip-container">
-                                <FiInfo className="schedule-create-info-icon" />
-                                <span className="schedule-create-tooltip-text">
-                                  <span style={{ color: "#ff5a3c" }}>
-                                    반복 선택
-                                  </span>
-                                  은 시작/종료 날짜와
-                                  <br />
-                                  주기/간격을 통해 일정이 자동 생성됩니다.
-                                  <br />
-                                  <span style={{ color: "#ff5a3c" }}>
-                                    날짜 직접 선택
-                                  </span>
-                                  은 수동으로 지정합니다.
-                                </span>
-                              </div>
-                            </div>
-                          </button>
-
-                          <button
-                            type="button"
-                            className={`schedule-create-tab-button ${
-                              !formData.repeatYn ? "active" : ""
-                            }`}
-                            onClick={() =>
-                              setFormData((prev) => ({
-                                ...prev,
-                                repeatYn: false,
-                              }))
-                            }
-                          >
-                            날짜 직접 선택
-                          </button>
-                        </div>
-                      </div>
-
-                      {formData.repeatYn && (
-                        <div className="schedule-create-section-card-step3">
-                          <div className="schedule-create-form-row">
-                            <div className="schedule-create-input-group">
-                              <label className="schedule-create-label-with-count">
-                                반복 주기
-                              </label>
-                              <select
-                                className="schedule-create-select-step3"
-                                name="repeatPattern.frequency"
-                                value={formData.repeatPattern.frequency}
-                                onChange={handleChange}
-                              >
-                                <option value="DAY">일일</option>
-                                <option value="WEEK">주간</option>
-                                <option value="MONTH">월간</option>
-                              </select>
-                            </div>
-
-                            <div className="schedule-create-input-group">
-                              <label className="schedule-create-label-with-info">
-                                반복 간격
+                  <div className="schedule-create-step3">
+                    {step === 3 && (
+                      <>
+                        <div
+                          className={`schedule-create-tab-wrapper ${
+                            formData.repeatYn ? "repeat-mode" : "direct-mode"
+                          }`}
+                        >
+                          <div className="schedule-create-tab-buttons">
+                            <button
+                              type="button"
+                              className={`schedule-create-tab-button ${
+                                formData.repeatYn ? "active" : ""
+                              }`}
+                              onClick={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  repeatYn: true,
+                                }))
+                              }
+                            >
+                              <div className="schedule-create-tab-label-with-tooltip">
+                                반복 선택
                                 <div className="schedule-create-tooltip-container">
                                   <FiInfo className="schedule-create-info-icon" />
                                   <span className="schedule-create-tooltip-text">
-                                    반복 주기마다 건너뛰는 간격을 의미하며
+                                    <span style={{ color: "#ff5a3c" }}>
+                                      반복 선택
+                                    </span>
+                                    은 시작/종료 날짜와
                                     <br />
-                                    <strong style={{ color: "#ff5a3c" }}>
-                                      주간(월간)
-                                    </strong>
-                                    으로 선택 시
+                                    주기/간격을 통해 일정이 자동 생성됩니다.
                                     <br />
-                                    선택한 요일(날짜)마다 선택한 간격으로
-                                    반복합니다.
+                                    <span style={{ color: "#ff5a3c" }}>
+                                      날짜 직접 선택
+                                    </span>
+                                    은 수동으로 지정합니다.
                                   </span>
                                 </div>
-                              </label>
-                              <input
-                                type="number"
-                                min="1"
-                                name="repeatPattern.interval"
-                                value={formData.repeatPattern.interval}
-                                onChange={handleChange}
-                                className="schedule-create-input-step3"
-                              />
-                            </div>
+                              </div>
+                            </button>
+
+                            <button
+                              type="button"
+                              className={`schedule-create-tab-button ${
+                                !formData.repeatYn ? "active" : ""
+                              }`}
+                              onClick={() =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  repeatYn: false,
+                                }))
+                              }
+                            >
+                              날짜 직접 선택
+                            </button>
                           </div>
+                        </div>
 
-                          {formData.repeatPattern.frequency === "WEEK" && (
-                            <div className="schedule-create-repeat-buttons-week">
-                              {["일", "월", "화", "수", "목", "금", "토"].map(
-                                (day) => (
-                                  <button
-                                    key={day}
-                                    type="button"
-                                    className={`schedule-create-week-button ${
-                                      formData.repeatPattern.daysOfWeek.includes(
-                                        dayMapping[day]
-                                      )
-                                        ? "selected"
-                                        : ""
+                        {formData.repeatYn && (
+                          <div className="schedule-create-section-card-step3">
+                            <div className="schedule-create-form-row">
+                              <div className="schedule-create-input-group">
+                                <label className="schedule-create-label-with-count">
+                                  반복 주기
+                                </label>
+
+                                <div className="schedule-create-step3-select-wrapper">
+                                  <div
+                                    className={`schedule-create-step3-select-box ${
+                                      showFrequencyDropdown ? "active" : ""
                                     }`}
-                                    onClick={() => handleDayClick(day)}
+                                    onClick={() =>
+                                      setShowFrequencyDropdown((prev) => !prev)
+                                    }
                                   >
-                                    {day}
-                                  </button>
-                                )
-                              )}
-                            </div>
-                          )}
+                                    {formData.repeatPattern.frequency === "DAY"
+                                      ? "일일"
+                                      : formData.repeatPattern.frequency ===
+                                        "WEEK"
+                                      ? "주간"
+                                      : formData.repeatPattern.frequency ===
+                                        "MONTH"
+                                      ? "월간"
+                                      : "선택"}
+                                    <span className="schedule-create-step3-select-arrow">
+                                      ▼
+                                    </span>
+                                  </div>
 
-                          {formData.repeatPattern.frequency === "MONTH" && (
-                            <div className="schedule-create-repeat-buttons-month">
-                              {Array.from({ length: 31 }, (_, i) => i + 1).map(
-                                (day) => (
+                                  {showFrequencyDropdown && (
+                                    <ul className="schedule-create-step3-select-dropdown">
+                                      {[
+                                        { value: "DAY", label: "일일" },
+                                        { value: "WEEK", label: "주간" },
+                                        { value: "MONTH", label: "월간" },
+                                      ].map((option) => (
+                                        <li
+                                          key={option.value}
+                                          className={`schedule-create-step3-select-option ${
+                                            formData.repeatPattern.frequency ===
+                                            option.value
+                                              ? "selected"
+                                              : ""
+                                          }`}
+                                          onClick={() => {
+                                            setFormData((prev) => ({
+                                              ...prev,
+                                              repeatPattern: {
+                                                ...prev.repeatPattern,
+                                                frequency: option.value,
+                                              },
+                                            }));
+                                            setShowFrequencyDropdown(false);
+                                          }}
+                                        >
+                                          {option.label}
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="schedule-create-input-group">
+                                <label className="schedule-create-label-with-info">
+                                  반복 간격
+                                  <div className="schedule-create-tooltip-container">
+                                    <FiInfo className="schedule-create-info-icon" />
+                                    <span className="schedule-create-tooltip-text">
+                                      반복 주기마다 건너뛰는 간격을 의미하며
+                                      <br />
+                                      <strong style={{ color: "#ff5a3c" }}>
+                                        주간(월간)
+                                      </strong>
+                                      으로 선택 시
+                                      <br />
+                                      선택한 요일(날짜)마다 선택한 간격으로
+                                      반복합니다.
+                                    </span>
+                                  </div>
+                                </label>
+                                <input
+                                  type="number"
+                                  min="1"
+                                  name="repeatPattern.interval"
+                                  value={formData.repeatPattern.interval}
+                                  onChange={handleChange}
+                                  className="schedule-create-input-step3"
+                                />
+                              </div>
+                            </div>
+
+                            {formData.repeatPattern.frequency === "WEEK" && (
+                              <div className="schedule-create-repeat-buttons-week">
+                                {["일", "월", "화", "수", "목", "금", "토"].map(
+                                  (day) => (
+                                    <button
+                                      key={day}
+                                      type="button"
+                                      className={`schedule-create-week-button ${
+                                        formData.repeatPattern.daysOfWeek.includes(
+                                          dayMapping[day]
+                                        )
+                                          ? "selected"
+                                          : ""
+                                      }`}
+                                      onClick={() => handleDayClick(day)}
+                                    >
+                                      {day}
+                                    </button>
+                                  )
+                                )}
+                              </div>
+                            )}
+
+                            {formData.repeatPattern.frequency === "MONTH" && (
+                              <div className="schedule-create-repeat-buttons-month">
+                                {Array.from(
+                                  { length: 31 },
+                                  (_, i) => i + 1
+                                ).map((day) => (
                                   <button
                                     key={day}
                                     type="button"
@@ -718,261 +799,277 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                                   >
                                     {day}
                                   </button>
-                                )
-                              )}
-                            </div>
-                          )}
+                                ))}
+                              </div>
+                            )}
 
-                          <div className="schedule-create-form-row">
-                            <div className="schedule-create-input-group wide">
-                              <label className="schedule-create-form-label">
-                                일정 반복 시작
-                              </label>
-                              <input
-                                type="datetime-local"
-                                name="repeatPattern.startDate"
-                                value={formData.repeatPattern.startDate}
-                                onChange={handleChange}
-                                className="schedule-create-input-step3 wide"
-                              />
-                            </div>
-                            <div className="schedule-create-input-group wide">
-                              <label className="schedule-create-form-label">
-                                일정 반복 종료
-                              </label>
-                              <input
-                                type="datetime-local"
-                                name="repeatPattern.endDate"
-                                value={formData.repeatPattern.endDate}
-                                onChange={handleChange}
-                                className="schedule-create-input-step3 wide"
-                              />
-                            </div>
+<div className="schedule-create-form-row">
+  <div className="schedule-create-input-group wide">
+    <label className="schedule-create-form-label">일정 반복 시작</label>
+    <DateTimeSelect
+      value={formData.repeatPattern.startDate}
+      onChange={(newValue) =>
+        setFormData((prev) => ({
+          ...prev,
+          repeatPattern: {
+            ...prev.repeatPattern,
+            startDate: newValue,
+          },
+        }))
+      }
+    />
+  </div>
+
+  <div className="schedule-create-input-group wide">
+    <label className="schedule-create-form-label">일정 반복 종료</label>
+    <DateTimeSelect
+      value={formData.repeatPattern.endDate}
+      onChange={(newValue) =>
+        setFormData((prev) => ({
+          ...prev,
+          repeatPattern: {
+            ...prev.repeatPattern,
+            endDate: newValue,
+          },
+        }))
+      }
+    />
+  </div>
+</div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {!formData.repeatYn && (
-                        <div className="schedule-create-step3-calendar-wrapper">
-                          {/* ⬅ 좌측 미니 캘린더 */}
-                          <div
-                            className="schedule-create-step3-mini-calendar"
-                            ref={calendarRef}
-                          >
-                            <div className="schedule-create-step3-mini-calendar-header">
-                              <button
-                                type="button"
-                                className="schedule-create-step3-nav-btn"
-                                onClick={() =>
-                                  setCurrentDate(
-                                    (prev) =>
-                                      new Date(
-                                        prev.getFullYear(),
-                                        prev.getMonth() - 1,
-                                        1
-                                      )
-                                  )
-                                }
-                              >
-                                ◀
-                              </button>
-                              <span className="schedule-create-step3-month-label">
-                                {currentMonthStr}
-                              </span>
-                              <button
-                                type="button"
-                                className="schedule-create-step3-nav-btn"
-                                onClick={() =>
-                                  setCurrentDate(
-                                    (prev) =>
-                                      new Date(
-                                        prev.getFullYear(),
-                                        prev.getMonth() + 1,
-                                        1
-                                      )
-                                  )
-                                }
-                              >
-                                ▶
-                              </button>
-                            </div>
+                        {!formData.repeatYn && (
+                          <div className="schedule-create-step3-calendar-wrapper">
+                            <div
+                              className="schedule-create-step3-mini-calendar"
+                              ref={calendarRef}
+                            >
+                              <div className="schedule-create-step3-mini-calendar-header">
+                                <button
+                                  type="button"
+                                  className="schedule-create-step3-nav-btn"
+                                  onClick={() =>
+                                    setCurrentDate(
+                                      (prev) =>
+                                        new Date(
+                                          prev.getFullYear(),
+                                          prev.getMonth() - 1,
+                                          1
+                                        )
+                                    )
+                                  }
+                                >
+                                  <ChevronLeftRoundedIcon
+                                    sx={{ fontSize: 32 }}
+                                  />
+                                </button>
 
-                            {groupDatesByWeek(
-                              getStartOfMonth(),
-                              getEndOfMonth()
-                            ).map((week, i) => (
-                              <div
-                                key={i}
-                                className="schedule-create-step3-week-row"
-                              >
-                                {week.map((date, j) => {
-                                  const formatted = new Date(
-                                    date.getTime() + 9 * 60 * 60 * 1000
-                                  )
-                                    .toISOString()
-                                    .slice(0, 10);
+                                <span className="schedule-create-step3-month-label">
+                                  {currentMonthStr}
+                                </span>
 
-                                  const isSelected =
-                                    formData.selectedDates.some(
-                                      (d) => d.date === formatted
-                                    );
-                                  const isToday =
-                                    date.toLocaleDateString("sv-SE", {
-                                      timeZone: "Asia/Seoul",
-                                    }) ===
-                                    new Date().toLocaleDateString("sv-SE", {
-                                      timeZone: "Asia/Seoul",
-                                    });
+                                <button
+                                  type="button"
+                                  className="schedule-create-step3-nav-btn"
+                                  onClick={() =>
+                                    setCurrentDate(
+                                      (prev) =>
+                                        new Date(
+                                          prev.getFullYear(),
+                                          prev.getMonth() + 1,
+                                          1
+                                        )
+                                    )
+                                  }
+                                >
+                                  <ChevronRightRoundedIcon
+                                    sx={{ fontSize: 32 }}
+                                  />
+                                </button>
+                              </div>
 
-                                  return (
-                                    <div
-                                      key={j}
-                                      className={`schedule-create-step3-day
+                              {groupDatesByWeek(
+                                getStartOfMonth(),
+                                getEndOfMonth()
+                              ).map((week, i) => (
+                                <div
+                                  key={i}
+                                  className="schedule-create-step3-week-row"
+                                >
+                                  {week.map((date, j) => {
+                                    const formatted = new Date(
+                                      date.getTime() + 9 * 60 * 60 * 1000
+                                    )
+                                      .toISOString()
+                                      .slice(0, 10);
+
+                                    const isSelected =
+                                      formData.selectedDates.some(
+                                        (d) => d.date === formatted
+                                      );
+                                    const isToday =
+                                      date.toLocaleDateString("sv-SE", {
+                                        timeZone: "Asia/Seoul",
+                                      }) ===
+                                      new Date().toLocaleDateString("sv-SE", {
+                                        timeZone: "Asia/Seoul",
+                                      });
+
+                                    return (
+                                      <div
+                                        key={j}
+                                        className={`schedule-create-step3-day
                 ${isToday ? "today" : ""}
                 ${isSelected ? "selected" : ""}
                 ${isToday && isSelected ? "today-selected" : ""}
               `}
-                                      onClick={() => handleDateChange(date)}
-                                    >
-                                      {date.getDate()}
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* ➡ 우측 선택된 날짜 */}
-                          <div
-                            className="schedule-create-step3-selected-dates-box"
-                            style={{
-                              height: syncedHeight
-                                ? `${syncedHeight}px`
-                                : "auto",
-                            }}
-                          >
-                            <div className="schedule-create-step3-selected-dates-title-row">
-                              <div className="schedule-create-step3-selected-dates-title">
-                                선택된 날짜
-                              </div>
-                              <button
-                                className="schedule-create-step3-clear-btn"
-                                type="button"
-                                onClick={() =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    selectedDates: [],
-                                  }))
-                                }
-                              >
-                                전체해제
-                              </button>
-                            </div>
-
-                            <div
-                              className={`schedule-create-step3-date-list ${
-                                formData.selectedDates.length % 2 === 1
-                                  ? "align-left"
-                                  : ""
-                              }`}
-                              style={{
-                                overflowY: "auto",
-                                maxHeight: `${syncedHeight - 48 - 24}px`,
-                              }}
-                            >
-                              {formData.selectedDates.map((item, idx) => (
-                                <div
-                                  key={idx}
-                                  className="schedule-create-step3-date-pill"
-                                  onClick={() =>
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      selectedDates: prev.selectedDates.filter(
-                                        (d) => d.date !== item.date
-                                      ),
-                                    }))
-                                  }
-                                >
-                                  {item.date}
+                                        onClick={() => handleDateChange(date)}
+                                      >
+                                        {date.getDate()}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               ))}
                             </div>
-                          </div>
-                        </div>
-                      )}
 
-                      <div className="schedule-create-step3-allday">
-                        {/* 하루종일 스위치 박스 */}
-                        <div className="schedule-create-allday-box">
-                          <span className="schedule-create-allday-label">
-                            하루종일 설정
-                            <div className="schedule-create-tooltip-container">
-                              <FiInfo className="schedule-create-info-icon" />
-                              <span className="schedule-create-tooltip-text">
-                                시간 설정 없이 일정을{" "}
-                                <span
-                                  style={{
-                                    fontWeight: "600",
-                                    color: "#ff5a3c",
-                                  }}
-                                >
-                                  하루 전체
-                                </span>
-                                로 간주됩니다
-                                <br />
-                                알림 설정 시 해당 날짜 자정 기준으로 설정됩니다
-                              </span>
-                            </div>
-                          </span>
-                          <label className="schedule-create-switch">
-                            <input
-                              type="checkbox"
-                              name="isAllDay"
-                              checked={formData.isAllDay}
-                              onChange={handleChange}
-                            />
-                            <span className="schedule-create-slider round"></span>
-                          </label>
-                        </div>
-
-                        {/* 시간 설정 or 하루종일 텍스트 */}
-                        <div
-                          className={`schedule-create-time-box ${
-                            !formData.isAllDay ? "active-time-box" : ""
-                          }`}
-                        >
-                          {formData.isAllDay ? (
-                            <div className="schedule-create-time-allday-text">
-                              선택한 일정 시간을 자정으로 설정합니다
-                            </div>
-                          ) : (
+                            {/* ➡ 우측 선택된 날짜 */}
                             <div
-                              className="schedule-create-time-setting"
-                              style={{ width: "100%" }}
+                              className="schedule-create-step3-selected-dates-box"
+                              style={{
+                                height: syncedHeight
+                                  ? `${syncedHeight}px`
+                                  : "auto",
+                              }}
                             >
-                              {formData.isAllDay ? (
-                                <div className="schedule-create-time-allday-text">
-                                  선택한 일정 시간을 자정으로 설정합니다
+                              <div className="schedule-create-step3-selected-dates-title-row">
+                                <div className="schedule-create-step3-selected-dates-title">
+                                  선택된 날짜
                                 </div>
-                              ) : (
-                                <TimeSelect
-                                  value={formData.scheduleTime || "00:00"}
-                                  onChange={(v) =>
+                                <button
+                                  className="schedule-create-step3-clear-btn"
+                                  type="button"
+                                  onClick={() =>
                                     setFormData((prev) => ({
                                       ...prev,
-                                      scheduleTime: v,
+                                      selectedDates: [],
                                     }))
                                   }
-                                  step={5}
-                                  disabled={false}
-                                />
-                              )}
+                                >
+                                  전체해제
+                                </button>
+                              </div>
+
+                              <div
+                                className={`schedule-create-step3-date-list ${
+                                  formData.selectedDates.length % 2 === 1
+                                    ? "align-left"
+                                    : ""
+                                }`}
+                                style={{
+                                  overflowY: "auto",
+                                  maxHeight: `${syncedHeight - 48 - 24}px`,
+                                }}
+                              >
+                                {formData.selectedDates.map((item, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="schedule-create-step3-date-pill"
+                                    onClick={() =>
+                                      setFormData((prev) => ({
+                                        ...prev,
+                                        selectedDates:
+                                          prev.selectedDates.filter(
+                                            (d) => d.date !== item.date
+                                          ),
+                                      }))
+                                    }
+                                  >
+                                    {item.date}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
-                          )}
+                          </div>
+                        )}
+
+                        <div className="schedule-create-step3-allday">
+                          {/* 하루종일 스위치 박스 */}
+                          <div className="schedule-create-allday-box">
+                            <span className="schedule-create-allday-label">
+                              하루종일 설정
+                              <div className="schedule-create-tooltip-container">
+                                <FiInfo className="schedule-create-info-icon" />
+                                <span className="schedule-create-tooltip-text">
+                                  시간 설정 없이 일정을{" "}
+                                  <span
+                                    style={{
+                                      fontWeight: "600",
+                                      color: "#ff5a3c",
+                                    }}
+                                  >
+                                    하루 전체
+                                  </span>
+                                  로 간주됩니다
+                                  <br />
+                                  알림 설정 시 해당 날짜 자정 기준으로
+                                  설정됩니다
+                                </span>
+                              </div>
+                            </span>
+                            <label className="schedule-create-switch">
+                              <input
+                                type="checkbox"
+                                name="isAllDay"
+                                checked={formData.isAllDay}
+                                onChange={handleChange}
+                              />
+                              <span className="schedule-create-slider round"></span>
+                            </label>
+                          </div>
+
+                          {/* 시간 설정 or 하루종일 텍스트 */}
+                          <div
+                            className={`schedule-create-time-box ${
+                              !formData.isAllDay ? "active-time-box" : ""
+                            }`}
+                          >
+                            {formData.isAllDay ? (
+                              <div className="schedule-create-time-allday-text">
+                                선택한 일정 시간을 <br />
+                                자정으로 설정합니다
+                              </div>
+                            ) : (
+                              <div
+                                className="schedule-create-time-setting"
+                                style={{ width: "100%" }}
+                              >
+                                {formData.isAllDay ? (
+                                  <div className="schedule-create-time-allday-text">
+                                    선택한 일정 시간을
+                                    <br /> 자정으로 설정합니다
+                                  </div>
+                                ) : (
+                                  <TimeSelect
+                                    value={formData.scheduleTime || "00:00"}
+                                    onChange={(v) =>
+                                      setFormData((prev) => ({
+                                        ...prev,
+                                        scheduleTime: v,
+                                      }))
+                                    }
+                                    step={5}
+                                    disabled={false}
+                                  />
+                                )}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    )}
+                  </div>
 
                   {step === 4 && (
                     <div className="schedule-create-section-card">
