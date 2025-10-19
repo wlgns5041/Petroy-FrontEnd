@@ -286,7 +286,7 @@
   opacity:.92;
 }
 
-/* ---------- 모바일 ---------- */
+/* --------- 모바일 --------- */
 @media screen and (max-width: 768px) {
 
 .comment-sheet-mask {
