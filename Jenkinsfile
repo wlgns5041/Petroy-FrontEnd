@@ -20,8 +20,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker system prune -af || true'
-                    docker.build("${DOCKERHUB_REPO}:${env.BUILD_NUMBER}", "--no-cache .")
+                    // ✅ 캐시 유지 (no-cache 제거)
+                    docker.build("${DOCKERHUB_REPO}:latest", ".")
                 }
             }
         }
@@ -30,9 +30,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-                        sh """
-                            docker push ${DOCKERHUB_REPO}:latest
-                        """
+                        sh "docker push ${DOCKERHUB_REPO}:latest"
                     }
                 }
             }
@@ -41,15 +39,16 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    def running = sh(script: "docker ps --filter name=$CONTAINER_NAME --format '{{.Names}}'", returnStdout: true).trim()
-                    if (running == "") {
-                        sh """
-                            docker pull ${DOCKERHUB_REPO}:latest
-                            docker run -d --name $CONTAINER_NAME -p 80:80 ${DOCKERHUB_REPO}:latest
-                        """
-                    } else {
-                        echo "Container $CONTAINER_NAME already running. Skipping deployment."
-                    }
+                    sh """
+                        if [ \$(docker ps -q -f name=${CONTAINER_NAME}) ]; then
+                            echo "Stopping and removing existing container..."
+                            docker stop ${CONTAINER_NAME} || true
+                            docker rm ${CONTAINER_NAME} || true
+                        fi
+
+                        echo "Deploying new container..."
+                        docker run -d --name ${CONTAINER_NAME} -p 80:80 ${DOCKERHUB_REPO}:latest
+                    """
                 }
             }
         }

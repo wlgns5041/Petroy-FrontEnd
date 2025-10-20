@@ -97,7 +97,7 @@ useEffect(() => {
     newDate.setHours(hour);
     newDate.setMinutes(minute);
     setSelectedDate(newDate);
-    onChange?.(newDate.toISOString());
+    onChange?.(newDate.toISOString().replace("Z", ""));
   };
 
   // ✅ 시간 변경
@@ -108,7 +108,7 @@ useEffect(() => {
     setHour(newHour);
     setMinute(newMinute);
     setSelectedDate(newDate);
-    onChange?.(newDate.toISOString());
+    onChange?.(newDate.toISOString().replace("Z", ""));
   };
 
   const currentMonthStr = format(currentDate, "yyyy년 M월", { locale: ko });
