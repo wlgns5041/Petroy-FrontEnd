@@ -2,14 +2,17 @@ import React, { useState, useEffect } from "react";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Pet/AssignCareGiver.css";
 import { fetchAcceptedFriends } from "../../services/FriendService";
-import {fetchCaregiversByPet, assignCaregiver} from "../../services/PetService";
-
+import {
+  fetchCaregiversByPet,
+  assignCaregiver,
+} from "../../services/PetService";
 
 const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
   const [friends, setFriends] = useState([]);
   const [caregivers, setCaregivers] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedFriend, setSelectedFriend] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,11 +35,12 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
     fetchData();
   }, [pet.petId]);
 
-  const handleAssign = async (careGiverId) => {
+  const handleAssign = async () => {
+    if (!selectedFriend) return;
     try {
-      const success = await assignCaregiver(pet.petId, careGiverId);
+      const success = await assignCaregiver(pet.petId, selectedFriend.id);
       if (success) {
-        onAssignCareGiver(careGiverId);
+        onAssignCareGiver(selectedFriend.id);
         onClose();
       }
     } catch (err) {
@@ -51,26 +55,34 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
     caregivers.some((c) => c.memberName === friendName);
 
   return (
-  <div className="pet-assign-overlay">
-    <div className="pet-assign-container">
-      <button className="pet-assign-close" onClick={onClose}>
-        &times;
-      </button>
-      <h2 className="pet-assign-title">
-        <strong>{pet.name}</strong>의 돌보미로 등록할 친구를 선택해주세요
-      </h2>
-      {loading ? (
-        <p className="pet-assign-loading">로딩 중...</p>
-      ) : error ? (
-        <p className="pet-assign-error">{error}</p>
-      ) : friends.length > 0 ? (
-        <div className="pet-assign-friends-grid">
-          {friends.map((friend) => {
-            const alreadyAssigned = isAlreadyCaregiver(friend.name);
+    <div className="pet-assign-overlay">
+      <div className="pet-assign-container">
+        <h2 className="pet-assign-title">
+          {pet.name}의 돌보미로 등록할 친구를 선택해주세요
+        </h2>
+        {loading ? (
+          <p className="pet-assign-loading">로딩 중...</p>
+        ) : error ? (
+          <p className="pet-assign-error">{error}</p>
+        ) : friends.length > 0 ? (
+          <div className="pet-assign-friends-grid">
+            {friends.map((friend) => {
+              const alreadyAssigned = isAlreadyCaregiver(friend.name);
+              const isSelected = selectedFriend?.id === friend.id;
 
-            return (
-              <div key={friend.id} className="pet-assign-friend-card">
-                <div className="pet-assign-left">
+              return (
+                <div
+                  key={friend.id}
+                  className={`pet-assign-friend-card ${
+                    isSelected ? "pet-assign-selected" : ""
+                  } ${alreadyAssigned ? "pet-assign-disabled-card" : ""}`}
+                  onClick={() =>
+                    !alreadyAssigned &&
+                    setSelectedFriend((prev) =>
+                      prev?.id === friend.id ? null : friend
+                    )
+                  }
+                >
                   <img
                     src={friend.image || defaultProfilePic}
                     alt={friend.name}
@@ -78,25 +90,27 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
                   />
                   <span className="pet-assign-friend-name">{friend.name}</span>
                 </div>
-                <button
-                  disabled={alreadyAssigned}
-                  onClick={() => handleAssign(friend.id)}
-                  className={`pet-assign-button ${
-                    alreadyAssigned ? "pet-assign-disabled" : ""
-                  }`}
-                >
-                  {alreadyAssigned ? "이미 등록된 돌보미" : "돌보미 등록"}
-                </button>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+        ) : (
+          <p className="pet-assign-no-friends">등록된 친구가 없습니다.</p>
+        )}
+        <div className="pet-assign-button-row">
+          <button className="pet-assign-cancel" onClick={onClose}>
+            취소
+          </button>
+          <button
+            className="pet-assign-submit"
+            onClick={handleAssign}
+            disabled={!selectedFriend}
+          >
+            돌보미 등록
+          </button>
         </div>
-      ) : (
-        <p className="pet-assign-no-friends">등록된 친구가 없습니다.</p>
-      )}
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default AssignCareGiver;

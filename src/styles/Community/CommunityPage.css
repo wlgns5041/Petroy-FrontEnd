@@ -503,7 +503,7 @@ body { overflow-y: scroll; }
   .communitypage-mobile-icon {
     background-color: #ffffff !important;
     color: #3a3a3a;
-    border-radius: 8px;
+    border-radius: 8px !important;
     width: 36px;
     height: 36px;
   }
@@ -607,7 +607,7 @@ body { overflow-y: scroll; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   padding: 16px;
   position: relative;
-  width: auto;
+  width: 90%;
   margin: 0 auto;
 }
 

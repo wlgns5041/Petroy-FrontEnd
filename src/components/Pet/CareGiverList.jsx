@@ -75,7 +75,7 @@ const CareGiverList = ({ pet, onClose }) => {
           &times;
         </button>
         <h2 className="care-giver-list-title">
-          <strong>{pet.name}</strong>의 돌보미 친구목록
+         {pet.name}의 돌보미 친구목록
         </h2>
         {error ? (
           <p className="care-giver-list-error">{error}</p>
@@ -97,7 +97,7 @@ const CareGiverList = ({ pet, onClose }) => {
                     handleDeleteCareGiver(cg.memberId, cg.memberName)
                   }
                 >
-                  삭제
+                  목록에서 제거
                 </button>
               </li>
             ))}

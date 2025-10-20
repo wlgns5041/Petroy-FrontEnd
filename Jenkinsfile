@@ -20,7 +20,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // ✅ 캐시 유지 (no-cache 제거)
                     docker.build("${DOCKERHUB_REPO}:latest", ".")
                 }
             }

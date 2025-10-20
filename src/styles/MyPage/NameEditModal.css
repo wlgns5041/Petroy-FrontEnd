@@ -10,15 +10,16 @@
 
 .name-edit-modal-content {
   background-color: white;
-  border-radius: 20px;
-  padding: 32px 24px;
-  width: 90vw;
+  border-radius: 12px;
+  padding: 24px;
+  width: 90%;
   max-width: 420px;
   font-family: 'Pretendard', sans-serif;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .name-edit-modal-header {
@@ -26,55 +27,59 @@
 }
 
 .name-edit-modal-header h2 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
 }
 
 .name-edit-modal-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .input-row {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   width: 100%;
 }
 
 .input-row input {
-  flex: 1;
+  width: 100%;
   padding: 12px 14px;
   font-size: 12px;
-  border: none;
   border-radius: 8px;
-  outline: none;
-  transition: border 0.2s;
-  background-color: #f3f4f6;
+  border: none;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  color: #000000;
 }
 
 .input-row input:focus {
-  border-color: #6366f1;
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
 }
 
 .check-button {
   padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  background-color: #f3f4f6;
+  font-size: 12px;
+  font-weight: 700;
+  background-color: #3a3a3a;
+  color: #FFFFFF;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   white-space: nowrap;
+  transition: background-color 0.2s ease;
 }
 
 .check-button:hover {
-  background-color: #e5e7eb;
+  background-color: #000000;
 }
 
 .name-edit-error {
   font-size: 14px;
+  font-weight: 600;
   margin-top: 24px;
   margin-bottom: -12px;
 }
@@ -84,7 +89,7 @@
 }
 
 .name-edit-error.valid {
-  color: #10b981;
+  color: #00CBA8;
 }
 
 .name-edit-modal-footer {
@@ -95,30 +100,175 @@
 
 .skip-button {
   flex: 1;
-  background-color: #f3f4f6;
-  color: #1f2937;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
   border: none;
-  border-radius: 12px;
-  padding: 14px 0;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #f9f9f9;
+}
+
+.skip-button:hover {
+  background-color: #E8E9EC;
 }
 
 .next-button {
   flex: 1;
-  background-color: #10b981;
-  color: white;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
   border: none;
-  border-radius: 12px;
-  padding: 14px 0;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #00CBA8;
+  color: white;
+}
+
+.next-button:hover {
+  background-color: #13BA9D;
 }
 
 .next-button:disabled {
-  background-color: #d1d5db;
-  color: #9ca3af;
+  background: #E8E9EC;
+  color: #C0C0C0;
   cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+.name-edit-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.name-edit-modal-content {
+  background-color: #fff;
+  width: 80%;
+  max-width: auto;
+  height: auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.name-edit-modal-header {
+  text-align: center;
+}
+
+.name-edit-modal-header h2 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
+}
+
+.name-edit-modal-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.input-row input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 9px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  color: #000000;
+}
+
+.input-row input:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.check-button {
+  padding: 10px 16px;
+  font-size: 10px;
+  font-weight: 700;
+  background-color: #3a3a3a;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.check-button:hover {
+  background-color: #000000;
+}
+
+.name-edit-error {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: -12px;
+}
+
+.name-edit-error.invalid {
+  color: #dc2626;
+}
+
+.name-edit-error.valid {
+  color: #00CBA8;
+}
+
+.name-edit-modal-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.skip-button {
+  flex: 1;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #f9f9f9;
+}
+
+.next-button {
+  flex: 1;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #00CBA8;
+  color: white;
+}
+
+.next-button:disabled {
+  background: #E8E9EC;
+  color: #C0C0C0;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
 }

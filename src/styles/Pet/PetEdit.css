@@ -17,30 +17,30 @@
 }
 
 .pet-edit-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
   position: fixed;
-  z-index: 1000;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .pet-edit-modal-content {
   background-color: white;
   width: 90%;
   max-width: 420px;
-  height: 480px;
+  height: auto;
   max-height: 90vh;
-  padding: 32px 24px;
+  padding: 12px 12px 0px 12px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   font-family: "Pretendard", sans-serif;
   position: relative;
-  overflow: hidden;
+  overflow: visible !important; 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -56,6 +56,7 @@
   border: none;
   cursor: pointer;
 }
+
 .pet-edit-close:hover {
   color: #10b981;
 }
@@ -67,30 +68,34 @@
   background: none;
   border: none;
   font-size: 24px;
-  color: #4b5563;
+  color: #aaa;
   cursor: pointer;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .pet-edit-back-button:hover {
   color: #10b981;
 }
 
 .pet-edit-step-indicator {
   font-size: 14px;
-  color: #9ca3af;
+  font-weight: 500;
+  color: #6B7280;
   margin-bottom: 20px;
   text-align: center;
+  margin-top: 32px;
 }
 
 .pet-edit-step-wrapper {
   flex: 1;
-  min-height: 300px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
+  height: 100%;
+  padding: 12px 12px 0px 12px;
 }
 
 .pet-edit-step-content {
@@ -100,19 +105,26 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin-bottom: 100px;
 }
 
 .pet-edit-title {
   font-size: 20px;
   font-weight: bold;
-  margin-top: 24px;
-  margin-bottom: 60px;
-  color: #111827;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  color: #000000;
   text-align: center;
 }
 
 .pet-edit-step2-group {
-  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin-top: 12px;
+  width: 100%;
 }
 
 .pet-edit-form-inline {
@@ -120,43 +132,27 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  gap: 12px;
+  gap: 0px;
+  width: 80%;
 }
 
 .pet-edit-inline-label {
   width: 60px;
   font-size: 14px;
-  font-weight: 500;
-  color: #374151;
-}
-
-.pet-edit-inline-select {
-  flex: 1;
-  padding: 12px 14px;
-  font-size: 12px;
-  border: none;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-sizing: border-box;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='black' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
+  font-weight: 600;
+  color: #000000;
 }
 
 .pet-edit-input {
   flex: 1;
-  padding: 12px 14px;
-  font-size: 13px;
+  padding: 12px 16px;
+  font-size: 12px;
   border-radius: 8px;
   border: none;
   background-color: #f9f9f9;
   box-sizing: border-box;
   transition: all 0.1s ease-in-out;
-  color: #111827;
+  color: #000000;
   border: 1px solid transparent;
 }
 
@@ -164,12 +160,13 @@
 .pet-edit-input:focus {
   outline: none;
   background-color: #ffffff;
-  box-shadow: 0 0 0 2px #10b981;
+  box-shadow: 0 0 0 2px #111827;
 }
 
 .pet-edit-image-box {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 12px;
+  margin-bottom: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,23 +174,26 @@
 }
 
 .pet-edit-image-placeholder {
-  width: 80%;
-  height: 180px;
-  border: 2px dashed #d1d5db;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  border: 2px dashed #CBCBCB;
+  border-radius: 12px;
+  padding: 60px 0;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .pet-edit-file-button {
-  background-color: #f3f4f6;
-  color: #374151;
+  background-color: #f9f9f9;
+  color: #000000;
   border: none;
-  padding: 14px 0;
-  width: 40%;
-  max-width: 100%;
-  font-size: 14px;
+  padding: 16px;
+  width: 100%;
+  font-size: 12px;
   font-weight: 600;
   border-radius: 8px;
   text-align: center;
@@ -201,20 +201,20 @@
   position: relative;
   overflow: hidden;
 }
+
 .pet-edit-file-button input[type="file"] {
   display: none;
 }
 
 .pet-edit-image-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 20px;
+  object-fit: cover;
+  background-color: #f9f9f9;
+  margin-top: -12px;
 }
+
 .pet-edit-image-preview img {
   width: 100%;
   height: 100%;
@@ -222,45 +222,44 @@
 }
 
 .pet-edit-file-clear {
-  width: 120px;
-  background-color: #e5e7eb;
-  color: #111827;
-  border: none;
-  padding: 10px 0;
-  font-size: 14px;
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 12px 32px;
+  font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
 .pet-edit-content-textarea {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: none;
-  margin-top: 20px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .pet-edit-textarea {
   width: 95%;
-  height: 140px;
-  padding: 50px 16px 16px 16px;
+  height: 120px;
+  padding: 48px 20px 20px 20px;
   font-size: 14px;
   line-height: 1.6;
   text-align: center;
   border-radius: 10px;
   background-color: #f9f9f9;
-  border: 1px solid #e5e7eb;
+  border: none;
   box-sizing: border-box;
   color: #111827;
   font-family: inherit;
   resize: none;
 }
+
 .pet-edit-textarea:focus {
   outline: none;
   background-color: #ffffff;
-  box-shadow: 0 0 0 2px #10b981;
+  box-shadow: 0 0 0 2px #111827;
 }
 
 .pet-edit-error {
@@ -282,20 +281,318 @@
 .pet-edit-next-button {
   width: 100%;
   height: 48px;
-  background-color: #10b981;
-  color: white;
-  font-weight: bold;
+  padding: 14px;
   font-size: 14px;
-  border: none;
+  font-weight: 600;
+  background-color: #00CBA8;
+  color: #fff;
   border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pet-edit-next-button:disabled {
+  background: #E8E9EC !important;
+  color: #C0C0C0 !important;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
+
+.pet-edit-next-button:hover {
+  background-color: #13BA9D;
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+
+.pet-edit-modal-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  margin-top: -54px;
+}
+
+.pet-edit-modal-content {
+  background-color: white;
+  width: 80%;
+  max-width: 420px;
+  height: auto;
+  max-height: 90vh;
+  padding: 12px 12px 0px 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  overflow: visible !important; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pet-edit-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 20px;
+  color: #aaa;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.pet-edit-close:hover {
+  color: #10b981;
+}
+
+.pet-edit-back-button {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #aaa;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pet-edit-back-button:hover {
+  color: #10b981;
+}
+
+.pet-edit-step-indicator {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6B7280;
+  margin-bottom: 12px;
+  text-align: center;
+  margin-top: 24px;
+}
+
+.pet-edit-step-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 12px 12px 0px 12px;
+}
+
+.pet-edit-step-content {
+  margin-top: 0;
+  padding-top: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-bottom: 90px;
+}
+
+.pet-edit-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  color: #000000;
+  text-align: center;
+}
+
+.pet-edit-step2-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.pet-edit-form-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 0px;
+  width: 80%;
+  margin-right: 12px;
+}
+
+.pet-edit-inline-label {
+  width: 60px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.pet-edit-input {
+  flex: 1;
+  padding: 12px;
+  font-size: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  transition: all 0.1s ease-in-out;
+  color: #000000;
+  border: 1px solid transparent;
+}
+
+.pet-edit-inline-select:focus,
+.pet-edit-input:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.pet-edit-image-box {
+  width: 100%;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.pet-edit-image-placeholder {
+  border: 2px dashed #CBCBCB;
+  border-radius: 12px;
+  padding: 48px 0;
+  width: 80%;
+  max-width: 280px;
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.pet-edit-next-button:disabled {
-  background-color: #e5e7eb !important;
-  color: #9ca3af !important;
-  cursor: not-allowed;
+
+.pet-edit-file-button {
+  background-color: #f9f9f9;
+  color: #000000;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
+
+.pet-edit-file-button input[type="file"] {
+  display: none;
+}
+
+.pet-edit-image-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  object-fit: cover;
+  background-color: #f9f9f9;
+  margin-top: -12px;
+}
+
+.pet-edit-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.pet-edit-file-clear {
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 12px 28px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.pet-edit-content-textarea {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.pet-edit-textarea {
+  width: 80%;
+  height: 100px;
+  padding: 40px 20px 20px 20px;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  border: none;
+  box-sizing: border-box;
+  color: #000000;
+  font-family: inherit;
+  resize: none;
+}
+
+.pet-edit-textarea:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.pet-edit-error {
+  color: #ef4444;
+  margin-top: 10px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.pet-edit-button-row {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.pet-edit-next-button {
+  width: 100%;
+  height: 48px;
+  padding: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  background-color: #00CBA8;
+  color: #fff;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pet-edit-next-button:disabled {
+  background: #E8E9EC !important;
+  color: #C0C0C0 !important;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
+
 .pet-edit-next-button:hover {
-  background-color: #059669;
+  background-color: #13BA9D;
+}
 }

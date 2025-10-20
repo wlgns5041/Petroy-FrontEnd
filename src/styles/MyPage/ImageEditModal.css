@@ -19,19 +19,20 @@
   align-items: center;
   font-family: 'Pretendard', sans-serif;
   box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .image-edit-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
+  font-size: 20px;
+  font-weight: 800;
+  color: #000000;
   margin-bottom: 24px;
   text-align: center;
 }
 
 .image-edit-upload-box {
-  border: 2px dashed #d1d5db;
-  border-radius: 16px;
+  border: 2px dashed #CBCBCB;
+  border-radius: 12px;
   padding: 48px 0;
   width: 100%;
   max-width: 280px;
@@ -44,7 +45,7 @@
 }
 
 .image-edit-upload-box:hover {
-  background-color: #f9fafb;
+  background-color: #f9f9f9;
 }
 
 .image-edit-input-hidden {
@@ -55,7 +56,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .image-edit-preview-image {
@@ -63,16 +64,16 @@
   height: 140px;
   border-radius: 20px;
   object-fit: cover;
-  border: 1px solid #e5e7eb;
+  background-color: #f9f9f9;
 }
 
 .image-edit-reset-button {
-  background-color: #f3f4f6;
-  color: #1f2937;
-  padding: 10px 24px;
-  font-size: 14px;
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 12px 32px;
+  font-size: 13px;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
 }
@@ -80,36 +81,176 @@
 .image-edit-footer {
   display: flex;
   gap: 12px;
-  margin-top: 40px;
+  margin-top: 32px;
   width: 100%;
 }
 
 .image-edit-skip-button {
   flex: 1;
-  background-color: #f3f4f6;
-  color: #1f2937;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
   border: none;
-  border-radius: 12px;
-  padding: 14px 0;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #f9f9f9;
+}
+
+.image-edit-skip-button:hover {
+  background-color: #E8E9EC;
 }
 
 .image-edit-next-button {
   flex: 1;
-  background-color: #10b981;
-  color: white;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
   border: none;
-  border-radius: 12px;
-  padding: 14px 0;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #00CBA8;
+  color: white;
+}
+
+.image-edit-next-button:hover {
+  background-color: #13BA9D;
 }
 
 .image-edit-next-button:disabled {
-  background-color: #d1d5db;
-  color: #9ca3af;
+  background: #E8E9EC;
+  color: #C0C0C0;
   cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+.image-edit-modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.image-edit-modal-content {
+  background-color: #fff;
+  width: 80%;
+  max-width: auto;
+  height: auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.image-edit-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #000000;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.image-edit-upload-box {
+  border: 2px dashed #CBCBCB;
+  border-radius: 12px;
+  padding: 48px 0;
+  width: 80%;
+  max-width: 280px;
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.image-edit-upload-box:hover {
+  background-color: #f9f9f9;
+}
+
+.image-edit-input-hidden {
+  display: none;
+}
+
+.image-edit-preview-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.image-edit-preview-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  object-fit: cover;
+  background-color: #f9f9f9;
+}
+
+.image-edit-reset-button {
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 12px 32px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.image-edit-footer {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.image-edit-skip-button {
+  flex: 1;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #f9f9f9;
+}
+
+.image-edit-skip-button:hover {
+  background-color: #E8E9EC;
+}
+
+.image-edit-next-button {
+  flex: 1;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background-color: #00CBA8;
+  color: white;
+}
+
+.image-edit-next-button:hover {
+  background-color: #13BA9D;
+}
+
+.image-edit-next-button:disabled {
+  background: #E8E9EC;
+  color: #C0C0C0;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
 }

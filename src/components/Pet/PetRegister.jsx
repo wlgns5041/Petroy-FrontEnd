@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../styles/Pet/PetRegister.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {
@@ -6,6 +6,7 @@ import {
   fetchBreedList,
   registerPet,
 } from "../../services/PetService";
+import ReactDOM from "react-dom";
 
 const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [step, setStep] = useState(1);
@@ -23,6 +24,21 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [breedOptions, setBreedOptions] = useState([]);
   const [error, setError] = useState(null);
 
+  const [dropdownOpen, setDropdownOpen] = useState({
+    species: false,
+    breed: false,
+    age: false,
+    gender: false,
+  });
+
+  const [dropdownPos, setDropdownPos] = useState({});
+  const dropdownRefs = {
+    species: useRef(null),
+    breed: useRef(null),
+    age: useRef(null),
+    gender: useRef(null),
+  };
+
   const breedImageMap = {
     1: require("../../assets/icons/dog-chihuahua.png"),
     2: require("../../assets/icons/dog-jindo.png"),
@@ -32,6 +48,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     6: require("../../assets/icons/cat-cheese.png"),
   };
 
+  // ✅ 종 / 품종 리스트 불러오기
   useEffect(() => {
     const fetchSpecies = async () => {
       try {
@@ -65,10 +82,22 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     fetchBreeds();
   }, [petInfo.speciesId]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setPetInfo((prev) => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    Object.keys(dropdownOpen).forEach((key) => {
+      if (dropdownOpen[key] && dropdownRefs[key].current) {
+        const rect = dropdownRefs[key].current.getBoundingClientRect();
+        setDropdownPos((prev) => ({
+          ...prev,
+          [key]: {
+            top: rect.bottom + 6,
+            right: window.innerWidth - rect.right,
+            width: rect.width,
+          },
+        }));
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dropdownOpen]);
 
   const handleNext = () => {
     if (step === 1 && (!petInfo.speciesId || !petInfo.breedId)) {
@@ -115,6 +144,58 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     }
   };
 
+  // ✅ 커스텀 드롭다운 렌더링 함수
+  const renderDropdown = (key, label, options, valueKey) => {
+    const selectedLabel =
+      options.find((opt) => opt.value === petInfo[valueKey])?.label || "선택";
+
+    const dropdownList =
+      dropdownOpen[key] &&
+      ReactDOM.createPortal(
+        <ul
+          className="pet-register-inline-dropdown"
+          style={{
+            position: "fixed",
+            top: `${dropdownPos[key]?.top || 0}px`,
+            right: `${dropdownPos[key]?.right || 0}px`,
+            zIndex: 9999,
+          }}
+        >
+          {options.map((opt) => (
+            <li
+              key={opt.value}
+              className="pet-register-inline-option"
+              onClick={() => {
+                setPetInfo((prev) => ({ ...prev, [valueKey]: opt.value }));
+                setDropdownOpen((prev) => ({ ...prev, [key]: false }));
+              }}
+            >
+              {opt.label}
+            </li>
+          ))}
+        </ul>,
+        document.body
+      );
+
+    return (
+      <div className="pet-register-form-inline" ref={dropdownRefs[key]}>
+        <label className="pet-register-inline-label">{label}</label>
+        <div className="pet-register-inline-select-wrapper">
+          <div
+            className="pet-register-inline-select"
+            onClick={() =>
+              setDropdownOpen((prev) => ({ ...prev, [key]: !prev[key] }))
+            }
+          >
+            {selectedLabel}
+            <span className="pet-register-inline-arrow">▼</span>
+          </div>
+        </div>
+        {dropdownList}
+      </div>
+    );
+  };
+
   return (
     <div className="pet-register-modal-overlay">
       <div className="pet-register-modal-content">
@@ -138,46 +219,15 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                   <h2 className="pet-register-title">
                     반려동물의 종을 선택해주세요
                   </h2>
-
                   <div className="pet-register-step-center">
-                    {/* 종 선택 */}
-                    <div className="pet-register-form-inline">
-                      <label className="pet-register-inline-label">종</label>
-                      <select
-                        name="speciesId"
-                        value={petInfo.speciesId}
-                        onChange={handleChange}
-                        className="pet-register-inline-select"
-                      >
-                        <option value="">선택</option>
-                        {speciesOptions.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 품종 선택 */}
-                    <div className="pet-register-form-inline">
-                      <label className="pet-register-inline-label">품종</label>
-                      <select
-                        name="breedId"
-                        value={petInfo.breedId}
-                        onChange={handleChange}
-                        className="pet-register-inline-select"
-                        disabled={!petInfo.speciesId}
-                      >
-                        <option value="">선택</option>
-                        {breedOptions.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+                    {renderDropdown(
+                      "species",
+                      "종",
+                      speciesOptions,
+                      "speciesId"
+                    )}
+                    {renderDropdown("breed", "품종", breedOptions, "breedId")}
                   </div>
-
                   <div className="pet-register-button-fixed">
                     <button
                       className="pet-register-step-button"
@@ -198,44 +248,40 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                     <h2 className="pet-register-title">
                       이름, 나이, 성별을 입력해주세요
                     </h2>
-                    <div className="pet-register-form-inline">
-                      <input
-                        type="text"
-                        name="name"
-                        value={petInfo.name}
-                        onChange={handleChange}
-                        className="pet-register-input"
-                        placeholder="반려동물 이름"
-                      />
-                    </div>
-                    <div className="pet-register-form-inline">
-                      <label className="pet-register-inline-label">나이</label>
-                      <select
-                        name="age"
-                        value={petInfo.age}
-                        onChange={handleChange}
-                        className="pet-register-inline-select"
-                      >
-                        <option value="">선택</option>
-                        {Array.from({ length: 20 }, (_, i) => (
-                          <option key={i + 1} value={i + 1}>
-                            {i + 1} 살
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="pet-register-form-inline">
-                      <label className="pet-register-inline-label">성별</label>
-                      <select
-                        name="gender"
-                        value={petInfo.gender}
-                        onChange={handleChange}
-                        className="pet-register-inline-select"
-                      >
-                        <option value="">선택</option>
-                        <option value="MALE">남자</option>
-                        <option value="FEMALE">여자</option>
-                      </select>
+                    <div className="pet-register-step2-content">
+                      <div className="pet-register-form-inline">
+                        <input
+                          type="text"
+                          name="name"
+                          value={petInfo.name}
+                          onChange={(e) =>
+                            setPetInfo((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
+                          className="pet-register-input"
+                          placeholder="반려동물 이름"
+                        />
+                      </div>
+                      {renderDropdown(
+                        "age",
+                        "나이",
+                        Array.from({ length: 20 }, (_, i) => ({
+                          value: i + 1,
+                          label: `${i + 1} 살`,
+                        })),
+                        "age"
+                      )}
+                      {renderDropdown(
+                        "gender",
+                        "성별",
+                        [
+                          { value: "MALE", label: "남자" },
+                          { value: "FEMALE", label: "여자" },
+                        ],
+                        "gender"
+                      )}
                     </div>
                   </div>
                   <div className="pet-register-button-fixed">
@@ -251,7 +297,6 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                   </div>
                 </>
               )}
-
               {step === 3 && (
                 <>
                   <div className="pet-register-step-content">
@@ -331,7 +376,12 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
                       <textarea
                         name="memo"
                         value={petInfo.memo}
-                        onChange={handleChange}
+                        onChange={(e) =>
+                          setPetInfo((prev) => ({
+                            ...prev,
+                            memo: e.target.value,
+                          }))
+                        }
                         className="pet-register-textarea"
                         placeholder="메모를 입력해주세요"
                         rows={5}

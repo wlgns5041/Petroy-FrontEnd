@@ -29,7 +29,7 @@ const FriendDetail = ({ memberId, onClose }) => {
     <div className="frienddetail-modal">
       <div className="frienddetail-modal-content">
         <button className="frienddetail-close-button" onClick={onClose}>
-          ×
+          &times;
         </button>
 
         {!error ? (

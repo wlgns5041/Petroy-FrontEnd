@@ -131,11 +131,34 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
                       <div className="pet-edit-form-inline">
                         <label className="pet-edit-inline-label">나이</label>
                         <input
-                          type="number"
+                          type="text"
                           name="age"
                           value={petInfo.age}
-                          onChange={handleChange}
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/[^0-9]/g, "");
+                            setPetInfo((prev) => ({ ...prev, age: value }));
+                          }}
+                          onKeyDown={(e) => {
+                            if (
+                              [
+                                "Backspace",
+                                "Delete",
+                                "Tab",
+                                "ArrowLeft",
+                                "ArrowRight",
+                              ].includes(e.key)
+                            )
+                              return;
+
+                            if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                          onCompositionStart={(e) => {
+                            e.preventDefault();
+                          }}
                           className="pet-edit-input"
+                          inputMode="numeric"
                         />
                       </div>
                     </div>

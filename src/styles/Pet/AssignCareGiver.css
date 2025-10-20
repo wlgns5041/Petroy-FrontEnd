@@ -5,46 +5,31 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 1000;
   display: flex;
-  align-items: center;
   justify-content: center;
-  font-family: 'Pretendard', sans-serif;
+  align-items: center;
+  z-index: 1000;
 }
 
 .pet-assign-container {
-  background-color: white;
+  background-color: #fff;
   width: 90%;
-  max-height: 60%;
-  max-width: 600px;
+  max-width: 420px;
+  height: auto;
+  padding: 24px;
   border-radius: 12px;
-  padding: 60px 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-.pet-assign-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 24px;
-  color: #aaa;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.pet-assign-close:hover {
-  color: #10b981;
 }
 
 .pet-assign-title {
-  font-size: 16px;
-  font-weight: 400;
+  font-size: 20px;
+  font-weight: 800;
   margin-top: 20px;
   margin-bottom: 40px;
   text-align: center;
-  color: #111827;
+  color: #000000;
 }
 
 .pet-assign-loading,
@@ -57,15 +42,17 @@
 }
 
 .pet-assign-friends-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  max-height: 300px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 0px;
+  justify-items: center;
+  max-height: 320px;
   overflow-y: auto;
-  padding-right: 4px;
+  padding: 20px 4px;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  background-color: #f9f9f9;
+  border-radius: 12px;
 }
 
 .pet-assign-friends-grid::-webkit-scrollbar {
@@ -73,58 +60,239 @@
 }
 
 .pet-assign-friend-card {
-  min-width: 70%;
+  min-width: 60%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border: none;
   border-radius: 12px;
-  padding: 12px 16px;
-  background-color: #f5f5f5;
+  padding: 16px 16px 16px 28px;
+  background-color: #ffffff;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 .pet-assign-friend-card:hover {
   background-color: #eeeeee;
 }
 
-.pet-assign-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.pet-assign-selected {
+  background-color: #E8E9EC;
+}
+
+.pet-assign-disabled-card {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .pet-assign-friend-image {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 12px;
 }
 
 .pet-assign-friend-name {
   flex: 1;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.pet-assign-button {
-  background-color: #414141;
-  color: white;
+.pet-assign-button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+
+.pet-assign-cancel {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #000000;
+  margin-right: 8px;
+  background-color: #f9f9f9;
+}
+
+.pet-assign-cancel:hover {
+  background-color: #E8E9EC;
+}
+
+.pet-assign-submit {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #FFFFFF;
+  background-color: #00CBA8;
+}
+
+.pet-assign-submit:hover {
+ background-color: #13BA9D;
+}
+
+.pet-assign-submit:disabled {
+  background: #E8E9EC !important;
+  color: #C0C0C0 !important;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+  .pet-assign-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.pet-assign-container {
+  background-color: #fff;
+  width: 75%;
+  max-width: auto;
+  height: auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+}
+
+.pet-assign-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-top: 20px;
+  margin-bottom: 32px;
+  text-align: center;
+  color: #000000;
+}
+
+.pet-assign-loading,
+.pet-assign-error,
+.pet-assign-no-friends {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.pet-assign-friends-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 0px;
+  justify-items: center;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 16px 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+}
+
+.pet-assign-friends-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.pet-assign-friend-card {
+  min-width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.pet-assign-friend-card:hover {
+  background-color: #eeeeee;
+}
+
+.pet-assign-selected {
+  background-color: #E8E9EC;
+}
+
+.pet-assign-disabled-card {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.pet-assign-friend-image {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.pet-assign-friend-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pet-assign-button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+}
+
+.pet-assign-cancel {
+  flex: 1;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 700;
   border: none;
   border-radius: 6px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
+  color: #000000;
+  margin-right: 8px;
+  background-color: #f9f9f9;
 }
 
-.pet-assign-button:hover {
-  background-color: #2f2f2f;
+.pet-assign-cancel:hover {
+  background-color: #E8E9EC;
 }
 
-.pet-assign-button:disabled {
-  background-color: #9ca3af !important;
-  cursor: default !important;
+.pet-assign-submit {
+  flex: 1;
+  height: 44px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: #FFFFFF;
+  background-color: #00CBA8;
+}
+
+.pet-assign-submit:hover {
+ background-color: #13BA9D;
+}
+
+.pet-assign-submit:disabled {
+  background: #E8E9EC !important;
+  color: #C0C0C0 !important;
+  cursor: not-allowed;
+  transition: background-color 0.2s ease;
+}
 }
