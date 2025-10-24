@@ -87,14 +87,14 @@
   font-size: 11px;
   font-weight: 600;
   border: none;
-  background-color: #5acaa5;
+  background-color: #00CBA8;
   transition: background-color 0.2s ease;
   border-radius: 4px;
   cursor: pointer;
   color: #190c0c;
 }
 .friendlist-accept-button:hover {
-  background-color: #26762a;
+  background-color: #13BA9D;
   color: #f1f1f1;
   transition: background-color 0.2s ease;
 }

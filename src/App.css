@@ -85,11 +85,42 @@ html, body, #root, .App {
   html,
   body {
     background-color: #f9f9f9;
-   
   }
 
   #root,
   .App {
     background-color: #f9f9f9;
+  }
+
+    .toast-portal {
+    top: 30px !important;               
+    left: 50% !important;               
+    right: auto !important;              
+    transform: translateX(-50%) !important; 
+    align-items: center !important;      
+    width: 100%;
+    max-width: 93%;
+  }
+
+  /* 각 토스트 카드 */
+  .toast-portal .Toastify__toast {
+    align-self: center !important;       
+    width: 90% !important;
+    max-width: 400px !important;        
+  }
+
+  /* 내부 텍스트 조정 */
+  .toast-portal .Toastify__toast-body {
+    padding: 0 !important;
+    text-align: center !important;
+  }
+
+  /* ToastCard 내부 폰트 조정 (JSX inline style보다 우선순위 높임) */
+  .Toastify__toast-body div[style*="fontWeight: 800"] {
+    font-size: 15px !important;          /* 제목 폰트 ↓ */
+  }
+
+  .Toastify__toast-body div[style*="fontSize: 14px"] {
+    font-size: 13px !important;          /* 서브 텍스트 ↓ */
   }
 }

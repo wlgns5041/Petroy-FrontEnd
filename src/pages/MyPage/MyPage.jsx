@@ -14,6 +14,10 @@ import {
   uploadMemberImage,
   deleteMember,
 } from "../../services/MemberService";
+import {
+  fetchScheduleCategories,
+  fetchAllSchedules,
+} from "../../services/ScheduleService";
 import { fetchMemberPets } from "../../services/PetService.jsx";
 import ArrowCircleRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
@@ -24,6 +28,9 @@ const MyPage = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({}); // 사용자 정보
   const [pets, setPets] = useState([]); // 펫 목록
+  const [postCount, setPostCount] = useState(0);
+  const [categoryCount, setCategoryCount] = useState(0);
+  const [scheduleCount, setScheduleCount] = useState(0);
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [showNameModal, setShowNameModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -108,6 +115,67 @@ const MyPage = () => {
 
     scrollEl.addEventListener("scroll", handleScroll);
     return () => scrollEl.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      const fetchData = async () => {
+        try {
+          const token = localStorage.getItem("accessToken");
+
+          const [
+            userResponse,
+            petsResponse,
+            postsResponse,
+            categoriesResponse,
+            schedulesResponse,
+          ] = await Promise.all([
+            fetchCurrentMember(token),
+            fetchMemberPets(),
+            fetchMemberPosts(token),
+            fetchScheduleCategories(),
+            fetchAllSchedules(),
+          ]);
+
+          const postCount =
+            postsResponse?.content?.length || postsResponse?.length || 0;
+
+          const categoryCount = Array.isArray(categoriesResponse)
+            ? categoriesResponse.length
+            : categoriesResponse?.content?.length || 0;
+
+          const scheduleCount = Array.isArray(schedulesResponse)
+            ? schedulesResponse.reduce(
+                (acc, schedule) =>
+                  acc +
+                  (Array.isArray(schedule.dateInfo)
+                    ? schedule.dateInfo.length
+                    : 0),
+                0
+              )
+            : 0;
+
+          setUserInfo(userResponse);
+          setPets(petsResponse);
+          setPostCount(postCount);
+          setCategoryCount(categoryCount);
+          setScheduleCount(scheduleCount);
+
+          const count = await fetchFriendCount(token);
+          setFriendsCount(count);
+        } catch (error) {
+          console.error("데이터를 불러오는데 실패했습니다:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchData();
+    } else {
+      console.error("토큰이 없습니다");
+    }
   }, []);
 
   // 이미지 변경 함수
@@ -200,21 +268,21 @@ const MyPage = () => {
       title: "내 작성 글",
       sub: "반려동물에 대한 정보를 공유하고 소통하며<br />새로운 인연을 만들어보세요",
       image: require("../../assets/icons/post logo.png"),
-      count: 2,
+      count: postCount,
       link: "/communityPage",
     },
     {
       title: "내 카테고리",
       sub: "카테고리를 추가해서 일정을 분류해보세요",
       image: require("../../assets/icons/category logo.png"),
-      count: 3,
+      count: categoryCount,
       link: "/mainPage",
     },
     {
       title: "내 일정",
       sub: "일정을 통해 반려동물을 손쉽게 관리해보세요",
       image: require("../../assets/icons/schedule logo.png"),
-      count: 12,
+      count: scheduleCount,
       link: "/mainPage",
     },
   ];

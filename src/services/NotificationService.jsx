@@ -2,6 +2,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 
+
 // MUI 아이콘
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
@@ -9,6 +10,7 @@ import EventAvailableRoundedIcon from "@mui/icons-material/EventAvailableRounded
 import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
+const isMobile = window.innerWidth <= 768;
 
 /* =========================================================
    전역 콜백 레지스트리 & 브로드캐스트
@@ -50,25 +52,25 @@ const TYPE_META = {
   FRIEND_REQUEST: {
     color: "#2563eb",
     title: "친구 요청",
-    iconBg: "#e0edff",
+    iconBg: "#F9F9F9",
     IconEl: <PersonAddAlt1RoundedIcon fontSize="small" />,
   },
   FRIEND_REJECTED: {
     color: "#ef4444",
     title: "친구 거절",
-    iconBg: "#ffe6e6",
+    iconBg: "#F9F9F9",
     IconEl: <CancelRoundedIcon fontSize="small" />,
   },
   FRIEND_ACCEPTED: {
-    color: "#10b981",
+    color: "#00CBA8",
     title: "친구 수락",
-    iconBg: "#e7fff6",
+    iconBg: "#F9F9F9",
     IconEl: <CheckCircleRoundedIcon fontSize="small" />,
   },
   SCHEDULE: {
-    color: "#10b981",
+    color: "#00CBA8",
     title: "일정 알림",
-    iconBg: "#e7fff6",
+    iconBg: "#F9F9F9",
     IconEl: <EventAvailableRoundedIcon fontSize="small" />,
   },
 };
@@ -141,18 +143,18 @@ const ToastCard = ({ kind, title, sub, durationMs = DURATION_MS }) => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          gap: 4,
+          gap: 2,
           flex: 1,
           minWidth: 0,
         }}
       >
-        <div style={{ fontWeight: 800, color: "#111827", fontSize: 16 }}>
+        <div style={{ fontWeight: 800, color: "#000000",  fontSize: isMobile ? 14 : 16, }}>
           {title}
         </div>
         <div
           style={{
             color: "#6b7280",
-            fontSize: 14,
+            fontSize: isMobile ? 12 : 14, 
             lineHeight: 1.35,
             wordBreak: "break-word",
           }}
