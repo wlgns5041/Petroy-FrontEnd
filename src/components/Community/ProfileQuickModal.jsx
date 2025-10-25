@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../../styles/Community/ProfileQuickModal.css";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
-
-// 서비스
+import AlertModal from "../../components/commons/AlertModal.jsx"; 
 import { fetchMemberPets } from "../../services/PetService";
 import {
   fetchMemberPosts,
@@ -29,7 +28,9 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 커뮤니티 응답(p) → 평탄화
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+
   const normalizeFromCommunity = (p) => ({
     postId: p?.post?.postId,
     title: p?.post?.title,
@@ -37,7 +38,6 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
     postImageDtoList: p?.postImageDtoList || [],
   });
 
-  // 내 글 응답(p) → 이미 평탄
   const normalizeFromMine = (p) => ({
     postId: p?.postId,
     title: p?.title,
@@ -45,21 +45,21 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
     postImageDtoList: p?.postImageDtoList || [],
   });
 
-  // 품종 텍스트
   const getBreedOnly = (pet) =>
     pet?.breed || pet?.breedLabel || pet?.breedName || "";
 
-  // 친구 요청 핸들러
   const handleAddFriend = async () => {
     if (!target?.id || isFriend || isPending || sending) return;
     try {
       setSending(true);
       await sendFriendRequest(target.id);
       setIsPending(true);
-      alert("친구 요청을 보냈습니다.");
+      setAlertMessage("친구 요청을 보냈습니다."); 
+      setShowAlert(true);
     } catch (e) {
       console.error(e);
-      alert("친구 요청에 실패했습니다.");
+      setAlertMessage("친구 요청에 실패했습니다."); 
+      setShowAlert(true);
     } finally {
       setSending(false);
     }
@@ -73,13 +73,11 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
         const meResp = await fetchCurrentMember();
         setMe(meResp || null);
 
-        // 대상 결정
         const viewingMe =
           !user || (meResp && String(user?.id) === String(meResp?.id));
         const targetUser = viewingMe ? meResp : user;
         setTarget(targetUser);
 
-        // 친구 상태 확인
         if (!viewingMe && targetUser?.id) {
           try {
             const [accepted, pending] = await Promise.all([
@@ -100,13 +98,10 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
           }
         }
 
-        // ── 펫 로딩 ──
         if (viewingMe) {
-          // 내 펫
           const myPets = await fetchMemberPets().catch(() => []);
           setPets(Array.isArray(myPets) ? myPets : []);
         } else {
-          // 📌 다른 사용자 펫: 더미 데이터
           const dummyPets = [
             {
               petId: "dummy-1",
@@ -124,7 +119,6 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
           setPets(dummyPets);
         }
 
-        // ── 글 로딩 ──
         if (viewingMe) {
           const myPostsResp = await fetchMemberPosts(token);
           const raw = myPostsResp?.content ?? myPostsResp ?? [];
@@ -157,7 +151,6 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
     })();
   }, [user]);
 
-  // ESC 닫기
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose?.();
     window.addEventListener("keydown", onKey);
@@ -189,80 +182,106 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
         role="dialog"
         aria-modal="true"
       >
-        {/* 헤더 */}
-       <div className="communityprofile-header">
-  <img
-    src={target?.image || target?.profileImage || defaultPetPic}
-    alt="프로필"
-    className="communityprofile-avatar"
-  />
-  <div className="communityprofile-meta">
-    <div className="communityprofile-name">{target?.name || "이름 없음"}</div>
-    <div className="communityprofile-phone">
-      {target?.phone || target?.mobile || (isMe ? "휴대폰 번호 없음" : "비공개")}
-    </div>
-  </div>
+        <div className="communityprofile-header">
+          <img
+            src={target?.image || target?.profileImage || defaultPetPic}
+            alt="프로필"
+            className="communityprofile-avatar"
+          />
+          <div className="communityprofile-meta">
+            <div className="communityprofile-name">
+              {target?.name || "이름 없음"}
+            </div>
+          </div>
 
-  {/* 👉 우측 액션 영역 */}
-  <div className="communityprofile-header-actions">
-    {!isMe && target?.id && (
-      <button
-        type="button"
-        className={`communityprofile-friend-btn ${isFriend ? "is-friend" : isPending ? "is-pending" : ""}`}
-        onClick={handleAddFriend}
-        disabled={isFriend || isPending || sending}
-        title={isFriend ? "이미 친구입니다" : isPending ? "요청 대기중" : "친구 추가"}
-        aria-label={isFriend ? "이미 친구" : isPending ? "친구 요청 대기중" : "친구 추가"}
-      >
-        {isFriend ? <CheckIcon/> : isPending ? <HourglassTopIcon/> : <PersonAddAlt1Icon/>}
-      </button>
-    )}
+          <div className="communityprofile-header-actions">
+            {!isMe && target?.id && (
+              <button
+                type="button"
+                className={`communityprofile-friend-btn ${
+                  isFriend ? "is-friend" : isPending ? "is-pending" : ""
+                }`}
+                onClick={handleAddFriend}
+                disabled={isFriend || isPending || sending}
+                title={
+                  isFriend
+                    ? "이미 친구입니다"
+                    : isPending
+                    ? "요청 대기중"
+                    : "친구 추가"
+                }
+                aria-label={
+                  isFriend
+                    ? "이미 친구"
+                    : isPending
+                    ? "친구 요청 대기중"
+                    : "친구 추가"
+                }
+              >
+                {isFriend ? (
+                  <CheckIcon />
+                ) : isPending ? (
+                  <HourglassTopIcon />
+                ) : (
+                  <PersonAddAlt1Icon />
+                )}
+              </button>
+            )}
 
-    <button
-      type="button"
-      className="communityprofile-close-btn"
-      onClick={onClose}
-      aria-label="닫기"
-    >
-      ✕
-    </button>
-  </div>
-</div>
+            <button
+              type="button"
+              className="communityprofile-close-btn"
+              onClick={onClose}
+              aria-label="닫기"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
 
-        {/* 펫 목록: 이제 내/남 둘 다 표시 (데이터 없으면 문구) */}
         <section className="communityprofile-pet-section">
           <h3 className="communityprofile-pet-lable">반려동물 목록</h3>
-          {pets.length === 0 ? (
-            <div className="communityprofile-empty">
-              {isMe
-                ? "등록된 반려동물이 없습니다"
-                : "공개된 반려동물이 없습니다"}
-            </div>
+
+          {isMe || isFriend ? (
+            pets.length === 0 ? (
+              <div className="communityprofile-empty">
+                {isMe
+                  ? "등록된 반려동물이 없습니다"
+                  : "공개된 반려동물이 없습니다"}
+              </div>
+            ) : (
+              <ul className="communityprofile-pet-list">
+                {pets.map((pet) => (
+                  <li key={pet.petId} className="communityprofile-pet-item">
+                    <img
+                      src={pet.image || defaultPetPic}
+                      alt={pet.name}
+                      className="communityprofile-pet-image"
+                    />
+                    <div className="communityprofile-pet-info">
+                      <div className="communityprofile-pet-name">
+                        {pet.name}
+                      </div>
+                      {(() => {
+                        const breed = getBreedOnly(pet);
+                        return breed ? (
+                          <div className="communityprofile-pet-sub">
+                            {breed}
+                          </div>
+                        ) : null;
+                      })()}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )
           ) : (
-            <ul className="communityprofile-pet-list">
-              {pets.map((pet) => (
-                <li key={pet.petId} className="communityprofile-pet-item">
-                  <img
-                    src={pet.image || defaultPetPic}
-                    alt={pet.name}
-                    className="communityprofile-pet-image"
-                  />
-                  <div className="communityprofile-pet-info">
-                    <div className="communityprofile-pet-name">{pet.name}</div>
-                    {(() => {
-                      const breed = getBreedOnly(pet);
-                      return breed ? (
-                        <div className="communityprofile-pet-sub">{breed}</div>
-                      ) : null;
-                    })()}
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <div className="communityprofile-empty">
+              친구를 맺어 해당 사용자의 반려동물을 확인할 수 있어요!
+            </div>
           )}
         </section>
 
-        {/* 작성한 글: 내/남 동일 */}
         <section className="communityprofile-post-section">
           <h3 className="communityprofile-post-lable">작성한 글 목록</h3>
           {myPosts.length === 0 ? (
@@ -295,6 +314,12 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
           )}
         </section>
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 };

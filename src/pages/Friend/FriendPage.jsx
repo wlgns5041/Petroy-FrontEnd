@@ -10,6 +10,8 @@ import {
   searchFriends,
   sendFriendRequest,
 } from "../../services/FriendService";
+import withAuth from "../../utils/withAuth";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const FriendPage = () => {
   const [friends, setFriends] = useState([]);
@@ -21,6 +23,9 @@ const FriendPage = () => {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("friends");
   const friendTabIndex = activeTab === "friends" ? 0 : 1;
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const loadFriends = async () => {
     const data = await fetchAcceptedFriends();
@@ -42,7 +47,8 @@ const FriendPage = () => {
 
     if (action === "ACCEPTED") {
       setFriends([...friends, accepted]);
-      alert(`'${accepted.name}' 님과 친구가 되었습니다.`);
+      setAlertMessage(`'${accepted.name}' 님과 친구가 되었습니다.`);
+      setShowAlert(true);
     }
 
     setRequests(requests.filter((r) => r.id !== memberId));
@@ -72,9 +78,11 @@ const FriendPage = () => {
     try {
       await sendFriendRequest(memberId);
       setRequestedIds((prev) => [...prev, memberId]);
-      alert("친구 요청을 보냈습니다.");
+      setAlertMessage("친구 요청을 보냈습니다.");
+      setShowAlert(true);
     } catch (error) {
-      alert("친구 요청에 실패했습니다.");
+      setAlertMessage("친구 요청에 실패했습니다.");
+      setShowAlert(true);
       console.error(error);
     }
   };
@@ -228,8 +236,14 @@ const FriendPage = () => {
           </>
         )}
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </main>
   );
 };
 
-export default FriendPage;
+export default withAuth(FriendPage);

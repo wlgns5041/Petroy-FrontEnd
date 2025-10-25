@@ -28,8 +28,8 @@ const ScheduleDeleteModal = ({
       <div className="schedule-delete-container">
         <h2 className="schedule-delete-title">정말로 삭제하시겠습니까?</h2>
         <p className="schedule-delete-description">
-          <strong>일정 삭제</strong>를 원하시면{" "}
-          <strong>일정 제목</strong>을 정확히 입력해주세요.
+          <strong>일정 삭제</strong>를 원하시면 <strong>일정 제목</strong>을
+          정확히 입력해주세요.
         </p>
 
         <div className="schedule-delete-meta">

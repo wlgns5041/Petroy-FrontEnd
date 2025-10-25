@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../../styles/Pet/PetEdit.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { updatePet, fetchMemberPets } from "../../services/PetService";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const PetEdit = ({ pet, onClose, onUpdate }) => {
   const [step, setStep] = useState(1);
@@ -14,6 +15,9 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
   const [previewUrl, setPreviewUrl] = useState(pet.image || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -79,7 +83,8 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
       }
 
       const data = await updatePet(pet.petId, formData);
-      alert("반려동물이 성공적으로 수정되었습니다.");
+      setAlertMessage("반려동물이 성공적으로 수정되었습니다.");
+      setShowAlert(true);
       onUpdate(data);
       onClose();
     } catch (err) {
@@ -239,6 +244,12 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
           </button>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 };

@@ -22,8 +22,8 @@
   z-index: 1000;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
@@ -34,17 +34,18 @@
 .post-modal-container {
   background-color: white;
   width: 90%;
-  max-width: 400px;
+  max-width: 420px;
   height: auto;
   max-height: 90vh;
-  padding: 32px 32px 32px 32px;
+  padding: 20px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
   font-family: "Pretendard", sans-serif;
   position: relative;
-  overflow-y: auto;
+  overflow: visible !important; 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 /* 닫기 버튼 */
@@ -58,8 +59,24 @@
   border: none;
   cursor: pointer;
 }
+
 .post-modal-close:hover {
   color: #10b981;
+}
+
+.post-create-step-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0px 12px 0;
+}
+
+.post-create-step-indicator {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 0px;
 }
 
 /* 제목 */
@@ -67,8 +84,8 @@
   font-size: 20px;
   font-weight: bold;
   margin-top: 24px;
-  margin-bottom: 60px;
-  color: #111827;
+  margin-bottom: 40px;
+  color: #000000;
   text-align: center;
 }
 
@@ -77,123 +94,200 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  font-family: 'SUIT', sans-serif;
+  align-items: center; 
 }
 
 .post-create-field {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
+  width: 90%;
 }
 
 .post-create-label {
-  width: 80px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151;
+  width: 60px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
   flex-shrink: 0;
+}
+
+/* ---------- 커스텀 셀렉트 ---------- */
+.post-create-inline-select-wrapper {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+
+.post-create-inline-select {
+  flex: 1;
+  padding: 12px 18px 12px 18px;
+  font-size: 12px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.post-create-inline-select:hover {
+  background-color: #f3f4f6;
+}
+
+.post-create-inline-select.active {
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.post-create-inline-arrow {
+  font-size: 10px;
+  color: #000;
+  pointer-events: none;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+
+.post-create-inline-select.active .post-create-inline-arrow {
+  transform: rotate(180deg);
+}
+
+/* 드롭다운 리스트 */
+.post-create-inline-dropdown {
+  background: #fff;
+  width: auto !important;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+.post-create-inline-dropdown::-webkit-scrollbar {
+  display: none;
+}
+
+.post-create-inline-option {
+  padding: 10px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.post-create-inline-option:hover {
+  background-color: #f3f4f6;
 }
 
 .post-create-input {
   flex: 1;
-  padding: 12px 14px;
+  padding: 12px 16px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
   border: none;
+  background-color: #f9f9f9;
   box-sizing: border-box;
-  transition: all 0.2s ease-in-out;
-  color: #111827;
-  font-family: inherit;
+  transition: all 0.1s ease-in-out;
+  color: #000000;
+  transition: background-color 0.2s ease;
 }
 
-.post-create-textarea {
-  flex: 1;
-  padding-top: 40px; 
-  padding-bottom: 40px;
-  padding-left: 14px;
-  font-size: 12px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  border: none;
-  box-sizing: border-box;
-  transition: all 0.2s ease-in-out;
-  color: #111827;
-  font-family: inherit;
-}
-
-.post-create-select {
-  flex: 1;
-  padding: 12px 14px;
-  font-size: 12px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  border: none;
-  box-sizing: border-box;
-  transition: all 0.2s ease-in-out;
-  color: #111827;
-  font-family: inherit;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='black' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
+.post-create-input:hover {
+  background-color: #f3f4f6;
 }
 
 .post-create-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #10b981;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px #111827;
+}
+
+.post-create-input.filled {
+  border: 1px solid #e5e7eb;
+  background-color: #fff;
+}
+
+.post-create-textarea {
+  width: 95%;
+  height: 100px;
+  padding: 40px 20px 20px 20px;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  border: none;
+  box-sizing: border-box;
+  color: #111827;
+  font-family: inherit;
+  resize: none;
+  transition: background-color 0.2s ease;
+}
+
+.post-create-textarea:hover {
+  background-color: #f3f4f6;
 }
 
 .post-create-textarea:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #10b981;
-}
-
-.post-create-textarea {
-  height: 100px;
-  resize: none;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px #111827;
 }
 
 .post-create-image-box {
   width: 100%;
-  margin-top: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .post-create-image-placeholder {
-  width: 100%;
-  max-width: 100%;
-  height: 200px;
-  border: 2px dashed #d1d5db;
+  border: 2px dashed #CBCBCB;
   border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.post-create-upload-label {
-  font-size: 15px;
+  padding: 60px 0;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
   font-weight: 600;
-  color: #374151;
-  background-color: #f3f4f6;
-  padding: 14px 32px;
-  border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
+.post-create-image-placeholder.has-image {
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.post-create-upload-label {
+  background-color: #f9f9f9;
+  color: #000000;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.2s ease;
+}
+
 .post-create-upload-label:hover {
-  background-color: #e5e7eb;
+  background-color: #E8E9EC;
 }
 
 .post-create-upload-label input[type="file"] {
@@ -201,95 +295,481 @@
 }
 
 .post-create-image-preview {
-  width: 140px;
-  height: 140px;
+  width: 100%;
+  max-width: 280px;
+  height: 280px;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f9f9f9;
 }
 
 .post-create-image-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  border-radius: 12px;
 }
 
 .post-create-image-clear {
-  width: 140px;
-  background-color: #e5e7eb;
-  color: #111827;
-  border: none;
-  padding: 10px 0;
-  font-size: 14px;
+  background-color: #f9f9f9;
+  color: #000000;
+  padding: 12px 32px;
+  font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
+  border: none;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  margin-top: 8px;
 }
 
 .post-create-image-clear:hover {
-  background-color: #d1d5db;
+  background-color: #E8E9EC;
 }
 
 /* 버튼 공통 스타일 */
 .post-create-button {
-  margin-top: 20px;
   width: 100%;
   height: 48px;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
+  padding: 14px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  color: #000;
+  border-radius: 8px;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s ease;
 }
 
 /* 다음으로 버튼 (1단계용) */
 .post-create-next {
-  background-color: #10b981;
+  background-color: #00CBA8;
   transition: background-color 0.2s ease;
   color: white;
 }
 .post-create-next:hover {
-  background-color: #059669;
+  background-color: #13BA9D;
   transition: background-color 0.2s ease;
 }
 
 .post-create-button-row {
   display: flex;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 32px;
+  margin-bottom: 12px;
 }
 
 .post-create-back {
-  background-color: rgb(236, 236, 236);
+  background-color: #f9f9f9;
   transition: background-color 0.2s ease;
   color: #000000;
 }
 .post-create-back:hover {
-  background-color: #d3d3d3;
+  background-color: #E8E9EC;
   transition: background-color 0.2s ease;
 }
 
 /* 등록 버튼 (2단계용) */
 .post-create-submit {
-  background-color: #10b981;
+  background-color: #00CBA8;
   transition: background-color 0.2s ease;
   color: white;
 }
 .post-create-submit:hover {
-  background-color: #059669;
+  background-color: #13BA9D;
   transition: background-color 0.2s ease;
 }
 
 .post-create-button:disabled {
-  background-color: #d3d3d3;
-  color: #000000;
+  background: #E8E9EC;
+  color: #C0C0C0;
   cursor: not-allowed;
   transition: background-color 0.2s ease;
+}
+
+/* --------------------  모바일  -------------------- */
+  @media screen and (max-width: 768px) {
+
+  /* Overlay (배경) */
+  .post-modal-overlay {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -54px;
+  }
+
+  /* 모달 본체 */
+  .post-modal-container {
+    background-color: white;
+    width: 80%;
+    max-width: 420px;
+    height: auto;
+    max-height: 90vh;
+    padding: 12px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+    overflow: visible !important; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* 닫기 버튼 */
+  .post-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 20px;
+    color: #aaa;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .post-modal-close:hover {
+    color: #10b981;
+  }
+
+  .post-create-step-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 12px 12px 0px 12px;
+  }
+
+  .post-create-step-indicator {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 0px;
+  }
+
+  /* 제목 */
+  .post-modal-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 16px;
+    margin-bottom: 32px;
+    color: #000000;
+    text-align: center;
+  }
+
+  /* 입력 폼 */
+  .post-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center; 
+  }
+
+  .post-create-field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .post-create-label {
+    width: 60px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #000000;
+    flex-shrink: 0;
+  }
+
+  /* ---------- 커스텀 셀렉트 ---------- */
+  .post-create-inline-select-wrapper {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+  }
+
+  .post-create-inline-select {
+    flex: 1;
+    padding: 12px;
+    font-size: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    border: none;
+    cursor: pointer;
+    color: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .post-create-inline-select:hover {
+    background-color: #f3f4f6;
+  }
+
+  .post-create-inline-select.active {
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px #111827;
+  }
+
+  .post-create-inline-arrow {
+    font-size: 8px;
+    color: #000;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+  }
+
+  .post-create-inline-select.active .post-create-inline-arrow {
+    transform: rotate(180deg);
+  }
+
+  /* 드롭다운 리스트 */
+  .post-create-inline-dropdown {
+    background: #fff;
+    width: auto !important;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    list-style: none;
+    padding: 6px;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    animation: fadeIn 0.15s ease-in-out;
+  }
+
+  .post-create-inline-dropdown::-webkit-scrollbar {
+    display: none;
+  }
+
+  .post-create-inline-option {
+    padding: 8px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+  }
+
+  .post-create-inline-option:hover {
+    background-color: #f3f4f6;
+  }
+
+  .post-create-input {
+    flex: 1;
+    padding: 12px;
+    font-size: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    transition: all 0.1s ease-in-out;
+    color: #000000;
+    border: 1px solid transparent;
+  }
+
+  .post-create-input:hover {
+    background-color: #f3f4f6;
+  }
+
+  .post-create-input:focus {
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px #111827;
+  }
+
+  .post-create-input.filled {
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+  }
+
+  .post-create-textarea {
+    width: 95%;
+    height: 100px;
+    padding: 40px 20px 20px 20px;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    border: none;
+    box-sizing: border-box;
+    color: #000000;
+    font-family: inherit;
+    resize: none;
+  }
+
+  .post-create-textarea:hover {
+    background-color: #f3f4f6;
+  }
+
+  .post-create-textarea:focus {
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px #111827;
+  }
+
+  .post-create-image-box {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .post-create-image-placeholder {
+    border: 2px dashed #CBCBCB;
+    border-radius: 12px;
+    padding: 50px 0;
+    width: 80%;
+    max-width: 280px;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .post-create-image-placeholder.has-image {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .post-create-upload-label {
+    background-color: #f9f9f9;
+    color: #000000;
+    border: none;
+    padding: 16px;
+    width: 100%;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.2s ease;
+  }
+
+  .post-create-upload-label:hover {
+    background-color: #E8E9EC;
+  }
+
+  .post-create-upload-label input[type="file"] {
+    display: none;
+  }
+
+  .post-create-image-preview {
+    width: 200px;
+    height: 200px;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+  }
+
+  .post-create-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+  }
+
+  .post-create-image-clear {
+    background-color: #f9f9f9;
+    color: #000000;
+    padding: 12px 28px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 8px;
+  }
+
+  .post-create-image-clear:hover {
+    background-color: #E8E9EC;
+  }
+
+  /* 버튼 공통 스타일 */
+  .post-create-button {
+    width: 100%;
+    height: 48px;
+    padding: 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  /* 다음으로 버튼 (1단계용) */
+  .post-create-next {
+    background-color: #00CBA8;
+    transition: background-color 0.2s ease;
+    color: white;
+  }
+  .post-create-next:hover {
+    background-color: #13BA9D;
+    transition: background-color 0.2s ease;
+  }
+
+  .post-create-button-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .post-create-back {
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease;
+    color: #000000;
+  }
+  .post-create-back:hover {
+    background-color: #E8E9EC;
+    transition: background-color 0.2s ease;
+  }
+
+  /* 등록 버튼 (2단계용) */
+  .post-create-submit {
+    background-color: #00CBA8;
+    transition: background-color 0.2s ease;
+    color: white;
+  }
+  .post-create-submit:hover {
+    background-color: #13BA9D;
+    transition: background-color 0.2s ease;
+  }
+
+  .post-create-button:disabled {
+    background: #E8E9EC;
+    color: #C0C0C0;
+    cursor: not-allowed;
+    transition: background-color 0.2s ease;
+  }
 }
 

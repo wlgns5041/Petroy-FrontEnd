@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import "../../styles/MyPage/ImageEditModal.css";
+import AlertModal from "../../components/commons/AlertModal.jsx"; 
 
 const MAX_MB = 1;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -8,13 +9,14 @@ const ImageEditModal = ({ onClose, onSave }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false); 
   const fileInputRef = useRef(null);
 
   const handleSave = () => {
     if (!selectedImage || saving) return;
     setSaving(true);
 
-    // 부모로 파일, 미리보기, 캐시버스트용 버전키 전달
     onSave?.(selectedImage, imagePreview, { version: Date.now() });
 
     setSaving(false);
@@ -25,25 +27,24 @@ const ImageEditModal = ({ onClose, onSave }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // 1) 타입 체크
     if (!ALLOWED_TYPES.includes(file.type)) {
-      alert("이미지 형식이 올바르지 않습니다. (jpg, png, webp, gif 허용)");
+      setAlertMessage("이미지 형식이 올바르지 않습니다. (jpg, png, webp, gif 허용)");
+      setShowAlert(true);
       resetInput();
       return;
     }
 
-    // 2) 용량 체크
     const maxBytes = MAX_MB * 1024 * 1024;
     if (file.size > maxBytes) {
       const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-      alert(`파일이 너무 큽니다. (현재 ${sizeMB}MB, 최대 ${MAX_MB}MB)`);
+      setAlertMessage(`파일이 너무 큽니다. (현재 ${sizeMB}MB, 최대 ${MAX_MB}MB)`);
+      setShowAlert(true);
       resetInput();
       return;
     }
 
     setSelectedImage(file);
 
-    // 3) 미리보기
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
@@ -56,6 +57,10 @@ const ImageEditModal = ({ onClose, onSave }) => {
   };
 
   const handleReset = () => resetInput();
+
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+  };
 
   return (
     <div className="image-edit-modal" role="dialog" aria-modal="true">
@@ -109,6 +114,9 @@ const ImageEditModal = ({ onClose, onSave }) => {
           </button>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
+      )}
     </div>
   );
 };

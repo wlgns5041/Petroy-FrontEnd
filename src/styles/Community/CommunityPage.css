@@ -266,8 +266,8 @@ body { overflow-y: scroll; }
   margin-top: 8px;
   max-height: 400px;
   object-fit: contain;
-  border-radius: 4px;
-  background-color: #f0f2f5;
+  border-radius: 12px;
+  background-color: none;
 }
 
 .communitypage-post-content {
@@ -433,6 +433,28 @@ body { overflow-y: scroll; }
 .comment-sheet-mask.open {
   opacity: 1;
   pointer-events: auto;
+}
+
+.communitypage-empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  color: #9ca3af;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.communitypage-empty-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.communitypage-empty-subtitle {
+  font-size: 14px;
+  color: #6b7280;
 }
 
 /* ---------- 모바일 ---------- */
@@ -892,6 +914,27 @@ body { overflow-y: scroll; }
 
 .communitypage-reaction-label { 
   white-space: nowrap; 
+}
+
+.communitypage-empty-state {
+  text-align: center;
+  padding: 120px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.communitypage-empty-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.communitypage-empty-subtitle {
+  font-size: 12px;
+  color: #6b7280;
 }
 
 }

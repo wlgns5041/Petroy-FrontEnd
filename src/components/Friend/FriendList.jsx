@@ -8,13 +8,9 @@ import FriendDetail from "./FriendDetail";
 const FriendList = ({ friends, onAccept, onReject }) => {
   const [openDetailId, setOpenDetailId] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
-
-  // ✅ 현재 "열려 있는" 메뉴 하나만 추적
   const openMenuRef = useRef(null);
-
   const isRequest = onAccept && onReject;
 
-  // ✅ 외부 클릭은 "열린 메뉴 ref"만 검사
   useEffect(() => {
     const handleOutside = (e) => {
       if (!openMenuId) return;
@@ -65,7 +61,6 @@ const FriendList = ({ friends, onAccept, onReject }) => {
               ) : (
                 <div
                   className="friendlist-menu"
-                  // ✅ 열린 카드에만 ref 연결
                   ref={openMenuId === friend.id ? openMenuRef : null}
                 >
                   <button
@@ -80,7 +75,7 @@ const FriendList = ({ friends, onAccept, onReject }) => {
                   {openMenuId === friend.id && (
                     <div
                       className="friendlist-dropdown"
-                      onClick={(e) => e.stopPropagation()} // 내부 클릭은 전파 차단
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <div
                         onClick={() => {

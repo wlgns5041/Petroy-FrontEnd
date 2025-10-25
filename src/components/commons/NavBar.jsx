@@ -171,7 +171,7 @@ export default function NavBar() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    width: 64,
+                    width: 68,
                     height: "100%",
                     background: "transparent",
                     border: "none",
@@ -213,7 +213,6 @@ export default function NavBar() {
     );
   }
 
-  // 💻 데스크탑 UI (그대로, 이름 + 흰색 아이콘 보장)
   return (
     <Box
       sx={{

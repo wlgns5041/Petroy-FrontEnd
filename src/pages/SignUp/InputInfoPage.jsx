@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SignUp/InputInfoPage.css";
 import { submitKakaoExtraInfo } from "../../services/MemberService.jsx";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 function InputInfo() {
   const [userData, setUserData] = useState({ email: "", phone: "" });
   const [accessToken, setAccessToken] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
 
   const isFormValid =
@@ -38,13 +41,20 @@ function InputInfo() {
         userData.email,
         userData.phone
       );
-      alert("카카오 회원가입 성공");
+
+      setAlertMessage("카카오 회원가입 성공");
+      setShowAlert(true);
+
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
-      navigate("/mainPage");
     } catch (error) {
       console.error("서버 전송 실패:", error);
     }
+  };
+
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+    navigate("/mainPage");
   };
 
   return (
@@ -115,6 +125,9 @@ function InputInfo() {
           </form>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
+      )}
     </div>
   );
 }

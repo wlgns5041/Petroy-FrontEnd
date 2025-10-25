@@ -136,7 +136,7 @@
   position: relative;
   border-radius: 12px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .notification-item.read {
@@ -310,7 +310,7 @@
     z-index: 1;
     border-radius: 6px;
     transition: all 0.2s ease;
-    padding: 12px;
+    padding: 8px 12px;
   }
 
   .notification-tab.active {
@@ -357,7 +357,7 @@
   .notification-list {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 12px;
     overflow-y: auto;
     max-height: 100%;
     width: 100%;
@@ -382,7 +382,7 @@
     position: relative;
     border-radius: 12px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
   .notification-item.read {

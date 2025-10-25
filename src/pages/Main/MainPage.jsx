@@ -19,6 +19,8 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ExpandMoreIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import ExpandLessIcon from "@mui/icons-material/KeyboardArrowUpRounded";
 import { motion } from "framer-motion";
+import withAuth from "../../utils/withAuth";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 function MainPage() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -40,6 +42,9 @@ function MainPage() {
   const [selectedSchedules, setSelectedSchedules] = useState(new Set());
   const [sortMode, setSortMode] = useState("timeAsc");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   // 모바일용 섹션 토글 상태
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -130,15 +135,20 @@ function MainPage() {
       const ok = await deleteScheduleCategory(deleteCategoryTarget.categoryId);
       if (ok) {
         await loadCategories();
-        alert("카테고리가 삭제되었습니다.");
+        setAlertMessage("카테고리가 삭제되었습니다.");
+        setShowAlert(true);
         setDeleteCategoryOpen(false);
         setDeleteCategoryTarget(null);
       } else {
-        alert("삭제에 실패했습니다.");
+        setAlertMessage("삭제에 실패했습니다.");
+        setShowAlert(true);
       }
     } catch (err) {
       console.error("카테고리 삭제 오류:", err);
-      alert("해당 카테고리에 대한 일정이 존재하여 삭제에 실패하였습니다.");
+      setAlertMessage(
+        "해당 카테고리에 대한 일정이 존재하여 삭제에 실패하였습니다."
+      );
+      setShowAlert(true);
     } finally {
       setDeletingCategory(false);
     }
@@ -584,7 +594,7 @@ function MainPage() {
               </div>
 
               <motion.div
-              className="mainpage-section-body"
+                className="mainpage-section-body"
                 initial={false}
                 animate={{
                   height: openCategory ? "auto" : 0,
@@ -681,7 +691,7 @@ function MainPage() {
                 </div>
 
                 <motion.div
-                className="mainpage-section-body"
+                  className="mainpage-section-body"
                   initial={false}
                   animate={{
                     height: openMyPets ? "auto" : 0,
@@ -759,7 +769,7 @@ function MainPage() {
                 </div>
 
                 <motion.div
-                className="mainpage-section-body"
+                  className="mainpage-section-body"
                   initial={false}
                   animate={{
                     height: openCarePets ? "auto" : 0,
@@ -808,7 +818,13 @@ function MainPage() {
         </div>
       </div>
 
-      {/* 모달들 */}
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
+
       {isScheduleModalOpen && (
         <ScheduleModal
           onClose={closeScheduleModal}
@@ -844,4 +860,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default withAuth(MainPage);

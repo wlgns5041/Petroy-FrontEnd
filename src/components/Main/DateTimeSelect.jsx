@@ -22,7 +22,6 @@ export default function DateTimeSelect({
   const wrapperRef = useRef(null);
   const popoverRef = useRef(null);
 
-  // ✅ 월별 주차 단위 날짜 배열 계산
   const getStartOfMonth = (date) => {
     const start = new Date(date.getFullYear(), date.getMonth(), 1);
     const day = start.getDay();
@@ -58,12 +57,10 @@ export default function DateTimeSelect({
     [currentDate]
   );
 
-  // ✅ 날짜 포맷 안전 처리
   const formattedDate = selectedDate
     ? format(selectedDate, "yyyy. MM. dd. a hh:mm", { locale: ko })
     : "날짜를 선택하세요";
 
-  // ✅ 외부 클릭 시 닫기
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -79,19 +76,18 @@ export default function DateTimeSelect({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-useEffect(() => {
-  if (!open) return;
+  useEffect(() => {
+    if (!open) return;
 
-  setPopoverStyle({
-    position: "fixed",
-    top: 40,     
-    left: "50%", 
-    transform: "translateX(-50%)", // 가운데 맞춤
-    zIndex: 9999,
-  });
-}, [open]);
+    setPopoverStyle({
+      position: "fixed",
+      top: 40,
+      left: "50%",
+      transform: "translateX(-50%)",
+      zIndex: 9999,
+    });
+  }, [open]);
 
-  // ✅ 날짜 클릭
   const handleDateClick = (date) => {
     const newDate = new Date(date);
     newDate.setHours(hour);
@@ -100,7 +96,6 @@ useEffect(() => {
     onChange?.(newDate.toISOString().replace("Z", ""));
   };
 
-  // ✅ 시간 변경
   const handleTimeChange = (newHour, newMinute) => {
     const newDate = new Date(selectedDate);
     newDate.setHours(newHour);
@@ -133,7 +128,7 @@ useEffect(() => {
       {open &&
         ReactDOM.createPortal(
           <div className="dts-popover" ref={popoverRef} style={popoverStyle}>
-            {/* 📅 캘린더 헤더 */}
+            {/*  캘린더 헤더 */}
             <div
               className="dts-calendar-header"
               style={{
@@ -177,7 +172,7 @@ useEffect(() => {
               </button>
             </div>
 
-            {/* 📅 날짜 영역 */}
+            {/* 날짜 영역 */}
             <div className="dts-calendar-grid">
               {weeks.map((week, i) => (
                 <div key={i} className="dts-week-row">
@@ -206,7 +201,7 @@ useEffect(() => {
               ))}
             </div>
 
-            {/* 🕒 시간 선택 */}
+            {/* 시간 선택 */}
             <div className="dts-column" aria-label="오전/오후">
               {["오전", "오후"].map((label) => {
                 const nextIsPM = label === "오후";

@@ -15,6 +15,7 @@ import PostEditModal from "../../components/Community/PostEditModal";
 import PostDeleteModal from "../../components/Community/PostDeleteModal";
 import CommentSection from "../../components/Community/CommentSection";
 import ProfileQuickModal from "../../components/Community/ProfileQuickModal";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 import "../../styles/Community/CommunityPage.css";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
@@ -36,6 +37,7 @@ import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfie
 import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissatisfiedRounded";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import { useMediaQuery } from "@mui/material";
+import withAuth from "../../utils/withAuth";
 
 /* -------------------- 유틸 -------------------- */
 
@@ -233,6 +235,9 @@ const CommunityPage = () => {
     setIsHeaderBookmarked((prev) => !prev);
   };
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
   /* ---------- 함수 ---------- */
 
   const getCategoryName = (p) => {
@@ -283,7 +288,8 @@ const CommunityPage = () => {
       const ok = await deletePost(pid, token);
       if (ok) {
         await reloadPosts();
-        alert("삭제가 완료되었습니다.");
+        setAlertMessage("삭제가 완료되었습니다.");
+        setShowAlert(true);
         setDeleteModalOpen(false);
         setDeleteTarget(null);
       }
@@ -305,7 +311,6 @@ const CommunityPage = () => {
   ];
 
   const onHeartClick = (pid) => {
-    // 하트 누르면 그냥 말풍선만 열기/닫기
     setReactionPickerId((prev) => (prev === pid ? null : pid));
   };
 
@@ -314,7 +319,6 @@ const CommunityPage = () => {
     const current = reactionMap[pid];
 
     if (current === key) {
-      // 같은 공감을 다시 누르면 → 해제
       const ok = await deleteSympathy(pid, token);
       if (ok) {
         setReactionMap((prev) => {
@@ -329,7 +333,6 @@ const CommunityPage = () => {
         }));
       }
     } else {
-      // 새로운 공감 선택 → 등록/변경
       const ok = await registerSympathy(pid, key, token);
       if (ok) {
         setReactionMap((prev) => ({ ...prev, [pid]: key }));
@@ -343,7 +346,7 @@ const CommunityPage = () => {
       }
     }
 
-    setReactionPickerId(null); // 선택 후 말풍선 닫기
+    setReactionPickerId(null);
   };
 
   // 북마크 토글 함수
@@ -441,7 +444,6 @@ const CommunityPage = () => {
     setSortKey(next);
   };
 
-  // 정렬용 안전 getter
   const getCreatedAt = (p) => p?.post?.createdAt ?? p?.createdAt ?? null;
   const getCommentCount = (p) =>
     Number(p?.commentTotal ?? p?.commentCount ?? 0);
@@ -449,6 +451,7 @@ const CommunityPage = () => {
     Number(p?.sympathyTotal ?? p?.sympathyCount ?? p?.likeTotal ?? 0);
 
   /* ---------- 초기 로딩 ---------- */
+
   useEffect(() => {
     (async () => {
       const [postData, categories, rawMe, friends] = await Promise.all([
@@ -574,7 +577,6 @@ const CommunityPage = () => {
       <div className={`communitypage-header ${isMobile ? "mobile" : ""}`}>
         {isMobile ? (
           <>
-            {/* 상단줄: 검색 + 새로고침 + 프로필 + 글쓰기 */}
             <div className="communitypage-header-top">
               <div className="communitypage-search-wrapper">
                 <input
@@ -654,7 +656,7 @@ const CommunityPage = () => {
                   <BookmarkIcon
                     sx={{
                       fontSize: 20,
-                      color:"#3a3a3a",
+                      color: "#3a3a3a",
                     }}
                   />
                 </button>
@@ -803,215 +805,222 @@ const CommunityPage = () => {
       </div>
 
       <div className="communitypage-posts">
-        {filteredPosts.map((post, idx) => {
-          const pid = getPostId(post) ?? idx;
-          const author = getMemberFromPost(post);
+        {filteredPosts.length === 0 ? (
+          <div className="communitypage-empty-state">
+            <p className="communitypage-empty-title">게시글이 없습니다</p>
+            <p className="communitypage-empty-subtitle">
+              새로운 글을 작성해보세요!
+            </p>
+          </div>
+        ) : (
+          filteredPosts.map((post, idx) => {
+            const pid = getPostId(post) ?? idx;
+            const author = getMemberFromPost(post);
 
-          return (
-            <div
-              key={pid}
-              id={`post-${pid}`}
-              className="communitypage-post-card"
-            >
-              <div className="communitypage-post-header">
-                {/* 왼쪽 영역 */}
-                <div className="communitypage-post-header-left">
-                  {/* 프로필/작성자/시간 */}
-                  <div className="communitypage-post-profile">
-                    <img
-                      src={author.image || defaultPetPic}
-                      alt="프로필"
-                      className="communitypage-post-profile-img"
-                      onClick={() =>
-                        handleProfileClick(
-                          isMyPost(post) ? me ?? author : author
-                        )
-                      }
-                      style={{ cursor: "pointer" }}
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) =>
-                        (e.key === "Enter" || e.key === " ") &&
-                        handleProfileClick(
-                          isMyPost(post) ? me ?? author : author
-                        )
-                      }
-                      aria-label={
-                        isMyPost(post)
-                          ? "내 프로필 빠른 보기"
-                          : "사용자 프로필 빠른 보기"
-                      }
-                    />
-                    <div className="communitypage-post-profile-info">
-                      <div className="communitypage-post-author">
-                        {post.member?.name}
+            return (
+              <div
+                key={pid}
+                id={`post-${pid}`}
+                className="communitypage-post-card"
+              >
+                <div className="communitypage-post-header">
+                  <div className="communitypage-post-header-left">
+                    <div className="communitypage-post-profile">
+                      <img
+                        src={author.image || defaultPetPic}
+                        alt="프로필"
+                        className="communitypage-post-profile-img"
+                        onClick={() =>
+                          handleProfileClick(
+                            isMyPost(post) ? me ?? author : author
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) =>
+                          (e.key === "Enter" || e.key === " ") &&
+                          handleProfileClick(
+                            isMyPost(post) ? me ?? author : author
+                          )
+                        }
+                        aria-label={
+                          isMyPost(post)
+                            ? "내 프로필 빠른 보기"
+                            : "사용자 프로필 빠른 보기"
+                        }
+                      />
+                      <div className="communitypage-post-profile-info">
+                        <div className="communitypage-post-author">
+                          {post.member?.name}
+                        </div>
+                        <div className="communitypage-post-time">
+                          {post.post.createdAt
+                            ? formatDistanceToNow(
+                                new Date(post.post.createdAt),
+                                {
+                                  addSuffix: true,
+                                  locale: ko,
+                                }
+                              )
+                            : "방금"}
+                        </div>
                       </div>
-                      <div className="communitypage-post-time">
-                        {post.post.createdAt
-                          ? formatDistanceToNow(new Date(post.post.createdAt), {
-                              addSuffix: true,
-                              locale: ko,
-                            })
-                          : "방금"}
+                    </div>
+
+                    <div className="communitypage-post-category-title">
+                      <div className="communitypage-post-category">
+                        {getCategoryName(post)}
                       </div>
+                      <div
+                        className="communitypage-post-title"
+                        dangerouslySetInnerHTML={{ __html: post.post.title }}
+                      />
                     </div>
                   </div>
 
-                  {/* 카테고리/타이틀 */}
-                  <div className="communitypage-post-category-title">
-                    <div className="communitypage-post-category">
-                      {getCategoryName(post)}
+                  {isMyPost(post) && (
+                    <div className="communitypage-post-menu">
+                      <button
+                        className="communitypage-menu-button"
+                        onClick={() => toggleMenu(idx)}
+                        aria-label="게시글 메뉴"
+                      >
+                        ⋯
+                      </button>
+                      {menuOpenIndex === idx && (
+                        <div className="communitypage-post-dropdown">
+                          <button onClick={() => handleEdit(post)}>수정</button>
+                          <button onClick={() => openDeleteModal(post)}>
+                            삭제
+                          </button>
+                        </div>
+                      )}
                     </div>
-                    <div
-                      className="communitypage-post-title"
-                      dangerouslySetInnerHTML={{ __html: post.post.title }}
-                    />
-                  </div>
+                  )}
                 </div>
 
-                {/* 우측 메뉴 */}
-                {isMyPost(post) && (
-                  <div className="communitypage-post-menu">
-                    <button
-                      className="communitypage-menu-button"
-                      onClick={() => toggleMenu(idx)}
-                      aria-label="게시글 메뉴"
-                    >
-                      ⋯
-                    </button>
-                    {menuOpenIndex === idx && (
-                      <div className="communitypage-post-dropdown">
-                        <button onClick={() => handleEdit(post)}>수정</button>
-                        <button onClick={() => openDeleteModal(post)}>
-                          삭제
-                        </button>
-                      </div>
-                    )}
-                  </div>
+                {(post?.postImageDtoList?.[0]?.imageUrl ??
+                  post?.post?.postImage?.[0]?.imageUrl) && (
+                  <img
+                    src={
+                      post?.postImageDtoList?.[0]?.imageUrl ??
+                      post?.post?.postImage?.[0]?.imageUrl
+                    }
+                    alt="게시글 이미지"
+                    className="communitypage-post-main-image"
+                  />
                 )}
-              </div>
-
-              {/* 이미지 */}
-              {(post?.postImageDtoList?.[0]?.imageUrl ??
-                post?.post?.postImage?.[0]?.imageUrl) && (
-                <img
-                  src={
-                    post?.postImageDtoList?.[0]?.imageUrl ??
-                    post?.post?.postImage?.[0]?.imageUrl
-                  }
-                  alt="게시글 이미지"
-                  className="communitypage-post-main-image"
+                <p
+                  className="communitypage-post-content"
+                  dangerouslySetInnerHTML={{ __html: post.post.content }}
                 />
-              )}
 
-              {/* 본문 */}
-              <p
-                className="communitypage-post-content"
-                dangerouslySetInnerHTML={{ __html: post.post.content }}
-              />
+                <div className="communitypage-post-actions">
+                  <div className="communitypage-post-actions-left">
+                    <div
+                      className="communitypage-like-area"
+                      style={{ position: "relative", display: "inline-flex" }}
+                    >
+                      <button
+                        type="button"
+                        className={`communitypage-action-btn ${
+                          likedMap[pid] ? "is-liked" : ""
+                        }`}
+                        aria-label="공감"
+                        onClick={() => onHeartClick(pid)}
+                        title={
+                          reactionMap[pid]
+                            ? REACTION_OPTIONS.find(
+                                (o) => o.key === reactionMap[pid]
+                              )?.label
+                            : "공감"
+                        }
+                      >
+                        {likedMap[pid] ? (
+                          <FavoriteIcon className="communitypage-action-icon" />
+                        ) : (
+                          <FavoriteBorderIcon className="communitypage-action-icon" />
+                        )}
+                        <span className="communitypage-action-count">
+                          {likeCountMap[pid] ?? 0}
+                        </span>
+                      </button>
 
-              {/* 하단 액션바 */}
-              <div className="communitypage-post-actions">
-                <div className="communitypage-post-actions-left">
-                  {/* 하트 + 말풍선 래퍼 */}
-                  <div
-                    className="communitypage-like-area"
-                    style={{ position: "relative", display: "inline-flex" }}
-                  >
+                      {reactionPickerId === pid && (
+                        <div
+                          className="communitypage-reaction-picker"
+                          role="menu"
+                          aria-label="감정 선택"
+                        >
+                          {REACTION_OPTIONS.map((opt) => (
+                            <button
+                              key={opt.key}
+                              type="button"
+                              className={`communitypage-reaction-item ${
+                                reactionMap[pid] === opt.key ? "active" : ""
+                              }`}
+                              onClick={() => onSelectReaction(pid, opt.key)}
+                              title={opt.label}
+                            >
+                              <span className="communitypage-reaction-emoji">
+                                {opt.icon}
+                              </span>
+                              <span className="communitypage-reaction-label">
+                                {opt.label}
+                              </span>
+                            </button>
+                          ))}
+                          <div className="communitypage-reaction-arrow" />
+                        </div>
+                      )}
+                    </div>
+
                     <button
                       type="button"
-                      className={`communitypage-action-btn ${
-                        likedMap[pid] ? "is-liked" : ""
-                      }`}
-                      aria-label="공감"
-                      onClick={() => onHeartClick(pid)}
-                      title={
-                        reactionMap[pid]
-                          ? REACTION_OPTIONS.find(
-                              (o) => o.key === reactionMap[pid]
-                            )?.label
-                          : "공감"
-                      }
+                      className="communitypage-action-btn"
+                      aria-label="댓글"
+                      onClick={() => toggleComments(post.post.postId)}
                     >
-                      {likedMap[pid] ? (
-                        <FavoriteIcon className="communitypage-action-icon" />
-                      ) : (
-                        <FavoriteBorderIcon className="communitypage-action-icon" />
-                      )}
+                      <ChatBubbleOutlineIcon className="communitypage-action-icon" />
                       <span className="communitypage-action-count">
-                        {likeCountMap[pid] ?? 0}
+                        {post.commentTotal ?? 0}
                       </span>
                     </button>
-
-                    {/* 감정 선택 말풍선 */}
-                    {reactionPickerId === pid && (
-                      <div
-                        className="communitypage-reaction-picker"
-                        role="menu"
-                        aria-label="감정 선택"
-                      >
-                        {REACTION_OPTIONS.map((opt) => (
-                          <button
-                            key={opt.key}
-                            type="button"
-                            className={`communitypage-reaction-item ${
-                              reactionMap[pid] === opt.key ? "active" : ""
-                            }`}
-                            onClick={() => onSelectReaction(pid, opt.key)}
-                            title={opt.label}
-                          >
-                            <span className="communitypage-reaction-emoji">
-                              {opt.icon}
-                            </span>
-                            <span className="communitypage-reaction-label">
-                              {opt.label}
-                            </span>
-                          </button>
-                        ))}
-                        <div className="communitypage-reaction-arrow" />
-                      </div>
-                    )}
                   </div>
+                  <div className="communitypage-post-actions-right">
+                    <button
+                      type="button"
+                      className="communitypage-action-btn"
+                      aria-label="저장"
+                      onClick={() => toggleBookmark(pid)}
+                    >
+                      {bookmarkedMap[pid] ? (
+                        <BookmarkIcon className="communitypage-action-icon bookmarked" />
+                      ) : (
+                        <BookmarkBorderIcon className="communitypage-action-icon" />
+                      )}
+                    </button>
+                  </div>
+                </div>
 
-                  {/* 댓글 버튼은 그대로 */}
-                  <button
-                    type="button"
-                    className="communitypage-action-btn"
-                    aria-label="댓글"
-                    onClick={() => toggleComments(post.post.postId)}
-                  >
-                    <ChatBubbleOutlineIcon className="communitypage-action-icon" />
-                    <span className="communitypage-action-count">
-                      {post.commentTotal ?? 0}
-                    </span>
-                  </button>
-                </div>
-                <div className="communitypage-post-actions-right">
-                  <button
-                    type="button"
-                    className="communitypage-action-btn"
-                    aria-label="저장"
-                    onClick={() => toggleBookmark(pid)}
-                  >
-                    {bookmarkedMap[pid] ? (
-                      <BookmarkIcon className="communitypage-action-icon bookmarked" />
-                    ) : (
-                      <BookmarkBorderIcon className="communitypage-action-icon" />
-                    )}
-                  </button>
-                </div>
+                <CommentSection
+                  postId={post.post.postId}
+                  open={Boolean(openComments[post.post.postId])}
+                  onClose={() => toggleComments(post.post.postId)}
+                />
               </div>
-
-              {/* 댓글 섹션 */}
-              <CommentSection
-                postId={post.post.postId}
-                open={Boolean(openComments[post.post.postId])}
-                onClose={() => toggleComments(post.post.postId)}
-              />
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
+
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
 
       {isModalOpen && (
         <PostCreateModal
@@ -1051,4 +1060,4 @@ const CommunityPage = () => {
   );
 };
 
-export default CommunityPage;
+export default withAuth(CommunityPage);

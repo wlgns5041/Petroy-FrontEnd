@@ -12,7 +12,7 @@ const PostDeleteModal = ({ postTitle = "", onClose, onConfirm, loading }) => {
       setError("게시글 제목을 정확히 입력해 주세요.");
       return;
     }
-    onConfirm?.(); // 실제 삭제 로직은 부모에서
+    onConfirm?.();
   };
 
   return (

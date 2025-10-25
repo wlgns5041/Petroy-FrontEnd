@@ -201,7 +201,7 @@
 
   .mypage-banner-section {
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     margin: 20px 0 12px;
   }
@@ -209,10 +209,11 @@
   .mypage-banner-scroll {
     display: flex;
     overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 14px;
-    padding: 0 12px;
+    scroll-snap-type: x mandatory; 
     scroll-behavior: smooth;
+    border-radius: 6px;
+    gap: 0px;
+    padding: 0;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
@@ -221,20 +222,16 @@
   }
 
   .mypage-banner {
-    flex: 0 0 95%;
+    flex: 0 0 100%; 
     scroll-snap-align: center;
+    scroll-snap-stop: always;
     display: flex;
     align-items: center;
     background: #fff;
-    border-radius: 6px;
     padding: 20px;
     position: relative;
     min-height: 100px;
-    transition: transform 0.3s ease;
-  }
-
-  .mypage-banner:hover {
-    transform: scale(1.02);
+    box-sizing: border-box;
   }
 
   .mypage-banner-image {
@@ -255,7 +252,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start; 
-    gap: 6px;
+    gap: 4px;
+    margin-top: 12px;
   }
 
   .mypage-banner-title {
@@ -646,11 +644,10 @@
     display: flex;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    gap: 14px;
-    padding: 0 12px;
+    gap: 0px;
+    padding: 0;
     scroll-behavior: smooth;
     border-radius: 6px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
   .mypage-banner-scroll::-webkit-scrollbar {
@@ -658,8 +655,9 @@
   }
 
   .mypage-banner {
-    flex: 0 0 95%;
+    flex: 0 0 100%;
     scroll-snap-align: center;
+    scroll-snap-stop: always;
     display: flex;
     align-items: center;
     background: #fff;
@@ -668,10 +666,6 @@
     position: relative;
     min-height: 100px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .mypage-banner:hover {
-    transform: scale(1.02);
   }
 
   .mypage-banner-image {
@@ -692,7 +686,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start; 
-    gap: 6px;
+    gap: 4px;
   }
 
   .mypage-banner-title {
@@ -722,8 +716,8 @@
     background: none;
     border: none;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 12px;
+    height: 12px;
     display: flex;
     align-items: center;
     justify-content: center;

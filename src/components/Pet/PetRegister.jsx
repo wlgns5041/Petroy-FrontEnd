@@ -7,6 +7,7 @@ import {
   registerPet,
 } from "../../services/PetService";
 import ReactDOM from "react-dom";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [step, setStep] = useState(1);
@@ -23,6 +24,9 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
   const [speciesOptions, setSpeciesOptions] = useState([]);
   const [breedOptions, setBreedOptions] = useState([]);
   const [error, setError] = useState(null);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const [dropdownOpen, setDropdownOpen] = useState({
     species: false,
@@ -48,7 +52,6 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     6: require("../../assets/icons/cat-cheese.png"),
   };
 
-  // ✅ 종 / 품종 리스트 불러오기
   useEffect(() => {
     const fetchSpecies = async () => {
       try {
@@ -101,11 +104,13 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
   const handleNext = () => {
     if (step === 1 && (!petInfo.speciesId || !petInfo.breedId)) {
-      alert("종과 품종을 모두 선택해주세요.");
+      setAlertMessage("종과 품종을 모두 선택해주세요.");
+      setShowAlert(true);
       return;
     }
     if (step === 2 && (!petInfo.name || !petInfo.age || !petInfo.gender)) {
-      alert("이름, 나이, 성별을 모두 입력해주세요.");
+      setAlertMessage("이름, 나이, 성별을 모두 입력해주세요.");
+      setShowAlert(true);
       return;
     }
     setStep(step + 1);
@@ -133,18 +138,19 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
       const result = await registerPet(formData);
 
-      alert("반려동물이 성공적으로 등록되었습니다.");
+      setAlertMessage("반려동물이 성공적으로 등록되었습니다.");
+      setShowAlert(true);
       if (onRegisterSuccess && result) {
         onRegisterSuccess(result);
       }
       onClose();
     } catch (err) {
-      alert("등록 중 오류가 발생했습니다.");
+      setAlertMessage("등록 중 오류가 발생했습니다.");
+      setShowAlert(true);
       console.error(err);
     }
   };
 
-  // ✅ 커스텀 드롭다운 렌더링 함수
   const renderDropdown = (key, label, options, valueKey) => {
     const selectedLabel =
       options.find((opt) => opt.value === petInfo[valueKey])?.label || "선택";
@@ -411,6 +417,12 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
           </CSSTransition>
         </SwitchTransition>
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 };

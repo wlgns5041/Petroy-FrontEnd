@@ -7,11 +7,15 @@ import {
   fetchCaregiversByPet,
   deleteCaregiver,
 } from "../../services/PetService";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const CareGiverList = ({ pet, onClose }) => {
   const [caregiversList, setCaregiversList] = useState([]);
   const [error, setError] = useState(null);
   const [friends, setFriends] = useState([]);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -45,7 +49,8 @@ const CareGiverList = ({ pet, onClose }) => {
   const handleDeleteCareGiver = async (cgId, memberName) => {
     const realFriend = friends.find((f) => f.name === memberName);
     if (!realFriend) {
-      alert("해당 친구의 ID를 찾을 수 없습니다.");
+      setAlertMessage("해당 친구의 ID를 찾을 수 없습니다.");
+      setShowAlert(true);
       return;
     }
 
@@ -56,7 +61,8 @@ const CareGiverList = ({ pet, onClose }) => {
     try {
       const success = await deleteCaregiver(pet.petId, realMemberId);
       if (success) {
-        alert("돌보미가 삭제되었습니다.");
+        setAlertMessage("돌보미가 삭제되었습니다.");
+        setShowAlert(true);
         setCaregiversList((prev) =>
           prev.filter((cg) => cg.memberName !== memberName)
         );
@@ -64,7 +70,8 @@ const CareGiverList = ({ pet, onClose }) => {
     } catch (err) {
       const msg =
         err.response?.data?.errorMessage || "삭제 중 오류가 발생했습니다.";
-      alert(msg);
+      setAlertMessage(msg);
+      setShowAlert(true);
     }
   };
 
@@ -74,9 +81,7 @@ const CareGiverList = ({ pet, onClose }) => {
         <button className="care-giver-list-close" onClick={onClose}>
           &times;
         </button>
-        <h2 className="care-giver-list-title">
-         {pet.name}의 돌보미 친구목록
-        </h2>
+        <h2 className="care-giver-list-title">{pet.name}의 돌보미 친구목록</h2>
         {error ? (
           <p className="care-giver-list-error">{error}</p>
         ) : caregiversList.length > 0 ? (
@@ -117,6 +122,12 @@ const CareGiverList = ({ pet, onClose }) => {
           </div>
         )}
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 };

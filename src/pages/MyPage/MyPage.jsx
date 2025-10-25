@@ -21,17 +21,19 @@ import {
 import { fetchMemberPets } from "../../services/PetService.jsx";
 import ArrowCircleRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
+import withAuth from "../../utils/withAuth";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const MyPage = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({}); // 사용자 정보
-  const [pets, setPets] = useState([]); // 펫 목록
+  const [userInfo, setUserInfo] = useState({});
+  const [pets, setPets] = useState([]);
   const [postCount, setPostCount] = useState(0);
   const [categoryCount, setCategoryCount] = useState(0);
   const [scheduleCount, setScheduleCount] = useState(0);
-  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [loading, setLoading] = useState(true);
   const [showNameModal, setShowNameModal] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [friendsCount, setFriendsCount] = useState(0);
@@ -41,6 +43,9 @@ const MyPage = () => {
   const dropdownRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   // 컴포넌트가 마운트될 때 실행
   useEffect(() => {
@@ -102,20 +107,53 @@ const MyPage = () => {
     return `${API_BASE_URL}${u}`;
   };
 
+  const banners = [
+    {
+      title: "내 작성 글",
+      sub: "반려동물에 대한 정보를 공유하고 소통하며<br />새로운 인연을 만들어보세요",
+      image: require("../../assets/icons/post logo.png"),
+      count: postCount,
+      link: "/communityPage",
+    },
+    {
+      title: "내 카테고리",
+      sub: "카테고리를 추가해서 일정을 분류해보세요",
+      image: require("../../assets/icons/category logo.png"),
+      count: categoryCount,
+      link: "/mainPage",
+    },
+    {
+      title: "내 일정",
+      sub: "일정을 통해 반려동물을 손쉽게 관리해보세요",
+      image: require("../../assets/icons/schedule logo.png"),
+      count: scheduleCount,
+      link: "/mainPage",
+    },
+  ];
+
   useEffect(() => {
     const scrollEl = scrollRef.current;
     if (!scrollEl) return;
 
     const handleScroll = () => {
-      const bannerWidth = scrollEl.firstChild?.offsetWidth || 0; // 각 배너 실제 폭
-      const gap = 14;
-      const newIndex = Math.round(scrollEl.scrollLeft / (bannerWidth + gap));
-      setActiveIndex(newIndex);
+      const scrollLeft = scrollEl.scrollLeft;
+      const bannerWidth =
+        scrollEl.firstElementChild?.getBoundingClientRect().width || 1;
+
+      const gap =
+        parseFloat(getComputedStyle(scrollEl).gap || 0) ||
+        parseFloat(getComputedStyle(scrollEl).columnGap || 0);
+
+      const effectiveWidth = bannerWidth + gap;
+
+      const index = Math.round(scrollLeft / effectiveWidth);
+
+      setActiveIndex(Math.max(0, Math.min(banners.length - 1, index)));
     };
 
     scrollEl.addEventListener("scroll", handleScroll);
     return () => scrollEl.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [banners.length]);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -181,7 +219,6 @@ const MyPage = () => {
   // 이미지 변경 함수
   const handleImageUpload = async (file, preview) => {
     const token = localStorage.getItem("accessToken");
-
     if (preview) setDisplayImage(preview);
 
     try {
@@ -192,7 +229,8 @@ const MyPage = () => {
         ? `${finalUrlBase}&v=${stamp}`
         : `${finalUrlBase}?v=${stamp}`;
 
-      alert("이미지를 변경했습니다.");
+      setAlertMessage("이미지를 변경했습니다.");
+      setShowAlert(true);
 
       const swapWhenReady = (tries = 6, delay = 250) => {
         const probe = new Image();
@@ -208,11 +246,11 @@ const MyPage = () => {
         const r = Math.random().toString(36).slice(2);
         probe.src = `${finalUrl}${finalUrl.includes("?") ? "&" : "?"}r=${r}`;
       };
-
       swapWhenReady();
     } catch (e) {
       console.error(e);
-      alert("이미지 업로드 실패");
+      setAlertMessage("이미지 업로드 실패");
+      setShowAlert(true);
     }
   };
 
@@ -225,7 +263,8 @@ const MyPage = () => {
       await deleteMember(token);
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      alert("회원 탈퇴에 성공했습니다.");
+      setAlertMessage("회원 탈퇴에 성공했습니다.");
+      setShowAlert(true);
       window.location.href = "/";
     } catch (error) {
       console.error("회원 탈퇴 중 오류 발생:", error);
@@ -234,20 +273,15 @@ const MyPage = () => {
 
   // 로그아웃 처리 함수
   const handleLogout = () => {
-    // 토큰 제거
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-
-    // SSE 연결 해제
     if (window.__eventSourceInstance) {
       window.__eventSourceInstance.close();
       window.__eventSourceInstance = null;
-      console.log("👋 SSE 연결 종료됨");
     }
 
-    alert("로그아웃되었습니다.");
-
-    // 로그인 페이지로 리디렉션
+    setAlertMessage("로그아웃되었습니다.");
+    setShowAlert(true);
     window.location.href = "/login";
   };
 
@@ -260,46 +294,20 @@ const MyPage = () => {
     } else if (confirmAction?.type === "delete") {
       await handleAccountDelete();
     }
-    setConfirmAction(null); // 모달 닫기
+    setConfirmAction(null);
   };
-
-  const banners = [
-    {
-      title: "내 작성 글",
-      sub: "반려동물에 대한 정보를 공유하고 소통하며<br />새로운 인연을 만들어보세요",
-      image: require("../../assets/icons/post logo.png"),
-      count: postCount,
-      link: "/communityPage",
-    },
-    {
-      title: "내 카테고리",
-      sub: "카테고리를 추가해서 일정을 분류해보세요",
-      image: require("../../assets/icons/category logo.png"),
-      count: categoryCount,
-      link: "/mainPage",
-    },
-    {
-      title: "내 일정",
-      sub: "일정을 통해 반려동물을 손쉽게 관리해보세요",
-      image: require("../../assets/icons/schedule logo.png"),
-      count: scheduleCount,
-      link: "/mainPage",
-    },
-  ];
 
   return (
     <main className="mypage-viewport">
       <div className="mypage">
         <div className="mypage-profile">
           <div className="mypage-profile-card">
-            {/* 왼쪽: 프로필 이미지 */}
             <img
               src={displayImage ?? normalizeUrl(userInfo.image)}
               alt="profile"
               className="mypage-profile-image"
             />
 
-            {/* 오른쪽: 정보 영역 */}
             <div className="mypage-profile-info">
               <div className="mypage-profile-name">{userInfo.name}</div>
               <div className="mypage-profile-phone">{userInfo.phone}</div>
@@ -465,9 +473,16 @@ const MyPage = () => {
             onCancel={() => setConfirmAction(null)}
           />
         )}
+
+        {showAlert && (
+          <AlertModal
+            message={alertMessage}
+            onConfirm={() => setShowAlert(false)}
+          />
+        )}
       </div>
     </main>
   );
 };
 
-export default MyPage;
+export default withAuth(MyPage);

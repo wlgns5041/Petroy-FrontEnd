@@ -10,6 +10,8 @@ import {
 } from "../../services/PetService.jsx";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import "../../styles/Pet/PetPage.css";
+import withAuth from "../../utils/withAuth";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -35,6 +37,9 @@ const PetPage = () => {
 
   const [activeTab, setActiveTab] = useState("mine");
   const petTabIndex = activeTab === "mine" ? 0 : 1;
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const sortOptions = [
     { key: "name-asc", label: "이름순 ↓" },
@@ -134,23 +139,23 @@ const PetPage = () => {
     loadCaregiver();
   }, []);
 
-useEffect(() => {
-  const handleClickOutside = (e) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-      e.stopPropagation(); 
-      setShowMenu(false);
-      setMenuPetId(null);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        e.stopPropagation();
+        setShowMenu(false);
+        setMenuPetId(null);
+      }
+    };
+
+    if (showMenu) {
+      document.addEventListener("click", handleClickOutside, true);
     }
-  };
 
-  if (showMenu) {
-    document.addEventListener("click", handleClickOutside, true); 
-  }
-
-  return () => {
-    document.removeEventListener("click", handleClickOutside, true);
-  };
-}, [showMenu]);
+    return () => {
+      document.removeEventListener("click", handleClickOutside, true);
+    };
+  }, [showMenu]);
 
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
@@ -198,7 +203,8 @@ useEffect(() => {
         pet.petId === selectedPet.petId ? { ...pet, careGiverId } : pet
       )
     );
-    alert("돌보미 등록 성공!");
+    setAlertMessage("돌보미 등록 성공!");
+    setShowAlert(true);
   };
 
   return (
@@ -548,9 +554,16 @@ useEffect(() => {
             onClose={() => setShowCareGiverList(false)}
           />
         )}
+
+        {showAlert && (
+          <AlertModal
+            message={alertMessage}
+            onConfirm={() => setShowAlert(false)}
+          />
+        )}
       </div>
     </main>
   );
 };
 
-export default PetPage;
+export default withAuth(PetPage);

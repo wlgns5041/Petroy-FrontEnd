@@ -178,44 +178,49 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             {groupDatesByWeek(getStartOfMonth(), getEndOfMonth()).map(
               (week, i) => (
                 <div key={i} className="calendar-mini-week-row">
-{week.map((date, j) => {
-  const isInSelectedWeek = weeks[0].some(
-    (w) => w.toDateString() === date.toDateString()
-  );
+                  {week.map((date, j) => {
+                    const isInSelectedWeek = weeks[0].some(
+                      (w) => w.toDateString() === date.toDateString()
+                    );
 
-  const isToday =
-    date.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" }) === todayStr;
+                    const isToday =
+                      date.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      }) === todayStr;
 
-  const isSelectedDate =
-    date.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" }) ===
-    currentDate.toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
+                    const isSelectedDate =
+                      date.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      }) ===
+                      currentDate.toLocaleDateString("sv-SE", {
+                        timeZone: "Asia/Seoul",
+                      });
 
-  // ✅ 일정 존재 여부 확인
-  const hasSchedule = filteredSchedules.some(
-    (s) =>
-      new Date(s.date).toLocaleDateString("sv-SE", {
-        timeZone: "Asia/Seoul",
-      }) ===
-      date.toLocaleDateString("sv-SE", {
-        timeZone: "Asia/Seoul",
-      })
-  );
+                    const hasSchedule = filteredSchedules.some(
+                      (s) =>
+                        new Date(s.date).toLocaleDateString("sv-SE", {
+                          timeZone: "Asia/Seoul",
+                        }) ===
+                        date.toLocaleDateString("sv-SE", {
+                          timeZone: "Asia/Seoul",
+                        })
+                    );
 
-  return (
-    <div
-      key={j}
-      className={`calendar-mini-day 
+                    return (
+                      <div
+                        key={j}
+                        className={`calendar-mini-day 
         ${isInSelectedWeek ? "calendar-highlight-week" : ""}
         ${isToday ? "calendar-mini-today" : ""}
         ${isSelectedDate ? "calendar-selected-date" : ""}
-        ${hasSchedule ? "calendar-has-schedule" : ""}  // ✅ 추가된 클래스
+        ${hasSchedule ? "calendar-has-schedule" : ""}  
       `}
-      onClick={() => setCurrentDate(date)}
-    >
-      {date.getDate()}
-    </div>
-  );
-})}
+                        onClick={() => setCurrentDate(date)}
+                      >
+                        {date.getDate()}
+                      </div>
+                    );
+                  })}
                 </div>
               )
             )}
@@ -412,7 +417,6 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                         <div className="calendar-schedule-card-wide">
                           {/* 시간 + 카테고리 */}
 
-
                           {/* 제목 + 펫 */}
                           <div className="calendar-summary-title-pets">
                             <div className="calendar-schedule-title">
@@ -449,7 +453,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                             </div>
                           </div>
 
-                                                    <div className="calendar-summary-time-category">
+                          <div className="calendar-summary-time-category">
                             <div className="calendar-date-text">
                               <AccessTimeFilledRoundedIcon
                                 fontSize="small"

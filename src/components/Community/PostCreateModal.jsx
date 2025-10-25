@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { createPost, fetchCategories } from "../../services/CommunityService";
 import "../../styles/Community/PostCreateModal.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import ReactDOM from "react-dom";
+import AlertModal from "../../components/commons/AlertModal";
 
 const PostCreateModal = ({ onClose, onPostCreated }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +16,14 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
   const [categories, setCategories] = useState([]);
   const [step, setStep] = useState(1);
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const [dropdownPos, setDropdownPos] = useState({});
+
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [onConfirmAction, setOnConfirmAction] = useState(null);
+
   useEffect(() => {
     const loadCategories = async () => {
       const data = await fetchCategories();
@@ -21,6 +31,17 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
     };
     loadCategories();
   }, []);
+
+  useEffect(() => {
+    if (dropdownOpen && dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      setDropdownPos({
+        top: rect.bottom + 6,
+        right: window.innerWidth - rect.right,
+        width: rect.width,
+      });
+    }
+  }, [dropdownOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,48 +69,79 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
 
     const success = await createPost(body, token);
     if (success) {
-      alert("게시글이 등록되었습니다!");
-      onPostCreated();
+      setAlertMessage("게시글이 등록되었습니다!");
+      setShowAlert(true);
+      setOnConfirmAction(() => () => {
+        setShowAlert(false);
+        onPostCreated();
+      });
     } else {
-      alert("게시글 등록에 실패했습니다.");
+      setAlertMessage("게시글 등록에 실패했습니다.");
+      setShowAlert(true);
+      setOnConfirmAction(() => () => setShowAlert(false));
     }
   };
 
   return (
     <div className="post-modal-overlay">
       <div className="post-modal-container">
-          <button className="post-modal-close" onClick={onClose}>
-            ×
-          </button>
-
-        <h2 className="post-modal-title">
-          {step === 1
-            ? "게시글을 작성해주세요"
-            : "게시글의 이미지를 등록해주세요"}
-        </h2>
-
-        <form className="post-create-form" onSubmit={handleSubmit}>
-          <SwitchTransition mode="out-in">
-            <CSSTransition key={step} classNames="fade" timeout={300}>
-              <>
-                {step === 1 ? (
-                  <>
-                    <div className="post-create-field">
+        <button className="post-modal-close" onClick={onClose}>
+          ×
+        </button>
+        <SwitchTransition>
+          <CSSTransition key={step} timeout={300} classNames="fade">
+            <div className="post-create-step-wrapper">
+              <p className="post-create-step-indicator">{step} / 2</p>
+              {step === 1 && (
+                <>
+                  <h2 className="post-modal-title">게시글을 작성해주세요</h2>
+                  <form className="post-create-form" onSubmit={handleSubmit}>
+                    <div className="post-create-field" ref={dropdownRef}>
                       <label className="post-create-label">카테고리</label>
-                      <select
-                        name="categoryId"
-                        value={formData.categoryId}
-                        onChange={handleChange}
-                        required
-                        className="post-create-select"
-                      >
-                        <option value="">카테고리를 선택하세요</option>
-                        {categories.map((cat) => (
-                          <option key={cat.categoryId} value={cat.categoryId}>
-                            {cat.categoryName}
-                          </option>
-                        ))}
-                      </select>
+                      <div className="post-create-inline-select-wrapper">
+                        <div
+                          className={`post-create-inline-select ${
+                            dropdownOpen ? "active" : ""
+                          }`}
+                          onClick={() => setDropdownOpen((prev) => !prev)}
+                        >
+                          {categories.find(
+                            (c) => c.categoryId === formData.categoryId
+                          )?.categoryName || "카테고리 선택"}
+                          <span className="post-create-inline-arrow">▼</span>
+                        </div>
+                      </div>
+
+                      {dropdownOpen &&
+                        ReactDOM.createPortal(
+                          <ul
+                            className="post-create-inline-dropdown"
+                            style={{
+                              position: "fixed",
+                              top: `${dropdownPos.top || 0}px`,
+                              right: `${dropdownPos.right || 0}px`,
+                              width: dropdownPos.width,
+                              zIndex: 9999,
+                            }}
+                          >
+                            {categories.map((cat) => (
+                              <li
+                                key={cat.categoryId}
+                                className="post-create-inline-option"
+                                onClick={() => {
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    categoryId: cat.categoryId,
+                                  }));
+                                  setDropdownOpen(false);
+                                }}
+                              >
+                                {cat.categoryName}
+                              </li>
+                            ))}
+                          </ul>,
+                          document.body
+                        )}
                     </div>
 
                     <div className="post-create-field">
@@ -116,10 +168,36 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
                         className="post-create-textarea"
                       />
                     </div>
-                  </>
-                ) : (
+
+                    <div className="post-create-button">
+                      <button
+                        type="button"
+                        className="post-create-button post-create-next"
+                        onClick={() => setStep(2)}
+                        disabled={
+                          !formData.categoryId ||
+                          !formData.title.trim() ||
+                          !formData.content.trim()
+                        }
+                      >
+                        다음으로
+                      </button>
+                    </div>
+                  </form>
+                </>
+              )}
+
+              {step === 2 && (
+                <>
+                  <h2 className="post-modal-title">
+                    게시글의 이미지를 등록해주세요
+                  </h2>
                   <div className="post-create-image-box">
-                    <div className="post-create-image-placeholder">
+                    <div
+                      className={`post-create-image-placeholder ${
+                        formData.image.length > 0 ? "has-image" : ""
+                      }`}
+                    >
                       {formData.image.length > 0 ? (
                         <div className="post-create-image-preview">
                           <img
@@ -149,45 +227,38 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
                       </button>
                     )}
                   </div>
-                )}
-              </>
-            </CSSTransition>
-          </SwitchTransition>
 
-          <div className="post-create-buttons">
-            {step === 1 ? (
-              <button
-                type="button"
-                className="post-create-button post-create-next"
-                onClick={() => setStep(2)}
-                disabled={
-                  !formData.categoryId ||
-                  !formData.title.trim() ||
-                  !formData.content.trim()
-                }
-              >
-                다음으로
-              </button>
-            ) : (
-              <div className="post-create-button-row">
-                <button
-                  type="button"
-                  className="post-create-button post-create-back"
-                  onClick={() => setStep(1)}
-                >
-                  뒤로가기
-                </button>
-                <button
-                  type="submit"
-                  className="post-create-button post-create-submit"
-                  disabled={formData.image.length === 0}
-                >
-                  등록
-                </button>
-              </div>
-            )}
-          </div>
-        </form>
+                  <div className="post-create-button-row">
+                    <button
+                      type="button"
+                      className="post-create-button post-create-back"
+                      onClick={() => setStep(1)}
+                    >
+                      뒤로가기
+                    </button>
+                    <button
+                      type="button"
+                      className="post-create-button post-create-submit"
+                      onClick={handleSubmit}
+                      disabled={formData.image.length === 0}
+                    >
+                      등록하기
+                    </button>
+                  </div>
+                  {showAlert && (
+                    <AlertModal
+                      message={alertMessage}
+                      onConfirm={() => {
+                        setShowAlert(false);
+                        if (onConfirmAction) onConfirmAction();
+                      }}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+          </CSSTransition>
+        </SwitchTransition>
       </div>
     </div>
   );

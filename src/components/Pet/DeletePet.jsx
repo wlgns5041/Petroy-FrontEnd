@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import "../../styles/Pet/DeletePet.css";
 import { deletePet } from "../../services/PetService";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
   const [nameInput, setNameInput] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const handleChange = (e) => {
     setNameInput(e.target.value);
@@ -23,7 +27,8 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
     try {
       const success = await deletePet(pet.petId);
       if (success) {
-        alert("펫 삭제 성공");
+        setAlertMessage("펫을 삭제했습니다");
+        setShowAlert(true);
         onDeleteSuccess();
         onClose();
       } else {
@@ -81,6 +86,12 @@ const DeletePet = ({ pet, onClose, onDeleteSuccess }) => {
           </button>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 };

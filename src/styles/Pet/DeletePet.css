@@ -117,7 +117,7 @@
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
-  .pet-delete-overlay {
+.pet-delete-overlay {
   position: fixed;
   top: 0;
   left: 0;

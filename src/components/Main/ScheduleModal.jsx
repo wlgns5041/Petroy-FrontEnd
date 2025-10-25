@@ -13,6 +13,7 @@ import TimeSelect from "../../components/Main/TimeSelect";
 import DateTimeSelect from "../../components/Main/DateTimeSelect";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -46,6 +47,10 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   const [syncedHeight, setSyncedHeight] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showFrequencyDropdown, setShowFrequencyDropdown] = useState(false);
+
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertAction, setAlertAction] = useState(null);
 
   useEffect(() => {
     if (calendarRef.current) {
@@ -161,8 +166,8 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
   const convertToKST = (date) => {
     const utcDate = new Date(date);
-    const koreanTime = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000); // UTC +9시간
-    return koreanTime.toISOString().replace("Z", ""); // ISO 형식으로 변환 후 Z 제거
+    const koreanTime = new Date(utcDate.getTime() + 9 * 60 * 60 * 1000);
+    return koreanTime.toISOString().replace("Z", "");
   };
 
   const dayMapping = {
@@ -364,14 +369,26 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
       const response = await createSchedule(requestData);
 
       if (response.status === 200) {
-        alert("일정이 생성되었습니다.");
-        onScheduleCreated();
-        onClose();
+        setAlertMessage("일정이 생성되었습니다.");
+        setAlertAction(() => () => {
+          onScheduleCreated();
+          onClose();
+        });
+        setShowAlert(true);
       }
     } catch (error) {
-      const { data } = error.response;
-      alert(data.errorMessage || "일정 생성 중 오류가 발생했습니다.");
+      const { data } = error.response || {};
+      setAlertMessage(
+        data?.errorMessage || "일정 생성 중 오류가 발생했습니다."
+      );
+      setAlertAction(null);
+      setShowAlert(true);
     }
+  };
+
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+    if (alertAction) alertAction();
   };
 
   const isStepValid = () => {
@@ -803,39 +820,43 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                               </div>
                             )}
 
-<div className="schedule-create-form-row">
-  <div className="schedule-create-input-group wide">
-    <label className="schedule-create-form-label">일정 반복 시작</label>
-    <DateTimeSelect
-      value={formData.repeatPattern.startDate}
-      onChange={(newValue) =>
-        setFormData((prev) => ({
-          ...prev,
-          repeatPattern: {
-            ...prev.repeatPattern,
-            startDate: newValue,
-          },
-        }))
-      }
-    />
-  </div>
+                            <div className="schedule-create-form-row">
+                              <div className="schedule-create-input-group wide">
+                                <label className="schedule-create-form-label">
+                                  일정 반복 시작
+                                </label>
+                                <DateTimeSelect
+                                  value={formData.repeatPattern.startDate}
+                                  onChange={(newValue) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      repeatPattern: {
+                                        ...prev.repeatPattern,
+                                        startDate: newValue,
+                                      },
+                                    }))
+                                  }
+                                />
+                              </div>
 
-  <div className="schedule-create-input-group wide">
-    <label className="schedule-create-form-label">일정 반복 종료</label>
-    <DateTimeSelect
-      value={formData.repeatPattern.endDate}
-      onChange={(newValue) =>
-        setFormData((prev) => ({
-          ...prev,
-          repeatPattern: {
-            ...prev.repeatPattern,
-            endDate: newValue,
-          },
-        }))
-      }
-    />
-  </div>
-</div>
+                              <div className="schedule-create-input-group wide">
+                                <label className="schedule-create-form-label">
+                                  일정 반복 종료
+                                </label>
+                                <DateTimeSelect
+                                  value={formData.repeatPattern.endDate}
+                                  onChange={(newValue) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      repeatPattern: {
+                                        ...prev.repeatPattern,
+                                        endDate: newValue,
+                                      },
+                                    }))
+                                  }
+                                />
+                              </div>
+                            </div>
                           </div>
                         )}
 
@@ -1195,6 +1216,9 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
           )}
         </div>
       </div>
+      {showAlert && (
+        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import {
   deleteSchedule,
 } from "../../services/ScheduleService";
 import ScheduleDeleteModal from "../../components/Main/ScheduleDeleteModal.jsx";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 function ScheduleDetailModal({
   isOpen,
@@ -28,10 +29,12 @@ function ScheduleDetailModal({
     scheduleAt: new Date().toISOString(),
   });
 
-  // ▼ 추가: 삭제 모달 상태
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState("");
+
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
 
   const getPriorityLabel = (priority) => {
     switch (priority) {
@@ -51,7 +54,6 @@ function ScheduleDetailModal({
     onRequestClose();
   };
 
-  // ▼ 변경: 확인창 대신 모달 오픈
   const openDeleteModal = () => {
     if (!scheduleId || !selectedDate) {
       setError("삭제할 일정이 선택되지 않았습니다.");
@@ -61,7 +63,6 @@ function ScheduleDetailModal({
     setDeleteOpen(true);
   };
 
-  // ▼ 추가: 실제 삭제 수행
   const confirmDelete = async () => {
     if (!scheduleId || !selectedDate) {
       setDeleteError("삭제할 일정이 선택되지 않았습니다.");
@@ -73,10 +74,8 @@ function ScheduleDetailModal({
       const response = await deleteSchedule(scheduleId, dateParam);
 
       if (response.status === 200 && response.data === true) {
-        alert("일정이 삭제되었습니다.");
-        onScheduleDeleted?.(scheduleId, selectedDate);
-        setDeleteOpen(false);
-        onRequestClose();
+        setAlertMessage("일정이 삭제되었습니다."); 
+        setShowAlert(true);
       } else {
         const msg = response?.data?.message || "일정 삭제에 실패했습니다.";
         setDeleteError(msg);
@@ -89,6 +88,13 @@ function ScheduleDetailModal({
     } finally {
       setDeleting(false);
     }
+  };
+
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+    onScheduleDeleted?.(scheduleId, selectedDate);
+    setDeleteOpen(false);
+    onRequestClose();
   };
 
   useEffect(() => {
@@ -196,8 +202,6 @@ function ScheduleDetailModal({
           </button>
         </div>
       </div>
-
-      {/* ▼ 삭제 확인 모달 */}
       {deleteOpen && (
         <ScheduleDeleteModal
           title={scheduleDetail?.title ?? ""}
@@ -210,6 +214,9 @@ function ScheduleDetailModal({
           loading={deleting}
           serverError={deleteError}
         />
+      )}
+      {showAlert && (
+        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
       )}
     </div>
   );

@@ -17,6 +17,7 @@ import {
   FaCalendarAlt,
   FaComments,
 } from "react-icons/fa";
+import withAuth from "../../utils/withAuth";
 
 const categories = ["전체", "친구", "일정", "커뮤니티"];
 
@@ -43,9 +44,8 @@ function NotificationPage() {
   const navigate = useNavigate();
 
   const [activeCategory, setActiveCategory] = useState("전체");
-  const tabRefs = useRef([]); 
+  const tabRefs = useRef([]);
   const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
-
 
   useEffect(() => {
     const activeIndex = categories.indexOf(activeCategory);
@@ -55,7 +55,6 @@ function NotificationPage() {
       setBgStyle({ left: offsetLeft, width: offsetWidth });
     }
   }, [activeCategory]);
-
 
   const reload = async () => {
     try {
@@ -173,13 +172,12 @@ function NotificationPage() {
     }
   };
 
-
   return (
     <div className="notification-viewport">
       <div className="notification-container">
         <NavBar title="알림" unreadCount={unreadCount} />
         <div className="notification-tab-bar">
-<div
+          <div
             className="notification-tab-background"
             style={{
               left: `${bgStyle.left}px`,
@@ -199,7 +197,9 @@ function NotificationPage() {
             >
               <span className="notification-tab-label">
                 <span className="notification-tab-text">{cat}</span>
-                <span className="notification-count">{categoryCounts[cat]}</span>
+                <span className="notification-count">
+                  {categoryCounts[cat]}
+                </span>
               </span>
             </button>
           ))}
@@ -265,4 +265,4 @@ function NotificationPage() {
   );
 }
 
-export default NotificationPage;
+export default withAuth(NotificationPage);

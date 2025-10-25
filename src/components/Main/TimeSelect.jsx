@@ -17,9 +17,12 @@ export default function TimeSelect({
   const hh = Math.max(0, Math.min(23, parseInt(value.slice(0, 2) || "0", 10)));
   const mm = Math.max(0, Math.min(59, parseInt(value.slice(3, 5) || "0", 10)));
   const isPM = hh >= 12;
-  const hour12 = (hh % 12) || 12;
+  const hour12 = hh % 12 || 12;
 
-  const hours12 = useMemo(() => Array.from({ length: 12 }, (_, i) => i + 1), []);
+  const hours12 = useMemo(
+    () => Array.from({ length: 12 }, (_, i) => i + 1),
+    []
+  );
   const minutes = useMemo(() => Array.from({ length: 60 }, (_, i) => i), []);
 
   const formatLabel = () => {
@@ -35,7 +38,6 @@ export default function TimeSelect({
     return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
   };
 
-  /** 팝오버 좌표 계산: 트리거의 좌측에 맞추고, 트리거 '위'로 띄우기 */
   const positionPopover = () => {
     const btn = btnRef.current;
     const pop = popRef.current;
@@ -46,11 +48,9 @@ export default function TimeSelect({
     const popH = pop.offsetHeight;
     const popW = pop.offsetWidth;
 
-    // 화면 좌우 넘치지 않게 보정
     let left = rect.left;
     left = Math.max(8, Math.min(left, window.innerWidth - popW - 8));
 
-    // 기본은 위로 띄우기. 공간이 부족하면 아래로.
     let top = rect.top - popH - gap;
     if (top < 8) {
       top = rect.bottom + gap;
@@ -69,15 +69,12 @@ export default function TimeSelect({
     setOpen(true);
   };
 
-  // open 직후 한 프레임 뒤에 치수 측정
   useEffect(() => {
     if (!open) return;
     const raf = requestAnimationFrame(() => positionPopover());
     return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // 스크롤/리사이즈 시 위치 재계산
   useEffect(() => {
     if (!open) return;
     const handler = () => positionPopover();
@@ -87,14 +84,16 @@ export default function TimeSelect({
       window.removeEventListener("scroll", handler, true);
       window.removeEventListener("resize", handler);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // 외부 클릭 닫기
   useEffect(() => {
     const onDocClick = (e) => {
       if (!wrapperRef.current) return;
-      if (!wrapperRef.current.contains(e.target) && popRef.current && !popRef.current.contains(e.target)) {
+      if (
+        !wrapperRef.current.contains(e.target) &&
+        popRef.current &&
+        !popRef.current.contains(e.target)
+      ) {
         setOpen(false);
       }
     };
@@ -129,7 +128,12 @@ export default function TimeSelect({
       </button>
 
       {open && !disabled && (
-        <div ref={popRef} className="cts-popover" style={popStyle} role="dialog">
+        <div
+          ref={popRef}
+          className="cts-popover"
+          style={popStyle}
+          role="dialog"
+        >
           {/* AM/PM */}
           <div className="cts-column" aria-label="오전/오후">
             {["오전", "오후"].map((label) => {

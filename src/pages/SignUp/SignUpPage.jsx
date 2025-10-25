@@ -13,29 +13,30 @@ import {
   checkNameDuplicate,
   registerMember,
 } from "../../services/MemberService";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 function SignUpPage() {
-useEffect(() => {
-  function setAppHeight() {
-    const vh = window.visualViewport?.height || window.innerHeight;
-    document.documentElement.style.setProperty("--app-height", `${vh}px`);
-  }
-
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener("resize", setAppHeight);
-    window.visualViewport.addEventListener("scroll", setAppHeight);
-  }
-  window.addEventListener("resize", setAppHeight);
-  setAppHeight();
-
-  return () => {
-    if (window.visualViewport) {
-      window.visualViewport.removeEventListener("resize", setAppHeight);
-      window.visualViewport.removeEventListener("scroll", setAppHeight);
+  useEffect(() => {
+    function setAppHeight() {
+      const vh = window.visualViewport?.height || window.innerHeight;
+      document.documentElement.style.setProperty("--app-height", `${vh}px`);
     }
-    window.removeEventListener("resize", setAppHeight);
-  };
-}, []);
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", setAppHeight);
+      window.visualViewport.addEventListener("scroll", setAppHeight);
+    }
+    window.addEventListener("resize", setAppHeight);
+    setAppHeight();
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", setAppHeight);
+        window.visualViewport.removeEventListener("scroll", setAppHeight);
+      }
+      window.removeEventListener("resize", setAppHeight);
+    };
+  }, []);
 
   const navigate = useNavigate();
 
@@ -79,6 +80,20 @@ useEffect(() => {
   const [nameGuide, setNameGuide] = useState("");
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
   const [phoneValid, setPhoneValid] = useState(false);
+
+  const [alert, setAlert] = useState({
+    show: false,
+    message: "",
+    onConfirm: null,
+  });
+
+  const showAlert = (message, onConfirm = null) => {
+    setAlert({ show: true, message, onConfirm });
+  };
+
+  const closeAlert = () => {
+    setAlert({ show: false, message: "", onConfirm: null });
+  };
 
   const isFormValid =
     formData.email &&
@@ -246,37 +261,41 @@ useEffect(() => {
     try {
       const response = await registerMember(payload);
       if (response.status === 200) {
-        alert("회원가입 성공");
-        navigate("/login");
+        showAlert("회원가입 성공", () => navigate("/login"));
       }
     } catch (error) {
-      alert("회원가입 실패");
+      showAlert("회원가입 실패");
     }
   };
 
-useEffect(() => {
-  // 모든 input 요소 가져오기
-  const inputs = document.querySelectorAll("input, textarea");
-
-  // 포커스 시 해당 input을 화면 중앙으로 스크롤
-  const handleFocus = (e) => {
-    e.target.scrollIntoView({
-      behavior: "smooth",
-      block: "center",
-      inline: "nearest",
-    });
+  const handleAlertConfirm = () => {
+    if (alert.onConfirm) alert.onConfirm();
+    closeAlert();
   };
 
-  inputs.forEach((input) => {
-    input.addEventListener("focus", handleFocus);
-  });
+  useEffect(() => {
+    // 모든 input 요소 가져오기
+    const inputs = document.querySelectorAll("input, textarea");
 
-  return () => {
+    // 포커스 시 해당 input을 화면 중앙으로 스크롤
+    const handleFocus = (e) => {
+      e.target.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    };
+
     inputs.forEach((input) => {
-      input.removeEventListener("focus", handleFocus);
+      input.addEventListener("focus", handleFocus);
     });
-  };
-}, []);
+
+    return () => {
+      inputs.forEach((input) => {
+        input.removeEventListener("focus", handleFocus);
+      });
+    };
+  }, []);
 
   return (
     <div className="signuppage">
@@ -604,6 +623,9 @@ useEffect(() => {
           </form>
         </div>
       </div>
+      {alert.show && (
+        <AlertModal message={alert.message} onConfirm={handleAlertConfirm} />
+      )}
     </div>
   );
 }

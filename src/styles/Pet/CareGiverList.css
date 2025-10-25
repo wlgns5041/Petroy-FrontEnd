@@ -215,7 +215,7 @@
 }
 
 .care-giver-list-list {
-  width: 90%;
+  width: 95%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -228,6 +228,7 @@
   background-color: #f9f9f9;
   border-radius: 12px;
   padding: 24px 4px;
+  margin: auto;
 }
 
 .care-giver-list-list::-webkit-scrollbar {

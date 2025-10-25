@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import '../../styles/MyPage/NameEditModal.css';
 import { checkNameDuplicate, updateMemberName } from "../../services/MemberService";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const NameEditModal = ({ onClose, onSave }) => {
   const [newName, setNewName] = useState('');
   const [nameError, setNameError] = useState('');
   const [nameChecked, setNameChecked] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleNameChange = (e) => {
     const value = e.target.value;
@@ -37,23 +40,32 @@ const NameEditModal = ({ onClose, onSave }) => {
     }
   };
 
-const handleSave = async () => {
-  if (!nameChecked) {
-    alert('이름 중복 확인을 완료해주세요.');
-    return;
-  }
+  const handleSave = async () => {
+    if (!nameChecked) {
+      setAlertMessage('이름 중복 확인을 완료해주세요.');
+      setShowAlert(true);
+      return;
+    }
 
-  try {
-    const token = localStorage.getItem("accessToken"); 
-    await updateMemberName(token, newName);
-    alert('이름을 변경했습니다');
-    onSave(newName);
-    onClose();
-  } catch (error) {
-    console.error("이름 변경 실패:", error);
-    alert("이름 변경에 실패했습니다. 다시 시도해주세요.");
-  }
-};
+    try {
+      const token = localStorage.getItem("accessToken"); 
+      await updateMemberName(token, newName);
+      setAlertMessage('이름을 변경했습니다');
+      setShowAlert(true);
+    } catch (error) {
+      console.error("이름 변경 실패:", error);
+      setAlertMessage("이름 변경에 실패했습니다. 다시 시도해주세요.");
+      setShowAlert(true);
+    }
+  };
+
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+    if (alertMessage.includes("변경했습니다")) {
+      onSave(newName);
+      onClose();
+    }
+  };
 
   return (
     <div className="name-edit-modal">
@@ -99,6 +111,9 @@ const handleSave = async () => {
           </button>
         </div>
       </div>
+      {showAlert && (
+        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
+      )}
     </div>
   );
 };
