@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import PetRegister from "../../components/Pet/PetRegister.jsx";
 import PetEdit from "../../components/Pet/PetEdit.jsx";
 import DeletePet from "../../components/Pet/DeletePet.jsx";
@@ -32,14 +32,16 @@ const PetPage = () => {
   const [loading, setLoading] = useState(true);
   const [caregiverLoading, setCaregiverLoading] = useState(false);
 
-  const [error, setError] = useState(null);
-  const [caregiverError, setCaregiverError] = useState(null);
-
   const [activeTab, setActiveTab] = useState("mine");
   const petTabIndex = activeTab === "mine" ? 0 : 1;
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  const showAlertMessage = useCallback((message) => {
+    setAlertMessage(message);
+    setShowAlert(true);
+  }, []);
 
   const sortOptions = [
     { key: "name-asc", label: "이름순 ↓" },
@@ -100,10 +102,10 @@ const PetPage = () => {
     sortedCaregiverPets.length / caregiverItemsPerPage
   );
 
-  const loadPets = async () => {
+  const loadPets = useCallback(async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      setError("로그인이 필요합니다");
+      showAlertMessage("로그인이 필요합니다.");
       setLoading(false);
       return;
     }
@@ -112,49 +114,46 @@ const PetPage = () => {
       const petList = await fetchMemberPets();
       setPets(petList);
     } catch (e) {
-      setError("반려동물 정보를 불러오는 중 오류 발생");
       console.error(e);
+      showAlertMessage("반려동물 정보를 불러오는 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [showAlertMessage]);
+
+  const loadCaregiver = useCallback(async () => {
+    try {
+      setCaregiverLoading(true);
+      const list = await fetchCaregiverPets();
+      setCaregiverPets(list);
+    } catch (e) {
+      console.error(e);
+      showAlertMessage(
+        "돌보미 반려동물 정보를 불러오는 중 오류가 발생했습니다."
+      );
+    } finally {
+      setCaregiverLoading(false);
+    }
+  }, [showAlertMessage]);
 
   useEffect(() => {
     loadPets();
-  }, []);
-
-  useEffect(() => {
-    const loadCaregiver = async () => {
-      try {
-        setCaregiverLoading(true);
-        const list = await fetchCaregiverPets();
-        setCaregiverPets(list);
-      } catch (e) {
-        setCaregiverError("돌보미 반려동물 정보를 불러오는 중 오류 발생");
-        console.error(e);
-      } finally {
-        setCaregiverLoading(false);
-      }
-    };
     loadCaregiver();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 🔹 드롭다운 외부 클릭 감지
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        e.stopPropagation();
+      const menu = document.querySelector(".petpage-dropdown-menu");
+      if (menu && !menu.contains(e.target)) {
         setShowMenu(false);
         setMenuPetId(null);
       }
     };
 
-    if (showMenu) {
-      document.addEventListener("click", handleClickOutside, true);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside, true);
-    };
+    if (showMenu) document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, [showMenu]);
 
   const handleOpenModal = () => setShowModal(true);
@@ -164,23 +163,31 @@ const PetPage = () => {
     setSelectedPet(pet);
     setShowEditModal(true);
   };
-  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setSelectedPet(null);
+  };
 
   const handleOpenDeleteModal = (pet) => {
     setSelectedPet(pet);
     setShowDeleteModal(true);
   };
-  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedPet(null);
+  };
 
   const handleOpenAssignModal = (pet) => {
     setSelectedPet(pet);
     setShowAssignModal(true);
   };
-  const handleCloseAssignModal = () => setShowAssignModal(false);
+  const handleCloseAssignModal = () => {
+    setShowAssignModal(false);
+    setSelectedPet(null);
+  };
 
-  const handleUpdatePet = (updatedPet) => {
-    setPets(pets.map((p) => (p.petId === updatedPet.petId ? updatedPet : p)));
-    loadPets();
+  const handleUpdatePet = async () => {
+    await loadPets();
     setShowEditModal(false);
   };
 
@@ -188,29 +195,34 @@ const PetPage = () => {
     setPets(pets.filter((p) => p.petId !== selectedPet.petId));
   };
 
-  const handleRegisterSuccess = (newPet) => {
-    loadPets();
-    if (newPet?.petId && newPet?.name) {
-      setPets((prev) => [newPet, ...prev]);
-      setCurrentPage(1);
-      resetPetSort();
-    }
+  const handleRegisterSuccess = async () => {
+    await loadPets();
+    setCurrentPage(1);
+    resetPetSort();
   };
 
   const handleAssignCareGiver = (careGiverId) => {
-    setPets(
+    setPets((pets) =>
       pets.map((pet) =>
         pet.petId === selectedPet.petId ? { ...pet, careGiverId } : pet
       )
     );
-    setAlertMessage("돌보미 등록 성공!");
-    setShowAlert(true);
+    showAlertMessage("돌보미 등록 성공!");
+  };
+
+  // 이미지 안전 처리
+  const getPetImage = (pet) => {
+    if (!pet.image) return "/images/default-pet.png";
+    if (pet.image.startsWith("http") || pet.image.startsWith("data:"))
+      return pet.image;
+    return `${API_BASE_URL}${pet.image}`;
   };
 
   return (
     <main className="petpage-viewport">
       <div className="petpage">
         <div className="petpage-container">
+          {/* 탭 바 */}
           <div className="petpage-tab-bar">
             <div
               className="petpage-tab-background"
@@ -244,6 +256,7 @@ const PetPage = () => {
             </button>
           </div>
 
+          {/* 상단 바 */}
           <div className="petpage-top-bar">
             <div className="petpage-sort-wrapper">
               <button className="petpage-sort-button" onClick={rotatePetSort}>
@@ -260,10 +273,12 @@ const PetPage = () => {
             </div>
           </div>
 
+          {/* 로딩 상태 */}
           {loading ? (
-            <p>로딩 중...</p>
-          ) : error ? (
-            <p className="error">{error}</p>
+            <div className="petpage-loading">
+              <div className="spinner" />
+              <p>반려동물 정보를 불러오는 중...</p>
+            </div>
           ) : (
             <>
               {activeTab === "mine" ? (
@@ -271,16 +286,11 @@ const PetPage = () => {
                   {pets.length > 0 ? (
                     <>
                       <div className="petpage-pets-list">
-                        {paginatedPets.filter(Boolean).map((pet) => (
+                        {paginatedPets.map((pet) => (
                           <div key={pet.petId} className="petpage-pet-card-new">
                             <div className="petpage-pet-card-body">
                               <img
-                                src={
-                                  pet.image.startsWith("http") ||
-                                  pet.image.startsWith("data:")
-                                    ? pet.image
-                                    : `${API_BASE_URL}${pet.image}`
-                                }
+                                src={getPetImage(pet)}
                                 alt={pet.name}
                                 className="petpage-pet-avatar"
                               />
@@ -312,6 +322,7 @@ const PetPage = () => {
                                   <span className="value">{pet.memo}</span>
                                 </div>
                               </div>
+
                               <div
                                 className="petpage-dot-container"
                                 ref={dropdownRef}
@@ -326,7 +337,6 @@ const PetPage = () => {
                                         ? false
                                         : true
                                     );
-
                                     const cards = document.querySelectorAll(
                                       ".petpage-pet-card-new"
                                     );
@@ -348,7 +358,6 @@ const PetPage = () => {
                                       onMouseDown={() => {
                                         handleOpenEditModal(pet);
                                         setShowMenu(false);
-                                        setMenuPetId(null);
                                       }}
                                     >
                                       반려동물 정보 수정
@@ -357,7 +366,6 @@ const PetPage = () => {
                                       onMouseDown={() => {
                                         handleOpenDeleteModal(pet);
                                         setShowMenu(false);
-                                        setMenuPetId(null);
                                       }}
                                     >
                                       반려동물 삭제
@@ -366,7 +374,6 @@ const PetPage = () => {
                                       onMouseDown={() => {
                                         handleOpenAssignModal(pet);
                                         setShowMenu(false);
-                                        setMenuPetId(null);
                                       }}
                                     >
                                       돌보미 등록
@@ -376,7 +383,6 @@ const PetPage = () => {
                                         setSelectedPet(pet);
                                         setShowCareGiverList(true);
                                         setShowMenu(false);
-                                        setMenuPetId(null);
                                       }}
                                     >
                                       돌보미 조회
@@ -389,8 +395,8 @@ const PetPage = () => {
                         ))}
                       </div>
 
-                      <div className="petpage-footer">
-                        {totalPages > 1 && (
+                      {totalPages > 1 && (
+                        <div className="petpage-footer">
                           <div className="petpage-pagination-buttons">
                             {Array.from({ length: totalPages }, (_, i) => (
                               <button
@@ -404,30 +410,28 @@ const PetPage = () => {
                               </button>
                             ))}
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </>
                   ) : (
-                    <>
-                      <div className="petpage-empty-state">
-                        <p className="petpage-empty-icon">🐾</p>
-                        <p className="petpage-empty-text-main">
-                          등록된 반려동물이 없습니다
-                        </p>
-                        <p className="petpage-empty-text-sub">
-                          반려동물을 등록하면 이곳에 표시됩니다!
-                        </p>
-                      </div>
-                      <div className="petpage-footer" />
-                    </>
+                    <div className="petpage-empty-state">
+                      <p className="petpage-empty-icon">🐾</p>
+                      <p className="petpage-empty-text-main">
+                        등록된 반려동물이 없습니다
+                      </p>
+                      <p className="petpage-empty-text-sub">
+                        반려동물을 등록하면 이곳에 표시됩니다!
+                      </p>
+                    </div>
                   )}
                 </section>
               ) : (
                 <section className="petpage-pets-section">
                   {caregiverLoading ? (
-                    <p>로딩 중...</p>
-                  ) : caregiverError ? (
-                    <p className="error">{caregiverError}</p>
+                    <div className="petpage-loading">
+                      <div className="spinner" />
+                      <p>돌보미 반려동물을 불러오는 중...</p>
+                    </div>
                   ) : caregiverPets.length > 0 ? (
                     <>
                       <div className="petpage-pets-list">
@@ -435,13 +439,7 @@ const PetPage = () => {
                           <div key={pet.petId} className="petpage-pet-card-new">
                             <div className="petpage-pet-card-body">
                               <img
-                                src={
-                                  pet.image &&
-                                  (pet.image.startsWith("http") ||
-                                    pet.image.startsWith("data:"))
-                                    ? pet.image
-                                    : `${API_BASE_URL}${pet.image}`
-                                }
+                                src={getPetImage(pet)}
                                 alt={pet.name}
                                 className="petpage-pet-avatar"
                               />
@@ -478,8 +476,8 @@ const PetPage = () => {
                         ))}
                       </div>
 
-                      <div className="petpage-footer">
-                        {caregiverTotalPages > 1 && (
+                      {caregiverTotalPages > 1 && (
+                        <div className="petpage-footer">
                           <div className="petpage-pagination-buttons">
                             {Array.from(
                               { length: caregiverTotalPages },
@@ -498,22 +496,19 @@ const PetPage = () => {
                               )
                             )}
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </>
                   ) : (
-                    <>
-                      <div className="petpage-empty-state">
-                        <p className="petpage-empty-icon">🐾</p>
-                        <p className="petpage-empty-text-main">
-                          등록된 돌보미 반려동물이 없습니다
-                        </p>
-                        <p className="petpage-empty-text-sub">
-                          친구의 반려동물을 등록하면 이곳에 표시됩니다!
-                        </p>
-                      </div>
-                      <div className="petpage-footer" />
-                    </>
+                    <div className="petpage-empty-state">
+                      <p className="petpage-empty-icon">🐾</p>
+                      <p className="petpage-empty-text-main">
+                        등록된 돌보미 반려동물이 없습니다
+                      </p>
+                      <p className="petpage-empty-text-sub">
+                        친구의 반려동물을 등록하면 이곳에 표시됩니다!
+                      </p>
+                    </div>
                   )}
                 </section>
               )}

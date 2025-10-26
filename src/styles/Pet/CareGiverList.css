@@ -48,13 +48,6 @@
   color: #000000;
 }
 
-.care-giver-list-error {
-  text-align: center;
-  color: #6b7280;
-  font-size: 16px;
-  margin-top: 16px;
-}
-
 .care-giver-list-list {
   width: 80%;
   display: flex;
@@ -205,13 +198,6 @@
   margin-bottom: 24px;
   text-align: center;
   color: #000000;
-}
-
-.care-giver-list-error {
-  text-align: center;
-  color: #6b7280;
-  font-size: 14px;
-  margin-top: 12px;
 }
 
 .care-giver-list-list {

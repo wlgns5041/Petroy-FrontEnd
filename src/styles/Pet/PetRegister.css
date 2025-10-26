@@ -441,13 +441,6 @@
   transition: background-color 0.2s ease;
 }
 
-.pet-register-error {
-  color: #ef4444;
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
-}
-
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
 
@@ -876,12 +869,5 @@
   color: #C0C0C0 !important;
   cursor: not-allowed;
   transition: background-color 0.2s ease;
-}
-
-.pet-register-error {
-  color: #ef4444;
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
 }
 }

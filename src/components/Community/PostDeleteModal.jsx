@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Community/PostDeleteModal.css";
 
 const PostDeleteModal = ({ postTitle = "", onClose, onConfirm, loading }) => {
   const [input, setInput] = useState("");
-  const [error, setError] = useState("");
 
   const canDelete = input.trim() === postTitle.trim();
 
   const handleConfirm = () => {
-    if (!canDelete) {
-      setError("게시글 제목을 정확히 입력해 주세요.");
-      return;
-    }
-    onConfirm?.();
+    if (canDelete) onConfirm?.();
   };
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose?.();
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
   return (
     <div className="post-delete-overlay" role="dialog" aria-modal="true">
-      <div className="post-delete-container">
-        <h2 className="post-delete-title">정말로 삭제하시겠습니까?</h2>
+      <div className="post-delete-container" aria-labelledby="post-delete-title">
+        <h2 id="post-delete-title" className="post-delete-title">
+          정말로 삭제하시겠습니까?
+        </h2>
         <p className="post-delete-description">
           <strong>게시글 삭제</strong>를 원하시면{" "}
           <strong>게시글 제목</strong>을 입력해주세요
@@ -27,19 +32,18 @@ const PostDeleteModal = ({ postTitle = "", onClose, onConfirm, loading }) => {
         <input
           type="text"
           value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            setError("");
-          }}
+          onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && canDelete) handleConfirm();
+            if (e.key === "Enter" && canDelete) {
+              e.preventDefault();
+              handleConfirm();
+            }
           }}
           className="post-delete-input"
           placeholder={postTitle || "게시글 제목"}
           aria-label="게시글 제목 입력"
+          disabled={loading}
         />
-
-        {error && <p className="post-delete-error">{error}</p>}
 
         <div className="post-delete-button-row">
           <button

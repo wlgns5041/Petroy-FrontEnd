@@ -3,27 +3,40 @@ import PropTypes from "prop-types";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendDetail.css";
 import { fetchFriendDetail } from "../../services/FriendService.jsx";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const FriendDetail = ({ memberId, onClose }) => {
   const [friendDetail, setFriendDetail] = useState(null);
   const [error, setError] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
+    let isMounted = true; // 언마운트 안전 처리
+
     const getFriendDetail = async () => {
       try {
         const data = await fetchFriendDetail(memberId);
-        setFriendDetail(data);
+        if (isMounted) setFriendDetail(data);
       } catch (error) {
-        setError(
-          error.response?.data?.errorMessage ||
-            "친구 상세 정보를 불러오는 중 오류가 발생했습니다."
-        );
+        if (isMounted) {
+          const message =
+            error.response?.data?.errorMessage ||
+            "친구 상세 정보를 불러오는 중 오류가 발생했습니다.";
+          setError(message);
+          setShowAlert(true);
+        }
       }
     };
+
     getFriendDetail();
+
+    return () => {
+      isMounted = false;
+    };
   }, [memberId]);
 
-  if (!friendDetail && !error) return <div className="modal">로딩 중...</div>;
+  if (!friendDetail && !error)
+    return <div className="frienddetail-loading">로딩 중...</div>;
 
   return (
     <div className="frienddetail-modal">
@@ -37,12 +50,14 @@ const FriendDetail = ({ memberId, onClose }) => {
             <div className="frienddetail-profile-section">
               <img
                 src={friendDetail.image || defaultProfilePic}
+                onError={(e) => (e.target.src = defaultProfilePic)}
                 alt={friendDetail.name}
                 className="frienddetail-profile-image"
               />
               <h2 className="frienddetail-friend-name">{friendDetail.name}</h2>
             </div>
 
+            {/* 내가 친구에게 돌보미로 등록한 펫 */}
             <div className="frienddetail-pet-section">
               <h3 className="frienddetail-section-title">
                 <strong>{friendDetail.name}</strong>님에게 돌보미로 등록한 펫
@@ -50,9 +65,10 @@ const FriendDetail = ({ memberId, onClose }) => {
               <ul className="frienddetail-pet-list">
                 {friendDetail.myPets?.length > 0 ? (
                   friendDetail.myPets.map((pet) => (
-                    <li key={pet.id} className="frienddetail-pet-item">
+                    <li key={pet.petId || pet.id} className="frienddetail-pet-item">
                       <img
-                        src={pet.petImage}
+                        src={pet.petImage || defaultProfilePic}
+                        onError={(e) => (e.target.src = defaultProfilePic)}
                         alt={pet.name}
                         className="frienddetail-pet-image"
                       />
@@ -67,6 +83,7 @@ const FriendDetail = ({ memberId, onClose }) => {
               </ul>
             </div>
 
+            {/* 친구가 나를 돌보미로 등록한 펫 */}
             <div className="frienddetail-pet-section">
               <h3 className="frienddetail-section-title">
                 <strong>{friendDetail.name}</strong>님이 나를 돌보미로 등록한 펫
@@ -74,9 +91,10 @@ const FriendDetail = ({ memberId, onClose }) => {
               {friendDetail.careGiversPets?.length > 0 ? (
                 <ul className="frienddetail-pet-list">
                   {friendDetail.careGiversPets.map((pet) => (
-                    <li key={pet.id} className="frienddetail-pet-item">
+                    <li key={pet.petId || pet.id} className="frienddetail-pet-item">
                       <img
-                        src={pet.petImage}
+                        src={pet.petImage || defaultProfilePic}
+                        onError={(e) => (e.target.src = defaultProfilePic)}
                         alt={pet.name}
                         className="frienddetail-pet-image"
                       />
@@ -91,12 +109,12 @@ const FriendDetail = ({ memberId, onClose }) => {
               )}
             </div>
           </>
-        ) : (
-          <ul className="frienddetail-pet-list">
-            <li className="frienddetail-pet-error-message">{error}</li>
-          </ul>
-        )}
+        ) : null}
       </div>
+
+      {showAlert && (
+        <AlertModal message={error} onConfirm={() => setShowAlert(false)} />
+      )}
     </div>
   );
 };

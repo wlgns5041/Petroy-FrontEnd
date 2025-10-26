@@ -52,9 +52,8 @@ const CommentSection = ({ postId, open, onClose }) => {
     if (menuOpenId == null) return;
 
     const onDocClick = (e) => {
-      const target = e.target;
-      if (!target.closest(".comment-menu")) {
-        setMenuOpenId(null);
+      if (!e.target.closest(".comment-menu")) {
+        setTimeout(() => setMenuOpenId(null), 50);
       }
     };
 
@@ -144,7 +143,7 @@ const CommentSection = ({ postId, open, onClose }) => {
           ) : (
             <ul className="comment-sheet-list">
               {comments.map((c) => (
-                <li className="comment-sheet-item">
+                <li key={c.commentId} className="comment-sheet-item">
                   <img
                     src={c.profileImage || defaultProfile}
                     alt=""

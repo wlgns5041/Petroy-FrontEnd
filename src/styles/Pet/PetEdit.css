@@ -262,13 +262,6 @@
   box-shadow: 0 0 0 2px #111827;
 }
 
-.pet-edit-error {
-  color: #ef4444;
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
-}
-
 .pet-edit-button-row {
   position: absolute;
   bottom: 24px;
@@ -553,13 +546,6 @@
   outline: none;
   background-color: #ffffff;
   box-shadow: 0 0 0 2px #111827;
-}
-
-.pet-edit-error {
-  color: #ef4444;
-  margin-top: 10px;
-  font-size: 14px;
-  text-align: center;
 }
 
 .pet-edit-button-row {

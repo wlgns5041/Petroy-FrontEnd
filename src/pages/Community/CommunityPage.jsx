@@ -293,6 +293,11 @@ const CommunityPage = () => {
         setDeleteModalOpen(false);
         setDeleteTarget(null);
       }
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "게시글 삭제 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
     } finally {
       setDeleting(false);
     }
@@ -358,22 +363,29 @@ const CommunityPage = () => {
   };
 
   const reloadPosts = async () => {
-    const data = await fetchCommunityPosts();
-    const list = Array.isArray(data) ? data : data?.content ?? [];
-    setAllPosts(list);
+    try {
+      const data = await fetchCommunityPosts();
+      const list = Array.isArray(data) ? data : data?.content ?? [];
+      setAllPosts(list);
 
-    const likeInit = {};
-    const likeCntInit = {};
-    list.forEach((p) => {
-      const id = getPostId(p);
-      if (id == null) return;
-      likeInit[id] = Boolean(p?.liked);
-      likeCntInit[id] = Number(p?.likeTotal) || 0;
-    });
-    setLikedMap(likeInit);
-    setLikeCountMap(likeCntInit);
-
-    setSearchMode(false);
+      const likeInit = {};
+      const likeCntInit = {};
+      list.forEach((p) => {
+        const id = getPostId(p);
+        if (id == null) return;
+        likeInit[id] = Boolean(p?.liked);
+        likeCntInit[id] = Number(p?.likeTotal) || 0;
+      });
+      setLikedMap(likeInit);
+      setLikeCountMap(likeCntInit);
+      setSearchMode(false);
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "게시글을 불러오는 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
+    }
   };
 
   const handlePostCreated = () => {
@@ -421,8 +433,11 @@ const CommunityPage = () => {
       );
       setAllPosts(normalized);
       setSearchMode(true);
-    } catch (err) {
-      console.error("검색 실패:", err);
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "검색 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
     }
   };
 
@@ -454,58 +469,68 @@ const CommunityPage = () => {
 
   useEffect(() => {
     (async () => {
-      const [postData, categories, rawMe, friends] = await Promise.all([
-        fetchCommunityPosts(),
-        fetchCategories(),
-        fetchCurrentMember(),
-        fetchAcceptedFriends().catch(() => []),
-      ]);
+      try {
+        const [postData, categories, rawMe, friends] = await Promise.all([
+          fetchCommunityPosts(),
+          fetchCategories(),
+          fetchCurrentMember(),
+          fetchAcceptedFriends().catch(() => []),
+        ]);
 
-      // 게시글/좋아요 초기화
-      const list = Array.isArray(postData) ? postData : postData?.content ?? [];
-      setAllPosts(list);
+        // 게시글/좋아요 초기화
+        const list = Array.isArray(postData)
+          ? postData
+          : postData?.content ?? [];
+        setAllPosts(list);
 
-      const likeInit = {};
-      const likeCntInit = {};
-      list.forEach((p) => {
-        const id = getPostId(p);
-        if (id == null) return;
-        likeInit[id] = Boolean(p?.liked);
-        likeCntInit[id] = Number(p?.likeTotal) || 0;
-      });
-      setLikedMap(likeInit);
-      setLikeCountMap(likeCntInit);
+        const likeInit = {};
+        const likeCntInit = {};
+        list.forEach((p) => {
+          const id = getPostId(p);
+          if (id == null) return;
+          likeInit[id] = Boolean(p?.liked);
+          likeCntInit[id] = Number(p?.likeTotal) || 0;
+        });
+        setLikedMap(likeInit);
+        setLikeCountMap(likeCntInit);
 
-      // 카테고리 맵
-      const map = Object.fromEntries(
-        (categories || []).map((c) => [
-          String(c.categoryId ?? c.id),
-          c.name ?? c.categoryName ?? "",
-        ])
-      );
-      setCategoryMap(map);
+        // 카테고리 맵
+        const map = Object.fromEntries(
+          (categories || []).map((c) => [
+            String(c.categoryId ?? c.id),
+            c.name ?? c.categoryName ?? "",
+          ])
+        );
+        setCategoryMap(map);
 
-      // 친구 ID 리스트
-      const ids = (friends || [])
-        .map((f) =>
-          String(
-            f?.id ??
-              f?.memberId ??
-              f?.friendId ??
-              f?.friend?.id ??
-              f?.member?.id ??
-              ""
+        // 친구 ID 리스트
+        const ids = (friends || [])
+          .map((f) =>
+            String(
+              f?.id ??
+                f?.memberId ??
+                f?.friendId ??
+                f?.friend?.id ??
+                f?.member?.id ??
+                ""
+            )
           )
-        )
-        .filter(Boolean);
-      setFriendIds(ids);
+          .filter(Boolean);
+        setFriendIds(ids);
 
-      // 내 정보/이름
-      setMe(rawMe ?? null);
-      const tokenName = getMyNameFromToken();
-      if (tokenName) setMyName(tokenName);
-      else if (rawMe?.name) setMyName(normalizeName(rawMe.name));
-      else setMyName("");
+        // 내 정보/이름
+        setMe(rawMe ?? null);
+        const tokenName = getMyNameFromToken();
+        if (tokenName) setMyName(tokenName);
+        else if (rawMe?.name) setMyName(normalizeName(rawMe.name));
+        else setMyName("");
+      } catch (error) {
+        const message =
+          error.response?.data?.message ||
+          "커뮤니티 데이터를 불러오는 중 오류가 발생했습니다.";
+        setAlertMessage(message);
+        setShowAlert(true);
+      }
     })();
   }, []);
 

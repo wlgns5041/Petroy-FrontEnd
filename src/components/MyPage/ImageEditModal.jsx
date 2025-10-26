@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../styles/MyPage/ImageEditModal.css";
-import AlertModal from "../../components/commons/AlertModal.jsx"; 
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const MAX_MB = 1;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
@@ -10,22 +10,32 @@ const ImageEditModal = ({ onClose, onSave }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [saving, setSaving] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [showAlert, setShowAlert] = useState(false); 
+  const [showAlert, setShowAlert] = useState(false);
   const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") onClose?.();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   const handleSave = () => {
     if (!selectedImage || saving) return;
     setSaving(true);
-
     onSave?.(selectedImage, imagePreview, { version: Date.now() });
 
-    setSaving(false);
-    onClose?.();
+    setTimeout(() => {
+      setSaving(false);
+      onClose?.();
+    }, 300);
   };
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       setAlertMessage("이미지 형식이 올바르지 않습니다. (jpg, png, webp, gif 허용)");
@@ -44,7 +54,6 @@ const ImageEditModal = ({ onClose, onSave }) => {
     }
 
     setSelectedImage(file);
-
     const reader = new FileReader();
     reader.onloadend = () => setImagePreview(reader.result);
     reader.readAsDataURL(file);
@@ -60,6 +69,7 @@ const ImageEditModal = ({ onClose, onSave }) => {
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
+    setAlertMessage("");
   };
 
   return (
@@ -69,22 +79,20 @@ const ImageEditModal = ({ onClose, onSave }) => {
 
         {imagePreview ? (
           <div className="image-edit-preview-section">
-            <img
-              src={imagePreview}
-              alt="미리보기"
-              className="image-edit-preview-image"
-            />
-            <button
-              type="button"
-              className="image-edit-reset-button"
-              onClick={handleReset}
-            >
+            <img src={imagePreview} alt="미리보기" className="image-edit-preview-image" />
+            <button type="button" className="image-edit-reset-button" onClick={handleReset}>
               선택 해제
             </button>
           </div>
         ) : (
-          <label className="image-edit-upload-box">
+          <label
+            htmlFor="image-upload-input"
+            className="image-edit-upload-box"
+            role="button"
+            aria-label="이미지 선택"
+          >
             <input
+              id="image-upload-input"
               ref={fileInputRef}
               type="file"
               accept={ALLOWED_TYPES.join(",")}
@@ -96,12 +104,7 @@ const ImageEditModal = ({ onClose, onSave }) => {
         )}
 
         <div className="image-edit-footer">
-          <button
-            type="button"
-            className="image-edit-skip-button"
-            onClick={onClose}
-            disabled={saving}
-          >
+          <button type="button" className="image-edit-skip-button" onClick={onClose} disabled={saving}>
             취소
           </button>
           <button
@@ -114,9 +117,8 @@ const ImageEditModal = ({ onClose, onSave }) => {
           </button>
         </div>
       </div>
-      {showAlert && (
-        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
-      )}
+
+      {showAlert && <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />}
     </div>
   );
 };

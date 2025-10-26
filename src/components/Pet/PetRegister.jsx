@@ -27,6 +27,7 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [alertConfirmAction, setAlertConfirmAction] = useState(null);
 
   const [dropdownOpen, setDropdownOpen] = useState({
     species: false,
@@ -138,12 +139,17 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
       const result = await registerPet(formData);
 
-      setAlertMessage("반려동물이 성공적으로 등록되었습니다.");
-      setShowAlert(true);
-      if (onRegisterSuccess && result) {
-        onRegisterSuccess(result);
-      }
-      onClose();
+setAlertMessage("반려동물이 성공적으로 등록되었습니다.");
+setShowAlert(true);
+
+if (onRegisterSuccess && result) {
+  onRegisterSuccess(result);
+}
+
+setAlertConfirmAction(() => () => {
+  setShowAlert(false);
+  onClose();
+});
     } catch (err) {
       setAlertMessage("등록 중 오류가 발생했습니다.");
       setShowAlert(true);
@@ -417,12 +423,15 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
           </CSSTransition>
         </SwitchTransition>
       </div>
-      {showAlert && (
-        <AlertModal
-          message={alertMessage}
-          onConfirm={() => setShowAlert(false)}
-        />
-      )}
+{showAlert && (
+  <AlertModal
+    message={alertMessage}
+    onConfirm={() => {
+      if (alertConfirmAction) alertConfirmAction();
+      else setShowAlert(false);
+    }}
+  />
+)}
     </div>
   );
 };

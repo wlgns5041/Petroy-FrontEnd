@@ -1,4 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useMemo,
+  useCallback,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Notification/NotificationPage.css";
@@ -18,6 +24,7 @@ import {
   FaComments,
 } from "react-icons/fa";
 import withAuth from "../../utils/withAuth";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const categories = ["전체", "친구", "일정", "커뮤니티"];
 
@@ -39,14 +46,16 @@ const iconMap = {
 
 function NotificationPage() {
   const [notifications, setNotifications] = useState([]);
-  const [error, setError] = useState(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
 
   const [activeCategory, setActiveCategory] = useState("전체");
   const tabRefs = useRef([]);
   const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
 
+  // 탭 애니메이션 효과
   useEffect(() => {
     const activeIndex = categories.indexOf(activeCategory);
     const activeTab = tabRefs.current[activeIndex];
@@ -56,59 +65,49 @@ function NotificationPage() {
     }
   }, [activeCategory]);
 
-  const reload = async () => {
+  /** -------------------- 알림 초기 로딩 -------------------- */
+  const initNotifications = useCallback(async () => {
     try {
       const data = await fetchNotifications();
       setNotifications(data);
+      const unread = data.filter((n) => !n.read).length;
+      setUnreadCount(unread);
+      updateGlobalUnreadCount(unread);
     } catch (err) {
       console.error("❌ 알림 로딩 실패:", err);
-      setError(err.message);
+      // alert 한 번만 표시
+      setAlertMessage(
+        err?.response?.data?.message ||
+          (err.code === "ERR_NETWORK"
+            ? "네트워크 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요."
+            : "알림을 불러오는 중 오류가 발생했습니다.")
+      );
+      setShowAlert(true);
     }
-  };
+  }, []); // ✅ showAlert 제거
 
+  /** -------------------- SSE 구독 -------------------- */
   useEffect(() => {
+    // 최초 한 번만 알림 불러오기
+    initNotifications();
+
+    // SSE 구독
     const eventSource = subscribeNotification((count) => {
-      const next =
-        typeof count === "number"
-          ? count
-          : count && typeof count === "object" && "unReadCount" in count
-          ? count.unReadCount
-          : 0;
-      setUnreadCount(Number(next) || 0);
-      reload();
+      setUnreadCount(Number(count) || 0);
     });
 
     eventSource.addEventListener("unReadCount", (event) => {
       const unreadCount = parseInt(event.data, 10);
       setUnreadCount(isNaN(unreadCount) ? 0 : unreadCount);
-      reload();
     });
 
     return () => {
       eventSource.close();
       window.__eventSourceInstance = null;
     };
-  }, []);
+  }, [initNotifications]);
 
-  useEffect(() => {
-    const unread = (notifications || []).filter((n) => !n.read).length;
-    setUnreadCount(unread);
-    localStorage.setItem("unreadCount", unread);
-  }, [notifications]);
-
-  useEffect(() => {
-    const loadNotifications = async () => {
-      try {
-        const data = await fetchNotifications();
-        setNotifications(data);
-      } catch (err) {
-        console.error("❌ 알림 로딩 실패:", err);
-        setError(err.message);
-      }
-    };
-    loadNotifications();
-  }, []);
-
+  /** -------------------- 읽음 처리 -------------------- */
   const markAsRead = async (noticeId) => {
     try {
       await markNotificationAsRead(noticeId);
@@ -123,9 +122,14 @@ function NotificationPage() {
       });
     } catch (err) {
       console.error("❌ 읽음 처리 중 오류 발생:", err);
+      setAlertMessage(
+        err?.response?.data?.message || "읽음 처리 중 오류가 발생했습니다."
+      );
+      setShowAlert(true);
     }
   };
 
+  /** -------------------- 정렬 / 필터 -------------------- */
   const sortedNotifications = [...notifications].sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
@@ -146,36 +150,42 @@ function NotificationPage() {
           return false;
         });
 
-  const categoryCounts = {
-    전체: notifications.filter((n) => !n.read).length,
-    친구: notifications.filter(
-      (n) =>
-        ["FRIEND_REQUEST", "FRIEND_ACCEPTED", "FRIEND_REJECTED"].includes(
-          n.noticeType
-        ) && !n.read
-    ).length,
-    일정: notifications.filter((n) => n.noticeType === "SCHEDULE" && !n.read)
-      .length,
-    커뮤니티: notifications.filter((n) => n.noticeType === "POST" && !n.read)
-      .length,
-  };
+  /** -------------------- 카테고리별 개수 -------------------- */
+  const categoryCounts = useMemo(
+    () => ({
+      전체: notifications.filter((n) => !n.read).length,
+      친구: notifications.filter(
+        (n) =>
+          ["FRIEND_REQUEST", "FRIEND_ACCEPTED", "FRIEND_REJECTED"].includes(
+            n.noticeType
+          ) && !n.read
+      ).length,
+      일정: notifications.filter((n) => n.noticeType === "SCHEDULE" && !n.read)
+        .length,
+      커뮤니티: notifications.filter((n) => n.noticeType === "POST" && !n.read)
+        .length,
+    }),
+    [notifications]
+  );
 
+  /** -------------------- 클릭 이동 -------------------- */
   const handleNotificationClick = (notice) => {
-    if (notice.noticeType === "SCHEDULE") {
-      navigate("/mainPage");
-    } else if (
+    if (notice.noticeType === "SCHEDULE") navigate("/mainPage");
+    else if (
       ["FRIEND_REQUEST", "FRIEND_ACCEPTED", "FRIEND_REJECTED"].includes(
         notice.noticeType
       )
-    ) {
+    )
       navigate("/friendPage");
-    }
   };
 
+  /** -------------------- 렌더 -------------------- */
   return (
     <div className="notification-viewport">
       <div className="notification-container">
         <NavBar title="알림" unreadCount={unreadCount} />
+
+        {/* 탭바 */}
         <div className="notification-tab-bar">
           <div
             className="notification-tab-background"
@@ -185,7 +195,6 @@ function NotificationPage() {
               transition: "left 0.3s ease, width 0.3s ease",
             }}
           />
-
           {categories.map((cat, index) => (
             <button
               key={cat}
@@ -205,8 +214,7 @@ function NotificationPage() {
           ))}
         </div>
 
-        {error && <div className="notification-error-message">❌ {error}</div>}
-
+        {/* 알림 목록 */}
         <div className="notification-list">
           {filteredNotifications.length === 0 ? (
             <div className="notification-empty-state">
@@ -261,6 +269,13 @@ function NotificationPage() {
           )}
         </div>
       </div>
+
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 }

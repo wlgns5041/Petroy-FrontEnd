@@ -65,13 +65,6 @@
   box-shadow: 0 0 0 2px #111827;
 }
 
-.pet-delete-error {
-  color: #ef4444;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
 .pet-delete-button-row {
   display: flex;
   justify-content: space-between;
@@ -182,13 +175,6 @@
   outline: none;
   background-color: #ffffff;
   box-shadow: 0 0 0 2px #111827;
-}
-
-.pet-delete-error {
-  color: #ef4444;
-  font-size: 11px;
-  text-align: center;
-  margin-bottom: 12px;
 }
 
 .pet-delete-button-row {

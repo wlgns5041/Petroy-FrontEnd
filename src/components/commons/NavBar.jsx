@@ -18,7 +18,7 @@ import myIcon from "../../assets/icons/my-icon.png";
 import petIcon from "../../assets/icons/pet-icon.png";
 import notificationIcon from "../../assets/icons/notification-icon.png";
 import settingsIcon from "../../assets/icons/setting-icon.png";
-import icon from "../../assets/icons/icon.png"
+import icon from "../../assets/icons/icon.png";
 
 export default function NavBar() {
   const [memberName, setMemberName] = useState("");
@@ -98,7 +98,12 @@ export default function NavBar() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <img src={icon} alt="logo" style={{ width: 20, height: 16 }} />
             <Typography
-              sx={{ fontWeight: 600, fontSize: 13, color: "#111827", fontFamily: "'Eommakkaturi', sans-serif"  }}
+              sx={{
+                fontWeight: 600,
+                fontSize: 13,
+                color: "#111827",
+                fontFamily: "'Eommakkaturi', sans-serif",
+              }}
             >
               PETORY
             </Typography>
@@ -108,32 +113,32 @@ export default function NavBar() {
             <IconButton onClick={() => navigate("/settingsPage")}>
               <img src={settingsIcon} alt="설정" style={{ width: 22 }} />
             </IconButton>
-<IconButton onClick={() => navigate("/notificationPage")}>
-<Badge
-  badgeContent={unreadCount}
-  color="error"
-  max={99}
-  showZero
-  overlap="circular"
-  anchorOrigin={{ vertical: "top", horizontal: "right" }}
-  sx={{
-    "& .MuiBadge-badge": {
-      fontSize: "0.5rem",  
-      fontWeight: 600, 
-      minWidth: "14px",    
-      height: "14px",       
-      padding: "0 4px",     
-    },
-  }}
->
-    <Box
-      component="img"
-      src={notificationIcon}
-      alt="알림"
-      sx={{ width: 22, height: 22, display: "block" }}
-    />
-  </Badge>
-</IconButton>
+            <IconButton onClick={() => navigate("/notificationPage")}>
+              <Badge
+                badgeContent={unreadCount}
+                color="error"
+                max={99}
+                showZero
+                overlap="circular"
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                sx={{
+                  "& .MuiBadge-badge": {
+                    fontSize: "0.5rem",
+                    fontWeight: 600,
+                    minWidth: "14px",
+                    height: "14px",
+                    padding: "0 4px",
+                  },
+                }}
+              >
+                <Box
+                  component="img"
+                  src={notificationIcon}
+                  alt="알림"
+                  sx={{ width: 22, height: 22, display: "block" }}
+                />
+              </Badge>
+            </IconButton>
           </Box>
         </Box>
 
@@ -146,7 +151,7 @@ export default function NavBar() {
             right: 0,
             height: 64,
             display: "flex",
-            justifyContent: "center", 
+            justifyContent: "center",
             alignItems: "center",
             bgcolor: "#fff",
             borderTop: "0.5px solid #e5e7eb",
@@ -290,27 +295,27 @@ export default function NavBar() {
               <img
                 src={icon}
                 alt={label}
-          style={{
-            width: isActive ? 30 : 26,     
-            height: isActive ? 34 : 26,
-            transition: "all 0.2s ease",
-            filter: isActive ? "invert(0)" : "invert(1) brightness(2)",
-          }}
-        />
-        {!isActive && (               
-          <span
-            style={{
-              fontFamily: "Pretendard",
-              fontSize: 9,
-              fontWeight: 600,
-              color: "#fff",
-              marginTop:2
-            }}
-          >
-            {label}
-          </span>
-        )}
-      </button>
+                style={{
+                  width: isActive ? 30 : 26,
+                  height: isActive ? 34 : 26,
+                  transition: "all 0.2s ease",
+                  filter: isActive ? "invert(0)" : "invert(1) brightness(2)",
+                }}
+              />
+              {!isActive && (
+                <span
+                  style={{
+                    fontFamily: "Pretendard",
+                    fontSize: 9,
+                    fontWeight: 600,
+                    color: "#fff",
+                    marginTop: 2,
+                  }}
+                >
+                  {label}
+                </span>
+              )}
+            </button>
           );
         })}
       </Box>

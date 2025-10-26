@@ -595,7 +595,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 8px;
+  gap: 12px;
   min-width: 40px;
   align-items: flex-start;
   text-align: left;
@@ -613,6 +613,7 @@
 
 .calendar-schedule-pets {
   display: flex;
+  flex-direction: row;
   gap: 6px;
 }
 
@@ -1219,6 +1220,7 @@
     gap: 6px;
     min-width: 30px;
     max-width: 60px;
+    padding: 4px 0px;
   }
 
   .calendar-schedule-title {
@@ -1229,6 +1231,7 @@
   }
 
   .calendar-schedule-pets {
+    flex-direction: column;
     gap: 4px;
   }
 

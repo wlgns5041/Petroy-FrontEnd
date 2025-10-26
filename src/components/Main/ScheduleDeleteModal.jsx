@@ -7,25 +7,22 @@ const ScheduleDeleteModal = ({
   onClose,
   onConfirm,
   loading = false,
-  serverError = "",
 }) => {
   const [input, setInput] = useState("");
-  const [localError, setLocalError] = useState("");
 
   const canDelete =
     input.trim().toLowerCase() === (title || "").trim().toLowerCase();
 
   const handleConfirm = () => {
-    if (!canDelete) {
-      setLocalError("일정 제목을 정확히 입력해주세요.");
-      return;
-    }
-    onConfirm?.();
+    if (canDelete) onConfirm?.();
   };
 
   return (
     <div className="schedule-delete-overlay" role="dialog" aria-modal="true">
-      <div className="schedule-delete-container">
+      <div
+        className="schedule-delete-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="schedule-delete-title">정말로 삭제하시겠습니까?</h2>
         <p className="schedule-delete-description">
           <strong>일정 삭제</strong>를 원하시면 <strong>일정 제목</strong>을
@@ -46,10 +43,7 @@ const ScheduleDeleteModal = ({
         <input
           type="text"
           value={input}
-          onChange={(e) => {
-            setInput(e.target.value);
-            setLocalError("");
-          }}
+          onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && canDelete) handleConfirm();
           }}
@@ -58,15 +52,12 @@ const ScheduleDeleteModal = ({
           aria-label="일정 제목 입력"
         />
 
-        {(localError || serverError) && (
-          <p className="schedule-delete-error">{localError || serverError}</p>
-        )}
-
         <div className="schedule-delete-button-row">
           <button
             className="schedule-delete-cancel-button"
             onClick={onClose}
             disabled={loading}
+            aria-label="삭제 취소"
           >
             취소
           </button>
@@ -74,6 +65,7 @@ const ScheduleDeleteModal = ({
             className="schedule-delete-confirm-button"
             onClick={handleConfirm}
             disabled={loading || !canDelete}
+            aria-label="일정 삭제 확인"
           >
             {loading ? "삭제 중..." : "삭제하기"}
           </button>

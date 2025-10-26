@@ -86,11 +86,6 @@
   background-color: #6c757d;
 }
 
-.petpage .error {
-  color: red;
-  margin-top: 10px;
-}
-
 /* 상단 정렬 및 등록 버튼 */
 .petpage-top-bar {
   display: flex;
@@ -362,10 +357,6 @@
   color: #aaa;
 }
 
-/* 공통 에러 */
-.error { color: red; margin-top: 10px; }
-
-
   /* --------------------  모바일  -------------------- */
   @media screen and (max-width: 768px) {
 
@@ -452,11 +443,6 @@
 
 .petpage button:disabled {
   background-color: #6c757d;
-}
-
-.petpage .error {
-  color: red;
-  margin-top: 10px;
 }
 
 /* 상단 정렬 및 등록 버튼 */
@@ -721,6 +707,4 @@
   font-weight: 400;
   color: #aaa;
 }
-
-.error { color: red; margin-top: 10px; }
   }

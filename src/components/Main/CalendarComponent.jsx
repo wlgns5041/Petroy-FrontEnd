@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Main/CalendarComponent.css";
 import "font-awesome/css/font-awesome.min.css";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
@@ -6,19 +6,28 @@ import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+
+// 날짜 포맷 통일 함수
+const formatDateKey = (date) =>
+  new Date(date).toLocaleDateString("sv-SE", { timeZone: "Asia/Seoul" });
 
 const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
   const [viewMode, setViewMode] = useState("month");
   const [currentDate, setCurrentDate] = useState(new Date());
-  const tabIndex = viewMode === "week" ? 0 : 1;
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const tabIndex = viewMode === "week" ? 0 : 1;
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
 
-  const todayStr = new Date().toLocaleDateString("sv-SE", {
-    timeZone: "Asia/Seoul",
-  });
+  const todayStr = formatDateKey(new Date());
 
   const getStartOfMonth = () => {
     const firstDay = new Date(year, month, 1);
@@ -166,6 +175,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
       {/* 주간 보기 섹션 (가로 배치: 미니 + 캘린더) */}
       {viewMode === "week" && (
         <div className="calendar-top-section">
+          {/* 미니 달력 */}
           <div className="calendar-mini-month-calendar">
             <div className="calendar-mini-month-header">{currentMonthStr}</div>
             <div className="calendar-mini-weekdays">
@@ -177,44 +187,28 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             </div>
             {groupDatesByWeek(getStartOfMonth(), getEndOfMonth()).map(
               (week, i) => (
-                <div key={i} className="calendar-mini-week-row">
+                <div key={week[0].toISOString()} className="calendar-mini-week-row">
                   {week.map((date, j) => {
                     const isInSelectedWeek = weeks[0].some(
                       (w) => w.toDateString() === date.toDateString()
                     );
-
-                    const isToday =
-                      date.toLocaleDateString("sv-SE", {
-                        timeZone: "Asia/Seoul",
-                      }) === todayStr;
-
+                    const dateKey = formatDateKey(date);
+                    const isToday = dateKey === todayStr;
                     const isSelectedDate =
-                      date.toLocaleDateString("sv-SE", {
-                        timeZone: "Asia/Seoul",
-                      }) ===
-                      currentDate.toLocaleDateString("sv-SE", {
-                        timeZone: "Asia/Seoul",
-                      });
+                      dateKey === formatDateKey(currentDate);
 
                     const hasSchedule = filteredSchedules.some(
-                      (s) =>
-                        new Date(s.date).toLocaleDateString("sv-SE", {
-                          timeZone: "Asia/Seoul",
-                        }) ===
-                        date.toLocaleDateString("sv-SE", {
-                          timeZone: "Asia/Seoul",
-                        })
+                      (s) => formatDateKey(s.date) === dateKey
                     );
 
                     return (
                       <div
-                        key={j}
+                        key={date.toISOString()}
                         className={`calendar-mini-day 
-        ${isInSelectedWeek ? "calendar-highlight-week" : ""}
-        ${isToday ? "calendar-mini-today" : ""}
-        ${isSelectedDate ? "calendar-selected-date" : ""}
-        ${hasSchedule ? "calendar-has-schedule" : ""}  
-      `}
+                          ${isInSelectedWeek ? "calendar-highlight-week" : ""}
+                          ${isToday ? "calendar-mini-today" : ""}
+                          ${isSelectedDate ? "calendar-selected-date" : ""}
+                          ${hasSchedule ? "calendar-has-schedule" : ""}`}
                         onClick={() => setCurrentDate(date)}
                       >
                         {date.getDate()}
@@ -229,47 +223,28 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
           {/* 주간 달력 본체 */}
           <div className="calendar-content">
             <div className="calendar-weekdays">
-              {weeks[0].map((date, idx) => (
-                <div key={idx}>
+              {weeks[0].map((date) => (
+                <div key={date.toISOString()}>
                   {date.toLocaleDateString("ko-KR", { weekday: "short" })}
                 </div>
               ))}
             </div>
 
             <div className="calendar-days calendar-view-week">
-              {weeks.map((week, i) => (
-                <div key={i} className="calendar-week">
-                  {week.map((date, j) => {
-                    const localDateStr = new Date(date).toLocaleDateString(
-                      "sv-SE",
-                      {
-                        timeZone: "Asia/Seoul",
-                      }
-                    );
-
-                    const isBaseDate =
-                      date.toLocaleDateString("sv-SE", {
-                        timeZone: "Asia/Seoul",
-                      }) ===
-                      currentDate.toLocaleDateString("sv-SE", {
-                        timeZone: "Asia/Seoul",
-                      });
-
-                    const isToday = localDateStr === todayStr;
+              {weeks.map((week) => (
+                <div key={week[0].toISOString()} className="calendar-week">
+                  {week.map((date) => {
+                    const dateKey = formatDateKey(date);
+                    const isBaseDate = dateKey === formatDateKey(currentDate);
+                    const isToday = dateKey === todayStr;
 
                     const schedulesForDate = filteredSchedules.filter(
-                      (s) =>
-                        new Date(s.date).toLocaleDateString("sv-SE", {
-                          timeZone: "Asia/Seoul",
-                        }) ===
-                        date.toLocaleDateString("sv-SE", {
-                          timeZone: "Asia/Seoul",
-                        })
+                      (s) => formatDateKey(s.date) === dateKey
                     );
 
                     return (
                       <div
-                        key={j}
+                        key={date.toISOString()}
                         className={`calendar-day ${
                           isBaseDate ? "calendar-base-date" : ""
                         }`}
@@ -283,9 +258,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                           {date.getDate()}
                         </div>
                         <div className="calendar-schedule-details">
-                          {schedulesForDate.map((s, index) => (
+                          {schedulesForDate.map((s) => (
                             <div
-                              key={index}
+                              key={s.scheduleId}
                               className={`calendar-schedule-box calendar-priority-${
                                 s.priority?.toLowerCase() || "normal"
                               }`}
@@ -308,7 +283,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
         </div>
       )}
 
-      {/* 월간 보기 본체 */}
+      {/* 월간 보기 */}
       {viewMode === "month" && (
         <>
           <div className="calendar-weekdays">
@@ -317,29 +292,20 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             ))}
           </div>
           <div className="calendar-days calendar-view-month">
-            {weeks.map((week, i) => (
-              <div key={i} className="calendar-week">
-                {week.map((date, j) => {
-                  const localDateStr = new Date(date).toLocaleDateString(
-                    "sv-SE",
-                    {
-                      timeZone: "Asia/Seoul",
-                    }
-                  );
-                  const isToday = localDateStr === todayStr;
-                  const isOtherMonth =
-                    date.getMonth() !== currentDate.getMonth();
+            {weeks.map((week) => (
+              <div key={week[0].toISOString()} className="calendar-week">
+                {week.map((date) => {
+                  const dateKey = formatDateKey(date);
+                  const isToday = dateKey === todayStr;
+                  const isOtherMonth = date.getMonth() !== currentDate.getMonth();
 
                   const schedulesForDate = filteredSchedules.filter(
-                    (s) =>
-                      new Date(s.date).toLocaleDateString("sv-SE", {
-                        timeZone: "Asia/Seoul",
-                      }) === localDateStr
+                    (s) => formatDateKey(s.date) === dateKey
                   );
 
                   return (
                     <div
-                      key={j}
+                      key={date.toISOString()}
                       className="calendar-day"
                       onClick={() => {
                         setCurrentDate(date);
@@ -355,9 +321,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                       </div>
 
                       <div className="calendar-schedule-details">
-                        {schedulesForDate.map((s, index) => (
+                        {schedulesForDate.map((s) => (
                           <div
-                            key={index}
+                            key={s.scheduleId}
                             className={`calendar-schedule-box calendar-priority-${
                               s.priority?.toLowerCase() || "normal"
                             }`}
@@ -382,22 +348,16 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
       {/* 주간 일정 요약 */}
       {viewMode === "week" && (
         <div className="calendar-weekly-summary-table-rows">
-          {weeks[0].map((date, idx) => {
-            const localDateStr = new Date(date).toLocaleDateString("sv-SE", {
-              timeZone: "Asia/Seoul",
-            });
-
+          {weeks[0].map((date) => {
+            const dateKey = formatDateKey(date);
             const schedules = filteredSchedules.filter(
-              (s) =>
-                new Date(s.date).toLocaleDateString("sv-SE", {
-                  timeZone: "Asia/Seoul",
-                }) === localDateStr
+              (s) => formatDateKey(s.date) === dateKey
             );
 
-            if (window.innerWidth <= 768 && schedules.length === 0) return null;
+            if (isMobile && schedules.length === 0) return null;
 
             return (
-              <div key={idx} className="calendar-summary-date-block">
+              <div key={date.toISOString()} className="calendar-summary-date-block">
                 <div className="calendar-summary-date-column">
                   <div className="calendar-weekday-text">
                     {date.toLocaleDateString("en-US", { weekday: "short" })}
@@ -410,18 +370,11 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                 <div className="calendar-summary-schedule-blocks">
                   {schedules.length > 0 ? (
                     schedules.map((s, i) => (
-                      <React.Fragment key={i}>
-                        {i > 0 && (
-                          <hr className="calendar-schedule-divider-hr" />
-                        )}
+                      <React.Fragment key={s.scheduleId || i}>
+                        {i > 0 && <hr className="calendar-schedule-divider-hr" />}
                         <div className="calendar-schedule-card-wide">
-                          {/* 시간 + 카테고리 */}
-
-                          {/* 제목 + 펫 */}
                           <div className="calendar-summary-title-pets">
-                            <div className="calendar-schedule-title">
-                              {s.title}
-                            </div>
+                            <div className="calendar-schedule-title">{s.title}</div>
                             <div className="calendar-schedule-pets">
                               {(s.petInfo || []).map((pet, i) => {
                                 const imageSrc = pet.image
@@ -430,17 +383,16 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                                     ? pet.image
                                     : `${API_BASE_URL}${pet.image}`
                                   : defaultPetPic;
-
                                 return (
-                                  <div
-                                    key={i}
-                                    className="calendar-pet-circle-with-name"
-                                  >
+                                  <div key={i} className="calendar-pet-circle-with-name">
                                     <div className="calendar-pet-circle">
                                       <img
                                         src={imageSrc}
                                         alt={pet.name}
                                         title={pet.name}
+                                        onError={(e) =>
+                                          (e.target.src = defaultPetPic)
+                                        }
                                         className="calendar-schedule-pet-thumbnail"
                                       />
                                     </div>
@@ -475,7 +427,6 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                             </div>
                           </div>
 
-                          {/* 중요도 + 상세보기 */}
                           <div className="calendar-summary-actions">
                             <span
                               className={`calendar-priority-badge ${s.priority?.toLowerCase()}`}
@@ -486,9 +437,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                               className="calendar-styled-detail-button"
                               onClick={() => onOpenDetail(s.scheduleId, s.date)}
                             >
-                              <span className="calendar-detail-text">
-                                상세보기
-                              </span>
+                              <span className="calendar-detail-text">상세보기</span>
                               <InfoRoundedIcon
                                 className="calendar-styled-detail-icon"
                                 fontSize="small"

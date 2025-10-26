@@ -22,6 +22,8 @@ import { motion } from "framer-motion";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
 function MainPage() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
@@ -66,6 +68,8 @@ function MainPage() {
       setPets(data || []);
     } catch (err) {
       console.error("내 반려동물 오류", err);
+      setAlertMessage("내 반려동물을 불러오는 중 오류가 발생했습니다.");
+      setShowAlert(true);
     }
   };
 
@@ -75,6 +79,8 @@ function MainPage() {
       setCareGiverPets(data || []);
     } catch (err) {
       console.error("돌보미 반려동물 오류", err);
+      setAlertMessage("돌보미 반려동물을 불러오는 중 오류가 발생했습니다.");
+      setShowAlert(true);
     }
   };
 
@@ -84,6 +90,8 @@ function MainPage() {
       setCategories(data || []);
     } catch (err) {
       console.error("카테고리 오류", err);
+      setAlertMessage("카테고리를 불러오는 중 오류가 발생했습니다.");
+      setShowAlert(true);
     }
   };
 
@@ -144,10 +152,10 @@ function MainPage() {
         setShowAlert(true);
       }
     } catch (err) {
-      console.error("카테고리 삭제 오류:", err);
-      setAlertMessage(
-        "해당 카테고리에 대한 일정이 존재하여 삭제에 실패하였습니다."
-      );
+      const msg =
+        err.response?.data?.message ||
+        "해당 카테고리에 대한 일정이 존재하여 삭제할 수 없습니다.";
+      setAlertMessage(msg);
       setShowAlert(true);
     } finally {
       setDeletingCategory(false);
@@ -335,6 +343,13 @@ function MainPage() {
           return 0;
       }
     });
+
+  const normalizeImage = (img) =>
+    !img
+      ? "/images/default-pet.png"
+      : img.startsWith("http")
+      ? img
+      : `${API_BASE_URL}${img}`;
 
   return (
     <div className="mainpage">
@@ -715,7 +730,7 @@ function MainPage() {
                           onClick={() => toggleMyPet(p.petId)}
                         >
                           <img
-                            src={p.image || "/images/default-pet.png"} // ✅ 실제 필드명 확인 필요
+                            src={normalizeImage(p.image)}
                             alt={p.name}
                             className="mainpage-pet-thumb"
                           />
@@ -793,7 +808,7 @@ function MainPage() {
                           onClick={() => toggleCareGiverPet(p.petId)}
                         >
                           <img
-                            src={p.image || "/images/default-pet.png"}
+                            src={normalizeImage(p.image)}
                             alt={p.name}
                             className="mainpage-pet-thumb"
                           />

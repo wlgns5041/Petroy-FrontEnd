@@ -130,14 +130,11 @@ function SignUpPage() {
 
     if (name === "email") {
       setEmailChecked(false);
-      if (!emailGuide || emailChecked) {
-        setEmailGuide("이메일 중복확인을 해주세요");
-      }
+      setEmailGuide(value ? "이메일 중복확인을 해주세요" : "");
     }
-
     if (name === "name") {
       setNameChecked(false);
-      setNameGuide("이름 중복확인을 해주세요");
+      setNameGuide(value ? "이름 중복확인을 해주세요" : "");
     }
 
     if (name === "phone") {
@@ -269,8 +266,9 @@ function SignUpPage() {
   };
 
   const handleAlertConfirm = () => {
-    if (alert.onConfirm) alert.onConfirm();
+    const { onConfirm } = alert;
     closeAlert();
+    if (onConfirm) onConfirm();
   };
 
   useEffect(() => {
@@ -279,11 +277,13 @@ function SignUpPage() {
 
     // 포커스 시 해당 input을 화면 중앙으로 스크롤
     const handleFocus = (e) => {
-      e.target.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-        inline: "nearest",
-      });
+      setTimeout(() => {
+        e.target.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }, 0);
     };
 
     inputs.forEach((input) => {

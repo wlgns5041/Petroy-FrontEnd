@@ -46,44 +46,75 @@ const MyPage = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [alertNextAction, setAlertNextAction] = useState(null);
 
-  // 컴포넌트가 마운트될 때 실행
   useEffect(() => {
-    const token = localStorage.getItem("accessToken"); // 로컬 저장소에서 토큰 가져오기
-
-    if (token) {
-      // 비동기 함수로 데이터를 가져오는 작업
-      const fetchData = async () => {
-        try {
-          // 사용자 정보, 펫 목록, 포스트 목록을 동시에 가져오기 (토큰 서비스에 있음)
-          const [userResponse, petsResponse] = await Promise.all([
-            fetchCurrentMember(token),
-            fetchMemberPets(),
-            fetchMemberPosts(token),
-          ]);
-
-          // 가져온 데이터를 상태에 저장
-          setUserInfo(userResponse);
-          setPets(petsResponse);
-
-          const count = await fetchFriendCount(token); // 🔥 이렇게 수정
-          setFriendsCount(count);
-        } catch (error) {
-          console.error("데이터를 불러오는데 실패했습니다:", error); // 에러 처리
-        } finally {
-          setLoading(false); // 데이터 로딩이 끝나면 로딩 상태 종료
-        }
-      };
-
-      fetchData(); // 데이터 가져오기 호출
-    } else {
-      console.error("토큰이 없습니다"); // 토큰이 없는 경우 에러 처리
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      setAlertMessage("로그인이 필요합니다.");
+      setShowAlert(true);
+      navigate("/login");
+      return;
     }
-  }, []); // 빈 배열을 의존성으로 설정하여 컴포넌트 마운트 시 처음에 한 번만 실행
+
+    const fetchData = async () => {
+      try {
+        const [
+          userResponse,
+          petsResponse,
+          postsResponse,
+          categoriesResponse,
+          schedulesResponse,
+        ] = await Promise.all([
+          fetchCurrentMember(token),
+          fetchMemberPets(),
+          fetchMemberPosts(token),
+          fetchScheduleCategories(),
+          fetchAllSchedules(),
+        ]);
+
+        const postCount =
+          postsResponse?.content?.length || postsResponse?.length || 0;
+
+        const categoryCount = Array.isArray(categoriesResponse)
+          ? categoriesResponse.length
+          : categoriesResponse?.content?.length || 0;
+
+        const scheduleCount = Array.isArray(schedulesResponse)
+          ? schedulesResponse.reduce(
+              (acc, schedule) =>
+                acc +
+                (Array.isArray(schedule.dateInfo)
+                  ? schedule.dateInfo.length
+                  : 0),
+              0
+            )
+          : 0;
+
+        setUserInfo(userResponse);
+        setPets(petsResponse);
+        setPostCount(postCount);
+        setCategoryCount(categoryCount);
+        setScheduleCount(scheduleCount);
+
+        const count = await fetchFriendCount(token);
+        setFriendsCount(count);
+      } catch (error) {
+        const message =
+          error.response?.data?.message ||
+          "데이터를 불러오는 중 오류가 발생했습니다.";
+        setAlertMessage(message);
+        setShowAlert(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [navigate]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      // 드롭다운이 열려 있고, 클릭한 곳이 드롭다운 내부가 아니면 닫기
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setShowMenu(false);
       }
@@ -95,7 +126,6 @@ const MyPage = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // cleanup
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -139,82 +169,17 @@ const MyPage = () => {
       const scrollLeft = scrollEl.scrollLeft;
       const bannerWidth =
         scrollEl.firstElementChild?.getBoundingClientRect().width || 1;
-
       const gap =
         parseFloat(getComputedStyle(scrollEl).gap || 0) ||
         parseFloat(getComputedStyle(scrollEl).columnGap || 0);
-
       const effectiveWidth = bannerWidth + gap;
-
       const index = Math.round(scrollLeft / effectiveWidth);
-
       setActiveIndex(Math.max(0, Math.min(banners.length - 1, index)));
     };
 
     scrollEl.addEventListener("scroll", handleScroll);
     return () => scrollEl.removeEventListener("scroll", handleScroll);
   }, [banners.length]);
-
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-
-    if (token) {
-      const fetchData = async () => {
-        try {
-          const token = localStorage.getItem("accessToken");
-
-          const [
-            userResponse,
-            petsResponse,
-            postsResponse,
-            categoriesResponse,
-            schedulesResponse,
-          ] = await Promise.all([
-            fetchCurrentMember(token),
-            fetchMemberPets(),
-            fetchMemberPosts(token),
-            fetchScheduleCategories(),
-            fetchAllSchedules(),
-          ]);
-
-          const postCount =
-            postsResponse?.content?.length || postsResponse?.length || 0;
-
-          const categoryCount = Array.isArray(categoriesResponse)
-            ? categoriesResponse.length
-            : categoriesResponse?.content?.length || 0;
-
-          const scheduleCount = Array.isArray(schedulesResponse)
-            ? schedulesResponse.reduce(
-                (acc, schedule) =>
-                  acc +
-                  (Array.isArray(schedule.dateInfo)
-                    ? schedule.dateInfo.length
-                    : 0),
-                0
-              )
-            : 0;
-
-          setUserInfo(userResponse);
-          setPets(petsResponse);
-          setPostCount(postCount);
-          setCategoryCount(categoryCount);
-          setScheduleCount(scheduleCount);
-
-          const count = await fetchFriendCount(token);
-          setFriendsCount(count);
-        } catch (error) {
-          console.error("데이터를 불러오는데 실패했습니다:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchData();
-    } else {
-      console.error("토큰이 없습니다");
-    }
-  }, []);
 
   // 이미지 변경 함수
   const handleImageUpload = async (file, preview) => {
@@ -248,13 +213,20 @@ const MyPage = () => {
       };
       swapWhenReady();
     } catch (e) {
-      console.error(e);
-      setAlertMessage("이미지 업로드 실패");
+      const message =
+        e.response?.data?.message || "이미지 업로드 중 오류가 발생했습니다.";
+      setAlertMessage(message);
       setShowAlert(true);
     }
   };
 
-  if (loading) return <p>잠시만 기다려주세요...</p>;
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+    if (alertNextAction) {
+      alertNextAction();
+      setAlertNextAction(null);
+    }
+  };
 
   // 계정 삭제 처리 함수
   const handleAccountDelete = async () => {
@@ -263,11 +235,15 @@ const MyPage = () => {
       await deleteMember(token);
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+
       setAlertMessage("회원 탈퇴에 성공했습니다.");
+      setAlertNextAction(() => () => (window.location.href = "/"));
       setShowAlert(true);
-      window.location.href = "/";
     } catch (error) {
-      console.error("회원 탈퇴 중 오류 발생:", error);
+      const message =
+        error.response?.data?.message || "회원 탈퇴 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
     }
   };
 
@@ -275,18 +251,16 @@ const MyPage = () => {
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+
     if (window.__eventSourceInstance) {
       window.__eventSourceInstance.close();
       window.__eventSourceInstance = null;
     }
 
     setAlertMessage("로그아웃되었습니다.");
+    setAlertNextAction(() => () => (window.location.href = "/login"));
     setShowAlert(true);
-    window.location.href = "/login";
   };
-
-  // 로딩 중일 때 메시지 표시
-  if (loading) return <p>잠시만 기다려주세요...</p>;
 
   const handleConfirm = async () => {
     if (confirmAction?.type === "logout") {
@@ -296,6 +270,8 @@ const MyPage = () => {
     }
     setConfirmAction(null);
   };
+
+  if (loading) return <p>잠시만 기다려주세요...</p>;
 
   return (
     <main className="mypage-viewport">
@@ -333,6 +309,7 @@ const MyPage = () => {
             </div>
           </div>
         </div>
+
         <div className="mypage-profile-buttons">
           <button
             className="mypage-button logout"
@@ -395,6 +372,7 @@ const MyPage = () => {
             ))}
           </div>
         </div>
+
         <div className="mypage-banner-dots">
           {banners.map((_, i) => (
             <span
@@ -475,10 +453,7 @@ const MyPage = () => {
         )}
 
         {showAlert && (
-          <AlertModal
-            message={alertMessage}
-            onConfirm={() => setShowAlert(false)}
-          />
+          <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
         )}
       </div>
     </main>

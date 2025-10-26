@@ -33,7 +33,6 @@
 }
 
 .pet-assign-loading,
-.pet-assign-error,
 .pet-assign-no-friends {
   text-align: center;
   color: #6b7280;
@@ -183,7 +182,6 @@
 }
 
 .pet-assign-loading,
-.pet-assign-error,
 .pet-assign-no-friends {
   text-align: center;
   color: #6b7280;

@@ -257,13 +257,6 @@
     object-fit: contain;
   }
 
-  .loginpage-error {
-    margin-top: 32px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #ff0000;
-  }
-
 @media screen and (max-width: 768px) {
   .loginpage {
     height: 100%;

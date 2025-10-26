@@ -105,8 +105,7 @@
 background-color: #E8E9EC;
 }
 
-.schedule-detail-loading-text,
-.schedule-detail-error-text {
+.schedule-detail-loading-text {
   text-align: center;
   margin: 20px 0;
 }
@@ -222,8 +221,7 @@ background-color: #E8E9EC;
 background-color: #E8E9EC;
 }
 
-.schedule-detail-loading-text,
-.schedule-detail-error-text {
+.schedule-detail-loading-text {
   text-align: center;
   margin: 20px 0;
 }

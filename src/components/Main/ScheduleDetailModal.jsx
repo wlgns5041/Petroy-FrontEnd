@@ -15,23 +15,9 @@ function ScheduleDetailModal({
   onScheduleDeleted,
 }) {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [scheduleDetail, setScheduleDetail] = useState({
-    title: "로딩 중...",
-    content: "",
-    priority: "미지정",
-    petName: [],
-    categoryName: "정보 없음",
-    status: "미지정",
-    noticeYn: false,
-    allDay: false,
-    repeatYn: false,
-    scheduleAt: new Date().toISOString(),
-  });
-
+  const [scheduleDetail, setScheduleDetail] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState("");
 
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
@@ -49,52 +35,59 @@ function ScheduleDetailModal({
     }
   };
 
-  const handleClose = (e) => {
-    e.stopPropagation();
-    onRequestClose();
-  };
+  const handleClose = () => onRequestClose();
 
   const openDeleteModal = () => {
     if (!scheduleId || !selectedDate) {
-      setError("삭제할 일정이 선택되지 않았습니다.");
+      setAlertMessage("삭제할 일정이 선택되지 않았습니다.");
+      setShowAlert(true);
       return;
     }
-    setDeleteError("");
     setDeleteOpen(true);
   };
 
   const confirmDelete = async () => {
     if (!scheduleId || !selectedDate) {
-      setDeleteError("삭제할 일정이 선택되지 않았습니다.");
+      setAlertMessage("삭제할 일정이 선택되지 않았습니다.");
+      setShowAlert(true);
       return;
     }
+
     setDeleting(true);
     try {
-      const dateParam = selectedDate.toLocaleString("sv-SE");
-      const response = await deleteSchedule(scheduleId, dateParam);
+      const localDate = selectedDate
+        .toLocaleString("sv-SE", { timeZone: "Asia/Seoul" })
+        .replace(" ", "T");
 
-      if (response.status === 200 && response.data === true) {
-        setAlertMessage("일정이 삭제되었습니다."); 
-        setShowAlert(true);
+      const response = await deleteSchedule(scheduleId, localDate);
+
+      if (
+        response.status === 200 &&
+        (response.data === true || response.data?.success)
+      ) {
+        setAlertMessage("일정이 삭제되었습니다.");
       } else {
-        const msg = response?.data?.message || "일정 삭제에 실패했습니다.";
-        setDeleteError(msg);
+        setAlertMessage(response?.data?.message || "일정 삭제에 실패했습니다.");
       }
     } catch (err) {
-      setDeleteError(
+      setAlertMessage(
         err?.response?.data?.message ??
-          "네트워크 오류가 발생했습니다. 나중에 다시 시도해 주세요."
+          "서버 오류(500)가 발생했습니다. 잠시 후 다시 시도해주세요."
       );
     } finally {
+      setShowAlert(true);
       setDeleting(false);
     }
   };
 
-  const handleAlertConfirm = () => {
+  const handleAlertConfirm = async () => {
     setShowAlert(false);
-    onScheduleDeleted?.(scheduleId, selectedDate);
-    setDeleteOpen(false);
-    onRequestClose();
+
+    if (alertMessage.includes("삭제되었습니다")) {
+      await Promise.resolve(onScheduleDeleted?.(scheduleId, selectedDate));
+      setDeleteOpen(false);
+      onRequestClose();
+    }
   };
 
   useEffect(() => {
@@ -102,11 +95,16 @@ function ScheduleDetailModal({
       try {
         const data = await fetchScheduleDetail(
           scheduleId,
-          selectedDate ? selectedDate.toLocaleString("sv-SE") : null
+          selectedDate
+            ? selectedDate
+                .toLocaleString("sv-SE", { timeZone: "Asia/Seoul" })
+                .replace(" ", "T")
+            : null
         );
         setScheduleDetail(data);
       } catch (err) {
-        setError("일정 상세 정보를 불러오는 데 실패했습니다.");
+        setAlertMessage("일정 상세 정보를 불러오는 데 실패했습니다.");
+        setShowAlert(true);
       } finally {
         setLoading(false);
       }
@@ -114,30 +112,14 @@ function ScheduleDetailModal({
 
     if (isOpen && scheduleId && selectedDate) {
       loadDetail();
-    } else if (!isOpen) {
-      setLoading(true);
-      setError(null);
-      setScheduleDetail({
-        title: "로딩 중...",
-        content: "",
-        priority: "미지정",
-        petName: [],
-        categoryName: "정보 없음",
-        status: "미지정",
-        noticeYn: false,
-        allDay: false,
-        repeatYn: false,
-        scheduleAt: new Date().toISOString(),
-      });
-      setDeleteOpen(false);
-      setDeleteError("");
-      setDeleting(false);
     }
   }, [isOpen, scheduleId, selectedDate]);
 
   if (!isOpen) return null;
 
-  const dateText = new Date(scheduleDetail.scheduleAt).toLocaleString();
+  const dateText = scheduleDetail
+    ? new Date(scheduleDetail.scheduleAt).toLocaleString()
+    : "";
 
   return (
     <div className="schedule-detail-modal-overlay">
@@ -145,9 +127,8 @@ function ScheduleDetailModal({
         <h2 className="schedule-detail-title">일정 상세 정보</h2>
 
         {loading && <p className="schedule-detail-loading-text">로딩 중...</p>}
-        {error && <p className="schedule-detail-error-text">{error}</p>}
 
-        {!loading && !error && (
+        {!loading && scheduleDetail && (
           <div className="schedule-detail-section">
             <div className="schedule-detail-label">카테고리</div>
             <div className="schedule-detail-value">
@@ -202,19 +183,17 @@ function ScheduleDetailModal({
           </button>
         </div>
       </div>
+
       {deleteOpen && (
         <ScheduleDeleteModal
           title={scheduleDetail?.title ?? ""}
           dateText={dateText}
-          onClose={() => {
-            setDeleteOpen(false);
-            setDeleteError("");
-          }}
+          onClose={() => setDeleteOpen(false)}
           onConfirm={confirmDelete}
           loading={deleting}
-          serverError={deleteError}
         />
       )}
+
       {showAlert && (
         <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
       )}

@@ -20,8 +20,8 @@
 }
 
 .my-page-confirm-message {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 700;
   color: #000000;
   margin-bottom: 12px;
   padding: 24px;
@@ -78,7 +78,7 @@
 
 .my-page-confirm-modal {
   background-color: #fff;
-  width: 75%;
+  width: 70%;
   max-width: auto;
   height: auto;
   padding: 20px;
@@ -91,11 +91,11 @@
 }
 
 .my-page-confirm-message {
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 700;
   color: #000000;
   margin-bottom: 8px;
-  padding: 24px;
+  padding: 12px;
   white-space: pre-wrap;
 }
 

@@ -28,30 +28,52 @@ const FriendPage = () => {
   const [alertMessage, setAlertMessage] = useState("");
 
   const loadFriends = async () => {
-    const data = await fetchAcceptedFriends();
-    setFriends(data);
+    try {
+      const data = await fetchAcceptedFriends();
+      setFriends(data);
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "친구 목록을 불러오는 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
+    }
   };
 
   const loadRequests = async () => {
-    const data = await fetchPendingFriends();
-    setRequests(data);
-
-    const pendingIds = data.map((r) => r.id);
-    setRequestedIds(pendingIds);
+    try {
+      const data = await fetchPendingFriends();
+      setRequests(data);
+      const pendingIds = data.map((r) => r.id);
+      setRequestedIds(pendingIds);
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "친구 요청 목록을 불러오는 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
+    }
   };
 
   const handleRequestAction = async (memberId, action) => {
-    await handleFriendRequest(memberId, action);
+    try {
+      await handleFriendRequest(memberId, action);
+      const accepted = requests.find((r) => r.id === memberId);
 
-    const accepted = requests.find((r) => r.id === memberId);
+      if (action === "ACCEPTED") {
+        setFriends([...friends, accepted]);
+        setAlertMessage(`'${accepted.name}' 님과 친구가 되었습니다.`);
+        setShowAlert(true);
+      }
 
-    if (action === "ACCEPTED") {
-      setFriends([...friends, accepted]);
-      setAlertMessage(`'${accepted.name}' 님과 친구가 되었습니다.`);
+      setRequests(requests.filter((r) => r.id !== memberId));
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        "친구 요청 처리 중 오류가 발생했습니다.";
+      setAlertMessage(message);
       setShowAlert(true);
     }
-
-    setRequests(requests.filter((r) => r.id !== memberId));
   };
 
   const handleSearch = async () => {
@@ -66,9 +88,11 @@ const FriendPage = () => {
     try {
       const result = await searchFriends(keyword);
       setSearchResults(result);
-    } catch (err) {
-      setError("친구 검색 중 오류 발생");
-      console.error(err);
+    } catch (error) {
+      const message =
+        error.response?.data?.message || "친구 검색 중 오류가 발생했습니다.";
+      setAlertMessage(message);
+      setShowAlert(true);
     } finally {
       setLoading(false);
     }
@@ -81,9 +105,10 @@ const FriendPage = () => {
       setAlertMessage("친구 요청을 보냈습니다.");
       setShowAlert(true);
     } catch (error) {
-      setAlertMessage("친구 요청에 실패했습니다.");
+      const message =
+        error.response?.data?.message || "친구 요청에 실패했습니다.";
+      setAlertMessage(message);
       setShowAlert(true);
-      console.error(error);
     }
   };
 
@@ -236,6 +261,7 @@ const FriendPage = () => {
           </>
         )}
       </div>
+
       {showAlert && (
         <AlertModal
           message={alertMessage}

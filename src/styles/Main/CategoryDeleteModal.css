@@ -62,13 +62,6 @@
   box-shadow: 0 0 0 2px #111827;
 }
 
-.category-delete-error {
-  color: #ef4444;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 12px;
-}
-
 .category-delete-button-row {
   display: flex;
   justify-content: space-between;
@@ -187,13 +180,6 @@
   outline: none;
   background: #fff;
   box-shadow: 0 0 0 2px #111827;
-}
-
-.category-delete-error {
-  color: #ef4444;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 12px;
 }
 
 .category-delete-button-row {

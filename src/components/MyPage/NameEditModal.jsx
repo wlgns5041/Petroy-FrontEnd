@@ -1,40 +1,43 @@
-import React, { useState } from 'react';
-import '../../styles/MyPage/NameEditModal.css';
-import { checkNameDuplicate, updateMemberName } from "../../services/MemberService";
+import React, { useState } from "react";
+import "../../styles/MyPage/NameEditModal.css";
+import {
+  checkNameDuplicate,
+  updateMemberName,
+} from "../../services/MemberService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const NameEditModal = ({ onClose, onSave }) => {
-  const [newName, setNewName] = useState('');
-  const [nameError, setNameError] = useState('');
+  const [newName, setNewName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [nameChecked, setNameChecked] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
   const handleNameChange = (e) => {
     const value = e.target.value;
     setNewName(value);
     setNameChecked(false);
-    setNameError('이름 중복 확인을 해주세요.');
+    setNameError("이름 중복 확인을 해주세요.");
   };
 
   const handleCheckNameDuplicate = async () => {
-    if (newName.trim() === '') {
-      setNameError('이름을 입력해 주세요.');
+    if (newName.trim() === "") {
+      setNameError("이름을 입력해 주세요.");
       setNameChecked(false);
       return;
     }
 
     try {
-      await checkNameDuplicate(newName); 
-      setNameError('사용 가능한 이름입니다.');
+      await checkNameDuplicate(newName);
+      setNameError("사용 가능한 이름입니다.");
       setNameChecked(true);
     } catch (error) {
       if (error.response) {
-        setNameError('중복된 이름입니다.');
+        setNameError("중복된 이름입니다.");
       } else if (error.request) {
-        setNameError('서버에 연결할 수 없습니다.');
+        setNameError("서버에 연결할 수 없습니다.");
       } else {
-        setNameError('알 수 없는 오류가 발생했습니다.');
+        setNameError("알 수 없는 오류가 발생했습니다.");
       }
       setNameChecked(false);
     }
@@ -42,15 +45,15 @@ const NameEditModal = ({ onClose, onSave }) => {
 
   const handleSave = async () => {
     if (!nameChecked) {
-      setAlertMessage('이름 중복 확인을 완료해주세요.');
+      setAlertMessage("이름 중복 확인을 완료해주세요.");
       setShowAlert(true);
       return;
     }
 
     try {
-      const token = localStorage.getItem("accessToken"); 
+      const token = localStorage.getItem("accessToken");
       await updateMemberName(token, newName);
-      setAlertMessage('이름을 변경했습니다');
+      setAlertMessage("이름을 변경했습니다");
       setShowAlert(true);
     } catch (error) {
       console.error("이름 변경 실패:", error);
@@ -61,6 +64,7 @@ const NameEditModal = ({ onClose, onSave }) => {
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
+    setAlertMessage("");
     if (alertMessage.includes("변경했습니다")) {
       onSave(newName);
       onClose();
@@ -82,16 +86,23 @@ const NameEditModal = ({ onClose, onSave }) => {
               value={newName}
               onChange={handleNameChange}
               maxLength={10}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !nameChecked)
+                  handleCheckNameDuplicate();
+                else if (e.key === "Enter" && nameChecked) handleSave();
+              }}
             />
-            <button className="check-button" onClick={handleCheckNameDuplicate}>
+            <button
+              className="check-button"
+              onClick={handleCheckNameDuplicate}
+              disabled={!newName.trim()}
+            >
               중복 확인
             </button>
           </div>
           {nameError && (
             <p
-              className={`name-edit-error ${
-                nameChecked ? 'valid' : 'invalid'
-              }`}
+              className={`name-edit-error ${nameChecked ? "valid" : "invalid"}`}
             >
               {nameError}
             </p>

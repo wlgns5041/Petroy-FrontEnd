@@ -3,50 +3,43 @@ import "../../styles/Pet/CareGiverList.css";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import noCaregiverImg from "../../assets/images/dogpaw.png";
 import { fetchAcceptedFriends } from "../../services/FriendService";
-import {
-  fetchCaregiversByPet,
-  deleteCaregiver,
-} from "../../services/PetService";
+import { fetchCaregiversByPet, deleteCaregiver } from "../../services/PetService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx";
 
 const CareGiverList = ({ pet, onClose }) => {
   const [caregiversList, setCaregiversList] = useState([]);
-  const [error, setError] = useState(null);
   const [friends, setFriends] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
-    const fetchFriends = async () => {
+    const loadData = async () => {
       try {
-        const data = await fetchAcceptedFriends();
-        setFriends(data);
+        const [friendsData, caregiversData] = await Promise.all([
+          fetchAcceptedFriends(),
+          fetchCaregiversByPet(pet.petId),
+        ]);
+        setFriends(friendsData);
+        setCaregiversList(caregiversData);
       } catch (err) {
-        console.error("친구 목록을 불러오지 못했습니다:", err);
+        console.error("데이터 로딩 실패:", err);
+        setAlertMessage("돌보미 정보를 불러오는 중 오류가 발생했습니다.");
+        setShowAlert(true);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchFriends();
-  }, []);
-
-  useEffect(() => {
-    const fetchCaregivers = async () => {
-      try {
-        const data = await fetchCaregiversByPet(pet.petId);
-        setCaregiversList(data);
-      } catch (err) {
-        const msg =
-          err.response?.data?.errorMessage ||
-          "돌보미 정보를 불러오지 못했습니다.";
-        setError(msg);
-      }
-    };
-
-    fetchCaregivers();
+    loadData();
   }, [pet.petId]);
 
-  const handleDeleteCareGiver = async (cgId, memberName) => {
+  const handleDeleteCareGiver = (memberName) => {
     const realFriend = friends.find((f) => f.name === memberName);
     if (!realFriend) {
       setAlertMessage("해당 친구의 ID를 찾을 수 없습니다.");
@@ -56,23 +49,36 @@ const CareGiverList = ({ pet, onClose }) => {
 
     const realMemberId = realFriend.id;
 
-    if (!window.confirm("해당 돌보미를 삭제하시겠습니까?")) return;
-
-    try {
-      const success = await deleteCaregiver(pet.petId, realMemberId);
-      if (success) {
-        setAlertMessage("돌보미가 삭제되었습니다.");
-        setShowAlert(true);
-        setCaregiversList((prev) =>
-          prev.filter((cg) => cg.memberName !== memberName)
+    setConfirmMessage(`${memberName}님을 돌보미 목록에서 제거하시겠습니까?`);
+    setConfirmAction(() => async () => {
+      try {
+        const success = await deleteCaregiver(pet.petId, realMemberId);
+        if (success) {
+          setCaregiversList((prev) =>
+            prev.filter((cg) => cg.memberName !== memberName)
+          );
+          setAlertMessage("돌보미가 삭제되었습니다.");
+          setShowAlert(true);
+        } else {
+          setAlertMessage("삭제에 실패했습니다. 다시 시도해주세요.");
+          setShowAlert(true);
+        }
+      } catch (err) {
+        console.error("삭제 실패:", err);
+        setAlertMessage(
+          err.response?.data?.errorMessage || "삭제 중 오류가 발생했습니다."
         );
+        setShowAlert(true);
+      } finally {
+        setShowConfirm(false);
+        setConfirmAction(null);
       }
-    } catch (err) {
-      const msg =
-        err.response?.data?.errorMessage || "삭제 중 오류가 발생했습니다.";
-      setAlertMessage(msg);
-      setShowAlert(true);
-    }
+    });
+    setShowConfirm(true);
+  };
+
+  const handleConfirm = () => {
+    if (confirmAction) confirmAction();
   };
 
   return (
@@ -82,8 +88,9 @@ const CareGiverList = ({ pet, onClose }) => {
           &times;
         </button>
         <h2 className="care-giver-list-title">{pet.name}의 돌보미 친구목록</h2>
-        {error ? (
-          <p className="care-giver-list-error">{error}</p>
+
+        {loading ? (
+          <p className="care-giver-list-loading">로딩 중...</p>
         ) : caregiversList.length > 0 ? (
           <ul className="care-giver-list-list">
             {caregiversList.map((cg) => (
@@ -91,16 +98,14 @@ const CareGiverList = ({ pet, onClose }) => {
                 <div className="care-giver-list-left">
                   <img
                     src={cg.image || defaultProfilePic}
-                    alt={cg.name}
+                    alt={cg.memberName}
                     className="care-giver-list-friend-image"
                   />
                   <span className="care-giver-list-name">{cg.memberName}</span>
                 </div>
                 <button
                   className="care-giver-list-button"
-                  onClick={() =>
-                    handleDeleteCareGiver(cg.memberId, cg.memberName)
-                  }
+                  onClick={() => handleDeleteCareGiver(cg.memberName)}
                 >
                   목록에서 제거
                 </button>
@@ -122,6 +127,17 @@ const CareGiverList = ({ pet, onClose }) => {
           </div>
         )}
       </div>
+
+      {/* ✅ 삭제 확인용 모달 */}
+      {showConfirm && (
+        <MyPageConfirmModal
+          message={confirmMessage}
+          onConfirm={handleConfirm}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
+
+      {/* ✅ 일반 알림용 모달 */}
       {showAlert && (
         <AlertModal
           message={alertMessage}

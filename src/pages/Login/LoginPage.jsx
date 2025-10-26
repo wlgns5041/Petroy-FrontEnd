@@ -4,32 +4,35 @@ import "../../styles/Login/LoginPage.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { loginUser } from "../../services/MemberService";
+import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const KAKAO_KEY = process.env.REACT_APP_KAKAO_KEY;
 
 function LoginPage() {
-  const navigate = useNavigate(); 
-  const [email, setEmail] = useState(""); 
-  const [password, setPassword] = useState(""); 
-  const [error, setError] = useState(null); 
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await loginUser(email, password);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+      navigate("/mainPage");
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.errorMessage ||
+        "로그인 중 오류가 발생했습니다.";
 
-  try {
-    const data = await loginUser(email, password);
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
-    navigate("/mainPage");
-  } catch (error) {
-    let message = "로그인 실패";
-    if (error.response?.data?.errorMessage) {
-      message = error.response.data.errorMessage;
+      setAlertMessage(message);
+      setShowAlert(true);
     }
-    setError(message);
-  }
-};
+  };
 
   useEffect(() => {
     if (!KAKAO_KEY) {
@@ -46,7 +49,6 @@ function LoginPage() {
     script.onload = () => {
       if (window.Kakao && !window.Kakao.isInitialized()) {
         window.Kakao.init(KAKAO_KEY);
-        console.log("✅ Kakao SDK 초기화 완료");
       }
     };
     document.body.appendChild(script);
@@ -62,7 +64,8 @@ function LoginPage() {
         redirectUri: `${process.env.REACT_APP_API_URL}/oauth/kakao/callback`,
       });
     } else {
-      console.error("Kakao SDK를 로드하지 못했습니다.");
+      setAlertMessage("Kakao SDK를 로드하지 못했습니다.");
+      setShowAlert(true);
     }
   };
 
@@ -108,7 +111,7 @@ function LoginPage() {
                 </span>
               </div>
             </div>
-            {error && <p className="loginpage-error">{error}</p>}
+
             <div className="loginpage-button">
               <button
                 type="button"
@@ -128,7 +131,9 @@ function LoginPage() {
 
             <div>
               <div className="loginpage-signup-wrapper">
-                <span className="loginpage-signup-title">아직 계정이 없으신가요?</span>
+                <span className="loginpage-signup-title">
+                  아직 계정이 없으신가요?
+                </span>
                 <span
                   className="loginpage-signup-link"
                   onClick={() => navigate("/signUp")}
@@ -165,6 +170,13 @@ function LoginPage() {
           </div>
         </div>
       </div>
+
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => setShowAlert(false)}
+        />
+      )}
     </div>
   );
 }

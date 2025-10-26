@@ -14,10 +14,19 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
   });
   const [previewUrl, setPreviewUrl] = useState(pet.image || "");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+
+  const [pendingUpdate, setPendingUpdate] = useState(null);
+
+  const handleAlertConfirm = () => {
+    setShowAlert(false);
+    if (pendingUpdate) {
+      pendingUpdate();
+      setPendingUpdate(null);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,15 +37,14 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
+    if (!file) return;
     setPetInfo((prev) => ({ ...prev, image: file }));
     setPreviewUrl(URL.createObjectURL(file));
   };
 
   const handleSubmit = async () => {
     setLoading(true);
-    setError(null);
-
     try {
       const formData = new FormData();
       formData.append("name", petInfo.name);
@@ -45,16 +53,17 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
 
       if (petInfo.image && petInfo.image instanceof File) {
         formData.append("image", petInfo.image);
+      } else if (pet.image && pet.image.startsWith("http")) {
+        const response = await fetch(pet.image);
+        const blob = await response.blob();
+        const fileName = pet.image.split("/").pop();
+        const file = new File([blob], fileName, { type: blob.type });
+        formData.append("image", file);
       } else {
         const allPets = await fetchMemberPets();
         const currentPet = allPets.find((p) => p.petId === pet.petId);
-
-        if (!currentPet) {
-          console.warn("⚠ 현재 펫 정보를 찾을 수 없습니다.");
-        } else {
+        if (currentPet) {
           const { species, breed } = currentPet;
-          console.log("✔ species:", species, "✔ breed:", breed);
-
           const fallbackImageMap = {
             "강아지-치와와": "dog-chihuahua.png",
             "강아지-진돗개": "dog-jindo.png",
@@ -63,7 +72,6 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
             "고양이-먼치킨": "cat-munchkin.png",
             "고양이-치즈": "cat-cheese.png",
           };
-
           const fallbackKey = `${species}-${breed}`;
           const fallbackFileName = fallbackImageMap[fallbackKey];
 
@@ -75,9 +83,6 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
               type: blob.type,
             });
             formData.append("image", file);
-            console.log("✔ fallback 이미지 적용:", fallbackFileName);
-          } else {
-            console.warn("⚠ 매핑된 fallback 이미지가 없습니다.");
           }
         }
       }
@@ -85,17 +90,23 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
       const data = await updatePet(pet.petId, formData);
       setAlertMessage("반려동물이 성공적으로 수정되었습니다.");
       setShowAlert(true);
-      onUpdate(data);
-      onClose();
+
+      setPendingUpdate(() => () => {
+        onUpdate?.(data);
+        onClose?.();
+      });
     } catch (err) {
-      setError("서버와의 통신에 실패했습니다.");
-      console.error(err);
+      console.error("펫 수정 실패:", err);
+      setAlertMessage(
+        "서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요."
+      );
+      setShowAlert(true);
     } finally {
       setLoading(false);
     }
   };
 
-  const isStep1Valid = petInfo.name && petInfo.age;
+  const isStep1Valid = petInfo.name.trim() && petInfo.age.trim();
 
   return (
     <div className="pet-edit-modal-overlay">
@@ -104,11 +115,12 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
           <button
             className="pet-edit-back-button"
             onClick={() => setStep(step - 1)}
+            disabled={loading}
           >
             &#x2039;
           </button>
         )}
-        <button className="pet-edit-close" onClick={onClose}>
+        <button className="pet-edit-close" onClick={onClose} disabled={loading}>
           &times;
         </button>
         <p className="pet-edit-step-indicator">{step} / 3</p>
@@ -143,27 +155,8 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
                             const value = e.target.value.replace(/[^0-9]/g, "");
                             setPetInfo((prev) => ({ ...prev, age: value }));
                           }}
-                          onKeyDown={(e) => {
-                            if (
-                              [
-                                "Backspace",
-                                "Delete",
-                                "Tab",
-                                "ArrowLeft",
-                                "ArrowRight",
-                              ].includes(e.key)
-                            )
-                              return;
-
-                            if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                            }
-                          }}
-                          onCompositionStart={(e) => {
-                            e.preventDefault();
-                          }}
-                          className="pet-edit-input"
                           inputMode="numeric"
+                          className="pet-edit-input"
                         />
                       </div>
                     </div>
@@ -184,6 +177,7 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
                               type="file"
                               accept="image/*"
                               onChange={handleImageChange}
+                              disabled={loading}
                             />
                           </label>
                         </div>
@@ -199,6 +193,7 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
                               setPetInfo((prev) => ({ ...prev, image: "" }));
                               setPreviewUrl("");
                             }}
+                            disabled={loading}
                           >
                             선택 해제
                           </button>
@@ -210,20 +205,18 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
 
                 {step === 3 && (
                   <>
-                    <h2 className="pet-edit-title">
-                      마지막으로 특이사항을 수정해주세요
-                    </h2>
+                    <h2 className="pet-edit-title">특이사항을 수정해주세요</h2>
                     <div className="pet-edit-content-textarea">
                       <textarea
                         name="memo"
                         value={petInfo.memo}
                         onChange={handleChange}
                         className="pet-edit-textarea"
-                        placeholder="메모"
+                        placeholder="메모를 입력하세요"
                         rows={4}
+                        disabled={loading}
                       />
                     </div>
-                    {error && <p className="pet-edit-error">{error}</p>}
                   </>
                 )}
               </div>
@@ -238,17 +231,15 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
               if (step < 3) setStep(step + 1);
               else handleSubmit();
             }}
-            disabled={(step === 1 && !isStep1Valid) || (step === 3 && loading)}
+            disabled={(step === 1 && !isStep1Valid) || loading}
           >
             {step < 3 ? "다음" : loading ? "수정 중..." : "수정 완료"}
           </button>
         </div>
       </div>
+
       {showAlert && (
-        <AlertModal
-          message={alertMessage}
-          onConfirm={() => setShowAlert(false)}
-        />
+        <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
       )}
     </div>
   );
