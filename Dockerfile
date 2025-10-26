@@ -14,14 +14,13 @@ COPY . .
 # 빌드 시 Node.js 메모리 제한 확장
 RUN CI=true NODE_OPTIONS="--max_old_space_size=4096" npm run build
 
-
 # --- Nginx Serve Stage ---
 FROM nginx:alpine
 # Nginx 기본 index.html 위치에 빌드 결과 복사
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Nginx 기본 설정 수정 가능 (예: 리액트 라우팅 대응)
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Nginx 기본 설정 수정 가능 (리액트 라우팅 페이지 대응)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
