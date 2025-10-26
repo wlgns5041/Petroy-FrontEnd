@@ -67,6 +67,7 @@ function MainPage() {
       const data = await fetchMemberPets();
       setPets(data || []);
     } catch (err) {
+      if (err._handledGlobally || err?.response?._handledGlobally) return;
       console.error("내 반려동물 오류", err);
       setAlertMessage("내 반려동물을 불러오는 중 오류가 발생했습니다.");
       setShowAlert(true);
@@ -78,6 +79,7 @@ function MainPage() {
       const data = await fetchCaregiverPets();
       setCareGiverPets(data || []);
     } catch (err) {
+      if (err._handledGlobally || err?.response?._handledGlobally) return;
       console.error("돌보미 반려동물 오류", err);
       setAlertMessage("돌보미 반려동물을 불러오는 중 오류가 발생했습니다.");
       setShowAlert(true);
@@ -89,6 +91,7 @@ function MainPage() {
       const data = await fetchScheduleCategories();
       setCategories(data || []);
     } catch (err) {
+      if (err._handledGlobally || err?.response?._handledGlobally) return;
       console.error("카테고리 오류", err);
       setAlertMessage("카테고리를 불러오는 중 오류가 발생했습니다.");
       setShowAlert(true);

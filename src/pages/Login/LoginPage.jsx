@@ -20,18 +20,23 @@ function LoginPage() {
     e.preventDefault();
     try {
       const data = await loginUser(email, password);
+
+      if (data?._handledGlobally) return;
+
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       navigate("/mainPage");
     } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        error.response?.data?.errorMessage ||
-        "로그인 중 오류가 발생했습니다.";
+  if (error._handledGlobally) return; 
 
-      setAlertMessage(message);
-      setShowAlert(true);
-    }
+  const message =
+    error.response?.data?.message ||
+    error.response?.data?.errorMessage ||
+    "로그인 중 오류가 발생했습니다.";
+
+  setAlertMessage(message);
+  setShowAlert(true);
+}
   };
 
   useEffect(() => {

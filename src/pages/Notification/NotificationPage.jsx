@@ -74,8 +74,8 @@ function NotificationPage() {
       setUnreadCount(unread);
       updateGlobalUnreadCount(unread);
     } catch (err) {
+      if (err._handledGlobally || err?.response?._handledGlobally) return;
       console.error("❌ 알림 로딩 실패:", err);
-      // alert 한 번만 표시
       setAlertMessage(
         err?.response?.data?.message ||
           (err.code === "ERR_NETWORK"
@@ -84,7 +84,7 @@ function NotificationPage() {
       );
       setShowAlert(true);
     }
-  }, []); // ✅ showAlert 제거
+  }, []);
 
   /** -------------------- SSE 구독 -------------------- */
   useEffect(() => {

@@ -100,6 +100,8 @@ const MyPage = () => {
         const count = await fetchFriendCount(token);
         setFriendsCount(count);
       } catch (error) {
+        if (error._handledGlobally || error?.response?._handledGlobally) return;
+
         const message =
           error.response?.data?.message ||
           "데이터를 불러오는 중 오류가 발생했습니다.";

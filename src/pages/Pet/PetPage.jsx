@@ -114,6 +114,7 @@ const PetPage = () => {
       const petList = await fetchMemberPets();
       setPets(petList);
     } catch (e) {
+      if (e._handledGlobally || e?.response?._handledGlobally) return;
       console.error(e);
       showAlertMessage("반려동물 정보를 불러오는 중 오류가 발생했습니다.");
     } finally {
@@ -127,6 +128,7 @@ const PetPage = () => {
       const list = await fetchCaregiverPets();
       setCaregiverPets(list);
     } catch (e) {
+      if (e._handledGlobally || e?.response?._handledGlobally) return;
       console.error(e);
       showAlertMessage(
         "돌보미 반려동물 정보를 불러오는 중 오류가 발생했습니다."

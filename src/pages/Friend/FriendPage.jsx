@@ -32,6 +32,7 @@ const FriendPage = () => {
       const data = await fetchAcceptedFriends();
       setFriends(data);
     } catch (error) {
+      if (error._handledGlobally || error?.response?._handledGlobally) return;
       const message =
         error.response?.data?.message ||
         "친구 목록을 불러오는 중 오류가 발생했습니다.";
@@ -47,6 +48,7 @@ const FriendPage = () => {
       const pendingIds = data.map((r) => r.id);
       setRequestedIds(pendingIds);
     } catch (error) {
+      if (error._handledGlobally || error?.response?._handledGlobally) return;
       const message =
         error.response?.data?.message ||
         "친구 요청 목록을 불러오는 중 오류가 발생했습니다.";
@@ -68,6 +70,7 @@ const FriendPage = () => {
 
       setRequests(requests.filter((r) => r.id !== memberId));
     } catch (error) {
+      if (error._handledGlobally || error?.response?._handledGlobally) return;
       const message =
         error.response?.data?.message ||
         "친구 요청 처리 중 오류가 발생했습니다.";
@@ -89,6 +92,7 @@ const FriendPage = () => {
       const result = await searchFriends(keyword);
       setSearchResults(result);
     } catch (error) {
+      if (error._handledGlobally || error?.response?._handledGlobally) return;
       const message =
         error.response?.data?.message || "친구 검색 중 오류가 발생했습니다.";
       setAlertMessage(message);
@@ -105,6 +109,7 @@ const FriendPage = () => {
       setAlertMessage("친구 요청을 보냈습니다.");
       setShowAlert(true);
     } catch (error) {
+      if (error._handledGlobally || error?.response?._handledGlobally) return;
       const message =
         error.response?.data?.message || "친구 요청에 실패했습니다.";
       setAlertMessage(message);
