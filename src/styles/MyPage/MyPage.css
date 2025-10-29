@@ -423,7 +423,7 @@
     font-size: 12px;
     font-weight: 400;
     color: #6B7280;
-    margin-top: 2px;
+    margin-top: 8px;
   }
 
   /* --------------------  모바일  -------------------- */
@@ -847,7 +847,7 @@
   }
 
   .mypage-empty-text-main {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     margin: 0;
     color: #000;
@@ -855,9 +855,9 @@
 
   .mypage-empty-text-sub {
     display: block;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 400;
     color: #6B7280;
-    margin-top: 2px;
+    margin-top: 8px;
   }
 }

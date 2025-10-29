@@ -218,7 +218,6 @@ function NotificationPage() {
         <div className="notification-list">
           {filteredNotifications.length === 0 ? (
             <div className="notification-empty-state">
-              <p className="notification-empty-icon">📭</p>
               <p className="notification-empty-title">알림 목록이 없습니다</p>
               <p className="notification-empty-subtitle">
                 새로운 소식이 도착하면 알려드릴게요!

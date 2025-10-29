@@ -553,14 +553,13 @@
 }
 
 .calendar-schedule-card-wide {
-  flex: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
   align-items: center;
   background: #fff;
   border-radius: 12px;
-  padding: 16px 32px;
+  padding: 16px 0px;
   gap: 24px;
-  box-shadow: none;
 }
 
 .calendar-summary-time-category {
@@ -569,10 +568,10 @@
   gap: 12px;
   font-size: 13px;
   font-weight: 600;
-  color: #6d6d6d;
-  min-width: 540px;
+  color: #000000;
   align-items: flex-start;
   text-align: left;
+  width: 600px;
 }
 
 .calendar-summary-time-category .calendar-summary-icon {
@@ -591,16 +590,6 @@
   align-items: center;
 }
 
-.calendar-summary-title-pets {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  gap: 12px;
-  min-width: 40px;
-  align-items: flex-start;
-  text-align: left;
-}
-
 .calendar-schedule-title {
   font-size: 14px;
   font-weight: 600;
@@ -609,30 +598,53 @@
   overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-pet-text {
+  display: flex;
+  align-items: center;
+  margin-left: 1px;
+}
+
+.calendar-pet-text .calendar-schedule-pets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.calendar-summary-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  color: #252525;
 }
 
 .calendar-schedule-pets {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 6px;
+  margin-top: 0px;
 }
 
 .calendar-pet-circle-with-name {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  color: #374151;
-  background-color: #f9fafb;
-  padding: 4px 8px;
-  border-radius: 12px;
+  font-size: 12px;
+  color: #000000;
+  background-color: #f9f9f9;
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
 .calendar-pet-circle {
   background-color: #e5e7eb;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1206,21 +1218,18 @@
     font-size: 8px;
     color: #666;
     min-width: 140px;
+    width: auto;
   }
+
+  .calendar-summary-time-category .calendar-summary-icon {
+    max-width: 16px;
+    margin-right: 10px;
+    color: #252525;
+}
 
   .calendar-summary-icon {
     transform: scale(0.8); 
     margin-right: 4px !important;     
-  }
-
-  .calendar-summary-title-pets {
-    flex: 1;
-    align-items: center;
-    text-align: left;
-    gap: 6px;
-    min-width: 30px;
-    max-width: 60px;
-    padding: 4px 0px;
   }
 
   .calendar-schedule-title {
@@ -1231,13 +1240,13 @@
   }
 
   .calendar-schedule-pets {
-    flex-direction: column;
-    gap: 4px;
+    flex-direction: row;
+    gap: 2px;
   }
 
   .calendar-pet-circle-with-name {
     background: #fff;
-    padding: 2px 6px;
+    padding: 2px 4px;
     border-radius: 4px;
     margin-left: -2px;
   }

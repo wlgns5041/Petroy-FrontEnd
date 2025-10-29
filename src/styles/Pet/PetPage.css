@@ -336,25 +336,20 @@
 /* 목록 없음 출력 */
 .petpage-empty-state {
   text-align: center;
-  margin-top: 80px;
-  color: #888;
-}
-
-.petpage-empty-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+  margin-top: 100px;
 }
 
 .petpage-empty-text-main {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
+  color: #000;
 }
 
 .petpage-empty-text-sub {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
-  color: #aaa;
+  color: #6B7280;
 }
 
   /* --------------------  모바일  -------------------- */
@@ -687,24 +682,19 @@
 /* 목록 없음 출력(에러)*/
 .petpage-empty-state {
   text-align: center;
-  margin-top: 40px;
-  color: #888;
-}
-
-.petpage-empty-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+  margin-top: 80px;
+  color: #000;
 }
 
 .petpage-empty-text-main {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 .petpage-empty-text-sub {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 400;
-  color: #aaa;
+  color: #6B7280;
 }
   }

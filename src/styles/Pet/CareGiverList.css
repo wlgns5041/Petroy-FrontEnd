@@ -127,25 +127,25 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 40px 20px;
-  margin: 30px auto 0 auto;
+  padding: 60px 20px;
+  margin: 4px auto 20px auto;
   background-color: #f4f4f4;
-  border-radius: 20px;
+  border-radius: 12px;
   width: 70%;
   max-width: 400px;
 }
 
-.care-giver-list-empty-img {
-  width: 80px;
-  height: auto;
-  margin: 20px;
-  opacity: 0.8;
+.care-giver-list-empty-title {
+  font-size: 14px;
+  color: #000;
+  font-weight: 600;
 }
 
-.care-giver-list-empty-text {
-  font-size: 14px;
-  color: #2e2f30;
-  font-weight: 600;
+.care-giver-list-empty-sub {
+  font-size: 12px;
+  color: #6B7280;
+  font-weight: 400;
+  margin-top: 8px;
 }
 
 /* --------------------  모바일  -------------------- */
@@ -280,24 +280,24 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 40px 20px;
-  margin: 30px auto 0 auto;
+  padding: 60px 20px;
+  margin: 4px auto 20px auto;
   background-color: #f4f4f4;
-  border-radius: 20px;
+  border-radius: 12px;
   width: 70%;
   max-width: 400px;
 }
 
-.care-giver-list-empty-img {
-  width: 80px;
-  height: auto;
-  margin: 20px;
-  opacity: 0.8;
+.care-giver-list-empty-title {
+  font-size: 12px;
+  color: #000;
+  font-weight: 600;
 }
 
-.care-giver-list-empty-text {
-  font-size: 14px;
-  color: #2e2f30;
-  font-weight: 600;
+.care-giver-list-empty-sub {
+  font-size: 10px;
+  color: #6B7280;
+  font-weight: 400;
+  margin-top: 8px;
 }
 }

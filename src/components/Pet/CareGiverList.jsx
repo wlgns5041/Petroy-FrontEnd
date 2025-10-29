@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Pet/CareGiverList.css";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
-import noCaregiverImg from "../../assets/images/dogpaw.png";
 import { fetchAcceptedFriends } from "../../services/FriendService";
 import { fetchCaregiversByPet, deleteCaregiver } from "../../services/PetService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
@@ -114,16 +113,12 @@ const CareGiverList = ({ pet, onClose }) => {
           </ul>
         ) : (
           <div className="care-giver-list-empty">
-            <img
-              src={noCaregiverImg}
-              alt="no caregiver"
-              className="care-giver-list-empty-img"
-            />
-            <p className="care-giver-list-empty-text">
+            <div className="care-giver-list-empty-title">
               아직 등록된 돌보미가 없어요.
-              <br />
+              <div className="care-giver-list-empty-sub">
               친구를 돌보미로 등록해보세요!
-            </p>
+              </div>
+            </div>
           </div>
         )}
       </div>

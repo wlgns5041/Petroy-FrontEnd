@@ -186,8 +186,8 @@ html, body { overflow: hidden; height: 100%; }
 
 .mainpage-empty-message {
   text-align: center;
-  color: #999;
-  padding: 40px 0;
+  color: #6B7280;
+  padding: 60px 0;
   font-size: 12px;
   font-weight: 400;
 }
@@ -663,7 +663,7 @@ html, body { overflow: hidden; height: 100%; }
   /* 항목 없음 */
   .mainpage-empty-message {
     text-align: center;
-    color: #aaa;
+    color: #6B7280;
     font-size: 10px;
     font-weight: 400;
     padding: 40px 0;

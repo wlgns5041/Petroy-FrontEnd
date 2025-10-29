@@ -163,25 +163,39 @@ const MyPage = () => {
     },
   ];
 
-  useEffect(() => {
+useEffect(() => {
+  const timer = setTimeout(() => {
     const scrollEl = scrollRef.current;
     if (!scrollEl) return;
 
-    const handleScroll = () => {
-      const scrollLeft = scrollEl.scrollLeft;
-      const bannerWidth =
-        scrollEl.firstElementChild?.getBoundingClientRect().width || 1;
-      const gap =
-        parseFloat(getComputedStyle(scrollEl).gap || 0) ||
-        parseFloat(getComputedStyle(scrollEl).columnGap || 0);
-      const effectiveWidth = bannerWidth + gap;
-      const index = Math.round(scrollLeft / effectiveWidth);
-      setActiveIndex(Math.max(0, Math.min(banners.length - 1, index)));
-    };
+    const banners = Array.from(scrollEl.children);
+    if (banners.length === 0) return;
 
-    scrollEl.addEventListener("scroll", handleScroll);
-    return () => scrollEl.removeEventListener("scroll", handleScroll);
-  }, [banners.length]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = banners.indexOf(entry.target);
+            if (index !== -1) setActiveIndex(index);
+          }
+        });
+      },
+      {
+        root: scrollEl,
+        threshold: 0.3,
+      }
+    );
+
+    banners.forEach((banner) => observer.observe(banner));
+
+    return () => {
+      banners.forEach((banner) => observer.unobserve(banner));
+      observer.disconnect();
+    };
+  }, 100);
+
+  return () => clearTimeout(timer);
+}, [banners.length]);
 
   // 이미지 변경 함수
   const handleImageUpload = async (file, preview) => {

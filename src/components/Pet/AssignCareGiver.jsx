@@ -14,7 +14,6 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
-  // ❗ fetchData 시 에러 발생해도 AlertModal로 표시
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -102,7 +101,10 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
             })}
           </div>
         ) : (
-          <p className="pet-assign-no-friends">등록된 친구가 없습니다.</p>
+          <div className="pet-assign-no-friends">
+          <div className="pet-assign-no-friends-title">등록된 친구가 없습니다.</div>
+          <div className="pet-assign-no-friends-sub">친구를 추가해서 돌보미로 등록해보세요!</div>
+          </div>
         )}
 
         <div className="pet-assign-button-row">

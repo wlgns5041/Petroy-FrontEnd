@@ -219,21 +219,18 @@
 .notification-empty-state {
   text-align: center;
   padding: 60px 0;
-  color: #aaa;
-}
-
-.notification-empty-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
 }
 
 .notification-empty-title {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
 }
 
 .notification-empty-subtitle {
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #6b7280;
   margin-top: 8px;
 }
 
@@ -453,26 +450,21 @@
     background-color: #000000;
   }
 
-  /* 빈 상태 출력 */
   .notification-empty-state {
     text-align: center;
-    padding: 60px 0;
-    color: #aaa;
-  }
-
-  .notification-empty-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
+    padding: 40px 0;
   }
 
   .notification-empty-title {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 12px;
+    font-weight: 600;
+    color: #000;
   }
 
   .notification-empty-subtitle {
-    font-size: 14px;
-    font-weight: 500;
-    margin-top: 6px;
+    font-size: 10px;
+    font-weight: 400;
+    color: #6b7280;
+    margin-top: 8px;
   }
 }

@@ -832,10 +832,21 @@ const CommunityPage = () => {
       <div className="communitypage-posts">
         {filteredPosts.length === 0 ? (
           <div className="communitypage-empty-state">
-            <p className="communitypage-empty-title">게시글이 없습니다</p>
-            <p className="communitypage-empty-subtitle">
-              새로운 글을 작성해보세요!
-            </p>
+      {searchMode ? (
+        <>
+          <p className="communitypage-empty-title">검색된 게시물이 없습니다</p>
+          <p className="communitypage-empty-subtitle">
+            검색한 텍스트를 확인해주세요.
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="communitypage-empty-title">게시글이 없습니다</p>
+          <p className="communitypage-empty-subtitle">
+            새로운 글을 작성해보세요!
+          </p>
+        </>
+      )}
           </div>
         ) : (
           filteredPosts.map((post, idx) => {

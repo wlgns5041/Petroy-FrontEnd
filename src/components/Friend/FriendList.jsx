@@ -109,12 +109,11 @@ const FriendList = ({ friends, onAccept, onReject }) => {
         </div>
       ) : (
         <div className="friendlist-empty-state">
-          <p className="friendlist-empty-icon">🫥</p>
           <p className="friendlist-empty-message-main">
             {isRequest ? "친구 요청이 없습니다." : "친구가 없습니다."}
           </p>
           <p className="friendlist-empty-message-sub">
-            {isRequest ? "받은 친구 요청이 이곳에 표시됩니다!" : "친구를 추가하면 이곳에 표시됩니다!"}
+            {isRequest ? "받은 친구 요청을 처리할 수 있어요!" : "친구를 맺어 관리해보세요!"}
           </p>
         </div>
       )}

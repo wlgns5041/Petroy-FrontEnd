@@ -417,7 +417,6 @@ const PetPage = () => {
                     </>
                   ) : (
                     <div className="petpage-empty-state">
-                      <p className="petpage-empty-icon">🐾</p>
                       <p className="petpage-empty-text-main">
                         등록된 반려동물이 없습니다
                       </p>
@@ -503,7 +502,6 @@ const PetPage = () => {
                     </>
                   ) : (
                     <div className="petpage-empty-state">
-                      <p className="petpage-empty-icon">🐾</p>
                       <p className="petpage-empty-text-main">
                         등록된 돌보미 반려동물이 없습니다
                       </p>

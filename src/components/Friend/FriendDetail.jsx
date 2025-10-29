@@ -11,7 +11,7 @@ const FriendDetail = ({ memberId, onClose }) => {
   const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
-    let isMounted = true; // 언마운트 안전 처리
+    let isMounted = true;
 
     const getFriendDetail = async () => {
       try {
@@ -65,7 +65,10 @@ const FriendDetail = ({ memberId, onClose }) => {
               <ul className="frienddetail-pet-list">
                 {friendDetail.myPets?.length > 0 ? (
                   friendDetail.myPets.map((pet) => (
-                    <li key={pet.petId || pet.id} className="frienddetail-pet-item">
+                    <li
+                      key={pet.petId || pet.id}
+                      className="frienddetail-pet-item"
+                    >
                       <img
                         src={pet.petImage || defaultProfilePic}
                         onError={(e) => (e.target.src = defaultProfilePic)}
@@ -76,9 +79,14 @@ const FriendDetail = ({ memberId, onClose }) => {
                     </li>
                   ))
                 ) : (
-                  <li className="frienddetail-empty-text">
-                    돌보미로 등록한 펫이 없습니다
-                  </li>
+                  <div className="frienddetail-empty">
+                    <div className="frienddetail-empty-title">
+                      돌보미로 등록한 펫이 없습니다
+                    </div>
+                    <div className="frienddetail-empty-sub">
+                      친구를 돌보미로 등록해보세요!
+                    </div>
+                  </div>
                 )}
               </ul>
             </div>
@@ -88,10 +96,14 @@ const FriendDetail = ({ memberId, onClose }) => {
               <h3 className="frienddetail-section-title">
                 <strong>{friendDetail.name}</strong>님이 나를 돌보미로 등록한 펫
               </h3>
-              {friendDetail.careGiversPets?.length > 0 ? (
-                <ul className="frienddetail-pet-list">
-                  {friendDetail.careGiversPets.map((pet) => (
-                    <li key={pet.petId || pet.id} className="frienddetail-pet-item">
+
+              <ul className="frienddetail-pet-list">
+                {friendDetail.careGiversPets?.length > 0 ? (
+                  friendDetail.careGiversPets.map((pet) => (
+                    <li
+                      key={pet.petId || pet.id}
+                      className="frienddetail-pet-item"
+                    >
                       <img
                         src={pet.petImage || defaultProfilePic}
                         onError={(e) => (e.target.src = defaultProfilePic)}
@@ -100,13 +112,18 @@ const FriendDetail = ({ memberId, onClose }) => {
                       />
                       <span className="frienddetail-pet-name">{pet.name}</span>
                     </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="frienddetail-empty-text">
-                  돌보미로 등록된 펫이 없습니다.
-                </p>
-              )}
+                  ))
+                ) : (
+                  <div className="frienddetail-empty">
+                    <div className="frienddetail-empty-title">
+                      돌보미로 등록된 펫이 없습니다
+                    </div>
+                    <div className="frienddetail-empty-sub">
+                      친구에게 돌보미 등록을 요청해보세요!
+                    </div>
+                  </div>
+                )}
+              </ul>
             </div>
           </>
         ) : null}

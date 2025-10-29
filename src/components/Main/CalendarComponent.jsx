@@ -4,6 +4,7 @@ import "font-awesome/css/font-awesome.min.css";
 import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRounded";
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
 import defaultPetPic from "../../assets/images/DefaultImage.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "";
@@ -187,7 +188,10 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             </div>
             {groupDatesByWeek(getStartOfMonth(), getEndOfMonth()).map(
               (week, i) => (
-                <div key={week[0].toISOString()} className="calendar-mini-week-row">
+                <div
+                  key={week[0].toISOString()}
+                  className="calendar-mini-week-row"
+                >
                   {week.map((date, j) => {
                     const isInSelectedWeek = weeks[0].some(
                       (w) => w.toDateString() === date.toDateString()
@@ -297,7 +301,8 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                 {week.map((date) => {
                   const dateKey = formatDateKey(date);
                   const isToday = dateKey === todayStr;
-                  const isOtherMonth = date.getMonth() !== currentDate.getMonth();
+                  const isOtherMonth =
+                    date.getMonth() !== currentDate.getMonth();
 
                   const schedulesForDate = filteredSchedules.filter(
                     (s) => formatDateKey(s.date) === dateKey
@@ -357,7 +362,10 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
             if (isMobile && schedules.length === 0) return null;
 
             return (
-              <div key={date.toISOString()} className="calendar-summary-date-block">
+              <div
+                key={date.toISOString()}
+                className="calendar-summary-date-block"
+              >
                 <div className="calendar-summary-date-column">
                   <div className="calendar-weekday-text">
                     {date.toLocaleDateString("en-US", { weekday: "short" })}
@@ -371,37 +379,14 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                   {schedules.length > 0 ? (
                     schedules.map((s, i) => (
                       <React.Fragment key={s.scheduleId || i}>
-                        {i > 0 && <hr className="calendar-schedule-divider-hr" />}
+                        {i > 0 && (
+                          <hr className="calendar-schedule-divider-hr" />
+                        )}
                         <div className="calendar-schedule-card-wide">
-                          <div className="calendar-summary-title-pets">
-                            <div className="calendar-schedule-title">{s.title}</div>
-                            <div className="calendar-schedule-pets">
-                              {(s.petInfo || []).map((pet, i) => {
-                                const imageSrc = pet.image
-                                  ? pet.image.startsWith("http") ||
-                                    pet.image.startsWith("data:")
-                                    ? pet.image
-                                    : `${API_BASE_URL}${pet.image}`
-                                  : defaultPetPic;
-                                return (
-                                  <div key={i} className="calendar-pet-circle-with-name">
-                                    <div className="calendar-pet-circle">
-                                      <img
-                                        src={imageSrc}
-                                        alt={pet.name}
-                                        title={pet.name}
-                                        onError={(e) =>
-                                          (e.target.src = defaultPetPic)
-                                        }
-                                        className="calendar-schedule-pet-thumbnail"
-                                      />
-                                    </div>
-                                    <span className="calendar-pet-name">
-                                      {pet.name}
-                                    </span>
-                                  </div>
-                                );
-                              })}
+                          {/* ① 제목 영역 */}
+                          <div className="calendar-summary-title">
+                            <div className="calendar-schedule-title">
+                              {s.title}
                             </div>
                           </div>
 
@@ -418,12 +403,51 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                                 day: "numeric",
                               })}
                             </div>
+
                             <div className="calendar-category-text">
                               <CategoryRoundedIcon
                                 fontSize="small"
                                 className="calendar-summary-icon"
                               />
                               {s.categoryName || "카테고리 없음"}
+                            </div>
+
+                            <div className="calendar-pet-text">
+                              <PetsRoundedIcon
+                                sx={{ fontSize: 14 }}
+                                className="calendar-summary-icon"
+                              />
+                              <div className="calendar-schedule-pets">
+                                {(s.petInfo || []).map((pet, i) => {
+                                  const imageSrc = pet.image
+                                    ? pet.image.startsWith("http") ||
+                                      pet.image.startsWith("data:")
+                                      ? pet.image
+                                      : `${API_BASE_URL}${pet.image}`
+                                    : defaultPetPic;
+                                  return (
+                                    <div
+                                      key={i}
+                                      className="calendar-pet-circle-with-name"
+                                    >
+                                      <div className="calendar-pet-circle">
+                                        <img
+                                          src={imageSrc}
+                                          alt={pet.name}
+                                          title={pet.name}
+                                          onError={(e) =>
+                                            (e.target.src = defaultPetPic)
+                                          }
+                                          className="calendar-schedule-pet-thumbnail"
+                                        />
+                                      </div>
+                                      <span className="calendar-pet-name">
+                                        {pet.name}
+                                      </span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
                             </div>
                           </div>
 
@@ -437,7 +461,9 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                               className="calendar-styled-detail-button"
                               onClick={() => onOpenDetail(s.scheduleId, s.date)}
                             >
-                              <span className="calendar-detail-text">상세보기</span>
+                              <span className="calendar-detail-text">
+                                상세보기
+                              </span>
                               <InfoRoundedIcon
                                 className="calendar-styled-detail-icon"
                                 fontSize="small"

@@ -105,6 +105,23 @@
   margin-left: 16px;
 }
 
+.schedule-create-inline-empty {
+  flex: 1;
+  padding: 12px 42px 12px 18px;
+  font-size: 12px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  border: none;
+  min-width: 450px;
+  max-width: 450px;
+  color: #6B7280;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  display: flex;
+}
+
 .schedule-create-inline-label {
   display: flex;
   width: 70px; 
@@ -116,7 +133,7 @@
 
 .schedule-create-inline-select-wrapper {
   position: relative;
-  width: 100%;
+  width: 90%;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -250,12 +267,26 @@
 }
 
 /* ======== STEP 2: 펫 선택 ======== */
-.schedule-create-no-pets-message {
-  padding: 16px;
+.schedule-create-empty-pets {
+  margin: 40px 40px;
+  background-color: #f9f9f9;
+  padding: 120px;
+  border-radius: 12px;
+}
+
+.schedule-create-empty-pets-title {
   font-size: 14px;
-  font-weight: 500;
-  color: #9ca3af;
+  font-weight: 600;
+  color: #000;
   text-align: center;
+}
+
+.schedule-create-empty-pets-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: #6B7280;
+  text-align: center;
+  margin-top: 8px;
 }
 
 .schedule-create-pet-select-container {
@@ -1183,6 +1214,23 @@ input:checked + .schedule-create-slider:before {
   margin-left: 0px;
 }
 
+.schedule-create-inline-empty {
+  flex: 1;
+  padding: 12px;
+  font-size: 10px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  border: none;
+  min-width: 100%;
+  max-width: 100;
+  color: #6B7280;
+  text-align: left;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  display: flex;
+}
+
 .schedule-create-inline-label {
   display: flex;
   width: 40px; 
@@ -1329,12 +1377,25 @@ input:checked + .schedule-create-slider:before {
 }
 
 /* ======== STEP 2: 펫 선택 ======== */
-.schedule-create-no-pets-message {
-  padding: 16px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #9ca3af;
+.schedule-create-empty-pets {
+  margin: 60px auto;
+  background-color: #f9f9f9;
+  padding: 80px 0;
+}
+
+.schedule-create-empty-pets-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
   text-align: center;
+}
+
+.schedule-create-empty-pets-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: #6B7280;
+  text-align: center;
+  margin-top: 8px;
 }
 
 .schedule-create-pet-select-container {
