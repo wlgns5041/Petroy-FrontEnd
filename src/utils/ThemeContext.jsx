@@ -6,7 +6,7 @@ const ThemeContext = createContext();
 // Provider 컴포넌트
 export const ThemeProvider = ({ children }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // localStorage 저장된 테마 유지
+    // localStorage 저장
     return localStorage.getItem("theme") === "dark";
   });
 
