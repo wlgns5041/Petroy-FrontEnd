@@ -19,13 +19,18 @@ import petIcon from "../../assets/icons/pet-icon.png";
 import notificationIcon from "../../assets/icons/notification-icon.png";
 import settingsIcon from "../../assets/icons/setting-icon.png";
 import icon from "../../assets/icons/icon.png";
+import SettingModal from "./SettingModal.jsx";
+import { useTheme } from "../../utils/ThemeContext";
 
 export default function NavBar() {
   const [memberName, setMemberName] = useState("");
   const [unreadCount, setUnreadCount] = useState(0);
+  const [openSetting, setOpenSetting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width:768px)");
+  const { isDarkMode } = useTheme();
+  const dark = isDarkMode;
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -75,11 +80,13 @@ export default function NavBar() {
     { label: "펫스타그램", icon: communityIcon, path: "/communityPage" },
   ];
 
-  // 📱 모바일 UI
+  const bgColor = dark ? "#1e1e1e" : "#f9f9f9";
+  const iconFilter = dark ? "invert(1) brightness(1.8)" : "invert(0)";
+  const textColor = dark ? "#f9f9f9" : "#111827";
+
   if (isMobile) {
     return (
       <>
-        {/* 상단 헤더 */}
         <Box
           sx={{
             position: "fixed",
@@ -91,17 +98,21 @@ export default function NavBar() {
             justifyContent: "space-between",
             alignItems: "center",
             px: 2,
-            bgcolor: "#f9f9f9",
+            bgcolor: bgColor,
             zIndex: 1200,
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <img src={icon} alt="logo" style={{ width: 20, height: 16 }} />
+            <img
+              src={icon}
+              alt="logo"
+              style={{ width: 20, height: 16, filter: iconFilter }}
+            />
             <Typography
               sx={{
                 fontWeight: 600,
                 fontSize: 13,
-                color: "#111827",
+                color: textColor,
                 fontFamily: "'Eommakkaturi', sans-serif",
               }}
             >
@@ -110,32 +121,19 @@ export default function NavBar() {
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={() => navigate("/settingsPage")}>
-              <img src={settingsIcon} alt="설정" style={{ width: 22 }} />
+            <IconButton onClick={() => setOpenSetting(true)}>
+              <img
+                src={settingsIcon}
+                alt="설정"
+                style={{ width: 22, filter: iconFilter }}
+              />
             </IconButton>
             <IconButton onClick={() => navigate("/notificationPage")}>
-              <Badge
-                badgeContent={unreadCount}
-                color="error"
-                max={99}
-                showZero
-                overlap="circular"
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                sx={{
-                  "& .MuiBadge-badge": {
-                    fontSize: "0.5rem",
-                    fontWeight: 600,
-                    minWidth: "14px",
-                    height: "14px",
-                    padding: "0 4px",
-                  },
-                }}
-              >
-                <Box
-                  component="img"
+              <Badge badgeContent={unreadCount} color="error" max={99}>
+                <img
                   src={notificationIcon}
                   alt="알림"
-                  sx={{ width: 22, height: 22, display: "block" }}
+                  style={{ width: 22, filter: iconFilter }}
                 />
               </Badge>
             </IconButton>
@@ -153,8 +151,8 @@ export default function NavBar() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            bgcolor: "#fff",
-            borderTop: "0.5px solid #e5e7eb",
+            bgcolor: dark ? "#2a2a2a" : "#fff",
+            borderTop: `0.5px solid ${dark ? "#444" : "#e5e7eb"}`,
             zIndex: 1200,
           }}
         >
@@ -190,9 +188,20 @@ export default function NavBar() {
                       width: isActive ? 40 : 22,
                       height: isActive ? 40 : 22,
                       transition: "all 0.2s ease",
-
                       opacity: isActive ? 1 : 0.5,
-                      background: isActive ? "#E8E9EC" : "transparent",
+                      filter: dark
+                        ? isActive
+                          ? "invert(1) brightness(1.8) contrast(1.2)"
+                          : "invert(0.85) brightness(0.9)"
+                        : isActive
+                        ? "none"
+                        : "brightness(0.6)",
+
+                      background: isActive
+                        ? dark
+                          ? "rgba(255, 255, 255, 0.15)"
+                          : "#E8E9EC"
+                        : "transparent",
                       borderRadius: "30%",
                       padding: isActive ? 6 : 0,
                     }}
@@ -203,7 +212,7 @@ export default function NavBar() {
                         fontSize: 8,
                         marginTop: 2,
                         fontWeight: 800,
-                        color: "#9CA3AF",
+                        color: dark ? "#aaa" : "#9CA3AF",
                       }}
                     >
                       {label}
@@ -214,10 +223,16 @@ export default function NavBar() {
             })}
           </Box>
         </Box>
+
+        <SettingModal
+          open={openSetting}
+          onClose={() => setOpenSetting(false)}
+        />
       </>
     );
   }
 
+  // PC 모드 
   return (
     <Box
       sx={{
@@ -236,24 +251,20 @@ export default function NavBar() {
         py: 1.5,
       }}
     >
-      {/* 좌측 로고 */}
-      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mr: 3 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: 20,
-            fontFamily: "Pretendard",
-            whiteSpace: "nowrap",
-            letterSpacing: "1px",
-          }}
-        >
-          PETORY
-        </Typography>
-      </Box>
+      <Typography
+        variant="h6"
+        sx={{
+          color: "#fff",
+          fontWeight: 800,
+          fontSize: 20,
+          fontFamily: "Pretendard",
+          letterSpacing: "1px",
+          mr: 3,
+        }}
+      >
+        PETORY
+      </Typography>
 
-      {/* 중앙 메뉴 (기존 그대로) */}
       <Box
         sx={{
           display: "flex",
@@ -264,7 +275,7 @@ export default function NavBar() {
           py: 1,
           borderRadius: 2,
           backgroundColor: "#3a3a3a",
-          marginBottom: 0.3,
+          mb: 0.3,
         }}
       >
         {navIcons.map(({ label, icon, path }) => {
@@ -322,58 +333,39 @@ export default function NavBar() {
 
       <Box sx={{ flex: 1 }} />
 
-      {/* 우측 사용자 이름 + 설정 + 알림 */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          gap: 1,
-          flexShrink: 0,
-          pr: { xs: "20px", md: "50px" },
-        }}
-      >
-        {/* 사용자 이름 복구 */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, pr: 6 }}>
         <Typography
-          variant="subtitle1"
           sx={{
             color: "#fff",
             fontWeight: 700,
             fontFamily: "Pretendard",
-            textAlign: "center",
-            whiteSpace: "nowrap",
             fontSize: 17,
             p: 1,
           }}
-          noWrap
         >
-          {memberName ? `${memberName}` : ""}
+          {memberName}
         </Typography>
 
-        <IconButton
-          onClick={() => navigate("/settingsPage")}
-          sx={{ color: "#fff", p: 1 }}
-        >
+        <IconButton onClick={() => setOpenSetting(true)}>
           <img
             src={settingsIcon}
             alt="설정"
-            style={{ width: 24, filter: "invert(1)" }}
+            style={{ width: 24, filter: "invert(1) brightness(2)" }}
           />
         </IconButton>
 
-        <IconButton
-          onClick={() => navigate("/notificationPage")}
-          sx={{ color: "#fff", p: 1 }}
-        >
-          <Badge badgeContent={unreadCount} color="error" max={99} showZero>
+        <IconButton onClick={() => navigate("/notificationPage")}>
+          <Badge badgeContent={unreadCount} color="error" max={99}>
             <img
               src={notificationIcon}
               alt="알림"
-              style={{ width: 24, filter: "invert(1)" }}
+              style={{ width: 24, filter: "invert(1) brightness(2)" }}
             />
           </Badge>
         </IconButton>
       </Box>
+
+      <SettingModal open={openSetting} onClose={() => setOpenSetting(false)} />
     </Box>
   );
 }

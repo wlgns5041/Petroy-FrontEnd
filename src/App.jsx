@@ -7,6 +7,7 @@ import { subscribeNotification } from "./services/NotificationService.jsx";
 import SplashScreen from "./pages/SplashScreen.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
+import { ThemeProvider } from "./utils/ThemeContext.jsx";
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -45,6 +46,7 @@ function App() {
   }, []);
 
   return (
+    <ThemeProvider>
     <div className="App">
       <AnimatePresence mode="wait">
         {showSplash && location.pathname === "/" ? (
@@ -80,6 +82,7 @@ function App() {
         )}
       </AnimatePresence>
     </div>
+    </ThemeProvider>
   );
 }
 

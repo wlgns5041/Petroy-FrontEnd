@@ -9,7 +9,7 @@
 }
 
 .image-edit-modal-content {
-  background-color: white;
+  background-color: var(--color-main2);
   border-radius: 20px;
   width: 90vw;
   max-width: 420px;
@@ -25,27 +25,27 @@
 .image-edit-title {
   font-size: 20px;
   font-weight: 800;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 24px;
   text-align: center;
 }
 
 .image-edit-upload-box {
-  border: 2px dashed #CBCBCB;
+  border: 2px dashed var(--color-disable-text);
   border-radius: 12px;
   padding: 48px 0;
   width: 100%;
   max-width: 280px;
   text-align: center;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .image-edit-upload-box:hover {
-  background-color: #f9f9f9;
+  background-color: var(--color-main1-hover);
 }
 
 .image-edit-input-hidden {
@@ -63,19 +63,24 @@
   width: 140px;
   height: 140px;
   border-radius: 20px;
+  padding: 12px;
   object-fit: cover;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
 }
 
 .image-edit-reset-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   padding: 12px 32px;
   font-size: 13px;
   font-weight: 600;
   border-radius: 8px;
   border: none;
   cursor: pointer;
+}
+
+.image-edit-reset-button:hover {
+  background-color: var(--color-main1-hover);
 }
 
 .image-edit-footer {
@@ -94,11 +99,12 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
+  color: var(--color-text);
 }
 
 .image-edit-skip-button:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .image-edit-next-button {
@@ -110,147 +116,153 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .image-edit-next-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .image-edit-next-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
+  background: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
-.image-edit-modal {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+  .image-edit-modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-.image-edit-modal-content {
-  background-color: #fff;
-  width: 80%;
-  max-width: auto;
-  height: auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  font-family: "Pretendard", sans-serif;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
+  .image-edit-modal-content {
+    background-color: var(--color-main2);
+    width: 80%;
+    max-width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
 
-.image-edit-title {
-  font-size: 16px;
-  font-weight: 800;
-  color: #000000;
-  margin-bottom: 32px;
-  text-align: center;
-}
+  .image-edit-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--color-text);
+    margin-bottom: 32px;
+    text-align: center;
+  }
 
-.image-edit-upload-box {
-  border: 2px dashed #CBCBCB;
-  border-radius: 12px;
-  padding: 48px 0;
-  width: 80%;
-  max-width: 280px;
-  text-align: center;
-  font-size: 12px;
-  color: #6b7280;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+  .image-edit-upload-box {
+    border: 2px dashed var(--color-disable-text);
+    border-radius: 12px;
+    padding: 48px 0;
+    width: 80%;
+    max-width: 280px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-subtext);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-.image-edit-upload-box:hover {
-  background-color: #f9f9f9;
-}
+  .image-edit-upload-box:hover {
+    background-color: var(--color-main1-hover);
+  }
 
-.image-edit-input-hidden {
-  display: none;
-}
+  .image-edit-input-hidden {
+    display: none;
+  }
 
-.image-edit-preview-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
+  .image-edit-preview-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
 
-.image-edit-preview-image {
-  width: 120px;
-  height: 120px;
-  border-radius: 16px;
-  object-fit: cover;
-  background-color: #f9f9f9;
-}
+  .image-edit-preview-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    padding: 12px;
+    object-fit: cover;
+    background-color: var(--color-main1);
+  }
 
-.image-edit-reset-button {
-  background-color: #f9f9f9;
-  color: #000000;
-  padding: 12px 32px;
-  font-size: 11px;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
+  .image-edit-reset-button {
+    background-color: var(--color-main1);
+    color: var(--color-text);
+    padding: 12px 32px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
 
-.image-edit-footer {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-  width: 100%;
-}
+  .image-edit-reset-button:hover {
+    background-color: var(--color-main1-hover);
+  }
 
-.image-edit-skip-button {
-  flex: 1;
-  height: 44px;
-  font-size: 12px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  background-color: #f9f9f9;
-}
+  .image-edit-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    width: 100%;
+  }
 
-.image-edit-skip-button:hover {
-  background-color: #E8E9EC;
-}
+  .image-edit-skip-button {
+    flex: 1;
+    height: 44px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: var(--color-main1);
+    color: var(--color-text);
+  }
 
-.image-edit-next-button {
-  flex: 1;
-  height: 44px;
-  font-size: 12px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  background-color: #00CBA8;
-  color: white;
-}
+  .image-edit-skip-button:hover {
+    background-color: var(--color-main1-hover);
+  }
 
-.image-edit-next-button:hover {
-  background-color: #13BA9D;
-}
+  .image-edit-next-button {
+    flex: 1;
+    height: 44px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: var(--color-point);
+    color: var(--color-main2);
+  }
 
-.image-edit-next-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
-  cursor: not-allowed;
-  transition: background-color 0.2s ease;
-}
+  .image-edit-next-button:hover {
+    background-color: var(--color-point-hover);
+  }
+
+  .image-edit-next-button:disabled {
+    background: var(--color-disable);
+    color: var(--color-disable-text);
+    cursor: not-allowed;
+    transition: background-color 0.2s ease;
+  }
 }

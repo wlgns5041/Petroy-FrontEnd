@@ -25,7 +25,7 @@ const Routing = () => {
       <Route path="/signUp" element={<SignUpPage />} />
       <Route path="/inputInfo" element={<InputInfoPage />} />
 
-      {/* NavBar 포함되는 라우트는 AppLayout으로 감싸기 */}
+      {/* NavBar 포함 라우트 */}
       <Route element={<AppLayout />}>
         <Route path="/mainPage" element={<MainPage />} />
         <Route path="/myPage" element={<MyPage />} />

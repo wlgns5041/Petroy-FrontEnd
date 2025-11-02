@@ -12,7 +12,7 @@
 }
 
 .pet-delete-container {
-  background-color: #fff;
+  background-color: var(--color-main2);
   width: 90%;
   max-width: 420px;
   height: auto;
@@ -27,7 +27,7 @@
   font-size: 20px;
   font-weight: 800;
   text-align: left;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 8px;
   margin-left: 4px;
 }
@@ -36,14 +36,14 @@
   font-size: 13px;
   font-weight: 500;
   text-align: left;
-  color: #6B7280;
+  color: var(--color-subtext);
   margin-bottom: 12px;
   margin-left: 4px;
 }
 
 .pet-delete-description strong {
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .pet-delete-input {
@@ -52,17 +52,17 @@
   font-size: 12px;
   border-radius: 8px;
   border: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   margin-top: 20px;
   margin-bottom: 32px;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .pet-delete-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2);
 }
 
 .pet-delete-button-row {
@@ -83,140 +83,140 @@
 }
 
 .pet-delete-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
 .pet-delete-cancel-button:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .pet-delete-confirm-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .pet-delete-confirm-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .pet-delete-confirm-button:disabled {
-  background: #E8E9EC !important;
-  color: #C0C0C0 !important;
+  background: var(--color-disable) !important;
+  color: var(--color-disable-text) !important;
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
-.pet-delete-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+  .pet-delete-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-.pet-delete-container {
-  background-color: #fff;
-  width: 75%;
-  max-width: auto;
-  height: auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  font-family: "Pretendard", sans-serif;
-  position: relative;
-}
+  .pet-delete-container {
+    background-color: var(--color-main2);
+    width: 75%;
+    max-width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+  }
 
-.pet-delete-title {
-  font-size: 16px;
-  font-weight: 800;
-  text-align: left;
-  color: #000000;
-  margin-bottom: 4px;
-  margin-left: 4px;
-}
+  .pet-delete-title {
+    font-size: 16px;
+    font-weight: 800;
+    text-align: left;
+    color: var(--color-text);
+    margin-bottom: 4px;
+    margin-left: 4px;
+  }
 
-.pet-delete-description {
-  font-size: 10px;
-  font-weight: 500;
-  text-align: left;
-  color: #6B7280;
-  margin-bottom: 24px;
-  margin-left: 4px;
-}
+  .pet-delete-description {
+    font-size: 10px;
+    font-weight: 500;
+    text-align: left;
+    color: var(--color-subtext);
+    margin-bottom: 24px;
+    margin-left: 4px;
+  }
 
-.pet-delete-description strong {
-  font-weight: 600;
-  color: #000000;
-}
+  .pet-delete-description strong {
+    font-weight: 600;
+    color: var(--color-text);
+  }
 
-.pet-delete-input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 9px;
-  border-radius: 8px;
-  border: none;
-  background-color: #f9f9f9;
-  box-sizing: border-box;
-  margin-top: 0px;
-  margin-bottom: 32px;
-  color: #000000;
-}
+  .pet-delete-input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 9px;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--color-main1);
+    box-sizing: border-box;
+    margin-top: 0px;
+    margin-bottom: 32px;
+    color: var(--color-text);
+  }
 
-.pet-delete-input:focus {
-  outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
-}
+  .pet-delete-input:focus {
+    outline: none;
+    background-color: var(--color-main2);
+    box-shadow: 0 0 0 2px var(--color-point2);
+  }
 
-.pet-delete-button-row {
-  display: flex;
-  justify-content: space-between;
-}
+  .pet-delete-button-row {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.pet-delete-cancel-button,
-.pet-delete-confirm-button {
-  flex: 1;
-  height: 44px;
-  font-size: 12px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+  .pet-delete-cancel-button,
+  .pet-delete-confirm-button {
+    flex: 1;
+    height: 44px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-.pet-delete-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
-  margin-right: 8px;
-}
+  .pet-delete-cancel-button {
+    background-color: var(--color-main1);
+    color: var(--color-text);
+    margin-right: 8px;
+  }
 
-.pet-delete-cancel-button:hover {
-  background-color: #E8E9EC;
-}
+  .pet-delete-cancel-button:hover {
+    background-color: var(--color-main1-hover);
+  }
 
-.pet-delete-confirm-button {
-  background-color: #00CBA8;
-  color: white;
-}
+  .pet-delete-confirm-button {
+    background-color: var(--color-point);
+    color: var(--color-main2);
+  }
 
-.pet-delete-confirm-button:hover {
-  background-color: #13BA9D;
-}
+  .pet-delete-confirm-button:hover {
+    background-color: var(--color-point-hover);
+  }
 
-.pet-delete-confirm-button:disabled {
-  background: #E8E9EC !important;
-  color: #C0C0C0 !important;
-  cursor: not-allowed;
-  transition: background-color 0.2s ease;
-}
+  .pet-delete-confirm-button:disabled {
+    background: var(--color-disable) !important;
+    color: var(--color-disable-text) !important;
+    cursor: not-allowed;
+    transition: background-color 0.2s ease;
+  }
 }

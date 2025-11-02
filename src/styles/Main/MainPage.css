@@ -15,7 +15,7 @@ html, body { overflow: hidden; height: 100%; }
 }
 
 .mainpage-container {
-  background: #f8f9fb;
+  background: var(--color-main1);
   border-radius: 12px;
   padding: var(--pad-v);        
   padding-bottom: var(--pad-v); 
@@ -52,8 +52,8 @@ html, body { overflow: hidden; height: 100%; }
 
 .mainpage-category-button {
   flex: 1;
-  background-color: #5C5C5C;
-  color: white;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   font-weight: bold;
   padding: 16px;
   border: none;
@@ -65,8 +65,8 @@ html, body { overflow: hidden; height: 100%; }
 
 .mainpage-calendar-button {
   flex: 1;
-  background-color: #5C5C5C;
-  color: white;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   font-weight: bold;
   padding: 16px;
   border: none;
@@ -77,20 +77,20 @@ html, body { overflow: hidden; height: 100%; }
 }
 
 .mainpage-category-button:hover {
-  background-color: #333333;
+  background-color: var(--color-point2-hover);
 }
 
 .mainpage-calendar-button:hover {
-  background-color: #333333;
+  background-color: var(--color-point2-hover);
 }
 
 /* 카테고리 필터 영역 */
 .mainpage-filter-card {
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 12px;
   padding: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  border: 1px solid #eee;
+  border: none;
   max-height: none;
   overflow: hidden;
   overflow-y: auto;
@@ -112,8 +112,8 @@ html, body { overflow: hidden; height: 100%; }
   padding: 16px 6px 16px 16px;
   font-size: 14px;
   font-weight: bold;
-  border-bottom: 1px solid #eee;
-  background-color: white;
+  border-bottom: none;
+  background-color: var(--color-main2);
   flex-shrink: 0;
   z-index: 1;
 }
@@ -124,17 +124,17 @@ html, body { overflow: hidden; height: 100%; }
   align-items: center;
   position: relative;
   margin-bottom: 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-main1-hover);
 }
 
-  .mainpage-schedule-header-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 16px;
-    gap: 8px;
-  }
+.mainpage-schedule-header-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 16px;
+  gap: 8px;
+}
 
 .mainpage-filter-title-row h4.mainpage-filter-title {
   border-bottom: none !important;
@@ -154,7 +154,7 @@ html, body { overflow: hidden; height: 100%; }
 
 .mainpage-item-count {
   font-size: 13px;
-  color: #888;
+  color: var(--color-subtext);
   font-weight: 500;
   margin-left: 2px;
 }
@@ -167,7 +167,7 @@ html, body { overflow: hidden; height: 100%; }
   font-size: 10px;
   background: none;
   border: none;
-  color: #888;
+  color: var(--color-subtext);
   cursor: pointer;
 }
 
@@ -186,7 +186,7 @@ html, body { overflow: hidden; height: 100%; }
 
 .mainpage-empty-message {
   text-align: center;
-  color: #6B7280;
+  color: var(--color-subtext);
   padding: 60px 0;
   font-size: 12px;
   font-weight: 400;
@@ -199,7 +199,7 @@ html, body { overflow: hidden; height: 100%; }
 }
 
 .mainpage-category-grid .mainpage-filter-item {
-  background-color: #f6f6f6;
+  background-color: var(--color-main1);
   padding: 4px;
   border-radius: 8px;
   font-size: 12px;
@@ -220,7 +220,7 @@ html, body { overflow: hidden; height: 100%; }
   padding: 4px;
   margin-bottom: 8px;
   border-radius: 8px;
-  background-color: #f6f6f6;
+  background-color: var(--color-main1);
   cursor: pointer;
   transition: background-color 0.2s;
   min-height: 36px;
@@ -229,8 +229,8 @@ html, body { overflow: hidden; height: 100%; }
 }
 
 .mainpage-filter-item.selected {
-  background-color: #E8E9EC !important;
-  color: #000 !important;
+  background-color: var(--color-main1-hover) !important;
+  color: var(--color-text) !important;
   transition: background-color 0.3s;
 }
 
@@ -245,12 +245,12 @@ html, body { overflow: hidden; height: 100%; }
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #999;
+  color: var(--color-subtext);
   cursor: pointer;
 }
 
 .mainpage-delete-icon:hover {
-  color: red;
+  color: var(--color-point-hover);
 }
 
 /* 반려동물 필터 */
@@ -285,12 +285,11 @@ html, body { overflow: hidden; height: 100%; }
   flex-shrink: 0;
   margin-left: -6px;
 }
-
 /* 일정 목록 */
-  .mainpage-schedule-list {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.mainpage-schedule-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .mainpage-schedule-header {
@@ -316,7 +315,7 @@ html, body { overflow: hidden; height: 100%; }
   font-size: 10px;
   padding: 6px 8px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-disable);
 }
 
 .mainpage-schedule-sort-button {
@@ -324,7 +323,7 @@ html, body { overflow: hidden; height: 100%; }
   padding: 6px 10px;
   border-radius: 6px;
   border: none;
-  background-color: #eee;
+  background-color: var(--color-main1-hover);
   cursor: pointer;
   width: 60px;
   text-align: center;
@@ -350,7 +349,7 @@ html, body { overflow: hidden; height: 100%; }
   height: 300px;
   font-size: 12px;
   font-weight: 400;
-  color: #999;
+  color: var(--color-subtext);
   text-align: center;
 }
 
@@ -367,7 +366,7 @@ html, body { overflow: hidden; height: 100%; }
 
 .mainpage-schedule-list-item {
   position: relative;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 12px;
   border-radius: 8px;
   font-size: 12px;
@@ -376,18 +375,19 @@ html, body { overflow: hidden; height: 100%; }
   text-align: center;
   transition: background-color 0.3s ease;
 }
+
 .mainpage-schedule-list-item p {
   font-size: 14px;
   font-weight: 600;
 }
 
 .mainpage-schedule-list-item:hover {
-  background-color: #e5e7eb;
+  background-color: var(--color-main1-hover);
 }
 
 .mainpage-schedule-list-item.selected {
-  background-color: #E8E9EC !important;
-  color: #000 !important;
+  background-color: var(--color-main1-hover) !important;
+  color: var(--color-text) !important;
   transition: background-color 0.3s;
 }
 
@@ -399,12 +399,13 @@ html, body { overflow: hidden; height: 100%; }
   height: 10px;
   border-radius: 50%;
 }
+
 .mainpage-priority-high {
-  background-color: #f87171;
+  background-color: #f87171; 
 }
 
 .mainpage-priority-medium {
-  background-color: #fbbf24;
+  background-color: #fbbf24; 
 }
 
 .mainpage-priority-low {
@@ -419,12 +420,12 @@ html, body { overflow: hidden; height: 100%; }
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: #666;
+  color: var(--color-subtext);
   transition: color 0.2s;
 }
 
 .mainpage-detail-icon-button:hover {
-  color: #ff6a3c;
+  color: var(--color-point-hover);
 }
 
 /* 캘린더 본문 */
@@ -436,13 +437,14 @@ html, body { overflow: hidden; height: 100%; }
   height: auto;     
   padding-bottom: var(--footer-gap); 
   overflow: hidden;             
-  background: #fff;              
+  background: var(--color-main2);              
   border-radius: 12px;
   padding: 24px 24px 24px 24px;         
   box-shadow: 0 2px 6px rgba(0,0,0,.05);
   overflow:hidden;     
 }
 
+/* 데스크탑 */
 @media screen and (min-width: 769px) {
   .mainpage-create-button {
     display: none;
@@ -491,7 +493,7 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-leftsection::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: var(--color-disable-text);
     border-radius: 4px;
   }
 
@@ -535,7 +537,7 @@ html, body { overflow: hidden; height: 100%; }
 
   .mainpage-filter-scroll-area::-webkit-scrollbar-thumb,
   .mainpage-schedule-scroll-grid::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: var(--color-disable-text);
     border-radius: 4px;
   }
 
@@ -563,7 +565,7 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-container {
-    background: #f9fafb;
+    background: var(--color-main1);
     padding: 2px 16px 16px 16px;
     height: auto;
     overflow-y: auto;
@@ -579,14 +581,14 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-calendar-mobile-wrapper {
-    background: #fff;
+    background: var(--color-main2);
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     padding: 16px;
   }
 
   .mainpage-filter-card {
-    background: #fff;
+    background: var(--color-main2);
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.3s ease;
@@ -602,9 +604,9 @@ html, body { overflow: hidden; height: 100%; }
     justify-content: space-between;
     align-items: center;
     padding: 4px;
-    background-color: #fff;
+    background-color: var(--color-main2);
     border: none;
-    color: #111827;
+    color: var(--color-text);
     cursor: pointer;
     margin-bottom: 0px;
   }
@@ -622,7 +624,7 @@ html, body { overflow: hidden; height: 100%; }
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #111;
+    color: var(--color-text);
     transition: transform 0.25s ease;
     font-size: 20px;
     margin-right: 8px;
@@ -635,7 +637,7 @@ html, body { overflow: hidden; height: 100%; }
   .mainpage-select-all-left {
     font-size: 9px;
     font-weight: 500;
-    color: #9ca3af;
+    color: var(--color-subtext);
     background: none;
     border: none;
     cursor: pointer;
@@ -643,12 +645,12 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-select-all-left:hover {
-    color: #4b5563;
+    color: var(--color-text);
   }
 
   .mainpage-filter-scroll-area {
     padding: 8px 16px 8px 16px;
-    background: #fff;
+    background: var(--color-main2);
     min-height: auto;   
     max-height: none;   
     overflow-y: visible; 
@@ -663,7 +665,7 @@ html, body { overflow: hidden; height: 100%; }
   /* 항목 없음 */
   .mainpage-empty-message {
     text-align: center;
-    color: #6B7280;
+    color: var(--color-subtext);
     font-size: 10px;
     font-weight: 400;
     padding: 40px 0;
@@ -677,7 +679,7 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-category-grid .mainpage-filter-item {
-    background-color: #F9F9F9;
+    background-color: var(--color-main1);
     border-radius: 8px;
     padding: 2px;
     text-align: center;
@@ -689,8 +691,8 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-filter-item.selected {
-    background-color: #E8E9EC !important;
-    color: #000 !important;
+    background-color: var(--color-main1-hover) !important;
+    color: var(--color-text) !important;
     transition: background-color 0.3s;
   }
 
@@ -699,7 +701,7 @@ html, body { overflow: hidden; height: 100%; }
     right: 8px;
     top: 50%;
     transform: translateY(-50%);
-    color: #999;
+    color: var(--color-subtext);
     max-width: 12px;
     max-height: 12px;
   }
@@ -707,15 +709,15 @@ html, body { overflow: hidden; height: 100%; }
   .mainpage-create-button-wrapper {
     position: sticky;
     bottom: 0;
-    background: #fff;
+    background: var(--color-main2);
     padding: 16px;
     z-index: 5;
   }
 
   .mainpage-create-button {
     width: 100%;
-    background-color: #00CBA8;
-    color: white;
+    background-color: var(--color-point);
+    color: var(--color-main2);
     font-size: 10px;
     font-weight: 700;
     padding: 16px 0;
@@ -726,7 +728,7 @@ html, body { overflow: hidden; height: 100%; }
   }
 
   .mainpage-create-button:hover {
-    background-color: #48b899;
+    background-color: var(--color-point-hover);
   }
 
   .mainpage-schedule-list {
@@ -752,7 +754,7 @@ html, body { overflow: hidden; height: 100%; }
     padding: 8px 12px 8px 12px;
     border-radius: 6px;
     border: none;
-    background: #f9f9f9;
+    background: var(--color-main1);
     outline: none;
     position: relative;
     max-width: 48px;
@@ -767,17 +769,17 @@ html, body { overflow: hidden; height: 100%; }
     padding: 8px 12px 8px 12px;
     border-radius: 6px;
     border: none;
-    background: #f9f9f9;
+    background: var(--color-main1);
     cursor: pointer;
     transition: all 0.2s ease;
-    color: #000;
+    color: var(--color-text);
   }
 
   /* 전체선택 버튼 */
   .mainpage-select-all-button {
     font-size: 11px;
     font-weight: 600;
-    color: #666;
+    color: var(--color-subtext);
     border: none;
     background: none;
     cursor: pointer;
@@ -797,7 +799,7 @@ html, body { overflow: hidden; height: 100%; }
     align-items: center; 
     padding: 14px 18px !important;
     border-radius: 12px !important;
-    background-color: #f9f9f9 !important;
+    background-color: var(--color-main1) !important;
     font-size: 12px !important;
     position: relative !important;
   }
@@ -813,13 +815,13 @@ html, body { overflow: hidden; height: 100%; }
     margin: 0;
     font-size: 12px !important;
     font-weight: 800 !important;
-    color: #111827 !important;
+    color: var(--color-text) !important;
   }
 
   .mainpage-schedule-list-item-left small {
     font-size: 9px !important;
     font-weight: 500 !important;
-    color: #666;
+    color: var(--color-subtext);
   }
 
   .mainpage-schedule-list-item-right {
@@ -838,8 +840,8 @@ html, body { overflow: hidden; height: 100%; }
 
   .mainpage-detail-icon-button {
     position: static !important;
-    background-color: #ffffff !important;
-    color: #000000 !important;
+    background-color: var(--color-main2) !important;
+    color: var(--color-text) !important;
     width: 15px !important;
     height: 15px !important;
     border-radius: 50% !important;

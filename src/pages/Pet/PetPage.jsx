@@ -12,6 +12,7 @@ import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import "../../styles/Pet/PetPage.css";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -37,6 +38,9 @@ const PetPage = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  const { isDarkMode } = useTheme();
+  const dark = isDarkMode;
 
   const showAlertMessage = useCallback((message) => {
     setAlertMessage(message);
@@ -351,7 +355,11 @@ const PetPage = () => {
                                   }}
                                 >
                                   <MoreHorizRoundedIcon
-                                    sx={{ fontSize: 22, color: "#333" }}
+                                    sx={{
+                                      fontSize: 22,
+                                      color: dark ? "#fff" : "#333",
+                                      transition: "color 0.3s ease",
+                                    }}
                                   />
                                 </button>
                                 {showMenu && menuPetId === pet.petId && (

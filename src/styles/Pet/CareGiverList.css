@@ -12,7 +12,7 @@
 }
 
 .care-giver-list-modal {
-  background-color: #fff;
+  background-color: var(--color-main2);
   width: 90%;
   max-width: 420px;
   height: auto;
@@ -29,14 +29,14 @@
   top: 12px;
   right: 12px;
   font-size: 24px;
-  color: #aaa;
+  color: var(--color-subtext);
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .care-giver-list-close:hover {
-  color: #10b981;
+  color: var(--color-point-hover);
 }
 
 .care-giver-list-title {
@@ -45,7 +45,7 @@
   margin-top: 20px;
   margin-bottom: 32px;
   text-align: center;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .care-giver-list-list {
@@ -59,7 +59,7 @@
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 12px;
   padding: 32px 4px;
 }
@@ -77,12 +77,12 @@
   border: none;
   border-radius: 12px;
   padding: 16px 16px 16px 28px;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   transition: background-color 0.3s ease;
 }
 
 .care-giver-list-card:hover {
-  background-color: #eeeeee;
+  background-color: var(--color-main1-hover);
 }
 
 .care-giver-list-left {
@@ -103,11 +103,12 @@
   flex: 1;
   font-size: 14px;
   font-weight: 600;
+  color: var(--color-text);
 }
 
 .care-giver-list-button {
-  background-color: #3a3a3a;
-  color: white;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   border: none;
   border-radius: 6px;
   padding: 8px 12px;
@@ -118,7 +119,7 @@
 }
 
 .care-giver-list-button:hover {
-  background-color: #000000;
+  background-color: var(--color-point2-hover);
 }
 
 .care-giver-list-empty {
@@ -129,7 +130,7 @@
   text-align: center;
   padding: 60px 20px;
   margin: 4px auto 20px auto;
-  background-color: #f4f4f4;
+  background-color: var(--color-main1-hover);
   border-radius: 12px;
   width: 70%;
   max-width: 400px;
@@ -137,167 +138,168 @@
 
 .care-giver-list-empty-title {
   font-size: 14px;
-  color: #000;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .care-giver-list-empty-sub {
   font-size: 12px;
-  color: #6B7280;
+  color: var(--color-subtext);
   font-weight: 400;
   margin-top: 8px;
 }
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
-.care-giver-list-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+  .care-giver-list-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-.care-giver-list-modal {
-  background-color: #fff;
-  width: 75%;
-  max-width: auto;
-  height: auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  font-family: "Pretendard", sans-serif;
-  position: relative;
-  justify-items: center;
-}
+  .care-giver-list-modal {
+    background-color: var(--color-main2);
+    width: 75%;
+    max-width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+    justify-items: center;
+  }
 
-.care-giver-list-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 20px;
-  color: #aaa;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
+  .care-giver-list-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 20px;
+    color: var(--color-subtext);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
 
-.care-giver-list-close:hover {
-  color: #10b981;
-}
+  .care-giver-list-close:hover {
+    color: var(--color-point-hover);
+  }
 
-.care-giver-list-title {
-  font-size: 16px;
-  font-weight: 800;
-  margin-top: 20px;
-  margin-bottom: 24px;
-  text-align: center;
-  color: #000000;
-}
+  .care-giver-list-title {
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 20px;
+    margin-bottom: 24px;
+    text-align: center;
+    color: var(--color-text);
+  }
 
-.care-giver-list-list {
-  width: 95%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-items: center;
-  gap: 20px;
-  max-height: 320px;
-  overflow-y: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  padding: 24px 4px;
-  margin: auto;
-}
+  .care-giver-list-list {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    gap: 20px;
+    max-height: 320px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background-color: var(--color-main1);
+    border-radius: 12px;
+    padding: 24px 4px;
+    margin: auto;
+  }
 
-.care-giver-list-list::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
-}
+  .care-giver-list-list::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
 
-.care-giver-list-card {
-  min-width: 70%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: none;
-  border-radius: 8px;
-  padding: 16px 16px 16px 28px;
-  background-color: #ffffff;
-  transition: background-color 0.3s ease;
-}
+  .care-giver-list-card {
+    min-width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: none;
+    border-radius: 8px;
+    padding: 16px 16px 16px 28px;
+    background-color: var(--color-main2);
+    transition: background-color 0.3s ease;
+  }
 
-.care-giver-list-card:hover {
-  background-color: #eeeeee;
-}
+  .care-giver-list-card:hover {
+    background-color: var(--color-main1-hover);
+  }
 
-.care-giver-list-left {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
+  .care-giver-list-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
 
-.care-giver-list-friend-image {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 4px;
-}
+  .care-giver-list-friend-image {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 4px;
+  }
 
-.care-giver-list-name {
-  flex: 1;
-  font-size: 12px;
-  font-weight: 600;
-}
+  .care-giver-list-name {
+    flex: 1;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
 
-.care-giver-list-button {
-  background-color: #3a3a3a;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px;
-  font-size: 9px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+  .care-giver-list-button {
+    background-color: var(--color-point2);
+    color: var(--color-main2);
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
 
-.care-giver-list-button:hover {
-  background-color: #000000;
-}
+  .care-giver-list-button:hover {
+    background-color: var(--color-point2-hover);
+  }
 
-.care-giver-list-empty {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 60px 20px;
-  margin: 4px auto 20px auto;
-  background-color: #f4f4f4;
-  border-radius: 12px;
-  width: 70%;
-  max-width: 400px;
-}
+  .care-giver-list-empty {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px;
+    margin: 4px auto 20px auto;
+    background-color: var(--color-main1-hover);
+    border-radius: 12px;
+    width: 70%;
+    max-width: 400px;
+  }
 
-.care-giver-list-empty-title {
-  font-size: 12px;
-  color: #000;
-  font-weight: 600;
-}
+  .care-giver-list-empty-title {
+    font-size: 12px;
+    color: var(--color-text);
+    font-weight: 600;
+  }
 
-.care-giver-list-empty-sub {
-  font-size: 10px;
-  color: #6B7280;
-  font-weight: 400;
-  margin-top: 8px;
-}
+  .care-giver-list-empty-sub {
+    font-size: 10px;
+    color: var(--color-subtext);
+    font-weight: 400;
+    margin-top: 8px;
+  }
 }

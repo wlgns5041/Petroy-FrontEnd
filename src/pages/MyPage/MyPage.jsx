@@ -23,6 +23,7 @@ import ArrowCircleRightRoundedIcon from "@mui/icons-material/ChevronRightRounded
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -43,6 +44,8 @@ const MyPage = () => {
   const dropdownRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollRef = useRef(null);
+  const { isDarkMode } = useTheme();
+  const dark = isDarkMode;
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -163,39 +166,39 @@ const MyPage = () => {
     },
   ];
 
-useEffect(() => {
-  const timer = setTimeout(() => {
-    const scrollEl = scrollRef.current;
-    if (!scrollEl) return;
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const scrollEl = scrollRef.current;
+      if (!scrollEl) return;
 
-    const banners = Array.from(scrollEl.children);
-    if (banners.length === 0) return;
+      const banners = Array.from(scrollEl.children);
+      if (banners.length === 0) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = banners.indexOf(entry.target);
-            if (index !== -1) setActiveIndex(index);
-          }
-        });
-      },
-      {
-        root: scrollEl,
-        threshold: 0.3,
-      }
-    );
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = banners.indexOf(entry.target);
+              if (index !== -1) setActiveIndex(index);
+            }
+          });
+        },
+        {
+          root: scrollEl,
+          threshold: 0.3,
+        }
+      );
 
-    banners.forEach((banner) => observer.observe(banner));
+      banners.forEach((banner) => observer.observe(banner));
 
-    return () => {
-      banners.forEach((banner) => observer.unobserve(banner));
-      observer.disconnect();
-    };
-  }, 100);
+      return () => {
+        banners.forEach((banner) => observer.unobserve(banner));
+        observer.disconnect();
+      };
+    }, 100);
 
-  return () => clearTimeout(timer);
-}, [banners.length]);
+    return () => clearTimeout(timer);
+  }, [banners.length]);
 
   // 이미지 변경 함수
   const handleImageUpload = async (file, preview) => {
@@ -313,7 +316,12 @@ useEffect(() => {
                 className="mypage-profile-more"
                 onClick={() => setShowMenu((prev) => !prev)}
               >
-                <MoreHorizRoundedIcon sx={{ fontSize: 20, color: "#000" }} />
+                <MoreHorizRoundedIcon
+                  sx={{
+                    fontSize: 20,
+                    color: dark ? "#fff" : "#000",
+                  }}
+                />
               </button>
 
               {showMenu && (
@@ -377,9 +385,10 @@ useEffect(() => {
                   <ArrowCircleRightRoundedIcon
                     sx={{
                       fontSize: 20,
-                      color: "#000000",
+                      color: dark ? "#fff" : "#000",
+                      transition: "color 0.3s ease",
                       "&:hover": {
-                        backgroundcolor: "#f9f9f9",
+                        color: dark ? "#e0e0e0" : "#333",
                       },
                     }}
                   />

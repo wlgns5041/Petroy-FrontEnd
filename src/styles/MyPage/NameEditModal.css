@@ -9,7 +9,7 @@
 }
 
 .name-edit-modal-content {
-  background-color: white;
+  background-color: var(--color-main2);
   border-radius: 12px;
   padding: 24px;
   width: 90%;
@@ -29,7 +29,7 @@
 .name-edit-modal-header h2 {
   font-size: 20px;
   font-weight: 800;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .name-edit-modal-body {
@@ -49,23 +49,23 @@
   font-size: 12px;
   border-radius: 8px;
   border: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .input-row input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2-hover);
+  box-shadow: 0 0 0 2px var(--color-point2);
 }
 
 .check-button {
   padding: 10px 16px;
   font-size: 12px;
   font-weight: 700;
-  background-color: #3a3a3a;
-  color: #FFFFFF;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -74,7 +74,7 @@
 }
 
 .check-button:hover {
-  background-color: #000000;
+  background-color: var(--color-point2-hover);
 }
 
 .name-edit-error {
@@ -89,7 +89,7 @@
 }
 
 .name-edit-error.valid {
-  color: #00CBA8;
+  color: var(--color-point);
 }
 
 .name-edit-modal-footer {
@@ -107,11 +107,12 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
+  color: var(--color-text);
 }
 
 .skip-button:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .next-button {
@@ -123,152 +124,153 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s ease;
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .next-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .next-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
+  background: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
-.name-edit-modal {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+  .name-edit-modal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-.name-edit-modal-content {
-  background-color: #fff;
-  width: 80%;
-  max-width: auto;
-  height: auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  font-family: "Pretendard", sans-serif;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
+  .name-edit-modal-content {
+    background-color: var(--color-main2);
+    width: 80%;
+    max-width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
 
-.name-edit-modal-header {
-  text-align: center;
-}
+  .name-edit-modal-header {
+    text-align: center;
+  }
 
-.name-edit-modal-header h2 {
-  font-size: 16px;
-  font-weight: 800;
-  color: #000000;
-}
+  .name-edit-modal-header h2 {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--color-text);
+  }
 
-.name-edit-modal-body {
-  display: flex;
-  flex-direction: column;
-}
+  .name-edit-modal-body {
+    display: flex;
+    flex-direction: column;
+  }
 
-.input-row {
-  display: flex;
-  gap: 12px;
-  width: 100%;
-}
+  .input-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+  }
 
-.input-row input {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 9px;
-  border-radius: 8px;
-  border: none;
-  background-color: #f9f9f9;
-  box-sizing: border-box;
-  color: #000000;
-}
+  .input-row input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 9px;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--color-main1);
+    box-sizing: border-box;
+    color: var(--color-text);
+  }
 
-.input-row input:focus {
-  outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
-}
+  .input-row input:focus {
+    outline: none;
+    background-color: var(--color-main2-hover);
+    box-shadow: 0 0 0 2px var(--color-point2);
+  }
 
-.check-button {
-  padding: 10px 16px;
-  font-size: 10px;
-  font-weight: 700;
-  background-color: #3a3a3a;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.2s ease;
-}
+  .check-button {
+    padding: 10px 16px;
+    font-size: 10px;
+    font-weight: 700;
+    background-color: var(--color-point2);
+    color: var(--color-main2);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+  }
 
-.check-button:hover {
-  background-color: #000000;
-}
+  .check-button:hover {
+    background-color: var(--color-point2-hover);
+  }
 
-.name-edit-error {
-  font-size: 12px;
-  font-weight: 600;
-  margin-top: 24px;
-  margin-bottom: -12px;
-}
+  .name-edit-error {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 24px;
+    margin-bottom: -12px;
+  }
 
-.name-edit-error.invalid {
-  color: #dc2626;
-}
+  .name-edit-error.invalid {
+    color: #dc2626;
+  }
 
-.name-edit-error.valid {
-  color: #00CBA8;
-}
+  .name-edit-error.valid {
+    color: var(--color-point);
+  }
 
-.name-edit-modal-footer {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
+  .name-edit-modal-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
 
-.skip-button {
-  flex: 1;
-  height: 44px;
-  font-size: 12px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  background-color: #f9f9f9;
-}
+  .skip-button {
+    flex: 1;
+    height: 44px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: var(--color-main1);
+    color: var(--color-text);
+  }
 
-.next-button {
-  flex: 1;
-  height: 44px;
-  font-size: 12px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  background-color: #00CBA8;
-  color: white;
-}
+  .next-button {
+    flex: 1;
+    height: 44px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: var(--color-point);
+    color: var(--color-main2);
+  }
 
-.next-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
-  cursor: not-allowed;
-  transition: background-color 0.2s ease;
-}
+  .next-button:disabled {
+    background: var(--color-disable);
+    color: var(--color-disable-text);
+    cursor: not-allowed;
+    transition: background-color 0.2s ease;
+  }
 }

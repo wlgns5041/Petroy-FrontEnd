@@ -30,7 +30,7 @@
 }
 
 .pet-edit-modal-content {
-  background-color: white;
+  background-color: var(--color-main2);
   width: 90%;
   max-width: 420px;
   height: auto;
@@ -58,7 +58,7 @@
 }
 
 .pet-edit-close:hover {
-  color: #10b981;
+  color: var(--color-point-hover);
 }
 
 .pet-edit-back-button {
@@ -77,13 +77,13 @@
 }
 
 .pet-edit-back-button:hover {
-  color: #10b981;
+  color: var(--color-point-hover);
 }
 
 .pet-edit-step-indicator {
   font-size: 14px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--color-subtext);
   margin-bottom: 20px;
   text-align: center;
   margin-top: 32px;
@@ -113,7 +113,7 @@
   font-weight: bold;
   margin-top: 0px;
   margin-bottom: 20px;
-  color: #000000;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -140,7 +140,7 @@
   width: 60px;
   font-size: 14px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .pet-edit-input {
@@ -149,18 +149,18 @@
   font-size: 12px;
   border-radius: 8px;
   border: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   transition: all 0.1s ease-in-out;
-  color: #000000;
+  color: var(--color-text);
   border: 1px solid transparent;
 }
 
 .pet-edit-inline-select:focus,
 .pet-edit-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2);
 }
 
 .pet-edit-image-box {
@@ -181,15 +181,15 @@
   max-width: 280px;
   text-align: center;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .pet-edit-file-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   border: none;
   padding: 16px;
   width: 100%;
@@ -211,7 +211,7 @@
   height: 140px;
   border-radius: 20px;
   object-fit: cover;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   margin-top: -12px;
 }
 
@@ -222,8 +222,8 @@
 }
 
 .pet-edit-file-clear {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   padding: 12px 32px;
   font-size: 13px;
   font-weight: 600;
@@ -248,18 +248,18 @@
   line-height: 1.6;
   text-align: center;
   border-radius: 10px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   box-sizing: border-box;
-  color: #111827;
+  color: var(--color-point2);
   font-family: inherit;
   resize: none;
 }
 
 .pet-edit-textarea:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2);
 }
 
 .pet-edit-button-row {
@@ -277,8 +277,8 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 600;
-  background-color: #00CBA8;
-  color: #fff;
+  background-color: var(--color-point);
+  color: var(--color-main2);
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -286,14 +286,14 @@
 }
 
 .pet-edit-next-button:disabled {
-  background: #E8E9EC !important;
-  color: #C0C0C0 !important;
+  background: var(--color-disable) !important;
+  color: var(--color-disable-text) !important;
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
 
 .pet-edit-next-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 /* --------------------  모바일  -------------------- */
@@ -314,7 +314,7 @@
 }
 
 .pet-edit-modal-content {
-  background-color: white;
+  background-color: var(--color-main2);
   width: 80%;
   max-width: 420px;
   height: auto;
@@ -342,7 +342,7 @@
 }
 
 .pet-edit-close:hover {
-  color: #10b981;
+  color: var(--color-point-hover);
 }
 
 .pet-edit-back-button {
@@ -361,13 +361,13 @@
 }
 
 .pet-edit-back-button:hover {
-  color: #10b981;
+  color: var(--color-point-hover);
 }
 
 .pet-edit-step-indicator {
   font-size: 12px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--color-subtext);
   margin-bottom: 12px;
   text-align: center;
   margin-top: 24px;
@@ -397,7 +397,7 @@
   font-weight: bold;
   margin-top: 0px;
   margin-bottom: 20px;
-  color: #000000;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -425,7 +425,7 @@
   width: 60px;
   font-size: 11px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .pet-edit-input {
@@ -434,18 +434,18 @@
   font-size: 10px;
   border-radius: 8px;
   border: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   transition: all 0.1s ease-in-out;
-  color: #000000;
+  color: var(--color-text);
   border: 1px solid transparent;
 }
 
 .pet-edit-inline-select:focus,
 .pet-edit-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2);
 }
 
 .pet-edit-image-box {
@@ -466,15 +466,15 @@
   max-width: 280px;
   text-align: center;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 .pet-edit-file-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   border: none;
   padding: 16px;
   width: 100%;
@@ -496,7 +496,7 @@
   height: 100px;
   border-radius: 20px;
   object-fit: cover;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   margin-top: -12px;
 }
 
@@ -508,8 +508,8 @@
 }
 
 .pet-edit-file-clear {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   padding: 12px 28px;
   font-size: 11px;
   font-weight: 600;
@@ -534,18 +534,18 @@
   line-height: 1.5;
   text-align: center;
   border-radius: 10px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   box-sizing: border-box;
-  color: #000000;
+  color: var(--color-text);
   font-family: inherit;
   resize: none;
 }
 
 .pet-edit-textarea:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2);
 }
 
 .pet-edit-button-row {
@@ -563,8 +563,8 @@
   padding: 14px;
   font-size: 12px;
   font-weight: 600;
-  background-color: #00CBA8;
-  color: #fff;
+  background-color: var(--color-point);
+  color: var(--color-main2);
   border-radius: 6px;
   border: none;
   cursor: pointer;
@@ -572,13 +572,13 @@
 }
 
 .pet-edit-next-button:disabled {
-  background: #E8E9EC !important;
-  color: #C0C0C0 !important;
+  background: var(--color-disable) !important;
+  color: var(--color-disable-text) !important;
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
 
 .pet-edit-next-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 }

@@ -1,0 +1,260 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.setting-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.setting-modal-container {
+  background-color: var(--color-main2);
+  width: 50%;
+  max-width: 240px;
+  height: auto;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 2000;
+}
+
+.setting-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.setting-modal-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  padding-left: 8px;
+}
+
+.setting-modal-close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.setting-modal-close svg {
+  font-size: 20px;
+  color: var(--color-text);
+}
+
+.setting-modal-body {
+  background-color: var(--color-main1);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.setting-modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 8px;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.setting-modal-row.info {
+  border-bottom: none;
+  justify-content: space-between;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.setting-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.setting-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.setting-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-disable-text);
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.setting-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--color-main2);
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .setting-slider {
+  background-color: var(--color-point);
+}
+
+input:checked + .setting-slider:before {
+  transform: translateX(18px);
+}
+
+.setting-version {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 500;
+  margin-right: 4px;
+}
+
+/* --------------------  모바일  -------------------- */
+@media screen and (max-width: 768px) {
+
+.setting-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.setting-modal-container {
+  background-color: var(--color-main2);
+  width: 50%;
+  max-width: 300px;
+  height: auto;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 2000;
+}
+
+.setting-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.setting-modal-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+  padding-left: 6px;
+}
+
+.setting-modal-close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.setting-modal-close svg {
+  font-size: 16px;
+  color: var(--color-text);
+}
+
+.setting-modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 6px;
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.setting-modal-row.info {
+  border-bottom: none;
+  justify-content: space-between;
+  color: var(--color-text);
+  font-size: 12px;
+}
+
+.setting-switch {
+  position: relative;
+  display: inline-block;
+  width: 28px;
+  height: 16px;
+}
+
+.setting-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.setting-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-disable-text);
+  transition: 0.4s;
+  border-radius: 24px;
+}
+
+.setting-slider:before {
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--color-main2);
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .setting-slider {
+  background-color: var(--color-point);
+}
+
+input:checked + .setting-slider:before {
+  transform: translateX(12px);
+}
+
+.setting-version {
+  font-size: 12px;
+  color: var(--color-text);
+  font-weight: 500;
+  margin-right: 2px;
+}
+}

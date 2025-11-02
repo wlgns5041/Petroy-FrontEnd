@@ -9,7 +9,7 @@
 }
 
 .my-page-confirm-modal {
-  background-color: white;
+  background-color: var(--color-main2);
   border-radius: 12px;
   padding: 24px;
   width: 90%;
@@ -22,7 +22,7 @@
 .my-page-confirm-message {
   font-size: 16px;
   font-weight: 700;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 12px;
   padding: 24px;
   white-space: pre-wrap;
@@ -46,92 +46,92 @@
 }
 
 .my-page-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
 .my-page-cancel-button:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .my-page-confirm-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .my-page-confirm-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
   .my-page-confirm-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
 
-.my-page-confirm-modal {
-  background-color: #fff;
-  width: 70%;
-  max-width: auto;
-  height: auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  font-family: "Pretendard", sans-serif;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
+  .my-page-confirm-modal {
+    background-color: var(--color-main2);
+    width: 70%;
+    max-width: auto;
+    height: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    font-family: "Pretendard", sans-serif;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
 
-.my-page-confirm-message {
-  font-size: 13px;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 8px;
-  padding: 12px;
-  white-space: pre-wrap;
-}
+  .my-page-confirm-message {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 8px;
+    padding: 12px;
+    white-space: pre-wrap;
+  }
 
-.my-page-confirm-buttons {
-  display: flex;
-  justify-content: space-between;
-}
+  .my-page-confirm-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
 
-.my-page-cancel-button,
-.my-page-confirm-button {
-  flex: 1;
-  height: 44px;
-  font-size: 12px;
-  font-weight: 700;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+  .my-page-cancel-button,
+  .my-page-confirm-button {
+    flex: 1;
+    height: 44px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
 
-.my-page-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
-  margin-right: 12px;
-}
+  .my-page-cancel-button {
+    background-color: var(--color-main1);
+    color: var(--color-text);
+    margin-right: 12px;
+  }
 
-.my-page-cancel-button:hover {
-  background-color: #E8E9EC;
-}
+  .my-page-cancel-button:hover {
+    background-color: var(--color-main1-hover);
+  }
 
-.my-page-confirm-button {
-  background-color: #00CBA8;
-  color: white;
-}
+  .my-page-confirm-button {
+    background-color: var(--color-point);
+    color: var(--color-main2);
+  }
 
-.my-page-confirm-button:hover {
-  background-color: #13BA9D;
-}
+  .my-page-confirm-button:hover {
+    background-color: var(--color-point-hover);
+  }
 }

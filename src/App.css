@@ -1,69 +1,96 @@
 html, body, #root, .App {
   height: var(--app-height);
   min-height: var(--app-height);
+  background-color: var(--color-main1);
+  color: var(--color-text);
 }
 
-/* 텍스트 정렬 */
+/* 전역 테마 컬러 */
+:root {
+  --color-main1: #f9f9f9;
+  --color-main1-hover: #E8E9EC;
+  --color-main2: #ffffff;
+  --color-main2-hover: #f9f9f9;
+  --color-text: #000;
+  --color-subtext: #6b7280;
+  --color-point: #00cba8;
+  --color-point-hover: #13ba9d;
+  --color-point2: #3a3a3a;
+  --color-point2-hover: #000000;
+  --color-disable: #E8E9EC;
+  --color-disable-text: #C0C0C0;
+  --color-tab-background: #f1f3f5;
+}
+
+* {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+  /*
+
+  var(--color-main1);
+  var(--color-main1-hover);
+  var(--color-main2);
+  var(--color-main2-hover);
+  var(--color-text);
+  var(--color-subtext);
+  var(--color-point);
+  var(--color-point-hover);
+  var(--color-point2);
+  var(--color-point2-hover);
+  var(--color-disable);
+  var(--color-disable-text);
+  var(--color-tab-background);
+
+  */
+
+/* 다크모드 */
+[data-theme="dark"] {
+  --color-main1: #1e1e1e;
+  --color-main1-hover: #2a2a2a;
+  --color-main2: #3a3a3a;
+  --color-main2-hover: #2a2a2a;
+  --color-text: #ffffff;
+  --color-subtext: #a1a1a1;
+  --color-point: #00cba8;
+  --color-point-hover: #13ba9d;
+  --color-point2: #e0e0e0;
+  --color-point2-hover: #f9fafb;
+  --color-disable: #a1a1a1;
+  --color-disable-text: #6b7280;
+  --color-tab-background: #131313;
+}
+
+/* 기본 텍스트 정렬 */
 .App {
   text-align: center;
 }
 
-/* 로고 */
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-/* 헤더 */
-.App-header {
-  background-color: #282c34;
-  min-height: var(--app-height); 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-/* 링크 */
-.App-link {
-  color: #61dafb;
-}
-
-/* 폰트 */
+/* 전역 폰트 */
 * {
   font-family: 'Pretendard', sans-serif;
 }
 
-/* 토스트 컨테이너 */
+/* ✅ Toast 컨테이너 */
 .toast-portal {
   position: fixed !important;
-  top: 32px !important;        
-  right: 12px !important;       
+  top: 32px !important;
+  right: 12px !important;
   z-index: 99999 !important;
   display: flex !important;
   flex-direction: column;
-  align-items: flex-end;        
-  width: auto;                  
-  pointer-events: none;         
+  align-items: flex-end;
+  pointer-events: none;
 }
 
 .toast-portal .Toastify__toast {
-  background: transparent !important; 
+  background: transparent !important;
   box-shadow: none !important;
   margin-bottom: 10px !important;
-  align-self: flex-end;          
-  width: auto !important;        
-  max-width: 520px;           
+  width: auto !important;
+  max-width: 520px;
   padding: 0 !important;
-  pointer-events: auto;          
+  pointer-events: auto;
 }
 
 .toast-portal .Toastify__toast-body {
@@ -71,56 +98,42 @@ html, body, #root, .App {
   padding: 0 !important;
 }
 
-/* 로고 회전 */
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* ✅ 모바일 환경 */
 @media screen and (max-width: 768px) {
-  html,
-  body {
-    background-color: #f9f9f9;
+  html, body {
+    background-color: var(--color-main1);
+    color: var(--color-text); 
   }
 
-  #root,
-  .App {
-    background-color: #f9f9f9;
+  #root, .App {
+    background-color: var(--color-main1);
+    color: var(--color-text);
   }
 
-    .toast-portal {
-    top: 30px !important;               
-    left: 50% !important;               
-    right: auto !important;              
-    transform: translateX(-50%) !important; 
-    align-items: center !important;      
+  .toast-portal {
+    top: 30px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    align-items: center !important;
     width: 100%;
     max-width: 93%;
   }
 
-  /* 각 토스트 카드 */
   .toast-portal .Toastify__toast {
-    align-self: center !important;       
     width: 90% !important;
-    max-width: 400px !important;        
+    max-width: 400px !important;
   }
 
-  /* 내부 텍스트 조정 */
   .toast-portal .Toastify__toast-body {
-    padding: 0 !important;
     text-align: center !important;
   }
 
-  /* ToastCard 내부 폰트 조정 (JSX inline style보다 우선순위 높임) */
   .Toastify__toast-body div[style*="fontWeight: 800"] {
-    font-size: 15px !important;          /* 제목 폰트 ↓ */
+    font-size: 15px !important;
   }
 
   .Toastify__toast-body div[style*="fontSize: 14px"] {
-    font-size: 13px !important;          /* 서브 텍스트 ↓ */
+    font-size: 13px !important;
   }
 }
