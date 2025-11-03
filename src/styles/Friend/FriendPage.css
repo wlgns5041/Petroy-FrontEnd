@@ -25,7 +25,7 @@
   padding: 30px;
   padding-top: 40px;
   font-family: 'Pretendard', sans-serif;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
   display: flex;
@@ -49,20 +49,20 @@
   font-weight: 500;
   border: none;
   border-radius: 6px;
-  background-color: #F5F5F5;
+  background-color: var(--color-main1);
   outline: none;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .friendpage-search-bar input::placeholder {
-  color: #9ca3af;
+  color: var(--color-subtext);
 }
 
 .friendpage-search-icon-button {
   background: none;
   border: none;
   margin-left: -36px;
-  color: #000000;
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -78,7 +78,7 @@
   margin: 12px auto; 
   width: 90%;
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: var(--color-main1);
   border-radius: 8px;
 }
 
@@ -95,7 +95,7 @@
   justify-content: space-between;
   border-radius: 8px;
   padding: 20px 12px;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   width: 100%;
   max-width: 100%;             
   margin: 0 auto;              
@@ -116,12 +116,15 @@
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: #f3f4f6;
+}
+
+.friendpage-profile-image.dark-mode {
+  filter: brightness(0) invert(1) !important; 
 }
 
 .friendpage-send-request-button {
-  background-color: #5C5C5C;
-  color: white;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   border: none;
   border-radius: 4px;
   padding: 8px 12px;
@@ -133,12 +136,12 @@
 }
 
 .friendpage-send-request-button:hover {
-  background-color: #4b4848;
+  background-color: var(--color-point2-hover);
 }
 
 .friendpage-send-request-button.disabled {
-  background-color: #e5e7eb;
-  color: #9ca3af;
+  background-color: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
 }
 
@@ -146,7 +149,7 @@
   text-align: center;
   margin-top: 40px;
   font-size: 15px;
-  color: #9ca3af;
+  color: var(--color-subtext);
   font-weight: 500;
 }
 
@@ -154,7 +157,7 @@
   text-align: center;
   margin-top: 80px;
   font-size: 14px;
-  color: #6B7280;
+  color: var(--color-subtext);
   font-weight: 600;
 }
 
@@ -167,7 +170,7 @@
   gap: 12px;
   padding: 6px;
   margin: 12px auto 32px auto;
-  background-color: #f1f3f5;
+  background-color: var(--color-tab-background);
   border-radius: 8px;
   justify-content: space-between;
 }
@@ -178,7 +181,7 @@
   left: 6px;
   width: calc((100% - 12px) / 2);
   height: calc(100% - 12px);
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 6px;
   transition: transform .3s ease; 
   z-index: 0;
@@ -193,10 +196,10 @@
   border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-subtext);
   background-color: transparent;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: transform .3s ease;
 }
 
 .friendpage-tab span {
@@ -205,8 +208,8 @@
 }
 
 .friendpage-tab.active {
-  background-color: #ffffff;
-  color: #111827;
+  background-color: var(--color-main2);
+  color: var(--color-text);
   font-weight: 700;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
@@ -227,7 +230,7 @@
 }
 
 .friendpage-friend-count {
-  color: #6b7280;
+  color: var(--color-subtext);
   font-size: 12px;
   padding: 2px 6px;
 }
@@ -271,7 +274,7 @@
   padding: 20px;
   padding-top: 0px;
   font-family: 'Pretendard', sans-serif;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-shadow: none;
   display: flex;
   flex-direction: column;
@@ -294,21 +297,21 @@
   font-weight: 500;
   border: none;
   border-radius: 6px;
-  background-color: #FFFFFF;
+  background-color: var(--color-main2);
   outline: none;
-  color: #111827;
+  color: var(--color-text);
   width: 100%;
 }
 
 .friendpage-search-bar input::placeholder {
-  color: #9ca3af;
+  color: var(--color-subtext);
 }
 
 .friendpage-search-icon-button {
   background: none;
   border: none;
   margin-left: -30px;
-  color: #000000;
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -324,7 +327,7 @@
   margin: 12px auto; 
   width: 100%;
   padding: 20px;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 8px;
 }
 
@@ -341,7 +344,7 @@
   justify-content: space-between;
   border-radius: 8px;
   padding: 20px 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: 100%;
   max-width: 100%;             
   margin: 0 auto;              
@@ -362,12 +365,15 @@
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  background-color: #f3f4f6;
+}
+
+.friendpage-profile-image.dark-mode {
+  filter: brightness(0) invert(1);
 }
 
 .friendpage-send-request-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   border: none;
   border-radius: 4px;
   padding: 8px 12px;
@@ -379,12 +385,12 @@
 }
 
 .friendpage-send-request-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point2-hover);
 }
 
 .friendpage-send-request-button.disabled {
-  background-color: #e5e7eb;
-  color: #9ca3af;
+  background-color: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
 }
 
@@ -392,7 +398,7 @@
   text-align: center;
   margin-top: 40px;
   font-size: 15px;
-  color: #9ca3af;
+  color: var(--color-subtext);
   font-weight: 500;
 }
 
@@ -400,7 +406,7 @@
   text-align: center;
   margin-top: 80px;
   font-size: 12px;
-  color: #6B7280;
+  color: var(--color-subtext);
   font-weight: 600;
 }
 
@@ -413,7 +419,7 @@
   gap: 12px;
   padding: 6px 12px;
   margin: 0px auto 32px auto;
-  background-color: #f1f3f5;
+  background-color: var(--color-tab-background);
   border-radius: 8px;
   justify-content: space-between;
 }
@@ -424,9 +430,9 @@
   left: 6px;
   width: calc((100% - 12px) / 2);
   height: calc(100% - 12px);
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 6px;
-  transition: transform .3s ease; 
+  transition: transform .3s ease;
   z-index: 0;
 }
 
@@ -439,10 +445,10 @@
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-subtext);
   background-color: transparent;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: transform .3s ease;
 }
 
 .friendpage-tab span {
@@ -451,8 +457,8 @@
 }
 
 .friendpage-tab.active {
-  background-color: #ffffff;
-  color: #111827;
+  background-color: var(--color-main2);
+  color: var(--color-text);
   font-weight: 700;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
@@ -473,7 +479,7 @@
 }
 
 .friendpage-friend-count {
-  color: #6b7280;
+  color: var(--color-subtext);
   font-size: 11px;
   padding: 2px 6px;
 }

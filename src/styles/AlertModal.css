@@ -12,7 +12,7 @@
 }
 
 .alertmodal-container {
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 10px;
   padding: 32px 32px 20px 32px;
   width: auto;
@@ -23,16 +23,16 @@
 .alertmodal-message {
   font-size: 16px;
   font-weight: 600;
-  color: #000;
+  color: var(--color-text);
   margin-bottom: 32px;
   line-height: 1.5;
   white-space: pre-line; 
 }
 
 .alertmodal-button {
-  background-color: #00CBA8;
+  background-color: var(--color-point);
   border: none;
-  color: white;
+  color: var(--color-main2);
   font-weight: 600;
   padding: 14px 24px;
   border-radius: 6px;
@@ -42,7 +42,7 @@
 }
 
 .alertmodal-button:hover {
-  background-color: #00b398;
+  background-color: var(--color-point-hover);
 }
 
 /* --------------------  모바일  -------------------- */
@@ -61,7 +61,7 @@
   }
 
   .alertmodal-container {
-    background: #fff;
+    background: var(--color-main2);
     border-radius: 10px;
     padding: 20px;
     width: auto;
@@ -72,16 +72,16 @@
   .alertmodal-message {
     font-size: 13px;
     font-weight: 600;
-    color: #000;
+    color: var(--color-text);
     margin-bottom: 32px;
     line-height: 1.5;
     white-space: pre-line; 
   }
 
   .alertmodal-button {
-    background-color: #00CBA8;
+    background-color: var(--color-point);
     border: none;
-    color: white;
+    color: var(--color-main2);
     font-weight: 600;
     padding: 10px 24px;
     border-radius: 6px;
@@ -91,6 +91,6 @@
   }
 
   .alertmodal-button:hover {
-    background-color: #00b398;
+    background-color: var(--color-point-hover);
   }
 }

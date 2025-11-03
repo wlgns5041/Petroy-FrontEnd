@@ -250,7 +250,6 @@
 }
 
 .pet-register-input.filled {
-  border: 1px solid #e5e7eb;
   background-color: var(--color-main2);
 }
 
@@ -674,7 +673,6 @@
 }
 
 .pet-register-input.filled {
-  border: 1px solid #e5e7eb;
   background-color: var(--color-main2);
 }
 

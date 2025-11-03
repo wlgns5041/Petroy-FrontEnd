@@ -17,9 +17,11 @@ html, body, #root, .App {
   --color-point-hover: #13ba9d;
   --color-point2: #3a3a3a;
   --color-point2-hover: #000000;
+  --color-selected: #E8E9EC;
   --color-disable: #E8E9EC;
   --color-disable-text: #C0C0C0;
   --color-tab-background: #f1f3f5;
+  --shadow-color: rgba(0, 0, 0, 0.04);
 }
 
 * {
@@ -38,6 +40,7 @@ html, body, #root, .App {
   var(--color-point-hover);
   var(--color-point2);
   var(--color-point2-hover);
+  var(--color-selected);
   var(--color-disable);
   var(--color-disable-text);
   var(--color-tab-background);
@@ -56,9 +59,11 @@ html, body, #root, .App {
   --color-point-hover: #13ba9d;
   --color-point2: #e0e0e0;
   --color-point2-hover: #f9fafb;
+  --color-selected: #6a6a6a;
   --color-disable: #a1a1a1;
   --color-disable-text: #6b7280;
   --color-tab-background: #131313;
+  --shadow-color: rgba(255, 255, 255, 0.04);
 }
 
 /* 기본 텍스트 정렬 */

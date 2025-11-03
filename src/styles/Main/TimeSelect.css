@@ -17,7 +17,7 @@
   border: 0;
   outline: none;
   border-radius: 8px;
-  background: transparent;    
+  background-color: var(--color-main2);
   font-size: 14px;
   font-weight: 500;
   line-height: 1;
@@ -27,7 +27,12 @@
   appearance: none;
   cursor: pointer;
 }
-.cts-disabled{ background: #f3f4f6; color:#9ca3af; cursor: not-allowed; }
+
+.cts-disabled{ 
+  background: var(--color-disable);
+  color: var(--color-disable-text);
+  cursor: not-allowed; 
+}
 
 /* 우측 화살표(세로 가운데) */
 .cts-caret{
@@ -37,7 +42,7 @@
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 14px;
-  color: #000000;
+  color: var(--color-text);
 }
 
 /* 팝오버: 위치/크기(top/left)는 JS에서 style로 주입됨 */
@@ -47,8 +52,8 @@
   gap: 8px;
   padding: 8px;
   width: 320px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background-color: var(--color-main2);
+  border: none;
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
@@ -58,7 +63,7 @@
   max-height: 220px;
   overflow-y: auto;
   border-radius: 8px;
-  background: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -79,11 +84,14 @@
   font-weight: 600;
   cursor: pointer;
 }
-.cts-option:hover{ background: #eef2f7; }
+
+.cts-option:hover{ 
+  background-color: var(--color-main1-hover);
+}
 
 .cts-option.selected{
-    background: #3a3a3a; 
-  color: #fff; 
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: 700;
 }
 
@@ -109,7 +117,7 @@
   border: 0;
   outline: none;
   border-radius: 8px;
-  background: transparent;    
+  background-color: var(--color-main2);  
   font-size: 11px;
   font-weight: 600;
   line-height: 1;
@@ -119,7 +127,12 @@
   appearance: none;
   cursor: pointer;
 }
-.cts-disabled{ background: #f3f4f6; color:#9ca3af; cursor: not-allowed; }
+
+.cts-disabled{ 
+  background: var(--color-disable);
+  color: var(--color-disable-text);
+  cursor: not-allowed; 
+}
 
 /* 우측 화살표(세로 가운데) */
 .cts-caret{
@@ -129,7 +142,7 @@
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 12px;
-  color: #000000;
+  color: var(--color-text);
 }
 
 /* 팝오버: 위치/크기(top/left)는 JS에서 style로 주입됨 */
@@ -139,7 +152,7 @@
   gap: 8px;
   padding: 12px;
   width: 280px;
-  background: #fff;
+  background-color: var(--color-main2);  
   border: none;
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.08);
@@ -150,7 +163,7 @@
   max-height: 200px;
   overflow: auto;
   border-radius: 8px;
-  background: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 8px;
 }
 
@@ -167,9 +180,14 @@
   font-weight: 600;
   cursor: pointer;
 }
-.cts-option:hover{ background: #eef2f7; }
+
+.cts-option:hover{ 
+  background-color: var(--color-main1-hover);
+}
 
 .cts-option.selected{
-  background: #3a3a3a; color: #fff; font-weight: 700;
+  background-color: var(--color-selected);
+  color: var(--color-text);
+  font-weight: 700;
 }
 }

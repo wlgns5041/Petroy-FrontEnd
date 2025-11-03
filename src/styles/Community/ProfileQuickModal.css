@@ -14,7 +14,7 @@
   max-width: 680px; 
   max-height: 85vh; 
   overflow: auto;
-  background: #fff; 
+  background: var(--color-main2);
   border-radius: 12px; 
   padding: 20px; 
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -64,7 +64,7 @@
   height: 32px;
   border-radius: 8px;
   border: none;
-  background: #f3f4f6;
+  background: var(--color-main1);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -72,7 +72,7 @@
 }
 
 .communityprofile-friend-btn:hover:not(:disabled) {
-  background: #e5e7eb;
+  background: var(--color-disable);
 }
 
 .communityprofile-friend-btn:disabled {
@@ -81,16 +81,16 @@
 }
 
 .communityprofile-friend-btn.is-friend {
-  background: #e7f7ef; 
+  background: var(--color-disable);
 }
 
 .communityprofile-friend-btn.is-pending {
-  background: #fff7e6; 
+  background: var(--color-disable);
 }
 
 .communityprofile-close-btn {
   border: none;
-  color: #000000; 
+  color: var(--color-text);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -101,7 +101,7 @@
 }
 
 .communityprofile-close-btn:hover { 
-  color: #10b981; 
+  color: var(--color-point);
 }
 
 .communityprofile-pet-section { 
@@ -117,10 +117,10 @@
 }
 
 .communityprofile-empty {
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
   text-align: center;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-size: 14px;
   font-weight: 500;
   padding: 40px 0;
@@ -134,7 +134,7 @@
   display: grid; 
   grid-template-columns: repeat(3, 1fr);
   gap: 16px; 
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 20px;
   border-radius: 8px;
   max-height: 240px;          
@@ -155,7 +155,7 @@
   display: flex; 
   gap: 20px; 
   align-items: center; 
-  background: #ffffff; 
+  background: var(--color-main2);
   border-radius: 12px; 
   padding: 12px; 
 }
@@ -182,7 +182,7 @@
 .communityprofile-pet-sub { 
   font-size: 11px; 
   font-weight: 500;
-  color: #6b7280; 
+  color: var(--color-subtext); 
 }
 
 .communityprofile-post-section { 
@@ -204,7 +204,7 @@
   display: grid; 
   grid-template-columns: 1fr 1fr;
   gap: 16px; 
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 20px;
   border-radius: 8px;
   max-height: 240px;           
@@ -229,7 +229,7 @@
   display: flex;
   gap: 20px;           
   align-items: center; 
-  background: #ffffff;
+  background: var(--color-main2);
   border-radius: 8px;
   padding: 12px;
   cursor: pointer;
@@ -237,7 +237,7 @@
 }
 
 .communityprofile-post-item:hover {
-  background-color: #E8E9EC;      
+  background-color: var(--color-main1-hover);  
 }
 
 .communityprofile-post-image {
@@ -246,7 +246,7 @@
   height: 48px;
   border-radius: 8px;
   object-fit: cover;
-  background: #fff;
+  background: var(--color-main2);
 }
 
 .communityprofile-post-info {
@@ -266,7 +266,7 @@
 .communityprofile-post-content { 
   font-size: 11px; 
   font-weight: 500;
-  color: #6b7280; 
+  color: var(--color-subtext);
 }
 
 .communityprofile-loading { 
@@ -292,7 +292,7 @@
     max-width: 680px; 
     max-height: 85vh; 
     overflow: auto;
-    background: #fff; 
+    background: var(--color-main2);
     border-radius: 12px; 
     padding: 12px; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -341,7 +341,7 @@
     height: 28px;
     border-radius: 8px;
     border: none;
-    background: #f9f9f9;
+    background: var(--color-main1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -353,7 +353,7 @@
   }
 
   .communityprofile-friend-btn:hover:not(:disabled) {
-    background: #e5e7eb;
+    background: var(--color-disable);
   }
 
   .communityprofile-friend-btn:disabled {
@@ -362,16 +362,16 @@
   }
 
   .communityprofile-friend-btn.is-friend {
-    background: #e7f7ef; 
+    background: var(--color-disable);
   }
 
   .communityprofile-friend-btn.is-pending {
-    background: #fff7e6; 
+    background: var(--color-disable);
   }
 
   .communityprofile-close-btn {
     border: none;
-    color: #000000; 
+    color: var(--color-text);
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
@@ -382,7 +382,7 @@
   }
 
   .communityprofile-close-btn:hover { 
-    color: #10b981; 
+    color: var(--color-point);
   }
 
   .communityprofile-pet-section { 
@@ -398,8 +398,9 @@
   }
 
   .communityprofile-empty {
+    background-color: var(--color-main1);
     text-align: center;
-    color: #6b7280;
+    color: var(--color-subtext);
     font-size: 10px;
     border-radius: 8px;
     padding: 20px 0;
@@ -413,7 +414,7 @@
     display: grid; 
     grid-template-columns: repeat(2, 1fr);
     gap: 12px; 
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
     padding: 12px;
     border-radius: 8px;
     max-height: 240px;          
@@ -434,7 +435,7 @@
     display: flex; 
     gap: 12px; 
     align-items: center; 
-    background: #ffffff; 
+    background: var(--color-main2);
     border-radius: 12px; 
     padding: 12px; 
   }
@@ -461,7 +462,7 @@
   .communityprofile-pet-sub { 
     font-size: 9px; 
     font-weight: 500;
-    color: #6b7280; 
+    color: var(--color-subtext); 
   }
 
   .communityprofile-post-section { 
@@ -483,7 +484,7 @@
     display: grid; 
     grid-template-columns: 1fr 1fr;
     gap: 12px; 
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
     padding: 12px;
     border-radius: 8px;
     max-height: 240px;           
@@ -508,7 +509,7 @@
     display: flex;
     gap: 12px;           
     align-items: center; 
-    background: #ffffff;
+    background: var(--color-main2);
     border-radius: 8px;
     padding: 12px;
     cursor: pointer;
@@ -516,7 +517,7 @@
   }
 
   .communityprofile-post-item:hover {
-    background-color: #E8E9EC;      
+    background-color: var(--color-main1-hover);      
   }
 
   .communityprofile-post-image {
@@ -525,7 +526,7 @@
     height: 36px;
     border-radius: 8px;
     object-fit: cover;
-    background: #fff;
+    background: var(--color-main2);
   }
 
   .communityprofile-post-info {
@@ -545,7 +546,7 @@
   .communityprofile-post-content { 
     font-size: 9px; 
     font-weight: 500;
-    color: #6b7280; 
+    color: var(--color-subtext);
   }
 
   .communityprofile-loading { 

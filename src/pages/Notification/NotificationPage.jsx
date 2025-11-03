@@ -25,6 +25,7 @@ import {
 } from "react-icons/fa";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 const categories = ["전체", "친구", "일정", "커뮤니티"];
 
@@ -34,14 +35,6 @@ const typeMap = {
   FRIEND_REJECTED: "친구 거절",
   SCHEDULE: "일정 알림",
   POST: "커뮤니티 알림",
-};
-
-const iconMap = {
-  FRIEND_REQUEST: <FaUserPlus size={24} color="#1e293b" />,
-  FRIEND_ACCEPTED: <FaCheckCircle size={24} color="#10b981" />,
-  FRIEND_REJECTED: <FaTimesCircle size={24} color="#ef4444" />,
-  SCHEDULE: <FaCalendarAlt size={24} color="#1e293b" />,
-  POST: <FaComments size={24} color="#1e293b" />,
 };
 
 function NotificationPage() {
@@ -54,6 +47,18 @@ function NotificationPage() {
   const [activeCategory, setActiveCategory] = useState("전체");
   const tabRefs = useRef([]);
   const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
+  const { isDarkMode } = useTheme(); 
+
+  const iconColor = isDarkMode ? "#ffffff" : "#1e293b";
+
+
+  const iconMap = {
+  FRIEND_REQUEST: <FaUserPlus size={24} color={iconColor}/>,
+  FRIEND_ACCEPTED: <FaCheckCircle size={24} color={iconColor}/>,
+  FRIEND_REJECTED: <FaTimesCircle size={24} color={iconColor}/>,
+  SCHEDULE: <FaCalendarAlt size={24} color={iconColor}/>,
+  POST: <FaComments size={24} color={iconColor}/>,
+};
 
   // 탭 애니메이션 효과
   useEffect(() => {

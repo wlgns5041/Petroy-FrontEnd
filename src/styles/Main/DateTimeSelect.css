@@ -13,10 +13,10 @@
   justify-content: left;
   border-radius: 8px;
   border: none;
-  background-color: #fff;
+  background-color: var(--color-main2);
   font-size: 12px;
   font-weight: 500;
-  color: #111827;
+  color: var(--color-text);
   cursor: pointer;
   padding: 0 12px;
   box-sizing: border-box;
@@ -25,8 +25,8 @@
 
 .dts-field:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .dts-caret {
@@ -36,7 +36,7 @@
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 16px;
-  color: #000;
+  color: var(--color-text);
 }
 
 .dts-popover {
@@ -49,7 +49,7 @@
   gap: 12px;
   padding: 24px 16px;
   width: 320px;
-  background: #fff;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
@@ -67,7 +67,7 @@
 }
 
 .dts-nav-btn {
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 8px;
   padding: 0px;
@@ -75,7 +75,7 @@
 }
 
 .dts-nav-btn:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main2-hover);
 }
 
 .dts-nav-btn svg {
@@ -94,7 +94,7 @@
   grid-column: 1 / span 3;
   margin-bottom: 12px;
   padding: 8px 24px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
 }
 
@@ -110,18 +110,18 @@
   line-height: 32px;
   border-radius: 6px;
   font-size: 10px;
-  color: #6b7280;
+  color: var(--color-subtext);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .dts-day:hover {
-  background-color: #e5e7eb;
+  background-color: var(--color-main1-hover);
 }
 
 .dts-day.selected {
-  background-color: #d1d5db;
-  color: black;
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: bold;
 }
 
@@ -141,7 +141,7 @@
   max-height: 120px;
   overflow-y: auto;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: var(--color-main1);
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -150,12 +150,7 @@
 }
 
 .dts-column::-webkit-scrollbar {
-  width: 6px;
-}
-
-.dts-column::-webkit-scrollbar-thumb {
-  background: #cfcfcf;
-  border-radius: 3px;
+  display: none;
 }
 
 .dts-option {
@@ -172,12 +167,12 @@
 }
 
 .dts-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .dts-option.selected {
-  background-color: #3a3a3a;
-  color: #fff;
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: 700;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -199,10 +194,10 @@
   justify-content: left;
   border-radius: 8px;
   border: none;
-  background-color: #fff;
+  background-color: var(--color-main2);
   font-size: 10px;
   font-weight: 500;
-  color: #111827;
+  color: var(--color-text);
   cursor: pointer;
   padding: 0 12px;
   box-sizing: border-box;
@@ -211,8 +206,8 @@
 
 .dts-field:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .dts-caret {
@@ -222,7 +217,7 @@
   transform: translateY(-50%);
   pointer-events: none;
   font-size: 16px;
-  color: #000;
+  color: var(--color-text);
 }
 
 .dts-popover {
@@ -235,7 +230,7 @@
   gap: 4px;
   padding: 16px;
   width: 240px;
-  background: #fff;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
@@ -252,7 +247,7 @@
 }
 
 .dts-nav-btn {
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 8px;
   padding: 0px;
@@ -260,7 +255,7 @@
 }
 
 .dts-nav-btn:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main2-hover);
 }
 
 .dts-nav-btn svg {
@@ -279,7 +274,7 @@
   grid-column: 1 / span 3;
   margin-bottom: 8px;
   padding: 12px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
 }
 
@@ -295,18 +290,18 @@
   line-height: 24px;
   border-radius: 6px;
   font-size: 9px;
-  color: #6b7280;
+  color: var(--color-subtext);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .dts-day:hover {
-  background-color: #e5e7eb;
+  background-color: var(--color-main1-hover);
 }
 
 .dts-day.selected {
-  background-color: #d1d5db;
-  color: black;
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: bold;
 }
 
@@ -326,7 +321,7 @@
   max-height: 110px;
   overflow-y: auto;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: var(--color-main1);
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -335,12 +330,7 @@
 }
 
 .dts-column::-webkit-scrollbar {
-  width: 6px;
-}
-
-.dts-column::-webkit-scrollbar-thumb {
-  background: #cfcfcf;
-  border-radius: 3px;
+  display: none;
 }
 
 .dts-option {
@@ -357,12 +347,12 @@
 }
 
 .dts-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .dts-option.selected {
-  background-color: #3a3a3a;
-  color: #fff;
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: 700;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

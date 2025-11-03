@@ -14,7 +14,7 @@
 }
 
 .schedule-create-modal-content {
-  background-color: white;
+  background-color: var(--color-main2);
   border-radius: 12px;
   width: 95%;
   max-width: 600px;
@@ -57,7 +57,7 @@
   cursor: pointer;
 }
 
-.schedule-create-close-button:hover { color: #10b981; }
+.schedule-create-close-button:hover { color: var(--color-point); }
 
 .schedule-create-back-button {
   position: absolute;
@@ -71,13 +71,13 @@
   z-index: 1;
 }
 
-.schedule-create-back-button:hover { color: #10b981; }
+.schedule-create-back-button:hover { color: var(--color-point); }
 
 .schedule-create-step-indicator {
   text-align: center;
   font-size: 14px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--color-subtext);
   margin-top: 60px;
 }
 
@@ -85,7 +85,7 @@
   text-align: center;
   font-size: 20px;
   font-weight: bold;
-  color: #000000;
+  color: var(--color-text);
   margin-top: 20px;
   line-height: 1.5;
 }
@@ -110,12 +110,12 @@
   padding: 12px 42px 12px 18px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   border: none;
   min-width: 450px;
   max-width: 450px;
-  color: #6B7280;
+  color: var(--color-subtext);
   text-align: left;
   transition: all 0.2s ease-in-out;
   position: relative;
@@ -127,7 +127,7 @@
   width: 70px; 
   font-size: 14px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
@@ -144,13 +144,13 @@
   padding: 12px 42px 12px 18px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   border: none;
   min-width: 450px;
   max-width: 450px;
   cursor: pointer;
-  color: #000000;
+  color: var(--color-text);
   text-align: left;
   transition: all 0.2s ease-in-out;
   position: relative;
@@ -158,13 +158,13 @@
 }
 
 .schedule-create-inline-select:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-inline-select:focus,
 .schedule-create-inline-select.active {
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-create-inline-arrow {
@@ -173,7 +173,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 10px;
-  color: #000000;
+  color: var(--color-text);
   pointer-events: none;
   transition: transform 0.2s ease;
 }
@@ -187,7 +187,7 @@
   top: calc(100% + 6px);
   right: 0;
   width: auto;
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   list-style: none;
@@ -202,17 +202,17 @@
   font-size: 14px;
   font-weight: 600;
   border-radius: 8px;
-  color: #111827;
+  color: var(--color-text);
   cursor: pointer;
   transition: background 0.15s ease-in-out;
 }
 
 .schedule-create-inline-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-inline-option.selected {
-  background-color: #f9fafb;
+  background-color: var(--color-main1);
   font-weight: 600;
 }
 
@@ -224,21 +224,21 @@
   min-width: 450px;
   max-width: 450px;
   border: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   transition: all 0.1s ease-in-out;
-  color: #111827;
+  color: var(--color-text);
   border: 1px solid transparent;
 }
 
 .schedule-create-input:hover { 
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
  }
 
 .schedule-create-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-create-textarea {
@@ -249,10 +249,10 @@
   line-height: 1.6;
   text-align: center;
   border-radius: 10px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   box-sizing: border-box;
-  color: #111827;
+  color: var(--color-text);
   font-family: inherit;
   resize: none;
   margin: 0 auto;
@@ -262,14 +262,14 @@
 
 .schedule-create-textarea:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 /* ======== STEP 2: 펫 선택 ======== */
 .schedule-create-empty-pets {
   margin: 40px 40px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 120px;
   border-radius: 12px;
 }
@@ -277,14 +277,14 @@
 .schedule-create-empty-pets-title {
   font-size: 14px;
   font-weight: 600;
-  color: #000;
+  color:   var(--color-text);
   text-align: center;
 }
 
 .schedule-create-empty-pets-sub {
   font-size: 12px;
   font-weight: 400;
-  color: #6B7280;
+  color: var(--color-text);
   text-align: center;
   margin-top: 8px;
 }
@@ -307,7 +307,7 @@
   display: flex;
   align-items: center;
   width: 80%;
-  background: #f9f9f9;
+  background: var(--color-main1);
   border: none;
   border-radius: 12px;
   padding: 14px 18px;
@@ -317,11 +317,11 @@
 }
 
 .schedule-create-pet-select-card:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-pet-select-card.selected {
-  background-color: #E8E9EC;
+  background-color: var(--color-selected);
 }
 
 .schedule-create-pet-image {
@@ -344,7 +344,7 @@
 .schedule-create-name {
   font-weight: 700;
   font-size: 14px;
-  color: #000000;
+  color: var(--color-text);
   min-height: 20px;
   white-space: nowrap;
 }
@@ -352,7 +352,7 @@
 .schedule-create-species {
   font-size: 12px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--color-subtext);
   min-height: 18px;
   white-space: nowrap;
 }
@@ -361,7 +361,7 @@
 .schedule-create-tab-wrapper {
   width: 100%;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px 8px 0 0;
   padding: 12px;
   margin-top: 32px;
@@ -384,12 +384,12 @@
 .schedule-create-tab-button {
   flex: 1;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   font-size: 14px;
   padding: 12px;
   border-radius: 8px;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-subtext);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -400,8 +400,8 @@
 }
 
 .schedule-create-tab-button.active {
-  background-color: #f9f9f9;
-  color: #111827;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   font-weight: 700;
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
 }
@@ -422,8 +422,8 @@
 .schedule-create-tooltip-text {
   visibility: hidden;
   opacity: 0;
-  background-color: #333;
-  color: #fff;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   text-align: center;
   padding: 6px 10px;
   border-radius: 8px;
@@ -449,7 +449,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: auto;
   padding: 20px 52px;
   margin-bottom: 32px;
@@ -477,7 +477,7 @@
 .schedule-create-label-with-count {
   font-size: 13px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -486,7 +486,7 @@
 .schedule-create-label-with-info {
   font-size: 13px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   display: flex;
   align-items: center;
 }
@@ -501,12 +501,12 @@
 /* 🔹 선택된 항목 표시 상자 */
 .schedule-create-step3-select-box {
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 8px;
   padding: 12px 14px;
   font-size: 13px;
-  color: #111827;
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
@@ -515,8 +515,8 @@
 
 .schedule-create-step3-select-box.active {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 /* 🔹 화살표 */
@@ -526,7 +526,7 @@
   top: 50%;
   transform: translateY(-50%);
   font-size: 9px;
-  color: #111827;
+  color: var(--color-text);
   pointer-events: none;
   transition: transform 0.2s ease;
 }
@@ -541,7 +541,7 @@
   top: calc(100% + 6px);
   right: 0;
   width: auto;
-  background: #fff;
+  background-color: var(--color-main2);
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   list-style: none;
@@ -557,18 +557,18 @@
   font-size: 12px;
   font-weight: 600;
   border-radius: 8px;
-  color: #111827;
+  color: var(--color-point2-hover);
   cursor: pointer;
   transition: background 0.15s ease-in-out;
 }
 
 .schedule-create-step3-select-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 /* 🔹 선택된 항목 강조 */
 .schedule-create-step3-select-option.selected {
-  background-color: #f9fafb;
+  background-color: var(--color-main1);
   font-weight: 600;
 }
 
@@ -577,16 +577,16 @@
   font-size: 13px;
   border: none;
   border-radius: 8px;
-  background-color: #fff;
-  color: #111827;
+  background-color: var(--color-main2);
+  color: var(--color-text);
   box-sizing: border-box;
   width: 100%;
 }
 
 .schedule-create-input-step3:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-create-input-group.wide { width: 180px; }
@@ -594,7 +594,7 @@
 .schedule-create-form-label {
   font-size: 13px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   display: flex;
   align-items: center;
 }
@@ -606,27 +606,27 @@
   margin-top: 0px;
   margin-bottom: 12px;
   flex-wrap: wrap;
-  background-color: #ffffff;
-  border-radius: 4px;
+  background-color: var(--color-main2);
+  border-radius: 8px;
   padding: 16px 12px;
 }
 
 .schedule-create-repeat-buttons-month {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 12px;
-  margin-bottom: 12px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 16px 12px;
+  gap: 16px;
+  margin-bottom: 10px;
+  background-color: var(--color-main2);
+  border-radius: 12px;
+  padding: 16px 20px;
   justify-items: center; 
 }
 
 .schedule-create-week-button {
   border: none;
-  background-color: #f9f9f9;
-  color: #111827;
-  border-radius: 10px;
+  background-color: var(--color-main1);
+  color: var(--color-text);
+  border-radius: 8px;
   padding: 10px 16px;
   cursor: pointer;
   font-size: 12px;
@@ -636,8 +636,8 @@
 
 .schedule-create-month-button {
   border: none;
-  background-color: #f9f9f9;
-  color: #111827;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   border-radius: 10px;
   width: 32px; 
   height: 32px;
@@ -651,13 +651,13 @@
 }
 
 .schedule-create-week-button.selected {
-  background-color: #E8E9EC;
-  color: #000000;
+  background-color: var(--color-selected);
+  color: var(--color-text);
 }
 
 .schedule-create-month-button.selected {
-  background-color: #E8E9EC;
-  color: #000000;
+  background-color: var(--color-selected);
+  color: var(--color-text);
 }
 
 .schedule-create-form-step3 input[type="datetime-local"] {
@@ -668,9 +668,9 @@
   font-size: 12px;
   border: none;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--color-main2);
   box-sizing: border-box;
-  color: #111827;
+  color: var(--color-text);
   text-align: left;
 }
 
@@ -694,7 +694,7 @@
   width: 280px;
   min-width: 280px;
   flex-shrink: 0;
-  background-color: #f9fafb;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 12px;
   height: 100%;
@@ -714,7 +714,7 @@
 }
 
 .schedule-create-step3-nav-btn {
-  background-color: #f9f9f9;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 8px;
   padding: 0px;
@@ -738,18 +738,18 @@
   line-height: 32px;
   border-radius: 6px;
   font-size: 10px;
-  color: #6b7280;
+  color: var(--color-subtext);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .schedule-create-step3-day:hover { 
-  background-color: #e5e7eb; 
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-step3-day.selected {
-  background-color: #d1d5db;
-  color: black;
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: bold;
 }
 
@@ -771,7 +771,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #f3f4f6;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 24px;
   box-sizing: border-box;
@@ -802,13 +802,13 @@
   background: none;
   border: none;
   font-size: 10px;
-  color: #9ca3af;
+  color: var(--color-subtext);
   cursor: pointer;
   transition: color 0.4s;
 }
 
 .schedule-create-step3-clear-btn:hover { 
-  color: #000; 
+  color: var(--color-text); 
 }
 
 .schedule-create-step3-date-list{
@@ -836,12 +836,12 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 6px;
   padding: 0 6px;         
   font-size: 10px;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -851,7 +851,7 @@
 }
 
 .schedule-create-step3-date-pill:hover { 
-  background-color: #e5e7eb; 
+  background-color: var(--color-main1-hover);
 }
 
 /* 하루종일/시간설정 */
@@ -864,7 +864,7 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   height: 120px;
   padding: 16px;
   border-radius: 8px;
@@ -875,7 +875,7 @@
   flex: 0 0 auto;         
   min-width: 200px;
   min-height: 56px;    
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 8px;
   padding: 16px;
   display: flex;
@@ -887,7 +887,7 @@
 .schedule-create-allday-label {
   font-size: 14px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   position: relative;
   display: flex;
   align-items: center;
@@ -895,7 +895,7 @@
 
 .schedule-create-time-box {
   flex: 1 1 auto;         
-  background-color: #fff;
+  background: var(--color-main2);
   border-radius: 8px;
   padding: 16px;
   min-height: 56px;        
@@ -906,7 +906,7 @@
 }
 
 .schedule-create-time-box.active-time-box {
-  background-color: #fff;    
+  background-color: var(--color-main2);  
 }
 
 .schedule-create-time-setting {
@@ -919,7 +919,7 @@
 .schedule-create-time-allday-text {
   font-size: 12px;
   font-weight: 600;
-  color: #4b5563;
+  color: var(--color-text);
   text-align: center;
   flex: 1;                  
   display: flex;            
@@ -931,7 +931,7 @@
 .schedule-create-priority {
   display: flex;
   justify-content: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: 60%;
   padding: 60px;
   border-radius: 8px;
@@ -952,16 +952,17 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: 500;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   transition: all 0.2s ease;
 }
+
 .schedule-create-priority-option:hover { 
-  background-color: #f4f4f4; 
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-priority-option.selected {
   border: none;
-  background-color: #E8E9EC;
+  background-color: var(--color-selected);
   border-radius: 6px;
 }
 
@@ -986,7 +987,7 @@
 .schedule-create-alert-group {
   display: flex;
   justify-content: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: 60%;
   padding: 60px;
   border-radius: 8px;
@@ -1006,7 +1007,7 @@
   width: 90px;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color:  var(--color-text);
   display: flex;
   align-items: center;
   gap: 2px;
@@ -1019,7 +1020,7 @@
   border-radius: 8px;
   margin-left: 12px;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -1044,8 +1045,8 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 600;
-  background-color: #10b981;
-  color: #fff;
+  background-color: var(--color-point);
+  color: var(--color-main2);
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -1053,7 +1054,8 @@
 }
 
 .schedule-create-next-btn:disabled {
-  background-color: #ccc;
+  background: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
 }
 
@@ -1090,13 +1092,13 @@
   width: 18px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--color-main2);
   transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .schedule-create-slider {
-  background-color: #10b981;
+  background-color: var(--color-point);
 }
 
 input:checked + .schedule-create-slider:before {
@@ -1122,7 +1124,7 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-modal-content {
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 12px;
   width: 80%;
   max-width: auto;
@@ -1159,13 +1161,13 @@ input:checked + .schedule-create-slider:before {
   top: 18px;
   right: 18px;
   font-size: 20px;
-  color: #000000;
+  color: #aaa;
   background: none;
   border: none;
   cursor: pointer;
 }
 
-.schedule-create-close-button:hover { color: #10b981; }
+.schedule-create-close-button:hover { color: var(--color-point2); }
 
 .schedule-create-back-button {
   position: absolute;
@@ -1174,18 +1176,18 @@ input:checked + .schedule-create-slider:before {
   background: none;
   border: none;
   font-size: 28px;
-  color: #000000;
+  color: #aaa;
   cursor: pointer;
   z-index: 1;
 }
 
-.schedule-create-back-button:hover { color: #10b981; }
+.schedule-create-back-button:hover { color: var(--color-point2); }
 
 .schedule-create-step-indicator {
   text-align: center;
   font-size: 12px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--color-subtext);
   margin-top: 24px;
 }
 
@@ -1193,7 +1195,7 @@ input:checked + .schedule-create-slider:before {
   text-align: center;
   font-size: 16px;
   font-weight: 800;
-  color: #111827;
+  color: var(--color-text);
   margin-top: 24px;
   line-height: 0;
 }
@@ -1219,12 +1221,12 @@ input:checked + .schedule-create-slider:before {
   padding: 12px;
   font-size: 10px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   border: none;
   min-width: 100%;
   max-width: 100;
-  color: #6B7280;
+  color: var(--color-subtext);
   text-align: left;
   transition: all 0.2s ease-in-out;
   position: relative;
@@ -1236,7 +1238,7 @@ input:checked + .schedule-create-slider:before {
   width: 40px; 
   font-size: 11px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
@@ -1253,13 +1255,13 @@ input:checked + .schedule-create-slider:before {
   padding: 12px;
   font-size: 10px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   border: none;
   width: 100%;     
   min-width: 0;       
   cursor: pointer;
-  color: #111827;
+  color: var(--color-text);
   text-align: left;
   transition: all 0.2s ease-in-out;
   position: relative;
@@ -1267,13 +1269,13 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-inline-select:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-inline-select:focus,
 .schedule-create-inline-select.active {
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-create-inline-arrow {
@@ -1282,7 +1284,7 @@ input:checked + .schedule-create-slider:before {
   top: 50%;
   transform: translateY(-50%);
   font-size: 8px;
-  color: #000000;
+  color: var(--color-text);
   pointer-events: none;
   transition: transform 0.2s ease;
 }
@@ -1296,7 +1298,7 @@ input:checked + .schedule-create-slider:before {
   top: calc(100% + 6px);
   right: 0;
   width: auto;
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   list-style: none;
@@ -1311,17 +1313,17 @@ input:checked + .schedule-create-slider:before {
   font-size: 11px;
   font-weight: 600;
   border-radius: 8px;
-  color: #111827;
+  color: var(--color-text);
   cursor: pointer;
   transition: background 0.15s ease-in-out;
 }
 
 .schedule-create-inline-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-inline-option.selected {
-  background-color: #f9fafb;
+  background-color: var(--color-main1);
   font-weight: 600;
 }
 
@@ -1333,21 +1335,21 @@ input:checked + .schedule-create-slider:before {
   width: 100%;       
   min-width: 0;        
   border: none;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   transition: all 0.1s ease-in-out;
-  color: #000000;
+  color: var(--color-text);
   border: 1px solid transparent;
 }
 
 .schedule-create-input:hover { 
-  background-color: #f3f4f6; 
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-create-textarea {
@@ -1355,10 +1357,10 @@ input:checked + .schedule-create-slider:before {
   height: 120px;
   font-size: 11px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   box-sizing: border-box;
-  color: #111827;
+  color: var(--color-text);
   font-family: inherit;
   resize: none;
   text-align: center;
@@ -1372,28 +1374,28 @@ input:checked + .schedule-create-slider:before {
 
 .schedule-create-textarea:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 /* ======== STEP 2: 펫 선택 ======== */
 .schedule-create-empty-pets {
   margin: 60px auto;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 80px 0;
 }
 
 .schedule-create-empty-pets-title {
   font-size: 12px;
   font-weight: 600;
-  color: #000;
+  color:   var(--color-text);
   text-align: center;
 }
 
 .schedule-create-empty-pets-sub {
   font-size: 10px;
   font-weight: 400;
-  color: #6B7280;
+  color: var(--color-text);
   text-align: center;
   margin-top: 8px;
 }
@@ -1416,7 +1418,7 @@ input:checked + .schedule-create-slider:before {
   display: flex;
   align-items: center;
   width: auto;
-  background: #f9f9f9;
+  background: var(--color-main1);
   border: none;
   border-radius: 10px;
   padding: 12px;
@@ -1426,11 +1428,11 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-pet-select-card:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-pet-select-card.selected {
-  background-color: #E8E9EC;
+  background-color: var(--color-selected);
 }
 
 .schedule-create-pet-image {
@@ -1454,7 +1456,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-name {
   font-weight: 700;
   font-size: 11px;
-  color: #000000;
+  color: var(--color-text);
   min-height: auto;
   white-space: nowrap;
   justify-content: center;
@@ -1465,7 +1467,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-species {
   font-size: 9px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--color-subtext);
   white-space: nowrap;
   justify-content: center;
   align-items: center;
@@ -1480,7 +1482,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-tab-wrapper {
   width: 100%;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 6px;
   margin-top: 32px;
 }
@@ -1502,12 +1504,12 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-tab-button {
   flex: 1;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   font-size: 12px;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--color-subtext);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
@@ -1517,8 +1519,8 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-tab-button.active {
-  background-color: #f9f9f9;
-  color: #111827;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   font-weight: 700;
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
 }
@@ -1539,8 +1541,8 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-tooltip-text {
   visibility: hidden;
   opacity: 0;
-  background-color: #333;
-  color: #fff;
+  background-color: var(--color-point2);
+  color: var(--color-main2);
   text-align: center;
   padding: 6px 8px;
   border-radius: 8px;
@@ -1566,7 +1568,7 @@ input:checked + .schedule-create-slider:before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: auto;
   padding: 20px;
   margin-bottom: 0px;
@@ -1594,7 +1596,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-label-with-count {
   font-size: 11px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   display: flex;
   align-items: center;
   gap: 0px;
@@ -1603,7 +1605,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-label-with-info {
   font-size: 11px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   display: flex;
   align-items: center;
 }
@@ -1618,12 +1620,12 @@ input:checked + .schedule-create-slider:before {
 /* 🔹 선택된 항목 표시 상자 */
 .schedule-create-step3-select-box {
   width: 100%;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 8px;
   padding: 12px;
   font-size: 10px;
-  color: #111827;
+  color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
@@ -1632,8 +1634,8 @@ input:checked + .schedule-create-slider:before {
 
 .schedule-create-step3-select-box.active {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 /* 🔹 화살표 */
@@ -1643,7 +1645,7 @@ input:checked + .schedule-create-slider:before {
   top: 50%;
   transform: translateY(-50%);
   font-size: 8px;
-  color: #111827;
+  color: var(--color-text);
   pointer-events: none;
   transition: transform 0.2s ease;
 }
@@ -1658,7 +1660,7 @@ input:checked + .schedule-create-slider:before {
   top: calc(100% + 6px);
   right: 0;
   width: auto;
-  background: #fff;
+  background-color: var(--color-main2);
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   list-style: none;
@@ -1674,18 +1676,18 @@ input:checked + .schedule-create-slider:before {
   font-size: 11px;
   font-weight: 600;
   border-radius: 8px;
-  color: #111827;
+  color: var(--color-point2-hover);
   cursor: pointer;
   transition: background 0.15s ease-in-out;
 }
 
 .schedule-create-step3-select-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 /* 🔹 선택된 항목 강조 */
 .schedule-create-step3-select-option.selected {
-  background-color: #f9fafb;
+  background-color: var(--color-main1);
   font-weight: 600;
 }
 
@@ -1697,17 +1699,17 @@ input:checked + .schedule-create-slider:before {
   width: 100%;       
   min-width: 0;        
   border: none;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   box-sizing: border-box;
   transition: all 0.1s ease-in-out;
-  color: #111827;
+  color: var(--color-text);
   border: 1px solid transparent;
 }
 
 .schedule-create-input-step3:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-create-input-group.wide { 
@@ -1717,7 +1719,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-form-label {
   font-size: 11px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   display: flex;
   align-items: center;
 }
@@ -1730,7 +1732,7 @@ input:checked + .schedule-create-slider:before {
   margin-top: 0px;
   margin-bottom: 12px;
   flex-wrap: wrap;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 8px;
   padding: 16px 8px;
   width: 95%;
@@ -1742,7 +1744,7 @@ input:checked + .schedule-create-slider:before {
   grid-template-columns: repeat(8, 1fr);
   gap: 10px;
   margin-bottom: 12px;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 8px;
   padding: 12px 8px;
   justify-items: center; 
@@ -1750,8 +1752,8 @@ input:checked + .schedule-create-slider:before {
 
 .schedule-create-week-button {
   border: none;
-  background-color: #f9f9f9;
-  color: #111827;
+  background-color: var(--color-main1);
+  border-radius: 8px;
   border-radius: 4px;
   padding: 8px;
   cursor: pointer;
@@ -1762,8 +1764,8 @@ input:checked + .schedule-create-slider:before {
 
 .schedule-create-month-button {
   border: none;
-  background-color: #f9f9f9;
-  color: #111827;
+  background-color: var(--color-main1);
+  border-radius: 8px;
   border-radius: 4px;
   width: 20px; 
   height: 20px;
@@ -1777,13 +1779,13 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-week-button.selected {
-  background-color: #E8E9EC;
-  color: #000000;
+  background-color: var(--color-selected);
+  color: var(--color-text);
 }
 
 .schedule-create-month-button.selected {
-  background-color: #E8E9EC;
-  color: #000000;
+  background-color: var(--color-selected);
+  color: var(--color-text);
 }
 
 .schedule-create-form-step3 input[type="datetime-local"] {
@@ -1794,9 +1796,9 @@ input:checked + .schedule-create-slider:before {
   font-size: 12px;
   border: none;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--color-main2);
   box-sizing: border-box;
-  color: #111827;
+  color: var(--color-text);
   text-align: left;
 }
 
@@ -1821,7 +1823,7 @@ input:checked + .schedule-create-slider:before {
   width: auto;
   min-width: auto;
   flex-shrink: 0;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 12px;
   height: 100%;
@@ -1837,7 +1839,7 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-step3-nav-btn {
-  background-color: #f9f9f9;
+  background-color: var(--color-main2);
   border: none;
   border-radius: 4px;
   padding: 4px;
@@ -1865,18 +1867,18 @@ input:checked + .schedule-create-slider:before {
   line-height: 32px;
   border-radius: 6px;
   font-size: 10px;
-  color: #6b7280;
+  color: var(--color-subtext);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .schedule-create-step3-day:hover { 
-  background-color: #e5e7eb; 
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-create-step3-day.selected {
-  background-color: #E8E9EC;
-  color: black;
+  background-color: var(--color-selected);
+  color: var(--color-text);
   font-weight: bold;
 }
 
@@ -1898,13 +1900,13 @@ input:checked + .schedule-create-slider:before {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 24px;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
-  max-height: 100%;
+  height: auto !important;
+  max-height: auto !important;
   overflow: hidden;
 }
 
@@ -1929,13 +1931,13 @@ input:checked + .schedule-create-slider:before {
   background: none;
   border: none;
   font-size: 10px;
-  color: #9ca3af;
+  color: var(--color-subtext);
   cursor: pointer;
   transition: color 0.4s;
 }
 
 .schedule-create-step3-clear-btn:hover { 
-  color: #000; 
+  color: var(--color-text); 
 }
 
 .schedule-create-step3-date-list{
@@ -1963,12 +1965,12 @@ input:checked + .schedule-create-slider:before {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   border-radius: 6px;
   padding: 0 6px;         
   font-size: 10px;
   font-weight: 600;
-  color: #333;
+  color: var(--color-text);
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
@@ -1978,7 +1980,7 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-step3-date-pill:hover { 
-  background-color: #e5e7eb; 
+  background-color: var(--color-main1-hover);
 }
 
 /* 하루종일/시간설정 */
@@ -1991,7 +1993,7 @@ input:checked + .schedule-create-slider:before {
   width: auto;
   max-width: auto;
   box-sizing: border-box;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   height: 80px;
   padding: 12px;
   border-radius: 8px;
@@ -2002,7 +2004,7 @@ input:checked + .schedule-create-slider:before {
   flex: 0 0 auto;         
   min-width: 120px;
   min-height: 24px;    
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 6px;
   padding: 8px;
   display: flex;
@@ -2014,7 +2016,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-allday-label {
   font-size: 10px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   position: relative;
   display: flex;
   align-items: center;
@@ -2022,7 +2024,7 @@ input:checked + .schedule-create-slider:before {
 
 .schedule-create-time-box {
   flex: 1 1 auto;         
-  background-color: #fff;
+  background: var(--color-main2);
   border-radius: 6px;
   padding: 4px;
   min-height: auto;        
@@ -2033,7 +2035,7 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-time-box.active-time-box {
-  background-color: #fff;    
+  background-color: var(--color-main2);  
 }
 
 .schedule-create-time-setting {
@@ -2043,11 +2045,10 @@ input:checked + .schedule-create-slider:before {
   width: 100%;
 }
 
-
 .schedule-create-time-allday-text {
   font-size: 9px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
   text-align: center;
   flex: 1;                  
   display: flex;            
@@ -2059,7 +2060,7 @@ input:checked + .schedule-create-slider:before {
 .schedule-create-priority {
   display: flex;
   justify-content: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: auto;
   padding: 60px;
   border-radius: 8px;
@@ -2080,18 +2081,18 @@ input:checked + .schedule-create-slider:before {
   border-radius: 8px;
   font-size: 10px;
   font-weight: 500;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   transition: all 0.2s ease;
   width: 40px;
 }
 
 .schedule-create-priority-option:hover { 
-  background-color: #f4f4f4; 
+  background-color: var(--color-main1-hover); 
 }
 
 .schedule-create-priority-option.selected {
   border: none;
-  background-color: #E8E9EC;
+  background-color: var(--color-selected);
   border-radius: 6px;
   font-weight: 600;
 }
@@ -2117,7 +2118,7 @@ input:checked + .schedule-create-slider:before {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   width: auto;
   border-radius: 8px;
   margin: 24px auto 12px auto;
@@ -2136,7 +2137,7 @@ input:checked + .schedule-create-slider:before {
   width: 70px;
   font-size: 11px;
   font-weight: 500;
-  color: #000000;
+  color:  var(--color-text);
   display: flex;
   align-items: center;
   gap: 2px;
@@ -2149,7 +2150,7 @@ input:checked + .schedule-create-slider:before {
   border-radius: 8px;
   margin-left: 0px;
   border: none;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
@@ -2174,8 +2175,8 @@ input:checked + .schedule-create-slider:before {
   padding: 14px;
   font-size: 12px;
   font-weight: 600;
-  background-color: #00CBA8;
-  color: #fff;
+  background-color: var(--color-point);
+  color: var(--color-main2);
   border-radius: 6px;
   border: none;
   cursor: pointer;
@@ -2183,7 +2184,8 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-next-btn:disabled {
-  background-color: #ccc;
+  background: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
 }
 
@@ -2220,13 +2222,13 @@ input:checked + .schedule-create-slider:before {
   width: 12px;
   left: 2px;
   bottom: 2px;
-  background-color: white;
+  background-color: var(--color-main2);
   transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .schedule-create-slider {
-  background-color: #10b981;
+  background-color: var(--color-point);
 }
 
 input:checked + .schedule-create-slider:before {

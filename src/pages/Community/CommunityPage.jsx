@@ -38,6 +38,7 @@ import SentimentDissatisfiedRoundedIcon from "@mui/icons-material/SentimentDissa
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import { useMediaQuery } from "@mui/material";
 import withAuth from "../../utils/withAuth";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 /* -------------------- 유틸 -------------------- */
 
@@ -237,6 +238,8 @@ const CommunityPage = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+  const { isDarkMode } = useTheme();
 
   /* ---------- 함수 ---------- */
 
@@ -603,13 +606,15 @@ const CommunityPage = () => {
         {isMobile ? (
           <>
             <div className="communitypage-header-top">
-              <div className="communitypage-search-wrapper">
+              <div className="communitypage-search-wrapper"
+              >
                 <input
                   type="text"
                   value={searchKeyword}
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   placeholder="게시글 검색"
                   className="communitypage-search-input"
+                  
                 />
                 <button
                   type="submit"
@@ -681,7 +686,7 @@ const CommunityPage = () => {
                   <BookmarkIcon
                     sx={{
                       fontSize: 20,
-                      color: "#3a3a3a",
+                      color: isDarkMode ? "#f5f5f5" : "#111827",
                     }}
                   />
                 </button>
@@ -727,7 +732,12 @@ const CommunityPage = () => {
                 }`}
                 onClick={toggleHeaderBookmark}
               >
-                <BookmarkIcon sx={{ fontSize: 24, color: "#111827" }} />
+                <BookmarkIcon
+                  sx={{
+                    fontSize: 24,
+                    color: isDarkMode ? "#ffffff" : "#000000",
+                  }}
+                />
               </button>
             </div>
 
@@ -739,7 +749,7 @@ const CommunityPage = () => {
                   alignItems: "center",
                   width: 150,
                   borderRadius: "8px",
-                  backgroundColor: "#f0f2f5",
+                 backgroundColor: isDarkMode ? "#2a2a2a" : "#f9f9f9",
                   padding: "6px",
                   boxShadow: "none",
                 }}
@@ -751,13 +761,15 @@ const CommunityPage = () => {
                     flex: 1,
                     fontFamily: "Pretendard, sans-serif",
                     fontSize: "12px",
+                    color: isDarkMode ? "#ffffff" : "#000000",
+    
                   }}
                   value={searchKeyword}
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   placeholder="게시물 검색"
                   inputProps={{ "aria-label": "search" }}
                 />
-                <IconButton type="submit" sx={{ p: "1px" }} aria-label="search">
+                <IconButton type="submit" sx={{ p: "1px", color: isDarkMode ? "#ffffff" : "#000000" }} aria-label="search">
                   <SearchIcon />
                 </IconButton>
               </Paper>
@@ -767,11 +779,12 @@ const CommunityPage = () => {
                 onClick={handleReset}
                 sx={{
                   ml: -1,
-                  backgroundColor: "#f0f2f5",
+                  backgroundColor: isDarkMode ? "#2a2a2a" : "#f9f9f9",
                   borderRadius: "8px",
                   width: 40,
                   height: 40,
-                  "&:hover": { backgroundColor: "#e4e6eb" },
+                  color: isDarkMode ? "#fff" : "#000",
+                  "&:hover": { backgroundColor: isDarkMode ? "#000" : "#e4e6eb" },
                 }}
                 aria-label="새로고침"
                 title="새로고침"
@@ -784,7 +797,8 @@ const CommunityPage = () => {
                 onClick={cycleSort}
                 style={{
                   marginLeft: -8,
-                  backgroundColor: "#f0f2f5",
+                  backgroundColor: isDarkMode ? "#2a2a2a" : "#f9f9f9",
+                  color: isDarkMode ? "#ffffff" : "#000",
                   border: "none",
                   borderRadius: 8,
                   height: 40,
@@ -812,14 +826,14 @@ const CommunityPage = () => {
                 aria-label="create-post"
                 onClick={() => setIsModalOpen(true)}
                 sx={{
-                  backgroundColor: "#333333",
-                  color: "white",
+                  backgroundColor: isDarkMode ? "#f9f9f9" : "#3a3a3a",
+                  color: isDarkMode ? "#000000" : "#ffffff",
                   ml: 0,
                   width: 32,
                   height: 32,
                   borderRadius: "4px",
                   padding: 1,
-                  "&:hover": { backgroundColor: "#6d6d6d" },
+                   "&:hover": { backgroundColor: isDarkMode ? "#E8E9EC" : "#000000"},
                 }}
               >
                 <AddIcon sx={{ fontSize: 20 }} />
@@ -832,21 +846,23 @@ const CommunityPage = () => {
       <div className="communitypage-posts">
         {filteredPosts.length === 0 ? (
           <div className="communitypage-empty-state">
-      {searchMode ? (
-        <>
-          <p className="communitypage-empty-title">검색된 게시물이 없습니다</p>
-          <p className="communitypage-empty-subtitle">
-            검색한 텍스트를 확인해주세요.
-          </p>
-        </>
-      ) : (
-        <>
-          <p className="communitypage-empty-title">게시글이 없습니다</p>
-          <p className="communitypage-empty-subtitle">
-            새로운 글을 작성해보세요!
-          </p>
-        </>
-      )}
+            {searchMode ? (
+              <>
+                <p className="communitypage-empty-title">
+                  검색된 게시물이 없습니다
+                </p>
+                <p className="communitypage-empty-subtitle">
+                  검색한 텍스트를 확인해주세요.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="communitypage-empty-title">게시글이 없습니다</p>
+                <p className="communitypage-empty-subtitle">
+                  새로운 글을 작성해보세요!
+                </p>
+              </>
+            )}
           </div>
         ) : (
           filteredPosts.map((post, idx) => {
@@ -865,7 +881,12 @@ const CommunityPage = () => {
                       <img
                         src={author.image || defaultPetPic}
                         alt="프로필"
-                        className="communitypage-post-profile-img"
+                        className={`communitypage-post-profile-img ${
+                          isDarkMode &&
+                          (!author.image || author.image === defaultPetPic)
+                            ? "dark-mode"
+                            : ""
+                        }`}
                         onClick={() =>
                           handleProfileClick(
                             isMyPost(post) ? me ?? author : author

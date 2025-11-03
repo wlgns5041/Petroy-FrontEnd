@@ -12,6 +12,7 @@ import {
 } from "../../services/FriendService";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 const FriendPage = () => {
   const [friends, setFriends] = useState([]);
@@ -26,6 +27,7 @@ const FriendPage = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const { isDarkMode } = useTheme();
 
   const loadFriends = async () => {
     try {
@@ -173,7 +175,14 @@ const FriendPage = () => {
                         <img
                           src={member.image || defaultProfilePic}
                           alt={member.name}
-                          className="friendpage-profile-image"
+                          className={`friendpage-profile-image ${
+                            isDarkMode &&
+                            (!member.image ||
+                              member.image === defaultProfilePic)
+                              ? "dark-mode"
+                              : ""
+                          }`}
+                          onError={(e) => (e.target.src = defaultProfilePic)}
                         />
                         <span>{member.name}</span>
                       </div>

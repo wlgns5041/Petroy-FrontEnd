@@ -82,6 +82,10 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
     timeZone: "Asia/Seoul",
   });
 
+  const hasAnySchedulesInWeek = weeks[0].some((date) =>
+  filteredSchedules.some((s) => formatDateKey(s.date) === formatDateKey(date))
+);
+
   return (
     <div className="calendar">
       {/* 상단 네비게이션 바 */}
@@ -351,7 +355,7 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
       )}
 
       {/* 주간 일정 요약 */}
-      {viewMode === "week" && (
+      {viewMode === "week" && (!isMobile || hasAnySchedulesInWeek) && (
         <div className="calendar-weekly-summary-table-rows">
           {weeks[0].map((date) => {
             const dateKey = formatDateKey(date);

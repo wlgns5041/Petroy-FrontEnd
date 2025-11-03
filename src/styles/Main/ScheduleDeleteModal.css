@@ -11,7 +11,7 @@
 }
 
 .schedule-delete-container {
-  background-color: #fff;
+  background-color:var(--color-main2);
   width: 90%;
   max-width: 360px;
   height: auto;
@@ -28,7 +28,7 @@
   font-size: 20px;
   font-weight: 800;
   text-align: left;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 0px;
   margin-left: 4px;
 }
@@ -37,18 +37,18 @@
   font-size: 13px;
   font-weight: 500;
   text-align: left;
-  color: #6B7280;
+  color: var(--color-subtext);
   margin-bottom: 32px;
   margin-left: 4px;
 }
 
 .schedule-delete-description strong {
-  color: #111827;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .schedule-delete-meta {
-  background: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 12px;
@@ -64,13 +64,13 @@
 .schedule-delete-meta .label {
   text-align: left;
   width: 80px;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-weight: 600;
   margin-left: 12px;
 }
 
 .schedule-delete-meta .value {
-  color: #000000;
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -80,16 +80,16 @@
   font-size: 12px;
   border-radius: 8px;
   border: none;
-  background: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
   margin: 12px 0 16px;
-  color: #000000;
+  color: var(--color-text);
 }
 
 .schedule-delete-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-delete-button-row {
@@ -121,27 +121,27 @@
 }
 
 .schedule-delete-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
 .schedule-delete-cancel-button:hover {
-  background: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-delete-confirm-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .schedule-delete-confirm-button:hover {
-  background: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .schedule-delete-confirm-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
+  background: var(--color-disable);
+  color:   var(--color-disable-text);
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
@@ -162,7 +162,7 @@
 }
 
 .schedule-delete-container {
-  background-color: #fff;
+  background-color:var(--color-main2);
   width: 75%;
   max-width: 260px;
   height: auto;
@@ -179,7 +179,7 @@
   font-size: 16px;
   font-weight: 800;
   text-align: left;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 4px;
   margin-left: 4px;
 }
@@ -188,18 +188,18 @@
   font-size: 10px;
   font-weight: 500;
   text-align: left;
-  color: #6b7280;
+  color: var(--color-subtext);
   margin-bottom: 24px;
   margin-left: 4px;
 }
 
 .schedule-delete-description strong {
-  color: #000000;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .schedule-delete-meta {
-  background: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 6px;
   margin-bottom: 12px;
@@ -215,13 +215,13 @@
 .schedule-delete-meta .label {
   text-align: left;
   width: 60px;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-weight: 600;
   margin-left: 12px;
 }
 
 .schedule-delete-meta .value {
-  color: #000000;
+  color: var(--color-text);
   font-weight: 600;
 }
 
@@ -231,16 +231,16 @@
   font-size: 9px;
   border-radius: 8px;
   border: none;
-  background: #f9f9f9;
+  background-color: var(--color-main1);
   box-sizing: border-box;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 16px;
 }
 
 .schedule-delete-input:focus {
   outline: none;
-  background-color: #ffffff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .schedule-delete-button-row {
@@ -272,27 +272,27 @@
 }
 
 .schedule-delete-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
 .schedule-delete-cancel-button:hover {
-  background: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .schedule-delete-confirm-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .schedule-delete-confirm-button:hover {
-  background: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .schedule-delete-confirm-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
+  background: var(--color-disable);
+  color:   var(--color-disable-text);
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }

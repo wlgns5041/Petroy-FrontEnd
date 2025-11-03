@@ -30,7 +30,7 @@
 }
 
 .post-edit-container {
-  background-color: white;
+  background-color: var(--color-main2);
   width: 90%;
   max-width: 420px;
   height: auto;
@@ -51,14 +51,14 @@
   top: 18px;
   right: 18px;
   font-size: 24px;
-  color: #aaa;
+  color: var(--color-text);
   background: none;
   border: none;
   cursor: pointer;
 }
 
 .post-edit-close:hover {
-  color: #10b981;
+  color: var(--color-point);
 }
 
 /* 단계 표시 */
@@ -73,7 +73,7 @@
 .post-edit-step-indicator {
   font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--color-subtext);
   margin-bottom: 0px;
 }
 
@@ -83,7 +83,7 @@
   font-weight: bold;
   margin-top: 24px;
   margin-bottom: 40px;
-  color: #000000;
+  color: var(--color-text);
   text-align: center;
 }
 
@@ -107,7 +107,7 @@
   width: 60px;
   font-size: 14px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
@@ -123,10 +123,10 @@
   padding: 12px 18px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   cursor: pointer;
-  color: #000;
+  color: var(--color-text);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,17 +134,17 @@
 }
 
 .post-edit-inline-select:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .post-edit-inline-select.active {
-  background-color: #fff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .post-edit-inline-arrow {
   font-size: 10px;
-  color: #000;
+  color: var(--color-text);
   pointer-events: none;
   margin-left: 8px;
   transition: transform 0.2s ease;
@@ -155,7 +155,7 @@
 }
 
 .post-edit-inline-dropdown {
-  background: #fff;
+  background: var(--color-main2);
   width: auto !important;
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
@@ -181,7 +181,7 @@
 }
 
 .post-edit-inline-option:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .post-edit-input {
@@ -189,28 +189,27 @@
   padding: 12px 16px;
   font-size: 12px;
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   box-sizing: border-box;
   transition: all 0.2s ease-in-out;
-  color: #000000;
+  color: var(--color-text);
   font-family: inherit;
   transition: background-color 0.2s ease;
 }
 
 .post-edit-input:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .post-edit-input:focus {
   outline: none;
-  background-color: #fff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .post-edit-input.filled {
-  border: 1px solid #e5e7eb;
-  background-color: #fff;
+  background-color: var(--color-main2);
 }
 
 .post-edit-textarea {
@@ -221,23 +220,23 @@
   line-height: 1.6;
   text-align: center;
   border-radius: 10px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border: none;
   box-sizing: border-box;
-  color: #111827;
+  color: var(--color-text);
   font-family: inherit;
   resize: none;
   transition: background-color 0.2s ease;
 }
 
 .post-edit-textarea:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main1-hover);
 }
 
 .post-edit-textarea:focus {
   outline: none;
-  background-color: #fff;
-  box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
 }
 
 .post-edit-image-box {
@@ -249,14 +248,14 @@
 }
 
 .post-edit-image-placeholder {
-  border: 2px dashed #CBCBCB;
+  border: 2px dashed var(--color-disable-text);
   border-radius: 12px;
   padding: 60px 0;
   width: 100%;
   max-width: 280px;
   text-align: center;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-subtext);
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -269,8 +268,8 @@
 }
 
 .post-edit-upload-label {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   border: none;
   padding: 16px;
   width: 100%;
@@ -285,7 +284,7 @@
 }
 
 .post-edit-upload-label:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 .post-edit-upload-label input[type="file"] {
@@ -301,7 +300,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
 }
 
 .post-edit-image-preview img {
@@ -313,8 +312,8 @@
 }
 
 .post-edit-image-clear {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   padding: 12px 32px;
   font-size: 13px;
   font-weight: 600;
@@ -326,7 +325,7 @@
 }
 
 .post-edit-image-clear:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
 }
 
 /* 버튼 공통 스타일 */
@@ -336,7 +335,7 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 600;
-  color: #000;
+  color: var(--color-text);
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -345,12 +344,12 @@
 
 /* 다음으로 버튼 (1단계용) */
 .post-edit-next {
-  background-color: #00CBA8;
+  background-color: var(--color-point);
   transition: background-color 0.2s ease;
-  color: white;
+  color: var(--color-main2);
 }
 .post-edit-next:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
   transition: background-color 0.2s ease;
 }
 
@@ -361,29 +360,29 @@
 }
 
 .post-edit-back {
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   transition: background-color 0.2s ease;
-  color: #000000;
+  color: var(--color-text);
 }
 .post-edit-back:hover {
-  background-color: #E8E9EC;
+  background-color: var(--color-main1-hover);
   transition: background-color 0.2s ease;
 }
 
 /* 등록 버튼 (2단계용) */
 .post-edit-submit {
-  background-color: #00CBA8;
+  background-color: var(--color-point);
   transition: background-color 0.2s ease;
-  color: white;
+  color: var(--color-main2);
 }
 .post-edit-submit:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
   transition: background-color 0.2s ease;
 }
 
 .post-edit-button:disabled {
-  background: #E8E9EC;
-  color: #C0C0C0;
+  background: var(--color-disable);
+  color: var(--color-disable-text);
   cursor: not-allowed;
   transition: background-color 0.2s ease;
 }
@@ -406,7 +405,7 @@
   }
 
   .post-edit-container {
-    background-color: white;
+    background-color: var(--color-main2);
     width: 80%;
     max-width: 420px;
     height: auto;
@@ -427,14 +426,14 @@
     top: 14px;
     right: 14px;
     font-size: 20px;
-    color: #aaa;
+    color: var(--color-text);
     background: none;
     border: none;
     cursor: pointer;
   }
 
   .post-edit-close:hover {
-    color: #10b981;
+    color: var(--color-point);
   }
 
   /* 단계 표시 */
@@ -449,7 +448,7 @@
   .post-edit-step-indicator {
     font-size: 12px;
     font-weight: 500;
-    color: #6b7280;
+    color: var(--color-subtext);
     margin-bottom: 0px;
   }
 
@@ -459,7 +458,7 @@
     font-weight: bold;
     margin-top: 16px;
     margin-bottom: 32px;
-    color: #000000;
+    color: var(--color-text);
     text-align: center;
   }
 
@@ -483,7 +482,7 @@
     width: 60px;
     font-size: 11px;
     font-weight: 600;
-    color: #000000;
+    color: var(--color-text);
     flex-shrink: 0;
   }
 
@@ -499,10 +498,10 @@
     padding: 12px;
     font-size: 10px;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
     border: none;
     cursor: pointer;
-    color: #000;
+    color: var(--color-text);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -510,17 +509,17 @@
   }
 
   .post-edit-inline-select:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-main1-hover);
   }
 
   .post-edit-inline-select.active {
-    background-color: #fff;
-    box-shadow: 0 0 0 2px #111827;
+  background-color: var(--color-main2);
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
   }
 
   .post-edit-inline-arrow {
     font-size: 8px;
-    color: #000;
+    color: var(--color-text);
     pointer-events: none;
     transition: transform 0.2s ease;
   }
@@ -530,7 +529,7 @@
   }
 
   .post-edit-inline-dropdown {
-    background: #fff;
+    background: var(--color-main2);
     width: auto !important;
     border-radius: 8px;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
@@ -556,7 +555,7 @@
   }
 
   .post-edit-inline-option:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-main1-hover);
   }
 
   .post-edit-input {
@@ -564,28 +563,27 @@
     padding: 12px;
     font-size: 10px;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
     border: none;
     box-sizing: border-box;
     transition: all 0.2s ease-in-out;
-    color: #000000;
+    color: var(--color-text);
     font-family: inherit;
     transition: background-color 0.2s ease;
   }
 
   .post-edit-input:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-main1-hover);
   }
 
   .post-edit-input:focus {
     outline: none;
-    background-color: #fff;
-    box-shadow: 0 0 0 2px #111827;
+    background-color: var(--color-main2);
+    box-shadow: 0 0 0 2px var(--color-point2-hover);
   }
 
   .post-edit-input.filled {
-    border: 1px solid #e5e7eb;
-    background-color: #fff;
+    background-color: var(--color-main2);
   }
 
   .post-edit-textarea {
@@ -596,23 +594,23 @@
     line-height: 1.5;
     text-align: center;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
     border: none;
     box-sizing: border-box;
-    color: #111827;
+    color: var(--color-text);
     font-family: inherit;
     resize: none;
     transition: background-color 0.2s ease;
   }
 
   .post-edit-textarea:hover {
-    background-color: #f3f4f6;
+    background-color: var(--color-main1-hover);
   }
 
   .post-edit-textarea:focus {
     outline: none;
-    background-color: #fff;
-    box-shadow: 0 0 0 2px #111827;
+    background-color: var(--color-main2);
+    box-shadow: 0 0 0 2px var(--color-point2-hover);
   }
 
   .post-edit-image-box {
@@ -624,14 +622,14 @@
   }
 
   .post-edit-image-placeholder {
-    border: 2px dashed #CBCBCB;
+    border: 2px dashed var(--color-disable-text);
     border-radius: 12px;
     padding: 50px 0;
     width: 80%;
     max-width: 280px;
     text-align: center;
     font-size: 12px;
-    color: #6b7280;
+    color: var(--color-subtext);
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -647,8 +645,8 @@
   }
 
   .post-edit-upload-label {
-    background-color: #f9f9f9;
-    color: #000000;
+    background-color: var(--color-main1);
+    color: var(--color-text);
     border: none;
     padding: 16px;
     width: 100%;
@@ -663,7 +661,7 @@
   }
 
   .post-edit-upload-label:hover {
-    background-color: #E8E9EC;
+    background-color: var(--color-main1-hover);
   }
 
   .post-edit-upload-label input[type="file"] {
@@ -678,7 +676,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
   }
 
   .post-edit-image-preview img {
@@ -690,8 +688,8 @@
   }
 
   .post-edit-image-clear {
-    background-color: #f9f9f9;
-    color: #000000;
+    background-color: var(--color-main1);
+    color: var(--color-text);
     padding: 12px 28px;
     font-size: 11px;
     font-weight: 600;
@@ -703,7 +701,7 @@
   }
 
   .post-edit-image-clear:hover {
-    background-color: #E8E9EC;
+    background-color: var(--color-main1-hover);
   }
 
   /* 버튼 공통 스타일 */
@@ -713,7 +711,7 @@
     padding: 14px;
     font-size: 12px;
     font-weight: 600;
-    color: #000;
+    color: var(--color-text);
     border-radius: 6px;
     border: none;
     cursor: pointer;
@@ -722,12 +720,12 @@
 
   /* 다음으로 버튼 (1단계용) */
   .post-edit-next {
-    background-color: #00CBA8;
+    background-color: var(--color-point);
     transition: background-color 0.2s ease;
-    color: white;
+    color: var(--color-main2);
   }
   .post-edit-next:hover {
-    background-color: #13BA9D;
+    background-color: var(--color-point-hover);
     transition: background-color 0.2s ease;
   }
 
@@ -738,29 +736,29 @@
   }
 
   .post-edit-back {
-    background-color: #f9f9f9;
+    background-color: var(--color-main1);
     transition: background-color 0.2s ease;
-    color: #000000;
+    color: var(--color-text);
   }
   .post-edit-back:hover {
-    background-color: #E8E9EC;
+    background-color: var(--color-main1-hover);
     transition: background-color 0.2s ease;
   }
 
   /* 등록 버튼 (2단계용) */
   .post-edit-submit {
-    background-color: #00CBA8;
+    background-color: var(--color-point);
     transition: background-color 0.2s ease;
-    color: white;
+    color: var(--color-main2);
   }
   .post-edit-submit:hover {
-    background-color: #13BA9D;
+    background-color: var(--color-point-hover);
     transition: background-color 0.2s ease;
   }
 
   .post-edit-button:disabled {
-    background: #E8E9EC;
-    color: #C0C0C0;
+    background: var(--color-disable);
+    color: var(--color-disable-text);
     cursor: not-allowed;
     transition: background-color 0.2s ease;
   }

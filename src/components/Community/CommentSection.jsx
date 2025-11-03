@@ -5,6 +5,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import "../../styles/Community/CommentSection.css";
 import defaultProfile from "../../assets/images/DefaultImage.png";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 import {
   createComment,
@@ -18,6 +19,7 @@ const CommentSection = ({ postId, open, onClose }) => {
   const [editingId, setEditingId] = useState(null);
   const [menuOpenId, setMenuOpenId] = useState(null);
   const inputRef = useRef(null);
+  const { isDarkMode } = useTheme();
 
   const token = localStorage.getItem("accessToken");
 
@@ -38,7 +40,6 @@ const CommentSection = ({ postId, open, onClose }) => {
 
   useEffect(() => {
     if (!open) return;
-
     const t = setTimeout(() => inputRef.current?.focus(), 120);
     const onKey = (e) => e.key === "Escape" && onClose?.();
     window.addEventListener("keydown", onKey);
@@ -50,13 +51,11 @@ const CommentSection = ({ postId, open, onClose }) => {
 
   useEffect(() => {
     if (menuOpenId == null) return;
-
     const onDocClick = (e) => {
       if (!e.target.closest(".comment-menu")) {
         setTimeout(() => setMenuOpenId(null), 50);
       }
     };
-
     document.addEventListener("click", onDocClick);
     return () => document.removeEventListener("click", onDocClick);
   }, [menuOpenId]);
@@ -67,7 +66,6 @@ const CommentSection = ({ postId, open, onClose }) => {
     if (!val) return;
 
     if (editingId) {
-      // 수정
       const ok = await updateComment(editingId, val, token);
       if (ok) {
         setComments((prev) =>
@@ -79,7 +77,6 @@ const CommentSection = ({ postId, open, onClose }) => {
         setContent("");
       }
     } else {
-      // 등록
       const ok = await createComment(postId, val, token);
       if (ok) {
         const newComment = {
@@ -118,8 +115,11 @@ const CommentSection = ({ postId, open, onClose }) => {
         onClick={onClose}
       />
 
+      {/* ✅ 다크모드 감지하여 클래스 추가 */}
       <aside
-        className={`comment-sheet ${open ? "open" : ""}`}
+        className={`comment-sheet ${open ? "open" : ""} ${
+          isDarkMode ? "dark" : ""
+        }`}
         role="dialog"
         aria-modal="true"
       >
@@ -143,7 +143,12 @@ const CommentSection = ({ postId, open, onClose }) => {
           ) : (
             <ul className="comment-sheet-list">
               {comments.map((c) => (
-                <li key={c.commentId} className="comment-sheet-item">
+                <li
+                  key={c.commentId}
+                  className={`comment-sheet-item ${
+                    editingId === c.commentId ? "editing" : ""
+                  }`}
+                >
                   <img
                     src={c.profileImage || defaultProfile}
                     alt=""

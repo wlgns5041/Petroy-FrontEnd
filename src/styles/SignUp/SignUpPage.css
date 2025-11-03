@@ -10,11 +10,12 @@
   }
 
   .signuppage {
-     height: 100vh;
+    height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    background-color: #FFFFFF;
   }
   
   .signuppage-container {

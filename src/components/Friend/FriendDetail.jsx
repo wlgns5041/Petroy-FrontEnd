@@ -4,11 +4,13 @@ import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendDetail.css";
 import { fetchFriendDetail } from "../../services/FriendService.jsx";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 const FriendDetail = ({ memberId, onClose }) => {
   const [friendDetail, setFriendDetail] = useState(null);
   const [error, setError] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     let isMounted = true;
@@ -52,7 +54,9 @@ const FriendDetail = ({ memberId, onClose }) => {
                 src={friendDetail.image || defaultProfilePic}
                 onError={(e) => (e.target.src = defaultProfilePic)}
                 alt={friendDetail.name}
-                className="frienddetail-profile-image"
+                className={`frienddetail-profile-image ${
+                  isDarkMode ? "dark-mode" : ""
+                }`}
               />
               <h2 className="frienddetail-friend-name">{friendDetail.name}</h2>
             </div>
@@ -73,7 +77,12 @@ const FriendDetail = ({ memberId, onClose }) => {
                         src={pet.petImage || defaultProfilePic}
                         onError={(e) => (e.target.src = defaultProfilePic)}
                         alt={pet.name}
-                        className="frienddetail-pet-image"
+                        className={`frienddetail-pet-image ${
+                          isDarkMode &&
+                          (!pet.petImage || pet.petImage === defaultProfilePic)
+                            ? "dark-mode"
+                            : ""
+                        }`}
                       />
                       <span className="frienddetail-pet-name">{pet.name}</span>
                     </li>
@@ -108,7 +117,9 @@ const FriendDetail = ({ memberId, onClose }) => {
                         src={pet.petImage || defaultProfilePic}
                         onError={(e) => (e.target.src = defaultProfilePic)}
                         alt={pet.name}
-                        className="frienddetail-pet-image"
+                        className={`frienddetail-pet-image ${
+                          isDarkMode ? "dark-mode" : ""
+                        }`}
                       />
                       <span className="frienddetail-pet-name">{pet.name}</span>
                     </li>

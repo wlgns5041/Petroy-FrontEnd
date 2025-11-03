@@ -88,7 +88,7 @@
 }
 
 .pet-assign-selected {
-  background-color: var(--color-disable);
+  background-color: var(--color-selected);
 }
 
 .pet-assign-disabled-card {
@@ -250,7 +250,7 @@
   }
 
   .pet-assign-selected {
-    background-color: var(--color-disable);
+    background-color: var(--color-selected);
   }
 
   .pet-assign-disabled-card {

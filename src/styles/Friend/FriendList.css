@@ -1,7 +1,7 @@
 .friendlist-container {
   width: 90%;
   min-height: 92%;
-  background-color: #f5f5f5;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 24px;
   margin: 0 auto;
@@ -21,7 +21,7 @@
   justify-content: space-between;
   border-radius: 8px;
   padding: 16px;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   margin-bottom: 12px;
   width: 100%;
   max-width: 600px;
@@ -33,7 +33,7 @@
   height: 56px;
   min-width: 56px;
   min-height: 56px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -46,6 +46,10 @@
   height: 36px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.friendlist-image.dark-mode {
+  filter: brightness(0) invert(1);
 }
 
 .friendlist-info-section {
@@ -61,13 +65,13 @@
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 4px;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .friendlist-pets {
   font-size: 12px;
   font-weight: 400;
-  color: #6b7280;
+  color: var(--color-subtext);
 }
 
 .friendlist-detail-button {
@@ -84,35 +88,33 @@
 
 .friendlist-accept-button {
   padding: 6px 12px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   border: none;
-  background-color: #00CBA8;
+  background-color: var(--color-point);
   transition: background-color 0.2s ease;
   border-radius: 4px;
   cursor: pointer;
-  color: #190c0c;
+  color: var(--color-text);
 }
 .friendlist-accept-button:hover {
-  background-color: #13BA9D;
-  color: #f1f1f1;
+  background-color: var(--color-point-hover);
   transition: background-color 0.2s ease;
 }
 
 .friendlist-reject-button {
   padding: 6px 12px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   border: none;
-  background-color: #e97171;
+  background-color: var(--color-point2);
   transition: background-color 0.2s ease;
   border-radius: 4px;
   cursor: pointer;
-  color: #190c0c;
+  color: var(--color-main2);
 }
 .friendlist-reject-button:hover {
-  background-color: #711c1c;
-  color: #f1f1f1;
+  background-color: var(--color-point2-hover);
   transition: background-color 0.2s ease;
 }
 
@@ -123,7 +125,7 @@
 }
 
 .friendlist-more-button {
-  background-color: transparent;
+  background-color: var(--color-main2);
   border: none;
   cursor: pointer;
   width: 32px;
@@ -136,7 +138,7 @@
 }
 
 .friendlist-more-button:hover {
-  background-color: #f3f4f6;
+  background-color: var(--color-main2-hover);
 }
 
 /* 드롭다운 */
@@ -146,7 +148,7 @@
   position: absolute;
   top: 30px;
   right: 0;
-  background: #fff;
+  background: var(--color-main2);
   border-radius: 10px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   z-index: 10;
@@ -162,12 +164,12 @@
   text-align: center;
   border-radius: 6px;
   cursor: pointer;
-  color: #333;
+  color: var(--color-text);
   transition: background-color 0.2s ease;
 }
 
 .friendlist-dropdown div:hover {
-  background-color: #f9f9f9;
+  background-color: var(--color-main2-hover);
 }
 
 .friendlist-dropdown div:last-child {
@@ -183,12 +185,12 @@
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #000;
+  color: var(--color-text);
 }
 
 .friendlist-empty-message-sub {
   font-size: 12px;
-  color: #6B7280;
+  color: var(--color-subtext);
 }
 
 
@@ -198,7 +200,7 @@
 .friendlist-container {
   width: 100%;
   min-height: 92%;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 8px;
   padding: 0 0px;
   margin: 0 auto;
@@ -218,7 +220,7 @@
   justify-content: space-between;
   border-radius: 8px;
   padding: 16px;
-  background-color: #ffffff;
+  background-color: var(--color-main2);
   margin-bottom: 12px;
   width: 100%;
   max-width: 600px;
@@ -230,7 +232,7 @@
   height: 56px;
   min-width: 56px;
   min-height: 56px;
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -258,13 +260,13 @@
   font-size: 12px;
   font-weight: 700;
   margin-bottom: 4px;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .friendlist-pets {
   font-size: 10px;
   font-weight: 400;
-  color: #6b7280;
+  color: var(--color-subtext);
 }
 
 .friendlist-detail-button {
@@ -284,16 +286,15 @@
   font-size: 9px;
   font-weight: 600;
   border: none;
-  background-color: #00CBA8;
+  background-color: var(--color-point);
   transition: background-color 0.2s ease;
   border-radius: 4px;
   cursor: pointer;
-  color: #ffffff;
+  color: var(--color-text);
 }
 
 .friendlist-accept-button:hover {
-  background-color: #13BA9D;
-  color: #f1f1f1;
+  background-color: var(--color-point-hover);
   transition: background-color 0.2s ease;
 }
 
@@ -302,16 +303,15 @@
   font-size: 9px;
   font-weight: 600;
   border: none;
-  background-color: #3a3a3a;
+  background-color: var(--color-point2);
   transition: background-color 0.2s ease;
   border-radius: 4px;
   cursor: pointer;
-  color: #ffffff;
+  color: var(--color-main2);
 }
 
 .friendlist-reject-button:hover {
-  background-color: #000000;
-  color: #f1f1f1;
+  background-color: var(--color-point2-hover);
   transition: background-color 0.2s ease;
 }
 
@@ -342,11 +342,11 @@
   font-size: 12px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #000;
+  color: var(--color-text);
 }
 
 .friendlist-empty-message-sub {
   font-size: 10px;
-  color: #6B7280;
+  color: var(--color-subtext);
 }
   }

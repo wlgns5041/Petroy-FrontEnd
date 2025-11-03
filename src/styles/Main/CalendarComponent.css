@@ -175,11 +175,11 @@
 
 .calendar-day {
   flex: 1;
-  border-radius: 4px;
+  border-radius: 0px;
   background-color: var(--color-main1);
   padding: 10px;
   min-height: 90px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px var(--shadow-color);
   transition: background 0.3s;
   box-sizing: border-box;
   text-align: left;
@@ -236,11 +236,45 @@
   height: var(--month-body-h);    
   min-height: 0;
   padding-bottom: 6px;
+  
 }
+
+  .calendar-view-month .calendar-week:first-child .calendar-day:first-child {
+    border-top-left-radius: 12px;
+  }
+
+
+  .calendar-view-month .calendar-week:first-child .calendar-day:last-child {
+    border-top-right-radius: 12px;
+  }
+
+  .calendar-view-month .calendar-week:last-child .calendar-day:first-child {
+    border-bottom-left-radius: 12px;
+  }
+
+  .calendar-view-month .calendar-week:last-child .calendar-day:last-child {
+    border-bottom-right-radius: 12px;
+  }
 
 .calendar-days.calendar-view-week{
   height: var(--week-row-h);
   min-height: 0;
+}
+
+.calendar-view-week .calendar-week:first-child .calendar-day:first-child {
+  border-top-left-radius: 12px;
+}
+
+.calendar-view-week .calendar-week:first-child .calendar-day:last-child {
+  border-top-right-radius: 12px;
+}
+
+.calendar-view-week .calendar-week:last-child .calendar-day:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+.calendar-view-week .calendar-week:last-child .calendar-day:last-child {
+  border-bottom-right-radius: 12px;
 }
 
 .calendar-week {
@@ -279,9 +313,9 @@
 }
 
 .calendar-day.calendar-base-date {
-  background-color:   var(--color-tab-background);
+  background-color: var(--color-tab-background);
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 0px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
   transition: all 0.2s ease-in-out;
 }
@@ -891,10 +925,10 @@
 
   .calendar-day {
     flex: 1;
-    border-radius: 4px !important;
+    border-radius: 0px;
     background-color: var(--color-main1);
     padding: 2px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 1px 4px var(--shadow-color);
     transition: background 0.3s;
     box-sizing: border-box;
     text-align: left;
@@ -951,14 +985,50 @@
     display: flex;
     flex-direction: column;
     gap: 0;
-    height: 300px;    
+    height: auto;
     min-height: 0;
     padding-bottom: 0px;
+    border-radius: 0px; 
+    overflow: visible; 
   }
+
+  .calendar-view-month .calendar-week:first-child .calendar-day:first-child {
+    border-top-left-radius: 4px;
+  }
+
+
+  .calendar-view-month .calendar-week:first-child .calendar-day:last-child {
+    border-top-right-radius: 4px;
+  }
+
+  .calendar-view-month .calendar-week:last-child .calendar-day:first-child {
+    border-bottom-left-radius: 4px;
+  }
+
+  .calendar-view-month .calendar-week:last-child .calendar-day:last-child {
+    border-bottom-right-radius: 4px;
+  }
+
 
 .calendar-days.calendar-view-week {
   height: auto !important; 
   min-height: 0;
+}
+
+.calendar-view-week .calendar-week:first-child .calendar-day:first-child {
+  border-top-left-radius: 4px;
+}
+
+.calendar-view-week .calendar-week:first-child .calendar-day:last-child {
+  border-top-right-radius: 4px;
+}
+
+.calendar-view-week .calendar-week:last-child .calendar-day:first-child {
+  border-bottom-left-radius: 4px;
+}
+
+.calendar-view-week .calendar-week:last-child .calendar-day:last-child {
+  border-bottom-right-radius: 4px;
 }
 
 .calendar-week {
@@ -1000,9 +1070,9 @@
   .calendar-day.calendar-base-date {
     background-color:   var(--color-tab-background);
     font-weight: 600;
-    border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     transition: all 0.2s ease-in-out;
+    border-radius: 0px;
   }
 
   .calendar-day-number {
@@ -1220,6 +1290,7 @@
     color: var(--color-text);
     min-width: 140px;
     width: auto;
+    margin-left: 12px;
   }
 
   .calendar-summary-time-category .calendar-summary-icon {
@@ -1239,7 +1310,7 @@
     color: var(--color-text);
     margin-left: 0;
     background-color: var(--color-main1);
-    padding: 12px 4px;
+    padding: 12px 8px;
     border-radius: 4px;
   }
 

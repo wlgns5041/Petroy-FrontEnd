@@ -12,7 +12,7 @@
 }
 
 .schedule-detail-modal-wrapper {
-  background-color: #fff;
+  background-color:var(--color-main2);
   width: 90%;
   max-width: 420px;
   height: auto;
@@ -29,12 +29,12 @@
   font-size: 20px;
   font-weight: 800;
   text-align: center;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 20px;
 }
 
 .schedule-detail-section {
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 24px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -47,13 +47,13 @@
 
 .schedule-detail-section .schedule-detail-label {
   font-weight: 600;
-  color: #6B7280;
+  color: var(--color-subtext);
   text-align: left;
 }
 
 .schedule-detail-section .schedule-detail-value {
   text-align: left;
-  color: #000000;
+  color: var(--color-text);
   font-weight: 600;
   line-height: 1.5;
   word-break: keep-all;
@@ -87,22 +87,22 @@
 }
 
 .schedule-detail-delete-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .schedule-detail-delete-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .schedule-detail-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
 .schedule-detail-cancel-button:hover {
-background-color: #E8E9EC;
+background-color: var(--color-main1-hover);
 }
 
 .schedule-detail-loading-text {
@@ -128,7 +128,7 @@ background-color: #E8E9EC;
 }
 
 .schedule-detail-modal-wrapper {
-  background-color: #fff;
+  background-color:var(--color-main2);
   width: 75%;
   max-width: auto;
   height: auto;
@@ -145,12 +145,12 @@ background-color: #E8E9EC;
   font-size: 16px;
   font-weight: 800;
   text-align: center;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 20px;
 }
 
 .schedule-detail-section {
-  background-color: #f9f9f9;
+  background-color: var(--color-main1);
   padding: 24px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -163,13 +163,13 @@ background-color: #E8E9EC;
 
 .schedule-detail-section .schedule-detail-label {
   font-weight: 600;
-  color: #6B7280;
+  color: var(--color-subtext);
   text-align: left;
 }
 
 .schedule-detail-section .schedule-detail-value {
   text-align: left;
-  color: #000000;
+  color: var(--color-text);
   font-weight: 600;
   line-height: 1.5;
   word-break: keep-all;
@@ -203,22 +203,22 @@ background-color: #E8E9EC;
 }
 
 .schedule-detail-delete-button {
-  background-color: #00CBA8;
-  color: white;
+  background-color: var(--color-point);
+  color: var(--color-main2);
 }
 
 .schedule-detail-delete-button:hover {
-  background-color: #13BA9D;
+  background-color: var(--color-point-hover);
 }
 
 .schedule-detail-cancel-button {
-  background-color: #f9f9f9;
-  color: #000000;
+  background-color: var(--color-main1);
+  color: var(--color-text);
   margin-right: 8px;
 }
 
 .schedule-detail-cancel-button:hover {
-background-color: #E8E9EC;
+background-color: var(--color-main1-hover);
 }
 
 .schedule-detail-loading-text {

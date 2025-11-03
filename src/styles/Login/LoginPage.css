@@ -15,6 +15,7 @@
     align-items: center;
     height: 100dvh; 
     box-sizing: border-box;
+    background-color: #FFFFFF;
   }
 
 .loginpage-container {
