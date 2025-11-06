@@ -1,0 +1,561 @@
+@keyframes slideNext {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slidePrev {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.guide-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.guide-container {
+  background-color: var(--color-main2);
+  width: 90%;
+  max-width: 420px;
+  height: auto;
+  max-height: 90vh;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  overflow: visible !important; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.guide-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.guide-back {
+  position: absolute;
+  width: 24px; 
+  height: 24px;
+  left: 0;
+  top: 0;
+  color: var(--color-point2);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.guide-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: var(--color-point2);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.guide-back:hover,
+.guide-close:hover {
+  color: var(--color-point2-hover);
+}
+
+.guide-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.guide-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-disable);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.guide-dot.active {
+  background: var(--color-point2);
+  transform: scale(1.1);
+}
+
+.guide-content {
+  margin-bottom: 28px;
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.slide-next {
+  animation: slideNext 1s ease;
+}
+
+.slide-prev {
+  animation: slidePrev 1s ease;
+}
+
+.guide-content {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.guide-content.fade-out {
+  opacity: 0;
+}
+
+.guide-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.guide-subtext {
+  font-size: 13px;
+  color: var(--color-subtext);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.guide-subtext strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.guide-section {
+  background: var(--color-main1);
+  padding: 20px 40px 20px 40px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.guide-video-tab-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-tab-background);
+  border-radius: 12px;
+  padding: 4px;
+  margin: 0 auto 20px auto;
+  width: 100%;
+  max-width: 280px; 
+  overflow: hidden;
+}
+
+.guide-video-tab-background {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / var(--tab-count, 2)); 
+  height: calc(100% - 8px);
+  background-color: var(--color-main2);
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+.guide-video-tab-button {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  font-size: 13px;
+  padding: 10px 0;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--color-subtext);
+  font-weight: 500;
+  z-index: 1;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.guide-video-tab-button.active {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.guide-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 440px; 
+  max-height: 440px;
+  min-height: 440px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+.guide-video-wrapper.large {
+  height: 503px;
+  max-height: 503px;
+  min-height: 503px;
+}
+
+.guide-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  max-width: 90%;
+  height: 100%;
+  max-height: 100% ;
+  min-height: 100% ;
+  object-fit: contain;
+  border-radius: 4px;
+  background: var(--color-main1);
+  transition: opacity 0.4s ease;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.guide-video-progress {
+  width: 60%;
+  height: 5px;
+  background-color: var(--color-selected);
+  border-radius: 3px;
+  margin: 20px auto 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.guide-video-progress-bar {
+  height: 100%;
+  background-color: var(--color-point);
+  transition: width 0.3s linear;
+  border-radius: 3px;
+}
+
+.guide-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.guide-button {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.guide-skip {
+  background-color: var(--color-main1);
+  color: var(--color-text);
+  margin-right: 8px;
+}
+
+.guide-skip:hover {
+  background-color: var(--color-main1-hover);
+}
+
+.guide-next {
+  background-color: var(--color-point);
+  color: var(--color-main2);
+}
+
+.guide-next:hover {
+  background-color: var(--color-point-hover);
+}
+
+@media screen and (max-width: 768px) {
+
+.guide-overlay {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.guide-container {
+  background-color: var(--color-main2);
+  width: 80%;
+  max-width: 80%;
+  height: 65vh;
+  max-height: 65vh;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+  overflow: visible !important; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 110px;
+}
+
+.guide-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0px;
+}
+
+.guide-back {
+  position: absolute;
+  width: 14px; 
+  height: 14px;
+  left: 0;
+  top: 4px;
+  color: var(--color-point2);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.guide-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: var(--color-point2);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.guide-back:hover,
+.guide-close:hover {
+  color: var(--color-point2-hover);
+}
+
+.guide-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.guide-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-disable);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.guide-dot.active {
+  background: var(--color-point2);
+  transform: scale(1.1);
+}
+
+.guide-content {
+  margin-bottom: 8px;
+  transition: transform 1s ease, opacity 1s ease;
+}
+
+.slide-next {
+  animation: slideNext 1s ease;
+}
+
+.slide-prev {
+  animation: slidePrev 1sc ease;
+}
+
+.guide-content {
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.guide-content.fade-out {
+  opacity: 0;
+}
+
+.guide-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: 8px;
+}
+
+.guide-subtext {
+  font-size: 9px;
+  color: var(--color-subtext);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.guide-subtext strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.guide-section {
+  background: var(--color-main1);
+  padding: 16px;
+  margin-top: 12px;
+  border-radius: 8px;
+}
+
+.guide-video-tab-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-tab-background);
+  border-radius: 12px;
+  padding: 2px;
+  margin: 0 auto 16px auto;
+  width: 100%;
+  max-width: 200px; 
+  overflow: hidden;
+}
+
+.guide-video-tab-background {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / var(--tab-count, 2)); 
+  height: calc(100% - 8px);
+  background-color: var(--color-main2);
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  z-index: 0;
+}
+
+.guide-video-tab-button {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  font-size: 10px;
+  padding: 10px 0;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--color-subtext);
+  font-weight: 600;
+  z-index: 1;
+  position: relative;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+
+.guide-video-tab-button.active {
+  color: var(--color-text);
+  font-weight: 800;
+}
+
+.guide-video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 240px; 
+  max-height: 240px;
+  min-height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+}
+
+.guide-video-wrapper.large {
+  height: 292px;
+  max-height: 292px;
+  min-height: 292px;
+}
+
+.guide-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+  max-width: 90%;
+  height: 100%;
+  max-height: 100% ;
+  min-height: 100% ;
+  object-fit: contain;
+  border-radius: 4px;
+  background: var(--color-main1);
+  transition: opacity 0.4s ease;
+}
+
+.guide-video.fade-in {
+  opacity: 1;
+  transition: opacity 0.2s ease-in;
+}
+.guide-video.fade-out {
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+}
+
+.guide-video-progress {
+  width: 50%;
+  height: 5px;
+  background-color: var(--color-selected);
+  border-radius: 3px;
+  margin: 16px auto 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.guide-video-progress-bar {
+  height: 100%;
+  background-color: var(--color-point);
+  transition: width 0.3s linear;
+  border-radius: 3px;
+}
+
+.guide-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0px;
+}
+
+.guide-button {
+  flex: 1;
+  height: 40px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.guide-skip {
+  background-color: var(--color-main1);
+  color: var(--color-text);
+  margin-right: 8px;
+}
+
+.guide-skip:hover {
+  background-color: var(--color-main1-hover);
+}
+
+.guide-next {
+  background-color: var(--color-point);
+  color: var(--color-main2);
+}
+
+.guide-next:hover {
+  background-color: var(--color-point-hover);
+}
+}

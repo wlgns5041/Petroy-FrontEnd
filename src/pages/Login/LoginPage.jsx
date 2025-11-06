@@ -25,6 +25,7 @@ function LoginPage() {
 
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
+      localStorage.setItem("firstLogin", "true"); 
       navigate("/mainPage");
     } catch (error) {
   if (error._handledGlobally) return; 

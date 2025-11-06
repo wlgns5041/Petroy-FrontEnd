@@ -21,6 +21,7 @@ import ExpandLessIcon from "@mui/icons-material/KeyboardArrowUpRounded";
 import { motion } from "framer-motion";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import GuideModal from "../../components/commons/GuideModal.jsx";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -47,6 +48,8 @@ function MainPage() {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
+   const [showGuide, setShowGuide] = useState(false);
 
   // 모바일용 섹션 토글 상태
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -174,6 +177,14 @@ function MainPage() {
   useEffect(() => {
     loadSchedules();
   }, [loadSchedules]);
+
+    useEffect(() => {
+    const isFirstLogin = localStorage.getItem("firstLogin");
+    if (isFirstLogin === "true") {
+      setShowGuide(true);
+      localStorage.removeItem("firstLogin"); // ✅ 한 번만 보여줌
+    }
+  }, []);
 
   const openCategoryModal = () => setIsCategoryModalOpen(true);
   const closeCategoryModal = () => setIsCategoryModalOpen(false);
@@ -385,14 +396,12 @@ function MainPage() {
               </div>
             )}
 
-            {/* ✅ 일정 목록 섹션 (카테고리와 동일한 구조로 재작성) */}
             <div className="mainpage-filter-card mainpage-fixed-title">
               <div
                 className="mainpage-filter-title-row mainpage-schedule-header-row"
                 onClick={() => isMobile && setOpenSchedule(!openSchedule)}
                 style={{ cursor: isMobile ? "pointer" : "default" }}
               >
-                {/* ✅ 데스크탑용 레이아웃 */}
                 {!isMobile ? (
                   <>
                     <div className="mainpage-schedule-controls">
@@ -418,7 +427,6 @@ function MainPage() {
                       </button>
                     </div>
 
-                    {/* ✅ 가운데 타이틀 */}
                     <div className="mainpage-schedule-title-center">
                       <h4 className="mainpage-filter-title">
                         일정 목록{" "}
@@ -428,7 +436,6 @@ function MainPage() {
                       </h4>
                     </div>
 
-                    {/* ✅ 오른쪽 전체선택 */}
                     <div className="mainpage-schedule-actions">
                       <button
                         className="mainpage-select-all-button"
@@ -443,7 +450,6 @@ function MainPage() {
                   </>
                 ) : (
                   <>
-                    {/* ✅ 모바일 기존 형태 */}
                     <h4 className="mainpage-filter-title">
                       일정 목록{" "}
                       <span className="mainpage-item-count">
@@ -501,7 +507,6 @@ function MainPage() {
                 transition={{ duration: 0.4, ease: "easeInOut" }}
                 style={{ overflow: "hidden" }}
               >
-                {/* ✅ 일정 목록 */}
                 <div className="mainpage-filter-scroll-area">
                   {filteredAndSortedSchedules.length === 0 ? (
                     <div className="mainpage-empty-message">
@@ -520,7 +525,6 @@ function MainPage() {
                             }`}
                             onClick={() => toggleSchedule(key)}
                           >
-                            {/* ✅ 왼쪽 (일정 제목 + 날짜) */}
                             <div className="mainpage-schedule-list-item-left">
                               <p>{s.title}</p>
                               <small>
@@ -535,7 +539,6 @@ function MainPage() {
                               </small>
                             </div>
 
-                            {/* ✅ 오른쪽 (중요도 점 + 상세보기 버튼) */}
                             <div className="mainpage-schedule-list-item-right">
                               <div
                                 className={`mainpage-priority-indicator mainpage-priority-${s.priority.toLowerCase()}`}
@@ -557,7 +560,6 @@ function MainPage() {
                   )}
                 </div>
 
-                {/* ✅ 하단 버튼 (모바일 전용) */}
                 {isMobile && (
                   <div className="mainpage-create-button-wrapper">
                     <button
@@ -571,7 +573,6 @@ function MainPage() {
               </motion.div>
             </div>
 
-            {/* ✅ 카테고리 섹션 */}
             <div className="mainpage-filter-card mainpage-fixed-title">
               {/* 제목줄 */}
               <div
@@ -653,7 +654,6 @@ function MainPage() {
                   )}
                 </div>
 
-                {/* ✅ 버튼은 항상 아래 고정 */}
                 {isMobile && (
                   <div className="mainpage-create-button-wrapper">
                     <button
@@ -667,9 +667,7 @@ function MainPage() {
               </motion.div>
             </div>
 
-            {/* ✅ 반려동물 섹션 */}
             <div className="mainpage-pets-grid">
-              {/* ── 펫 ── */}
               <div className="mainpage-filter-card mainpage-fixed-title">
                 <div
                   className="mainpage-filter-title-row"
@@ -695,7 +693,6 @@ function MainPage() {
                       {openMyPets ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </span>
                   ) : (
-                    // ✅ PC일 때 전체선택 버튼 추가
                     <button
                       className="mainpage-select-all-button"
                       onClick={(e) => {
@@ -745,7 +742,6 @@ function MainPage() {
                 </motion.div>
               </div>
 
-              {/* ── 돌보미 펫 ── */}
               <div className="mainpage-filter-card mainpage-fixed-title">
                 <div
                   className="mainpage-filter-title-row"
@@ -773,7 +769,6 @@ function MainPage() {
                       {openCarePets ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </span>
                   ) : (
-                    // ✅ PC일 때 전체선택 버튼 추가
                     <button
                       className="mainpage-select-all-button"
                       onClick={(e) => {
@@ -824,7 +819,6 @@ function MainPage() {
               </div>
             </div>
           </div>
-          {/* 캘린더 본문 */}
           {!isMobile && (
             <div className="mainpage-calendar-main">
               <CalendarComponent
@@ -874,6 +868,8 @@ function MainPage() {
         selectedDate={selectedDate}
         onScheduleDeleted={loadSchedules}
       />
+
+       {showGuide && <GuideModal onClose={() => setShowGuide(false)} />}
     </div>
   );
 }

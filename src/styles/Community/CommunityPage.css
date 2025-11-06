@@ -528,7 +528,7 @@ body { overflow-y: scroll; }
 
   .communitypage-mobile-icon {
     background: var(--color-main2) !important;
-    color: var(--color-text);
+    color: var(--color-text)!important;
     border-radius: 8px !important;
     width: 36px;
     height: 36px;
@@ -536,7 +536,7 @@ body { overflow-y: scroll; }
 
   .communitypage-mobile-icon.add {
     background: var(--color-point2) !important;
-    color: var(--color-main2);
+    color: var(--color-main2)!important;
   }
 
 .communitypage-header-bottom {
