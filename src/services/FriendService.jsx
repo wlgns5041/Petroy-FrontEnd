@@ -57,13 +57,17 @@ export const searchFriends = async (keyword) => {
 // 친구 요청
 export const sendFriendRequest = async (memberId) => {
   const token = localStorage.getItem("accessToken");
-  await axios.post(
+  const response = await axios.post(
     `${API_BASE_URL}/friends/${memberId}`,
     {},
-    {
-      headers: { Authorization: `${token}` },
-    }
+    { headers: { Authorization: `${token}` } }
   );
+  
+  if (response.status >= 200 && response.status < 300) {
+    return response.data || true;
+  } else {
+    throw new Error("친구 요청 실패");
+  }
 };
 
 // 친구 수 조회

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendList.css";
@@ -9,6 +10,7 @@ import { useTheme } from "../../utils/ThemeContext.jsx";
 const FriendList = ({ friends, onAccept, onReject }) => {
   const [openDetailId, setOpenDetailId] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const openMenuRef = useRef(null);
   const isRequest = onAccept && onReject;
   const { isDarkMode } = useTheme();
@@ -16,13 +18,27 @@ const FriendList = ({ friends, onAccept, onReject }) => {
   useEffect(() => {
     const handleOutside = (e) => {
       if (!openMenuId) return;
+
+      const dropdown = document.querySelector(".friendlist-dropdown");
+      if (dropdown && dropdown.contains(e.target)) return;
+
       if (openMenuRef.current && !openMenuRef.current.contains(e.target)) {
         setOpenMenuId(null);
       }
     };
+
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
   }, [openMenuId]);
+
+  const handleMenuClick = (e, id) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setDropdownPosition({
+      top: rect.bottom + window.scrollY + 6, 
+      left: rect.left + window.scrollX - 30, 
+    });
+    setOpenMenuId((prev) => (prev === id ? null : id));
+  };
 
   return (
     <div className="friendlist-container">
@@ -30,26 +46,46 @@ const FriendList = ({ friends, onAccept, onReject }) => {
         <div className="friendlist-list">
           {friends.map((friend) => (
             <div key={friend.id} className="friendlist-card">
-              <div className="friendlist-image-wrapper">
-                <img
-                  src={friend.image || defaultProfilePic}
-                  alt={friend.name}
-                  className={`friendlist-image ${
-                    isDarkMode ? "dark-mode" : ""
-                  }`}
-                />
-              </div>
-
-              <div className="friendlist-info-section">
-                <div className="friendlist-name">{friend.name}</div>
-                <div className="friendlist-pets">
-                  {friend.pets?.length > 0
-                    ? friend.pets.join(", ")
-                    : "등록된 펫 없음"}
+              <div className="friendlist-top">
+                <div className="friendlist-image-wrapper">
+                  <img
+                    src={friend.image || defaultProfilePic}
+                    alt={friend.name}
+                    className={`friendlist-image ${
+                      isDarkMode ? "dark-mode" : ""
+                    }`}
+                  />
                 </div>
+
+                <div className="friendlist-info-section">
+                  <div className="friendlist-name">{friend.name}</div>
+                  <div className="friendlist-pets">
+                    {friend.pets?.length > 0
+                      ? friend.pets.join(", ")
+                      : "등록된 펫 없음"}
+                  </div>
+                </div>
+
+                {!isRequest && (
+                  <div className="friendlist-menu">
+                    <button
+                      className="friendlist-more-button"
+                      onClick={(e) => handleMenuClick(e, friend.id)}
+                      ref={openMenuId === friend.id ? openMenuRef : null}
+                    >
+                      <MoreHorizRoundedIcon
+                        sx={{
+                          fontSize: 20,
+                          color: isDarkMode ? "#fff" : "#000",
+                          transition: "color 0.3s ease",
+                        }}
+                      />
+                    </button>
+                  </div>
+                )}
               </div>
 
-              {isRequest ? (
+              {isRequest && (
                 <div className="friendlist-actions">
                   <button
                     onClick={() => onAccept(friend.id)}
@@ -64,53 +100,37 @@ const FriendList = ({ friends, onAccept, onReject }) => {
                     거절
                   </button>
                 </div>
-              ) : (
-                <div
-                  className="friendlist-menu"
-                  ref={openMenuId === friend.id ? openMenuRef : null}
-                >
-                  <button
-                    className="friendlist-more-button"
-                    onClick={() =>
-                      setOpenMenuId((prev) =>
-                        prev === friend.id ? null : friend.id
-                      )
-                    }
-                  >
-                    <MoreHorizRoundedIcon
-                      sx={{
-                        fontSize: 20,
-                        color: isDarkMode ? "#fff" : "#000",
-                        transition: "color 0.3s ease",
-                      }}
-                    />
-                  </button>
-
-                  {openMenuId === friend.id && (
-                    <div
-                      className="friendlist-dropdown"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div
-                        onClick={() => {
-                          setOpenDetailId(friend.id);
-                          setOpenMenuId(null);
-                        }}
-                      >
-                        상세보기
-                      </div>
-                      <div
-                        onClick={() => {
-                          alert("친구 삭제 기능은 추후 구현 예정입니다.");
-                          setOpenMenuId(null);
-                        }}
-                      >
-                        친구 삭제
-                      </div>
-                    </div>
-                  )}
-                </div>
               )}
+
+              {openMenuId === friend.id &&
+                ReactDOM.createPortal(
+                  <div
+                    className="friendlist-dropdown"
+                    style={{
+                      position: "absolute",
+                      top: dropdownPosition.top,
+                      left: dropdownPosition.left,
+                    }}
+                  >
+                    <div
+                      onClick={() => {
+                        setOpenDetailId(friend.id);
+                        setOpenMenuId(null);
+                      }}
+                    >
+                      상세보기
+                    </div>
+                    <div
+                      onClick={() => {
+                        alert("친구 삭제 기능은 추후 구현 예정입니다.");
+                        setOpenMenuId(null);
+                      }}
+                    >
+                      친구 삭제
+                    </div>
+                  </div>,
+                  document.body
+                )}
             </div>
           ))}
 

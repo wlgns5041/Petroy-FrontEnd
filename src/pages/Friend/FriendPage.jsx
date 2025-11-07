@@ -134,7 +134,6 @@ const FriendPage = () => {
   return (
     <main className="friendpage-viewport">
       <div className="friendpage">
-        {/* 검색창 */}
         <div className="friendpage-search-bar">
           <input
             type="text"
@@ -151,7 +150,6 @@ const FriendPage = () => {
           </button>
         </div>
 
-        {/* 검색 결과 */}
         {keyword && (
           <div className="friendpage-search-results">
             {error && (
@@ -221,7 +219,6 @@ const FriendPage = () => {
           </div>
         )}
 
-        {/* 탭 메뉴 */}
         {!keyword && (
           <>
             <div className="friendpage-tab-bar">

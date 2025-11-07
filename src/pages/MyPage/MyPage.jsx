@@ -166,39 +166,62 @@ const MyPage = () => {
     },
   ];
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const scrollEl = scrollRef.current;
-      if (!scrollEl) return;
+useEffect(() => {
+  if (loading) return;              
+  const el = scrollRef.current;
+  if (!el) return;
 
-      const banners = Array.from(scrollEl.children);
-      if (banners.length === 0) return;
+  const updateIndex = () => {
+    const width = el.clientWidth || 1;
+    const idx = Math.round(el.scrollLeft / width);
+    setActiveIndex(idx);
+  };
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const index = banners.indexOf(entry.target);
-              if (index !== -1) setActiveIndex(index);
-            }
-          });
-        },
-        {
-          root: scrollEl,
-          threshold: 0.3,
-        }
-      );
+  const ensureImagesLoaded = async () => {
+    const imgs = el.querySelectorAll(".mypage-banner img");
+    if (imgs.length === 0) return;
 
-      banners.forEach((banner) => observer.observe(banner));
+    await Promise.all(
+      Array.from(imgs).map(
+        (img) =>
+          new Promise((resolve) => {
+            if (img.complete) return resolve();
+            img.addEventListener("load", resolve, { once: true });
+            img.addEventListener("error", resolve, { once: true });
+          })
+      )
+    );
+  };
 
-      return () => {
-        banners.forEach((banner) => observer.unobserve(banner));
-        observer.disconnect();
-      };
-    }, 100);
+  let rafId;
+  let ro;
 
-    return () => clearTimeout(timer);
-  }, [banners.length]);
+  const setup = async () => {
+    await ensureImagesLoaded();
+
+    rafId = requestAnimationFrame(() => {
+      el.scrollLeft = 0;
+      updateIndex();
+    });
+
+    el.addEventListener("scroll", updateIndex, { passive: true });
+    window.addEventListener("resize", updateIndex);
+
+    if ("ResizeObserver" in window) {
+      ro = new ResizeObserver(() => updateIndex());
+      ro.observe(el);
+    }
+  };
+
+  setup();
+
+  return () => {
+    el.removeEventListener("scroll", updateIndex);
+    window.removeEventListener("resize", updateIndex);
+    if (ro) ro.disconnect();
+    if (rafId) cancelAnimationFrame(rafId);
+  };
+}, [loading]); 
 
   // 이미지 변경 함수
   const handleImageUpload = async (file, preview) => {

@@ -185,6 +185,7 @@
   border-radius: 6px;
   transition: transform .3s ease; 
   z-index: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .friendpage-tab {
@@ -211,7 +212,6 @@
   background-color: var(--color-main2);
   color: var(--color-text);
   font-weight: 700;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .friendpage-tab.active span::after {
@@ -434,6 +434,7 @@
   border-radius: 6px;
   transition: transform .3s ease;
   z-index: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .friendpage-tab {
@@ -460,7 +461,6 @@
   background-color: var(--color-main2);
   color: var(--color-text);
   font-weight: 700;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 }
 
 .friendpage-tab.active span::after {
