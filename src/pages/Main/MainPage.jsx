@@ -22,8 +22,7 @@ import { motion } from "framer-motion";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import GuideModal from "../../components/commons/GuideModal.jsx";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import PetImage from "../../components/commons/PetImage.jsx";
 
 function MainPage() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -357,13 +356,6 @@ function MainPage() {
           return 0;
       }
     });
-
-  const normalizeImage = (img) =>
-    !img
-      ? "/images/default-pet.png"
-      : img.startsWith("http")
-      ? img
-      : `${API_BASE_URL}${img}`;
 
   return (
     <div className="mainpage">
@@ -729,8 +721,8 @@ function MainPage() {
                           }`}
                           onClick={() => toggleMyPet(p.petId)}
                         >
-                          <img
-                            src={normalizeImage(p.image)}
+                          <PetImage
+                            src={p.image}
                             alt={p.name}
                             className="mainpage-pet-thumb"
                           />
@@ -805,8 +797,8 @@ function MainPage() {
                           }`}
                           onClick={() => toggleCareGiverPet(p.petId)}
                         >
-                          <img
-                            src={normalizeImage(p.image)}
+                          <PetImage
+                            src={p.image}
                             alt={p.name}
                             className="mainpage-pet-thumb"
                           />

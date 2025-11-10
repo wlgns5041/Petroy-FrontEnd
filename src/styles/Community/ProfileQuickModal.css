@@ -240,15 +240,6 @@
   background-color: var(--color-main1-hover);  
 }
 
-.communityprofile-post-image {
-  flex: 0 0 48px;      
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  object-fit: cover;
-  background: var(--color-main2);
-}
-
 .communityprofile-post-info {
   flex: 1;                 
   display: flex;
@@ -518,15 +509,6 @@
 
   .communityprofile-post-item:hover {
     background-color: var(--color-main1-hover);      
-  }
-
-  .communityprofile-post-image {
-    flex: 0 0 36px;
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    object-fit: cover;
-    background: var(--color-main2);
   }
 
   .communityprofile-post-info {

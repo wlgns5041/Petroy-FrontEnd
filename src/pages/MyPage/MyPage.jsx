@@ -7,7 +7,7 @@ import ImageEditModal from "../../components/MyPage/ImageEditModal.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw } from "@fortawesome/free-solid-svg-icons";
 import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx";
-import defaultPetPic from "../../assets/images/DefaultImage.png";
+import PetImage from "../../components/commons/PetImage.jsx";
 import { fetchFriendCount } from "../../services/FriendService";
 import {
   fetchCurrentMember,
@@ -24,8 +24,7 @@ import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import { useTheme } from "../../utils/ThemeContext.jsx";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 const MyPage = () => {
   const navigate = useNavigate();
@@ -39,7 +38,8 @@ const MyPage = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [friendsCount, setFriendsCount] = useState(0);
   const [confirmAction, setConfirmAction] = useState(null);
-  const [displayImage, setDisplayImage] = useState(null);
+
+  const [currentImage, setCurrentImage] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const dropdownRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -136,12 +136,6 @@ const MyPage = () => {
     };
   }, [showMenu]);
 
-  const normalizeUrl = (u) => {
-    if (!u) return "";
-    if (u.startsWith("http") || u.startsWith("data:")) return u;
-    return `${API_BASE_URL}${u}`;
-  };
-
   const banners = [
     {
       title: "내 작성 글",
@@ -166,101 +160,77 @@ const MyPage = () => {
     },
   ];
 
-useEffect(() => {
-  if (loading) return;              
-  const el = scrollRef.current;
-  if (!el) return;
+  useEffect(() => {
+    if (loading) return;
+    const el = scrollRef.current;
+    if (!el) return;
 
-  const updateIndex = () => {
-    const width = el.clientWidth || 1;
-    const idx = Math.round(el.scrollLeft / width);
-    setActiveIndex(idx);
-  };
+    const updateIndex = () => {
+      const width = el.clientWidth || 1;
+      const idx = Math.round(el.scrollLeft / width);
+      setActiveIndex(idx);
+    };
 
-  const ensureImagesLoaded = async () => {
-    const imgs = el.querySelectorAll(".mypage-banner img");
-    if (imgs.length === 0) return;
+    const ensureImagesLoaded = async () => {
+      const imgs = el.querySelectorAll(".mypage-banner img");
+      if (imgs.length === 0) return;
 
-    await Promise.all(
-      Array.from(imgs).map(
-        (img) =>
-          new Promise((resolve) => {
-            if (img.complete) return resolve();
-            img.addEventListener("load", resolve, { once: true });
-            img.addEventListener("error", resolve, { once: true });
-          })
-      )
-    );
-  };
+      await Promise.all(
+        Array.from(imgs).map(
+          (img) =>
+            new Promise((resolve) => {
+              if (img.complete) return resolve();
+              img.addEventListener("load", resolve, { once: true });
+              img.addEventListener("error", resolve, { once: true });
+            })
+        )
+      );
+    };
 
-  let rafId;
-  let ro;
+    let rafId;
+    let ro;
 
-  const setup = async () => {
-    await ensureImagesLoaded();
+    const setup = async () => {
+      await ensureImagesLoaded();
 
-    rafId = requestAnimationFrame(() => {
-      el.scrollLeft = 0;
-      updateIndex();
-    });
+      rafId = requestAnimationFrame(() => {
+        el.scrollLeft = 0;
+        updateIndex();
+      });
 
-    el.addEventListener("scroll", updateIndex, { passive: true });
-    window.addEventListener("resize", updateIndex);
+      el.addEventListener("scroll", updateIndex, { passive: true });
+      window.addEventListener("resize", updateIndex);
 
-    if ("ResizeObserver" in window) {
-      ro = new ResizeObserver(() => updateIndex());
-      ro.observe(el);
-    }
-  };
+      if ("ResizeObserver" in window) {
+        ro = new ResizeObserver(() => updateIndex());
+        ro.observe(el);
+      }
+    };
 
-  setup();
+    setup();
 
-  return () => {
-    el.removeEventListener("scroll", updateIndex);
-    window.removeEventListener("resize", updateIndex);
-    if (ro) ro.disconnect();
-    if (rafId) cancelAnimationFrame(rafId);
-  };
-}, [loading]); 
+    return () => {
+      el.removeEventListener("scroll", updateIndex);
+      window.removeEventListener("resize", updateIndex);
+      if (ro) ro.disconnect();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [loading]);
 
   // 이미지 변경 함수
-  const handleImageUpload = async (file, preview) => {
-    const token = localStorage.getItem("accessToken");
-    if (preview) setDisplayImage(preview);
-
-    try {
-      const savedPath = await uploadMemberImage(token, file);
-      const finalUrlBase = normalizeUrl(savedPath);
-      const stamp = Date.now();
-      const finalUrl = finalUrlBase.includes("?")
-        ? `${finalUrlBase}&v=${stamp}`
-        : `${finalUrlBase}?v=${stamp}`;
-
-      setAlertMessage("이미지를 변경했습니다.");
-      setShowAlert(true);
-
-      const swapWhenReady = (tries = 6, delay = 250) => {
-        const probe = new Image();
-        probe.onload = () => {
-          setUserInfo((prev) => ({ ...prev, image: finalUrl }));
-          setDisplayImage(finalUrl);
-        };
-        probe.onerror = () => {
-          if (tries > 1) {
-            setTimeout(() => swapWhenReady(tries - 1, delay * 1.5), delay);
-          }
-        };
-        const r = Math.random().toString(36).slice(2);
-        probe.src = `${finalUrl}${finalUrl.includes("?") ? "&" : "?"}r=${r}`;
-      };
-      swapWhenReady();
-    } catch (e) {
-      const message =
-        e.response?.data?.message || "이미지 업로드 중 오류가 발생했습니다.";
-      setAlertMessage(message);
-      setShowAlert(true);
-    }
-  };
+const handleSaveImage = async (formData, { file, preview }) => {
+  const token = localStorage.getItem("accessToken");
+  try {
+    await uploadMemberImage(token, formData); 
+    setAlertMessage("프로필 이미지가 성공적으로 변경되었습니다!");
+    setShowAlert(true);
+    setCurrentImage(preview || null);
+  } catch (error) {
+    console.error("이미지 업로드 중 오류:", error);
+    setAlertMessage("이미지 변경 중 오류가 발생했습니다.");
+    setShowAlert(true);
+  }
+};
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
@@ -320,9 +290,9 @@ useEffect(() => {
       <div className="mypage">
         <div className="mypage-profile">
           <div className="mypage-profile-card">
-            <img
-              src={displayImage ?? normalizeUrl(userInfo.image)}
-              alt="profile"
+            <ProfileImage
+              src={currentImage || userInfo.image}
+              alt="프로필 이미지"
               className="mypage-profile-image"
             />
 
@@ -452,15 +422,8 @@ useEffect(() => {
             <div className="mypage-pet-list">
               {pets.map((pet) => (
                 <li key={pet.petId}>
-                  <img
-                    src={
-                      pet.image
-                        ? pet.image.startsWith("http") ||
-                          pet.image.startsWith("data:")
-                          ? pet.image
-                          : `${API_BASE_URL}${pet.image}`
-                        : defaultPetPic
-                    }
+                  <PetImage
+                    src={pet.image}
                     alt={pet.name}
                     className="mypage-pet-image"
                   />
@@ -487,8 +450,9 @@ useEffect(() => {
         )}
         {showImageModal && (
           <ImageEditModal
-            onSave={handleImageUpload}
+            currentImage={currentImage}
             onClose={() => setShowImageModal(false)}
+            onSave={handleSaveImage}
           />
         )}
 

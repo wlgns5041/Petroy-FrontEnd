@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendList.css";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import FriendDetail from "./FriendDetail";
 import { useTheme } from "../../utils/ThemeContext.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 const FriendList = ({ friends, onAccept, onReject }) => {
   const [openDetailId, setOpenDetailId] = useState(null);
@@ -34,8 +34,8 @@ const FriendList = ({ friends, onAccept, onReject }) => {
   const handleMenuClick = (e, id) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setDropdownPosition({
-      top: rect.bottom + window.scrollY + 6, 
-      left: rect.left + window.scrollX - 30, 
+      top: rect.bottom + window.scrollY + 6,
+      left: rect.left + window.scrollX - 30,
     });
     setOpenMenuId((prev) => (prev === id ? null : id));
   };
@@ -48,9 +48,10 @@ const FriendList = ({ friends, onAccept, onReject }) => {
             <div key={friend.id} className="friendlist-card">
               <div className="friendlist-top">
                 <div className="friendlist-image-wrapper">
-                  <img
-                    src={friend.image || defaultProfilePic}
+                  <ProfileImage
+                    src={friend.image}
                     alt={friend.name}
+                    title={friend.name}
                     className={`friendlist-image ${
                       isDarkMode ? "dark-mode" : ""
                     }`}

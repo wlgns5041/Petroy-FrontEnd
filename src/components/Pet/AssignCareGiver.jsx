@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Pet/AssignCareGiver.css";
 import { fetchAcceptedFriends } from "../../services/FriendService";
 import { fetchCaregiversByPet, assignCaregiver } from "../../services/PetService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
   const [friends, setFriends] = useState([]);
@@ -90,8 +90,8 @@ const AssignCareGiver = ({ pet, onClose, onAssignCareGiver }) => {
                     )
                   }
                 >
-                  <img
-                    src={friend.image || defaultProfilePic}
+                  <ProfileImage
+                    src={friend.image}
                     alt={friend.name}
                     className="pet-assign-friend-image"
                   />

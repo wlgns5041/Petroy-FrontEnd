@@ -13,8 +13,7 @@ import "../../styles/Pet/PetPage.css";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import { useTheme } from "../../utils/ThemeContext.jsx";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import PetImage from "../../components/commons/PetImage.jsx";
 
 const PetPage = () => {
   const [showModal, setShowModal] = useState(false);
@@ -216,14 +215,6 @@ const PetPage = () => {
     showAlertMessage("돌보미 등록 성공!");
   };
 
-  // 이미지 안전 처리
-  const getPetImage = (pet) => {
-    if (!pet.image) return "/images/default-pet.png";
-    if (pet.image.startsWith("http") || pet.image.startsWith("data:"))
-      return pet.image;
-    return `${API_BASE_URL}${pet.image}`;
-  };
-
   return (
     <main className="petpage-viewport">
       <div className="petpage">
@@ -295,8 +286,8 @@ const PetPage = () => {
                         {paginatedPets.map((pet) => (
                           <div key={pet.petId} className="petpage-pet-card-new">
                             <div className="petpage-pet-card-body">
-                              <img
-                                src={getPetImage(pet)}
+                              <PetImage
+                                src={pet.image}
                                 alt={pet.name}
                                 className="petpage-pet-avatar"
                               />
@@ -447,8 +438,8 @@ const PetPage = () => {
                         {caregiverPaginatedPets.map((pet) => (
                           <div key={pet.petId} className="petpage-pet-card-new">
                             <div className="petpage-pet-card-body">
-                              <img
-                                src={getPetImage(pet)}
+                              <PetImage
+                                src={pet.image}
                                 alt={pet.name}
                                 className="petpage-pet-avatar"
                               />

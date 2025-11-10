@@ -80,14 +80,21 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
+
+    // multipart form 생성
     const body = new FormData();
     body.append("categoryId", formData.categoryId);
     body.append("title", formData.title);
     body.append("content", formData.content);
-    formData.image.forEach((file) => body.append("image", file));
+
+    // ✅ 이미지가 있을 때만 append
+    if (formData.image.length > 0) {
+      formData.image.forEach((file) => body.append("image", file));
+    }
 
     try {
       const success = await createPost(body, token);
+
       if (success) {
         setAlertMessage("게시글이 등록되었습니다!");
         setShowAlert(true);
@@ -99,7 +106,8 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
       } else {
         throw new Error("게시글 등록 실패");
       }
-    } catch {
+    } catch (error) {
+      console.error("게시글 등록 실패:", error);
       setAlertMessage("게시글 등록에 실패했습니다.");
       setShowAlert(true);
       setOnConfirmAction(() => () => setShowAlert(false));
@@ -274,7 +282,7 @@ const PostCreateModal = ({ onClose, onPostCreated }) => {
                         type="button"
                         className="post-create-button post-create-submit"
                         onClick={handleSubmit}
-                        disabled={formData.image.length === 0}
+                        disabled={false}
                       >
                         등록하기
                       </button>

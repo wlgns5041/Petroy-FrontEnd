@@ -328,7 +328,7 @@
   width: 48px;
   height: 48px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 8px;
   border: none;
 }
 
@@ -1428,7 +1428,7 @@ input:checked + .schedule-create-slider:before {
 }
 
 .schedule-create-pet-select-card:hover {
-  background-color: var(--color-main1-hover);
+  background-color: var(--color-main2-hover);
 }
 
 .schedule-create-pet-select-card.selected {
@@ -1439,7 +1439,7 @@ input:checked + .schedule-create-slider:before {
   width: 32px;
   height: 32px;
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 4px;
   border: none;
 }
 

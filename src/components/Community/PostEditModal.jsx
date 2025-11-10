@@ -90,13 +90,21 @@ const PostEditModal = ({ post, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("accessToken");
+
     const body = new FormData();
     body.append("categoryId", Number(formData.categoryId));
     body.append("title", formData.title);
     body.append("content", formData.content);
 
-    formData.image.forEach((file) => body.append("newImages", file));
-    deleteImageIds.forEach((id) => body.append("deleteImageIds", id));
+    // ✅ 새로 선택된 이미지가 있을 때만 append
+    if (formData.image.length > 0) {
+      formData.image.forEach((file) => body.append("newImages", file));
+    }
+
+    // ✅ 삭제할 이미지 ID가 있으면 append
+    if (deleteImageIds.length > 0) {
+      deleteImageIds.forEach((id) => body.append("deleteImageIds", id));
+    }
 
     try {
       const success = await updatePost(post.post.postId, body, token);
@@ -258,11 +266,13 @@ const PostEditModal = ({ post, onClose, onSuccess }) => {
                           type="button"
                           className="post-edit-image-clear"
                           onClick={() => {
+                            // 기존 이미지가 있을 때만 삭제 ID 추가
                             if (existingImages.length > 0) {
                               const id = existingImages[0].imageId;
                               setDeleteImageIds((prev) => [...prev, id]);
-                              setExistingImages([]);
+                              setExistingImages([]); // 기존 이미지 목록 초기화
                             }
+                            // 새 이미지가 선택된 경우 초기화
                             setFormData((prev) => ({
                               ...prev,
                               image: [],
@@ -302,10 +312,7 @@ const PostEditModal = ({ post, onClose, onSuccess }) => {
                         <button
                           type="submit"
                           className="post-edit-button post-edit-submit"
-                          disabled={
-                            existingImages.length === 0 &&
-                            formData.image.length === 0
-                          }
+                          disabled={false}
                         >
                           수정하기
                         </button>
@@ -319,7 +326,6 @@ const PostEditModal = ({ post, onClose, onSuccess }) => {
         </div>
       </div>
 
-      {/* 🔹 AlertModal은 overlay 밖에서 렌더링 */}
       {showAlert && (
         <AlertModal
           message={alertMessage}

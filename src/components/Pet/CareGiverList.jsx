@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../../styles/Pet/CareGiverList.css";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import { fetchAcceptedFriends } from "../../services/FriendService";
 import { fetchCaregiversByPet, deleteCaregiver } from "../../services/PetService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 const CareGiverList = ({ pet, onClose }) => {
   const [caregiversList, setCaregiversList] = useState([]);
@@ -95,8 +95,8 @@ const CareGiverList = ({ pet, onClose }) => {
             {caregiversList.map((cg) => (
               <li key={cg.memberId} className="care-giver-list-card">
                 <div className="care-giver-list-left">
-                  <img
-                    src={cg.image || defaultProfilePic}
+                  <ProfileImage
+                    src={cg.image}
                     alt={cg.memberName}
                     className="care-giver-list-friend-image"
                   />

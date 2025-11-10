@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import "../../styles/Friend/FriendDetail.css";
 import { fetchFriendDetail } from "../../services/FriendService.jsx";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import { useTheme } from "../../utils/ThemeContext.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 const FriendDetail = ({ memberId, onClose }) => {
   const [friendDetail, setFriendDetail] = useState(null);
@@ -50,10 +50,10 @@ const FriendDetail = ({ memberId, onClose }) => {
         {!error ? (
           <>
             <div className="frienddetail-profile-section">
-              <img
-                src={friendDetail.image || defaultProfilePic}
-                onError={(e) => (e.target.src = defaultProfilePic)}
+              <ProfileImage
+                src={friendDetail.image}
                 alt={friendDetail.name}
+                title={friendDetail.name}
                 className={`frienddetail-profile-image ${
                   isDarkMode ? "dark-mode" : ""
                 }`}
@@ -73,15 +73,12 @@ const FriendDetail = ({ memberId, onClose }) => {
                       key={pet.petId || pet.id}
                       className="frienddetail-pet-item"
                     >
-                      <img
-                        src={pet.petImage || defaultProfilePic}
-                        onError={(e) => (e.target.src = defaultProfilePic)}
+                      <ProfileImage
+                        src={pet.petImage}
                         alt={pet.name}
+                        title={pet.name}
                         className={`frienddetail-pet-image ${
-                          isDarkMode &&
-                          (!pet.petImage || pet.petImage === defaultProfilePic)
-                            ? "dark-mode"
-                            : ""
+                          isDarkMode ? "dark-mode" : ""
                         }`}
                       />
                       <span className="frienddetail-pet-name">{pet.name}</span>
@@ -113,10 +110,10 @@ const FriendDetail = ({ memberId, onClose }) => {
                       key={pet.petId || pet.id}
                       className="frienddetail-pet-item"
                     >
-                      <img
-                        src={pet.petImage || defaultProfilePic}
-                        onError={(e) => (e.target.src = defaultProfilePic)}
+                      <ProfileImage
+                        src={pet.petImage}
                         alt={pet.name}
+                        title={pet.name}
                         className={`frienddetail-pet-image ${
                           isDarkMode ? "dark-mode" : ""
                         }`}

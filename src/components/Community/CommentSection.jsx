@@ -4,8 +4,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import "../../styles/Community/CommentSection.css";
-import defaultProfile from "../../assets/images/DefaultImage.png";
 import { useTheme } from "../../utils/ThemeContext.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx"; 
 
 import {
   createComment,
@@ -82,7 +82,7 @@ const CommentSection = ({ postId, open, onClose }) => {
         const newComment = {
           commentId: Date.now(),
           memberName: "나",
-          profileImage: defaultProfile,
+          profileImage: null,
           content: val,
           createdAt: new Date().toISOString(),
         };
@@ -149,9 +149,9 @@ const CommentSection = ({ postId, open, onClose }) => {
                     editingId === c.commentId ? "editing" : ""
                   }`}
                 >
-                  <img
-                    src={c.profileImage || defaultProfile}
-                    alt=""
+                  <ProfileImage
+                    src={c.profileImage}
+                    alt={c.memberName}
                     className="comment-sheet-avatar"
                   />
 

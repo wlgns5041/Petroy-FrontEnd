@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../../styles/Community/ProfileQuickModal.css";
-import defaultPetPic from "../../assets/images/DefaultImage.png";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import { fetchMemberPets } from "../../services/PetService";
 import {
@@ -16,8 +15,8 @@ import {
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import CheckIcon from "@mui/icons-material/Check";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
+import PetImage from "../../components/commons/PetImage.jsx";
 
 const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
   const [me, setMe] = useState(null);
@@ -172,12 +171,6 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
   const myPosts = useMemo(() => posts || [], [posts]);
   const isMe = me && target && String(me.id) === String(target.id);
 
-  /** 🔹 이미지 정규화 */
-  const normalizeImage = (img) => {
-    if (!img) return defaultPetPic;
-    if (img.startsWith("http") || img.startsWith("data:")) return img;
-    return `${API_BASE_URL}${img}`;
-  };
 
   /** 🔹 로딩 화면 */
   if (loading) {
@@ -203,9 +196,9 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
           aria-modal="true"
         >
           <div className="communityprofile-header">
-            <img
-              src={normalizeImage(target?.image || target?.profileImage)}
-              alt="프로필"
+            <ProfileImage
+              src={target?.image || target?.profileImage}
+              alt="프로필 이미지"
               className="communityprofile-avatar"
             />
             <div className="communityprofile-meta">
@@ -266,8 +259,8 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
                 <ul className="communityprofile-pet-list">
                   {pets.map((pet) => (
                     <li key={pet.petId} className="communityprofile-pet-item">
-                      <img
-                        src={normalizeImage(pet.image)}
+                      <PetImage
+                        src={pet.image}
                         alt={pet.name}
                         className="communityprofile-pet-image"
                       />
@@ -308,15 +301,6 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
                       onJumpToPost?.(p.postId);
                     }}
                   >
-                    <img
-                      src={
-                        p.postImageDtoList?.[0]?.imageUrl
-                          ? normalizeImage(p.postImageDtoList[0].imageUrl)
-                          : defaultPetPic
-                      }
-                      alt="thumbnail"
-                      className="communityprofile-post-image"
-                    />
                     <div className="communityprofile-post-info">
                       <div className="communityprofile-post-title">
                         {p.title}

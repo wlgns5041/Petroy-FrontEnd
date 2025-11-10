@@ -5,9 +5,7 @@ import AccessTimeFilledRoundedIcon from "@mui/icons-material/AccessTimeFilledRou
 import CategoryRoundedIcon from "@mui/icons-material/CategoryRounded";
 import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
 import PetsRoundedIcon from "@mui/icons-material/PetsRounded";
-import defaultPetPic from "../../assets/images/DefaultImage.png";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || "";
+import PetImage from "../../components/commons/PetImage.jsx";
 
 // 날짜 포맷 통일 함수
 const formatDateKey = (date) =>
@@ -83,8 +81,8 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
   });
 
   const hasAnySchedulesInWeek = weeks[0].some((date) =>
-  filteredSchedules.some((s) => formatDateKey(s.date) === formatDateKey(date))
-);
+    filteredSchedules.some((s) => formatDateKey(s.date) === formatDateKey(date))
+  );
 
   return (
     <div className="calendar">
@@ -422,35 +420,24 @@ const CalendarComponent = ({ filteredSchedules, onOpenDetail }) => {
                                 className="calendar-summary-icon"
                               />
                               <div className="calendar-schedule-pets">
-                                {(s.petInfo || []).map((pet, i) => {
-                                  const imageSrc = pet.image
-                                    ? pet.image.startsWith("http") ||
-                                      pet.image.startsWith("data:")
-                                      ? pet.image
-                                      : `${API_BASE_URL}${pet.image}`
-                                    : defaultPetPic;
-                                  return (
-                                    <div
-                                      key={i}
-                                      className="calendar-pet-circle-with-name"
-                                    >
-                                      <div className="calendar-pet-circle">
-                                        <img
-                                          src={imageSrc}
-                                          alt={pet.name}
-                                          title={pet.name}
-                                          onError={(e) =>
-                                            (e.target.src = defaultPetPic)
-                                          }
-                                          className="calendar-schedule-pet-thumbnail"
-                                        />
-                                      </div>
-                                      <span className="calendar-pet-name">
-                                        {pet.name}
-                                      </span>
+                                {(s.petInfo || []).map((pet, i) => (
+                                  <div
+                                    key={i}
+                                    className="calendar-pet-circle-with-name"
+                                  >
+                                    <div className="calendar-pet-circle">
+                                      <PetImage
+                                        src={pet.image}
+                                        alt={pet.name}
+                                        title={pet.name}
+                                        className="calendar-schedule-pet-thumbnail"
+                                      />
                                     </div>
-                                  );
-                                })}
+                                    <span className="calendar-pet-name">
+                                      {pet.name}
+                                    </span>
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           </div>

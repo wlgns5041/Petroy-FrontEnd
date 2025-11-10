@@ -280,7 +280,7 @@ html, body { overflow: hidden; height: 100%; }
 .mainpage-pet-thumb {
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
   margin-left: -6px;

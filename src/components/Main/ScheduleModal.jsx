@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import "../../styles/Main/ScheduleModal.css";
-import defaultPetPic from "../../assets/images/DefaultImage.png";
 import { FiInfo } from "react-icons/fi";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import {
@@ -14,8 +13,7 @@ import DateTimeSelect from "../../components/Main/DateTimeSelect";
 import ChevronLeftRoundedIcon from "@mui/icons-material/ChevronLeftRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import AlertModal from "../../components/commons/AlertModal.jsx";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+import PetImage from "../../components/commons/PetImage.jsx";
 
 const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   const [formData, setFormData] = useState({
@@ -495,57 +493,60 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                 <div>
                   {step === 1 && (
                     <div className="schedule-create-section-card">
-                     <div className="schedule-create-form-inline">
-  <label
-    htmlFor="categoryId"
-    className="schedule-create-inline-label"
-  >
-    카테고리
-  </label>
+                      <div className="schedule-create-form-inline">
+                        <label
+                          htmlFor="categoryId"
+                          className="schedule-create-inline-label"
+                        >
+                          카테고리
+                        </label>
 
-  <div className="schedule-create-inline-select-wrapper">
-    {categories.length === 0 ? (
-      // 🔸 카테고리가 없을 때
-      <div className="schedule-create-inline-empty">
-        생성된 카테고리가 없습니다.
-      </div>
-    ) : (
-      <>
-        <div
-          className="schedule-create-inline-select"
-          onClick={() => setShowDropdown((prev) => !prev)}
-        >
-          {formData.categoryId
-            ? categories.find(
-                (c) => c.categoryId === formData.categoryId
-              )?.name || "선택"
-            : "선택"}
-          <span className="schedule-create-inline-arrow">▼</span>
-        </div>
+                        <div className="schedule-create-inline-select-wrapper">
+                          {categories.length === 0 ? (
+                            // 🔸 카테고리가 없을 때
+                            <div className="schedule-create-inline-empty">
+                              생성된 카테고리가 없습니다.
+                            </div>
+                          ) : (
+                            <>
+                              <div
+                                className="schedule-create-inline-select"
+                                onClick={() => setShowDropdown((prev) => !prev)}
+                              >
+                                {formData.categoryId
+                                  ? categories.find(
+                                      (c) =>
+                                        c.categoryId === formData.categoryId
+                                    )?.name || "선택"
+                                  : "선택"}
+                                <span className="schedule-create-inline-arrow">
+                                  ▼
+                                </span>
+                              </div>
 
-        {showDropdown && (
-          <ul className="schedule-create-inline-dropdown">
-            {categories.map((c) => (
-              <li
-                key={c.categoryId}
-                className="schedule-create-inline-option"
-                onClick={() => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    categoryId: c.categoryId,
-                  }));
-                  setShowDropdown(false);
-                }}
-              >
-                {c.name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </>
-    )}
-  </div>
-</div>
+                              {showDropdown && (
+                                <ul className="schedule-create-inline-dropdown">
+                                  {categories.map((c) => (
+                                    <li
+                                      key={c.categoryId}
+                                      className="schedule-create-inline-option"
+                                      onClick={() => {
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          categoryId: c.categoryId,
+                                        }));
+                                        setShowDropdown(false);
+                                      }}
+                                    >
+                                      {c.name}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
 
                       <div className="schedule-create-form-inline">
                         <label
@@ -582,12 +583,12 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                     <div className="schedule-create-section-card">
                       {pets.length === 0 ? (
                         <div className="schedule-create-empty-pets">
-                        <div className="schedule-create-empty-pets-title">
-                          등록된 반려동물이 없습니다
-                        </div>
-                        <div className="schedule-create-empty-pets-sub">
-                          반려동물을 먼저 등록해주세요
-                        </div>
+                          <div className="schedule-create-empty-pets-title">
+                            등록된 반려동물이 없습니다
+                          </div>
+                          <div className="schedule-create-empty-pets-sub">
+                            반려동물을 먼저 등록해주세요
+                          </div>
                         </div>
                       ) : (
                         <ul className="schedule-create-pet-select-container">
@@ -603,16 +604,10 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                                 handlePetSelectionChange(pet.petId)
                               }
                             >
-                              <img
-                                src={
-                                  pet.image
-                                    ? pet.image.startsWith("http") ||
-                                      pet.image.startsWith("data:")
-                                      ? pet.image
-                                      : `${API_BASE_URL}${pet.image}`
-                                    : defaultPetPic
-                                }
+                              <PetImage
+                                src={pet.image}
                                 alt={pet.name}
+                                title={pet.name}
                                 className="schedule-create-pet-image"
                               />
                               <div className="schedule-create-info">

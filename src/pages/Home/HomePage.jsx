@@ -260,17 +260,54 @@ function HomePage() {
       </div>
 
       <div className="onboarding">
-        <div className="onboarding-logo-box">
-          <div className="onboarding-logo-wrapper">
-            <img
-              src={require("../../assets/icons/icon.png")}
-              alt="Petory Logo"
-              className="onboarding-logo-icon"
-            />
-          </div>
-          <h1 className="onboarding-logo-text">PETORY</h1>
-        </div>
+         <div className="homepage-left">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="homepage-textarea"
+                >
+                  <h1 className="homepage-textarea-title">
+                    {slides[activeSlide].title}
+                  </h1>
+                  <h2 className="homepage-textarea-subtitle">
+                    {slides[activeSlide].subtitle}
+                  </h2>
+                </motion.div>
+              </AnimatePresence>
 
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="homepage-slider"
+                >
+                  <Lottie
+                    animationData={slides[activeSlide].lottie}
+                    loop
+                    style={{ width: 400, height: 400 }}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="homepage-bullets-wrap">
+                {slides.map((slide, index) => (
+                  <span
+                    key={slide.id}
+                    className={`homepage-bullets ${
+                      activeSlide === index ? "homepage-bullets-on" : ""
+                    }`}
+                    onClick={() => handleBulletClick(index)}
+                  ></span>
+                ))}
+              </div>
+            </div>
         <div className="onboarding-buttons">
           <div className="onboarding-row">
             <button className="btn-login" onClick={handleLoginClick}>
@@ -309,7 +346,6 @@ function HomePage() {
             </button>
           </div>
         </div>
-        <h className="homepage-bottom-text">반려동물의 일상과 관리를 한 번에</h>
       </div>
     </div>
   );

@@ -44,15 +44,6 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
     gender: useRef(null),
   };
 
-  const breedImageMap = {
-    1: require("../../assets/icons/dog-chihuahua.png"),
-    2: require("../../assets/icons/dog-jindo.png"),
-    3: require("../../assets/icons/dog-pomeranian.png"),
-    4: require("../../assets/icons/cat-russianblue.png"),
-    5: require("../../assets/icons/cat-munchkin.png"),
-    6: require("../../assets/icons/cat-cheese.png"),
-  };
-
   useEffect(() => {
     const fetchSpecies = async () => {
       try {
@@ -129,27 +120,24 @@ const PetRegister = ({ onClose, onRegisterSuccess }) => {
 
       if (petInfo.image && petInfo.image instanceof File) {
         formData.append("image", petInfo.image);
-      } else {
-        const fallbackImageUrl = breedImageMap[petInfo.breedId];
-        const response = await fetch(fallbackImageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], "default.png", { type: blob.type });
-        formData.append("image", file);
+      } else if (petInfo.image === null) {
+        // ✅ 기본 이미지 요청임을 명시
+        formData.append("image", new Blob([]), "null");
       }
 
       const result = await registerPet(formData);
 
-setAlertMessage("반려동물이 성공적으로 등록되었습니다.");
-setShowAlert(true);
+      setAlertMessage("반려동물이 성공적으로 등록되었습니다.");
+      setShowAlert(true);
 
-if (onRegisterSuccess && result) {
-  onRegisterSuccess(result);
-}
+      if (onRegisterSuccess && result) {
+        onRegisterSuccess(result);
+      }
 
-setAlertConfirmAction(() => () => {
-  setShowAlert(false);
-  onClose();
-});
+      setAlertConfirmAction(() => () => {
+        setShowAlert(false);
+        onClose();
+      });
     } catch (err) {
       setAlertMessage("등록 중 오류가 발생했습니다.");
       setShowAlert(true);
@@ -225,6 +213,7 @@ setAlertConfirmAction(() => () => {
         <SwitchTransition>
           <CSSTransition key={step} timeout={300} classNames="fade">
             <div className="pet-register-step-wrapper">
+              {/* --- STEP 1 --- */}
               {step === 1 && (
                 <>
                   <p className="pet-register-step-indicator">1 / 4</p>
@@ -253,6 +242,7 @@ setAlertConfirmAction(() => () => {
                 </>
               )}
 
+              {/* --- STEP 2 --- */}
               {step === 2 && (
                 <>
                   <div className="pet-register-step-content">
@@ -309,6 +299,8 @@ setAlertConfirmAction(() => () => {
                   </div>
                 </>
               )}
+
+              {/* --- STEP 3 --- */}
               {step === 3 && (
                 <>
                   <div className="pet-register-step-content">
@@ -359,12 +351,12 @@ setAlertConfirmAction(() => () => {
                       type="button"
                       className="pet-register-skip-button"
                       onClick={() => {
-                        setPetInfo((prev) => ({ ...prev, image: "" }));
+                        setPetInfo((prev) => ({ ...prev, image: null }));
                         setStep(step + 1);
                       }}
                       disabled={!!petInfo.image}
                     >
-                      건너뛰기
+                      기본 이미지 사용
                     </button>
                     <button
                       className="pet-register-next-button"
@@ -377,6 +369,7 @@ setAlertConfirmAction(() => () => {
                 </>
               )}
 
+              {/* --- STEP 4 --- */}
               {step === 4 && (
                 <>
                   <div className="pet-register-step-content">
@@ -423,15 +416,16 @@ setAlertConfirmAction(() => () => {
           </CSSTransition>
         </SwitchTransition>
       </div>
-{showAlert && (
-  <AlertModal
-    message={alertMessage}
-    onConfirm={() => {
-      if (alertConfirmAction) alertConfirmAction();
-      else setShowAlert(false);
-    }}
-  />
-)}
+
+      {showAlert && (
+        <AlertModal
+          message={alertMessage}
+          onConfirm={() => {
+            if (alertConfirmAction) alertConfirmAction();
+            else setShowAlert(false);
+          }}
+        />
+      )}
     </div>
   );
 };

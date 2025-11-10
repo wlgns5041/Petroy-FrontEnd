@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../../styles/Pet/PetEdit.css";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import { updatePet, fetchMemberPets } from "../../services/PetService";
+import { updatePet } from "../../services/PetService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const PetEdit = ({ pet, onClose, onUpdate }) => {
@@ -53,38 +53,8 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
 
       if (petInfo.image && petInfo.image instanceof File) {
         formData.append("image", petInfo.image);
-      } else if (pet.image && pet.image.startsWith("http")) {
-        const response = await fetch(pet.image);
-        const blob = await response.blob();
-        const fileName = pet.image.split("/").pop();
-        const file = new File([blob], fileName, { type: blob.type });
-        formData.append("image", file);
-      } else {
-        const allPets = await fetchMemberPets();
-        const currentPet = allPets.find((p) => p.petId === pet.petId);
-        if (currentPet) {
-          const { species, breed } = currentPet;
-          const fallbackImageMap = {
-            "강아지-치와와": "dog-chihuahua.png",
-            "강아지-진돗개": "dog-jindo.png",
-            "강아지-포메라니안": "dog-pomeranian.png",
-            "고양이-러시안블루": "cat-russianblue.png",
-            "고양이-먼치킨": "cat-munchkin.png",
-            "고양이-치즈": "cat-cheese.png",
-          };
-          const fallbackKey = `${species}-${breed}`;
-          const fallbackFileName = fallbackImageMap[fallbackKey];
-
-          if (fallbackFileName) {
-            const fallbackImageUrl = `${process.env.PUBLIC_URL}/assets/icons/${fallbackFileName}`;
-            const response = await fetch(fallbackImageUrl);
-            const blob = await response.blob();
-            const file = new File([blob], fallbackFileName, {
-              type: blob.type,
-            });
-            formData.append("image", file);
-          }
-        }
+      } else if (petInfo.image === null) {
+        formData.append("image", new Blob([]), "null");
       }
 
       const data = await updatePet(pet.petId, formData);
@@ -190,7 +160,7 @@ const PetEdit = ({ pet, onClose, onUpdate }) => {
                             type="button"
                             className="pet-edit-file-clear"
                             onClick={() => {
-                              setPetInfo((prev) => ({ ...prev, image: "" }));
+                              setPetInfo((prev) => ({ ...prev, image: null }));
                               setPreviewUrl("");
                             }}
                             disabled={loading}

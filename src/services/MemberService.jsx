@@ -90,21 +90,19 @@ export const updateMemberName = async (token, newName) => {
 };
 
 // 이미지 변경
-export const uploadMemberImage = async (token, imageFile) => {
-  const formData = new FormData();
-  formData.append("image", imageFile);
-
+export const uploadMemberImage = async (token, formData) => {
   const response = await fetch(`${API_BASE_URL}/members/image`, {
     method: "PATCH",
-    headers: {
-      Authorization: token,
-    },
+    headers: { Authorization: token },
     body: formData,
   });
 
-  if (!response.ok) throw new Error("이미지 업로드 실패");
+  if (!response.ok) {
+    const msg = await response.text();
+    throw new Error(msg || "이미지 업로드 실패");
+  }
 
-  return await response.text(); // image URL
+  return await response.text();
 };
 
 // 회원 탈퇴

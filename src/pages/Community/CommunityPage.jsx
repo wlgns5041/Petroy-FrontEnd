@@ -39,6 +39,7 @@ import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import { useMediaQuery } from "@mui/material";
 import withAuth from "../../utils/withAuth";
 import { useTheme } from "../../utils/ThemeContext.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 /* -------------------- 유틸 -------------------- */
 
@@ -606,15 +607,13 @@ const CommunityPage = () => {
         {isMobile ? (
           <>
             <div className="communitypage-header-top">
-              <div className="communitypage-search-wrapper"
-              >
+              <div className="communitypage-search-wrapper">
                 <input
                   type="text"
                   value={searchKeyword}
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   placeholder="게시글 검색"
                   className="communitypage-search-input"
-                  
                 />
                 <button
                   type="submit"
@@ -749,7 +748,7 @@ const CommunityPage = () => {
                   alignItems: "center",
                   width: 150,
                   borderRadius: "8px",
-                 backgroundColor: isDarkMode ? "#2a2a2a" : "#f9f9f9",
+                  backgroundColor: isDarkMode ? "#2a2a2a" : "#f9f9f9",
                   padding: "6px",
                   boxShadow: "none",
                 }}
@@ -762,14 +761,17 @@ const CommunityPage = () => {
                     fontFamily: "Pretendard, sans-serif",
                     fontSize: "12px",
                     color: isDarkMode ? "#ffffff" : "#000000",
-    
                   }}
                   value={searchKeyword}
                   onChange={(e) => setSearchKeyword(e.target.value)}
                   placeholder="게시물 검색"
                   inputProps={{ "aria-label": "search" }}
                 />
-                <IconButton type="submit" sx={{ p: "1px", color: isDarkMode ? "#ffffff" : "#000000" }} aria-label="search">
+                <IconButton
+                  type="submit"
+                  sx={{ p: "1px", color: isDarkMode ? "#ffffff" : "#000000" }}
+                  aria-label="search"
+                >
                   <SearchIcon />
                 </IconButton>
               </Paper>
@@ -784,7 +786,9 @@ const CommunityPage = () => {
                   width: 40,
                   height: 40,
                   color: isDarkMode ? "#fff" : "#000",
-                  "&:hover": { backgroundColor: isDarkMode ? "#000" : "#e4e6eb" },
+                  "&:hover": {
+                    backgroundColor: isDarkMode ? "#000" : "#e4e6eb",
+                  },
                 }}
                 aria-label="새로고침"
                 title="새로고침"
@@ -815,9 +819,10 @@ const CommunityPage = () => {
                 {SORT_LABEL[sortKey]}
               </button>
 
-              <img
-                src={(me?.image || me?.profileImage) ?? defaultPetPic}
+              <ProfileImage
+                src={me?.image || me?.profileImage}
                 alt="내 프로필"
+                title={me?.name}
                 className="communitypage-header-profile-img"
                 onClick={() => handleProfileClick(me)}
               />
@@ -833,7 +838,9 @@ const CommunityPage = () => {
                   height: 32,
                   borderRadius: "4px",
                   padding: 1,
-                   "&:hover": { backgroundColor: isDarkMode ? "#E8E9EC" : "#000000"},
+                  "&:hover": {
+                    backgroundColor: isDarkMode ? "#E8E9EC" : "#000000",
+                  },
                 }}
               >
                 <AddIcon sx={{ fontSize: 20 }} />
@@ -878,14 +885,12 @@ const CommunityPage = () => {
                 <div className="communitypage-post-header">
                   <div className="communitypage-post-header-left">
                     <div className="communitypage-post-profile">
-                      <img
-                        src={author.image || defaultPetPic}
-                        alt="프로필"
+                      <ProfileImage
+                        src={author.image}
+                        alt={author.name}
+                        title={author.name}
                         className={`communitypage-post-profile-img ${
-                          isDarkMode &&
-                          (!author.image || author.image === defaultPetPic)
-                            ? "dark-mode"
-                            : ""
+                          isDarkMode ? "dark-mode" : ""
                         }`}
                         onClick={() =>
                           handleProfileClick(
@@ -900,11 +905,6 @@ const CommunityPage = () => {
                           handleProfileClick(
                             isMyPost(post) ? me ?? author : author
                           )
-                        }
-                        aria-label={
-                          isMyPost(post)
-                            ? "내 프로필 빠른 보기"
-                            : "사용자 프로필 빠른 보기"
                         }
                       />
                       <div className="communitypage-post-profile-info">
