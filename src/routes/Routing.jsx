@@ -16,7 +16,7 @@ const Routing = () => {
   return (
     <Routes>
 
-      {/* 스플래시 */}
+      {/* 스플래시 스크린 */}
       <Route path="/splash" element={<SplashScreen />} />
       
       {/* NavBar 없는 라우트 */}

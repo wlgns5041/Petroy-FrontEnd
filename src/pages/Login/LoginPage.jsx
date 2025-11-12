@@ -104,7 +104,7 @@ function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
-                  placeholder="비밀번호 입력"
+                  placeholder="비밀번호"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

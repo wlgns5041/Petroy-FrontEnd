@@ -2,6 +2,8 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+/* ---------------------- 친구 조회 ---------------------- */
+
 // 친구 상세보기
 export const fetchFriendDetail = async (memberId) => {
   const token = localStorage.getItem("accessToken");
@@ -11,7 +13,7 @@ export const fetchFriendDetail = async (memberId) => {
   return response.data;
 };
 
-// 친구 목록 ACCEPTED 조회
+// 친구 목록 (ACCEPTED)
 export const fetchAcceptedFriends = async () => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.get(`${API_BASE_URL}/friends`, {
@@ -21,7 +23,7 @@ export const fetchAcceptedFriends = async () => {
   return response.data.content || [];
 };
 
-// 친구 요청 PENDING 조회
+// 친구 요청 목록 (PENDING)
 export const fetchPendingFriends = async () => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.get(`${API_BASE_URL}/friends`, {
@@ -31,7 +33,9 @@ export const fetchPendingFriends = async () => {
   return response.data.content || [];
 };
 
-// 친구 수락
+/* ---------------------- 친구 요청 / 관리 ---------------------- */
+
+// 친구 요청 수락 또는 거절
 export const handleFriendRequest = async (memberId, action) => {
   const token = localStorage.getItem("accessToken");
   await axios.patch(
@@ -39,22 +43,12 @@ export const handleFriendRequest = async (memberId, action) => {
     {},
     {
       headers: { Authorization: `${token}` },
-      params: { status: action },
+      params: { status: action }, // ACCEPTED or REJECTED
     }
   );
 };
 
-// 친구 검색
-export const searchFriends = async (keyword) => {
-  const token = localStorage.getItem("accessToken");
-  const response = await axios.get(`${API_BASE_URL}/friends/search`, {
-    headers: { Authorization: `${token}` },
-    params: { keyword },
-  });
-  return response.data.content || [];
-};
-
-// 친구 요청
+// 친구 요청 보내기
 export const sendFriendRequest = async (memberId) => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.post(
@@ -62,12 +56,24 @@ export const sendFriendRequest = async (memberId) => {
     {},
     { headers: { Authorization: `${token}` } }
   );
-  
+
   if (response.status >= 200 && response.status < 300) {
     return response.data || true;
   } else {
     throw new Error("친구 요청 실패");
   }
+};
+
+/* ---------------------- 친구 검색 / 통계 ---------------------- */
+
+// 친구 검색 (이름 또는 이메일)
+export const searchFriends = async (keyword) => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.get(`${API_BASE_URL}/friends/search`, {
+    headers: { Authorization: `${token}` },
+    params: { keyword },
+  });
+  return response.data.content || [];
 };
 
 // 친구 수 조회

@@ -29,6 +29,7 @@
     opacity: 0;
     animation: fadeIn 0.8s ease forwards;
     gap: 24px;
+    min-width: 540px;
 }
 
 .loginpage-section {
@@ -269,7 +270,8 @@
     min-height: var(--app-height); 
     border-radius: 0;    
     box-shadow: none;    
-    padding: 20px;       
+    padding: 20px;  
+    min-width: 310px;     
   }
 
   .loginpage-section {

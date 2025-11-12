@@ -2,31 +2,33 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+/* ---------------------- 내 반려동물 ---------------------- */
+
 // 내 펫 정보 조회
 export const fetchMemberPets = async () => {
   const token = localStorage.getItem("accessToken");
   console.log("🔑 accessToken:", token);
   try {
     const response = await fetch(`${API_BASE_URL}/members/pets`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `${token}`,
-      },
+      method: "GET",
+      headers: { Authorization: `${token}` },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('반려동물 정보를 찾을 수 없습니다', errorText);
+      console.error("반려동물 정보를 찾을 수 없습니다", errorText);
       return [];
     }
 
     const data = await response.json();
     return data.content || [];
   } catch (error) {
-    console.error("🔥 fetchMemberPets 예외:", error);
+    console.error("반려동물 정보를 불러오는 중 오류:", error);
     return [];
   }
 };
+
+/* ---------------------- 종 / 품종 ---------------------- */
 
 // 종 목록 조회
 export const fetchSpeciesList = async () => {
@@ -42,6 +44,8 @@ export const fetchBreedList = async (speciesId) => {
   const response = await axios.get(`${API_BASE_URL}/pets/breed/${speciesId}`);
   return response.data.content || [];
 };
+
+/* ---------------------- 반려동물 등록 / 수정 / 삭제 ---------------------- */
 
 // 반려동물 등록
 export const registerPet = async (formData) => {
@@ -76,7 +80,9 @@ export const deletePet = async (petId) => {
   return response.status === 200;
 };
 
-// 돌보미 목록 조회
+/* ---------------------- 돌보미 ---------------------- */
+
+// 특정 펫의 돌보미 목록 조회
 export const fetchCaregiversByPet = async (petId) => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.get(`${API_BASE_URL}/caregivers`, {

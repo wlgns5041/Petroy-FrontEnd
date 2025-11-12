@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../../styles/Friend/FriendPage.css";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
 import SearchIcon from "@mui/icons-material/Search";
 import FriendList from "../../components/Friend/FriendList.jsx";
 import {
@@ -12,7 +11,7 @@ import {
 } from "../../services/FriendService";
 import withAuth from "../../utils/withAuth";
 import AlertModal from "../../components/commons/AlertModal.jsx";
-import { useTheme } from "../../utils/ThemeContext.jsx";
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 const FriendPage = () => {
   const [friends, setFriends] = useState([]);
@@ -27,7 +26,7 @@ const FriendPage = () => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const { isDarkMode } = useTheme();
+
 
   const loadFriends = async () => {
     try {
@@ -170,18 +169,11 @@ const FriendPage = () => {
                       className="friendpage-search-result-item"
                     >
                       <div className="friendpage-search-result-info">
-                        <img
-                          src={member.image || defaultProfilePic}
-                          alt={member.name}
-                          className={`friendpage-profile-image ${
-                            isDarkMode &&
-                            (!member.image ||
-                              member.image === defaultProfilePic)
-                              ? "dark-mode"
-                              : ""
-                          }`}
-                          onError={(e) => (e.target.src = defaultProfilePic)}
-                        />
+<ProfileImage
+  src={member.image}
+  alt={member.name}
+  className="friendpage-profile-image"
+/>
                         <span>{member.name}</span>
                       </div>
 

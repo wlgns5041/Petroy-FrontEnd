@@ -1,5 +1,6 @@
 import React from "react";
-import defaultProfilePic from "../../assets/images/DefaultImage.png";
+import { useTheme } from "../../utils/ThemeContext";
+import defaultProfilePic from "../../assets/icons/profile-default.png";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -11,13 +12,15 @@ const ProfileImage = ({
   onClick,
   ...props
 }) => {
-const resolveSrc = (image) => {
-  if (!image || image === "null" || image === "" || image === undefined) {
-    return defaultProfilePic; 
-  }
-  if (image.startsWith("http") || image.startsWith("data:")) return image;
-  return `${API_BASE_URL}${image}`;
-};
+  const { isDarkMode } = useTheme();
+
+  const resolveSrc = (image) => {
+    if (!image || image === "null" || image === "" || image === undefined) {
+      return defaultProfilePic;
+    }
+    if (image.startsWith("http") || image.startsWith("data:")) return image;
+    return `${API_BASE_URL}${image}`;
+  };
 
   return (
     <img
@@ -26,6 +29,10 @@ const resolveSrc = (image) => {
       title={title}
       className={className}
       onClick={onClick}
+      style={{
+        filter: isDarkMode ? "brightness(0) invert(1)" : "none",
+        transition: "filter 0.3s ease",
+      }}
       onError={(e) => (e.target.src = defaultProfilePic)}
       {...props}
     />

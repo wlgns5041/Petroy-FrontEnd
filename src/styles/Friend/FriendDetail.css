@@ -55,12 +55,6 @@
   margin-right: 10px;
 }
 
-.frienddetail-profile-image.dark-mode,
-.frienddetail-pet-image.dark-mode {
-  filter: invert(1) brightness(1.2) !important;
-  transition: filter 0.3s ease;
-}
-
 .frienddetail-friend-name {
   font-size: 16px;
   font-weight: 700;

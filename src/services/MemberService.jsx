@@ -2,7 +2,9 @@ import axios from "axios";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
-// 정보 조회
+/* ---------------------- 회원 정보 ---------------------- */
+
+// 내 정보 조회
 export const fetchCurrentMember = async () => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
@@ -12,44 +14,47 @@ export const fetchCurrentMember = async () => {
 
   try {
     const response = await fetch(`${API_BASE_URL}/members`, {
-      method: 'GET',
-      headers: { 'Authorization': `${token}` },
+      method: "GET",
+      headers: { Authorization: `${token}` },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('회원 정보를 찾을 수 없습니다', errorText);
+      console.error("회원 정보를 찾을 수 없습니다", errorText);
       return null;
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('회원 정보를 불러오는 중 오류 발생:', error);
+    console.error("회원 정보를 불러오는 중 오류 발생:", error);
     return null;
   }
 };
 
-// 로그인 요청
+/* ---------------------- 인증 / 가입 ---------------------- */
+
+// 로그인
 export const loginUser = async (email, password) => {
   const response = await axios.post(`${API_BASE_URL}/members/login`, {
     email,
     password,
   });
-  return response.data; 
+  return response.data;
 };
 
-// 회원가입 요청
+// 회원가입
 export const registerMember = async (payload) => {
-  return await axios.post(`${API_BASE_URL}/members`, payload); 
+  return await axios.post(`${API_BASE_URL}/members`, payload);
 };
+
+/* ---------------------- 중복 확인 ---------------------- */
 
 // 이메일 중복확인
 export const checkEmailDuplicate = async (email) => {
   const response = await axios.get(`${API_BASE_URL}/members/check-email`, {
     params: { email },
   });
-  return response; // ✅ response 전체 반환
+  return response;
 };
 
 // 이름 중복확인
@@ -57,23 +62,27 @@ export const checkNameDuplicate = async (name) => {
   const response = await axios.get(`${API_BASE_URL}/members/check-name`, {
     params: { name },
   });
-  return response; // ✅ response 전체 반환
+  return response;
 };
 
-// 카카오 추가정보
+/* ---------------------- 카카오 로그인 ---------------------- */
+
+// 카카오 추가 정보 입력
 export const submitKakaoExtraInfo = async (accessToken, email, phone) => {
   const response = await axios.post(
     `${API_BASE_URL}/oauth/kakao/extraInfo`,
     { email, phone },
     {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         Authorization: `${accessToken}`,
       },
     }
   );
   return response.data;
 };
+
+/* ---------------------- 회원 수정 ---------------------- */
 
 // 이름 변경
 export const updateMemberName = async (token, newName) => {
@@ -89,7 +98,7 @@ export const updateMemberName = async (token, newName) => {
   if (!response.ok) throw new Error("이름 수정 실패");
 };
 
-// 이미지 변경
+// 프로필 이미지 변경
 export const uploadMemberImage = async (token, formData) => {
   const response = await fetch(`${API_BASE_URL}/members/image`, {
     method: "PATCH",
@@ -105,13 +114,13 @@ export const uploadMemberImage = async (token, formData) => {
   return await response.text();
 };
 
+/* ---------------------- 회원 탈퇴 ---------------------- */
+
 // 회원 탈퇴
 export const deleteMember = async (token) => {
   const response = await fetch(`${API_BASE_URL}/members`, {
     method: "DELETE",
-    headers: {
-      Authorization: token,
-    },
+    headers: { Authorization: token },
   });
 
   if (!response.ok) {

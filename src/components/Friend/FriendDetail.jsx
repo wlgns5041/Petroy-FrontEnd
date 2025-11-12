@@ -5,6 +5,7 @@ import { fetchFriendDetail } from "../../services/FriendService.jsx";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import { useTheme } from "../../utils/ThemeContext.jsx";
 import ProfileImage from "../../components/commons/ProfileImage.jsx";
+import PetImage from "../../components/commons/PetImage.jsx";
 
 const FriendDetail = ({ memberId, onClose }) => {
   const [friendDetail, setFriendDetail] = useState(null);
@@ -73,13 +74,11 @@ const FriendDetail = ({ memberId, onClose }) => {
                       key={pet.petId || pet.id}
                       className="frienddetail-pet-item"
                     >
-                      <ProfileImage
+                      <PetImage
                         src={pet.petImage}
                         alt={pet.name}
                         title={pet.name}
-                        className={`frienddetail-pet-image ${
-                          isDarkMode ? "dark-mode" : ""
-                        }`}
+                        className="frienddetail-pet-image"
                       />
                       <span className="frienddetail-pet-name">{pet.name}</span>
                     </li>
@@ -110,13 +109,11 @@ const FriendDetail = ({ memberId, onClose }) => {
                       key={pet.petId || pet.id}
                       className="frienddetail-pet-item"
                     >
-                      <ProfileImage
+                      <PetImage
                         src={pet.petImage}
                         alt={pet.name}
                         title={pet.name}
-                        className={`frienddetail-pet-image ${
-                          isDarkMode ? "dark-mode" : ""
-                        }`}
+                        className="frienddetail-pet-image"
                       />
                       <span className="frienddetail-pet-name">{pet.name}</span>
                     </li>

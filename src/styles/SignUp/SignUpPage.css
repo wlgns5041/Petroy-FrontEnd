@@ -29,6 +29,7 @@
     opacity: 0;
     animation: fadeIn 0.8s ease forwards;
     gap: 24px;
+    min-width: 540px;
   }
   
   /* 우측 입력 폼 */
@@ -458,6 +459,7 @@
     padding: 0px 16px 60px 16px;
     height: auto;   
     min-height: var(--app-height); 
+    min-width: 310px;
   }
 
   .signuppage-section {
