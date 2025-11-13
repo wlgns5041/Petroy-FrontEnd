@@ -241,7 +241,8 @@
 }
 
 .communityprofile-post-info {
-  flex: 1;                 
+  flex: 1;          
+  min-width: 0;                
   display: flex;
   flex-direction: column;
   align-items: flex-start;  
@@ -260,11 +261,18 @@
   color: var(--color-subtext);
 }
 
+.communityprofile-post-content.one-line {
+  display: block;          
+  width: 100%;             
+  white-space: nowrap;     
+  overflow: hidden;        
+  text-overflow: ellipsis; 
+}
+
 .communityprofile-loading { 
   text-align: center; 
   padding: 40px 0; 
 }
-
 
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {

@@ -1,3 +1,5 @@
+
+
 @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
@@ -154,11 +156,10 @@
 }
 
 .homepage-logo-text {
-  font-size: 1.5rem;
+  font-size: 16px;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: 1px;
-  font-family: 'Eommakkaturi', sans-serif;
 }
 
 .homepage-right-buttons {
@@ -212,13 +213,13 @@
   gap: 12px;
   margin: 28px 0 28px;
   font-size: 12px;
-  color: #3a3a3a;
+  color: #FFFFFF;
 }
 
 .homepage-sns-title hr {
   flex: 1;
   height: 1px;
-  background-color: #3a3a3a;
+  background-color: #FFFFFF;
   border: none;
 }
 
