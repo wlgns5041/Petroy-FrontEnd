@@ -40,6 +40,8 @@
   background-color: var(--color-tab-background);
   border-radius: 8px;
   justify-content: space-between;
+  height: auto;       
+  min-height: 42px; 
 }
 
 .notification-tab-background {
@@ -67,6 +69,7 @@
   background-color: transparent;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  line-height: normal;
 }
 
 .notification-tab.active {
@@ -271,6 +274,8 @@
     background-color: var(--color-tab-background);
     border-radius: 8px;
     margin: 0 auto 32px auto;
+    height: auto;       
+    min-height: 32px; 
   }
 
   .notification-tab-background {

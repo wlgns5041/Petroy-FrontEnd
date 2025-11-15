@@ -27,7 +27,6 @@ const FriendPage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-
   const loadFriends = async () => {
     try {
       const data = await fetchAcceptedFriends();
@@ -169,11 +168,11 @@ const FriendPage = () => {
                       className="friendpage-search-result-item"
                     >
                       <div className="friendpage-search-result-info">
-<ProfileImage
-  src={member.image}
-  alt={member.name}
-  className="friendpage-profile-image"
-/>
+                        <ProfileImage
+                          src={member.image}
+                          alt={member.name}
+                          className="friendpage-profile-image"
+                        />
                         <span>{member.name}</span>
                       </div>
 

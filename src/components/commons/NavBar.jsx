@@ -110,10 +110,10 @@ export default function NavBar() {
             />
             <Typography
               sx={{
-                fontWeight: 600,
+                fontWeight: 800,
                 fontSize: 13,
                 color: textColor,
-                fontFamily: "'Eommakkaturi', sans-serif",
+                fontFamily: "Pretendard",
               }}
             >
               PETORY
