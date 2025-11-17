@@ -16,12 +16,17 @@ pipeline {
             }
         }
 
-        stage('Install & Build') {
-            steps {
-                sh "npm ci"
-                sh "npm run build"
+    stage('Install & Build') {
+        steps {
+            script {
+                docker.image('node:20').inside {
+                    sh "npm ci"
+                    sh "npm run build"
+                    sh "cp -r build/* ${WORKSPACE}/build/"
+                }
             }
         }
+    }
 
         stage('Deploy to EC2') {
             steps {
