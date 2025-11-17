@@ -4,12 +4,15 @@ import PropTypes from "prop-types";
 import "../../styles/Friend/FriendList.css";
 import MoreHorizRoundedIcon from "@mui/icons-material/MoreHorizRounded";
 import FriendDetail from "./FriendDetail";
+import FriendDeleteModal from "./FriendDeleteModal";
 import { useTheme } from "../../utils/ThemeContext.jsx";
 import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
-const FriendList = ({ friends, onAccept, onReject }) => {
+const FriendList = ({ friends, onAccept, onReject, onDeleted }) => {
   const [openDetailId, setOpenDetailId] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(null);
+  const [localFriends, setLocalFriends] = useState(friends);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const openMenuRef = useRef(null);
   const isRequest = onAccept && onReject;
@@ -31,6 +34,14 @@ const FriendList = ({ friends, onAccept, onReject }) => {
     return () => document.removeEventListener("mousedown", handleOutside);
   }, [openMenuId]);
 
+  useEffect(() => {
+    setLocalFriends(friends);
+  }, [friends]);
+
+  const handleDeletedFriend = (friendId) => {
+    setLocalFriends((prev) => prev.filter((f) => f.id !== friendId));
+  };
+
   const handleMenuClick = (e, id) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setDropdownPosition({
@@ -42,9 +53,9 @@ const FriendList = ({ friends, onAccept, onReject }) => {
 
   return (
     <div className="friendlist-container">
-      {friends.length > 0 ? (
+      {localFriends.length > 0 ? (
         <div className="friendlist-list">
-          {friends.map((friend) => (
+          {localFriends.map((friend) => (
             <div key={friend.id} className="friendlist-card">
               <div className="friendlist-top">
                 <div className="friendlist-image-wrapper">
@@ -123,7 +134,7 @@ const FriendList = ({ friends, onAccept, onReject }) => {
                     </div>
                     <div
                       onClick={() => {
-                        alert("친구 삭제 기능은 추후 구현 예정입니다.");
+                        setOpenDeleteModal(friend);
                         setOpenMenuId(null);
                       }}
                     >
@@ -139,6 +150,17 @@ const FriendList = ({ friends, onAccept, onReject }) => {
             <FriendDetail
               memberId={Number(openDetailId)}
               onClose={() => setOpenDetailId(null)}
+            />
+          )}
+
+          {openDeleteModal && (
+            <FriendDeleteModal
+              friend={openDeleteModal}
+              onClose={() => setOpenDeleteModal(null)}
+              onDeleted={(id) => {
+                handleDeletedFriend(id);
+                onDeleted();
+              }}
             />
           )}
         </div>
@@ -168,6 +190,7 @@ FriendList.propTypes = {
   ).isRequired,
   onAccept: PropTypes.func,
   onReject: PropTypes.func,
+  onDeleted: PropTypes.func,
   title: PropTypes.string,
 };
 

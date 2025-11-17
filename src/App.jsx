@@ -13,20 +13,19 @@ function App() {
   const [showSplash, setShowSplash] = useState(true);
   const location = useLocation();
 
-  useEffect(() => {
-    function setAppHeight() {
-      const doc = document.documentElement;
-      doc.style.setProperty("--app-height", `${window.innerHeight}px`);
-    }
-    window.addEventListener("resize", setAppHeight);
-    setAppHeight();
+useEffect(() => {
+  const setAppHeight = () => {
+    document.documentElement.style.setProperty(
+      '--app-height',
+      `${window.innerHeight}px`
+    );
+  };
 
-    setAppHeight();
-    window.visualViewport?.addEventListener("resize", setAppHeight);
-    return () => {
-      window.visualViewport?.removeEventListener("resize", setAppHeight);
-    };
-  }, []);
+  setAppHeight();
+  window.addEventListener('resize', setAppHeight);
+
+  return () => window.removeEventListener('resize', setAppHeight);
+}, []);
 
   useEffect(() => {
     if (location.pathname === "/") {

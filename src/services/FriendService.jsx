@@ -33,7 +33,7 @@ export const fetchPendingFriends = async () => {
   return response.data.content || [];
 };
 
-/* ---------------------- 친구 요청 / 관리 ---------------------- */
+/* ---------------------- 친구 요청 / 관리 / 삭제 ---------------------- */
 
 // 친구 요청 수락 또는 거절
 export const handleFriendRequest = async (memberId, action) => {
@@ -61,6 +61,24 @@ export const sendFriendRequest = async (memberId) => {
     return response.data || true;
   } else {
     throw new Error("친구 요청 실패");
+  }
+};
+
+// 친구 삭제
+export const deleteFriend = async (friendId) => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await axios.delete(
+    `${API_BASE_URL}/friends/${friendId}`,
+    {
+      headers: { Authorization: `${token}` },
+    }
+  );
+
+  if (response.status === 200) {
+    return response.data === true;
+  } else {
+    throw new Error("친구 삭제 실패");
   }
 };
 

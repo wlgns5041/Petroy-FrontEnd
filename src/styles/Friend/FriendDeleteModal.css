@@ -1,0 +1,113 @@
+.frienddelete-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.frienddelete-container {
+  background-color: var(--color-main2);
+  width: 90%;
+  max-width: 420px;
+  height: auto;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Pretendard", sans-serif;
+  position: relative;
+}
+
+.frienddelete-title {
+  font-size: 20px;
+  font-weight: 800;
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: 24px;
+}
+
+.frienddelete-text {
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-subtext);
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.frienddelete-text strong {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.frienddelete-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.frienddelete-buttons .cancel,
+.frienddelete-buttons .delete {
+  flex: 1;
+  height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.frienddelete-buttons .cancel {
+  background-color: var(--color-main1);
+  color: var(--color-text);
+  margin-right: 8px;
+}
+
+.frienddelete-buttons .cancel:hover {
+  background-color: var(--color-main1-hover);
+}
+
+.frienddelete-buttons .delete {
+  background-color: var(--color-point);
+  color: var(--color-main2);
+}
+
+.frienddelete-buttons .delete:hover {
+  background-color: var(--color-point-hover);
+}
+
+.frienddelete-buttons .delete:disabled {
+  background: var(--color-disable) !important;
+  color: var(--color-disable-text) !important;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* -------------------- 모바일 -------------------- */
+@media screen and (max-width: 768px) {
+  .frienddelete-container {
+    width: 75%;
+    padding: 20px;
+  }
+
+  .frienddelete-title {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .frienddelete-text {
+    font-size: 12px;
+    margin-bottom: 32px;
+  }
+
+  .frienddelete-buttons .cancel,
+  .frienddelete-buttons .delete {
+    font-size: 12px;
+    height: 40px;
+  }
+}

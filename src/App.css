@@ -5,6 +5,10 @@ html, body, #root, .App {
   color: var(--color-text);
 }
 
+:root {
+  --app-height: 100dvh;
+}
+
 /* 전역 테마 컬러 */
 :root {
   --color-main1: #f9f9f9;

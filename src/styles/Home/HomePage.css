@@ -13,13 +13,10 @@
 }
 
 .homepage-container {
-    background: #ffffff;
-    height: 100dvh;
-    height: auto;                  
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+  background: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 @media screen and (min-width: 769px) {
@@ -31,30 +28,33 @@
 /*    --------------------------- top ---------------------------    */
 
 .homepage-top {
-    margin-top: 10vh;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+  flex: 1;                 
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;     
+  gap: 20px;
+  min-height: 100vh;
 }
 
 .homepage-top-box {
-    position: relative;
-    box-sizing: border-box;
-    display: block;
-    height: 80vh;
-    width: 75vw;
-    padding: 20px; 
-    border-radius: 32px;
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  height: auto;  
+  min-height: 600px;
+  width: 75vw;
+  padding: 20px; 
+  border-radius: 32px;
 }
 
 .homepage-content {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+   align-items: stretch;
   width: 100%;
   height: 100%;
+  min-height: 600px; 
   gap: 32px;
 }
 
@@ -67,7 +67,7 @@
   position: relative;
   background-color: #F9FAFB;
   padding: 60px;
-  height: 85%;
+  min-height: 60vh;       
   border-radius: 20px;
   box-shadow: 0 0 16px rgba(0, 0, 16, 0.1);
 }
@@ -128,7 +128,7 @@
   gap: 100px;
   background-color: #00CBA8;
   padding: 60px;
-  height: 85%;
+  min-height: 60vh;       
   border-radius: 20px;
   box-shadow: 0 0 16px rgba(0, 0, 16, 0.2);
 }
@@ -288,8 +288,7 @@
     flex-direction: column;
     align-items: center; 
     justify-content: center; 
-    margin-top: 10%;
-    width: 90vw;
+    width: 100vw;
     font-weight: 400;
     background-attachment: scroll;
     background-clip: border-box;
@@ -299,6 +298,7 @@
     background-size: auto;
     unicode-bidi: isolate;
     text-align: center;
+    flex: 0;
 }
 
 .homepage-middle-header {
@@ -444,6 +444,7 @@
     background-size: cover;
     background-blend-mode: darken; 
     unicode-bidi: isolate;
+    flex: 0;
 }
 
 .homepage-bottom span {
@@ -530,6 +531,7 @@
     flex-direction: column;
     justify-content: space-between;
     height: 100dvh;
+    min-height: 100dvh;
     align-items: center;
     font-family: 'Pretendard', sans-serif;
     padding: 0px 40px 0px 40px !important;
@@ -561,6 +563,8 @@
     position: relative;
     background-color: #f9f9f9;
     padding: 0px;
+    min-height: 280px;
+    height: 280px !important;
     max-height: 280px;
     border-radius: 12px;
     box-shadow: none;

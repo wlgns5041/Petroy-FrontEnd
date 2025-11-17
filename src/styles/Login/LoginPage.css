@@ -261,17 +261,19 @@
 
 @media screen and (max-width: 768px) {
   .loginpage {
-    height: 100%;
+    height: var(--app-height);
+    min-height: var(--app-height);
   }
 
   .loginpage-container {
     width: 100%;         
     height: auto;        
-    min-height: var(--app-height); 
+    min-height: var(--app-height);
     border-radius: 0;    
     box-shadow: none;    
     padding: 20px;  
     min-width: 310px;     
+    justify-content: center;
   }
 
   .loginpage-section {

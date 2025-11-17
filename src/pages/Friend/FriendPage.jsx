@@ -249,7 +249,11 @@ const FriendPage = () => {
 
             <div className="friendpage-tab-content">
               {activeTab === "friends" && (
-                <FriendList friends={friends} title="친구 목록" />
+                <FriendList
+                  friends={friends}
+                  title="친구 목록"
+                  onDeleted={loadFriends}
+                />
               )}
               {activeTab === "manage" && (
                 <FriendList
