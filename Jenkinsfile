@@ -4,8 +4,8 @@ pipeline {
     environment {
         EC2_IP = "52.78.179.97"
         BUILD_DIR = "build"
-        CONTAINER_NAME = "petory-nginx"
         TARGET_DIR = "/home/frontend-build"
+        CONTAINER_NAME = "petory-nginx"
     }
 
     stages {
@@ -18,22 +18,31 @@ pipeline {
             }
         }
 
-        stage('Install & Build') {
+        stage('Install & Build (Node Docker)') {
             steps {
-                sh '''
-                node -v
-                npm -v
+                script {
+                    docker.image('node:20').inside {
+                        sh '''
+                            echo "Node Version:"
+                            node -v
 
-                npm config set cache /var/jenkins_home/.npm-cache
-                npm ci --silent
-                export NODE_OPTIONS=--max_old_space_size=4096
+                            echo "NPM Version:"
+                            npm -v
 
-                npm run build
-                '''
+                            npm config set cache /var/jenkins_home/.npm-cache
+                            rm -rf node_modules package-lock.json
+
+                            npm install
+                            export NODE_OPTIONS=--max_old_space_size=4096
+
+                            npm run build
+                        '''
+                    }
+                }
             }
         }
 
-        stage('Upload to EC2') {
+        stage('Upload Build to EC2') {
             steps {
                 withCredentials([
                     sshUserPrivateKey(
@@ -43,9 +52,9 @@ pipeline {
                     )
                 ]) {
                     sh """
-                    ssh -i \$SSH_KEY -o StrictHostKeyChecking=no \$SSH_USER@${EC2_IP} 'mkdir -p ${TARGET_DIR} && rm -rf ${TARGET_DIR}/*'
+                        ssh -i \$SSH_KEY -o StrictHostKeyChecking=no \$SSH_USER@${EC2_IP} 'mkdir -p ${TARGET_DIR} && rm -rf ${TARGET_DIR}/*'
 
-                    scp -i \$SSH_KEY -o StrictHostKeyChecking=no -r ${BUILD_DIR}/* \$SSH_USER@${EC2_IP}:${TARGET_DIR}/
+                        scp -i \$SSH_KEY -o StrictHostKeyChecking=no -r ${BUILD_DIR}/* \$SSH_USER@${EC2_IP}:${TARGET_DIR}/
                     """
                 }
             }
@@ -61,11 +70,11 @@ pipeline {
                     )
                 ]) {
                     sh """
-                    ssh -i \$SSH_KEY -o StrictHostKeyChecking=no \$SSH_USER@${EC2_IP} '
-                        docker exec ${CONTAINER_NAME} rm -rf /usr/share/nginx/html/* &&
-                        docker cp ${TARGET_DIR}/. ${CONTAINER_NAME}:/usr/share/nginx/html/ &&
-                        docker restart ${CONTAINER_NAME}
-                    '
+                        ssh -i \$SSH_KEY -o StrictHostKeyChecking=no \$SSH_USER@${EC2_IP} '
+                            docker exec ${CONTAINER_NAME} rm -rf /usr/share/nginx/html/* &&
+                            docker cp ${TARGET_DIR}/. ${CONTAINER_NAME}:/usr/share/nginx/html/ &&
+                            docker restart ${CONTAINER_NAME}
+                        '
                     """
                 }
             }
@@ -74,7 +83,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ 배포 성공"
+            echo "✅ 배포 성공!"
         }
         failure {
             echo "❌ 배포 실패"
