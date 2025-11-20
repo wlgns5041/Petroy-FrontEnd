@@ -20,16 +20,16 @@ pipeline {
 
         stage('Install & Build') {
             steps {
-                script {
-                    docker.image('node:20').inside {
-                        sh '''
-                        npm config set cache /var/jenkins_home/.npm-cache
-                        npm ci
-                        export NODE_OPTIONS=--max_old_space_size=4096
-                        npm run build
-                        '''
-                    }
-                }
+                sh '''
+                node -v
+                npm -v
+
+                npm config set cache /var/jenkins_home/.npm-cache
+                npm ci --silent
+                export NODE_OPTIONS=--max_old_space_size=4096
+
+                npm run build
+                '''
             }
         }
 
@@ -44,6 +44,7 @@ pipeline {
                 ]) {
                     sh """
                     ssh -i \$SSH_KEY -o StrictHostKeyChecking=no \$SSH_USER@${EC2_IP} 'mkdir -p ${TARGET_DIR} && rm -rf ${TARGET_DIR}/*'
+
                     scp -i \$SSH_KEY -o StrictHostKeyChecking=no -r ${BUILD_DIR}/* \$SSH_USER@${EC2_IP}:${TARGET_DIR}/
                     """
                 }
