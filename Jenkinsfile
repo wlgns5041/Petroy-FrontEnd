@@ -5,6 +5,8 @@ pipeline {
         EC2_HOST = "ec2-user@52.78.179.97"
         SSH_KEY = "~/.ssh/id_rsa"
         BUILD_DIR = "build"
+        CONTAINER_NAME = "petory-nginx"
+        TARGET_DIR = "/home/frontend-build"
     }
 
     stages {
@@ -21,24 +23,42 @@ pipeline {
             steps {
                 script {
                     docker.image('node:20').inside {
-                        sh "mkdir -p ${WORKSPACE}/build"
                         sh "npm ci"
-                        sh "export NODE_OPTIONS=--max_old_space_size=4096 && npm run build"
-                        sh "cp -r build/* ${WORKSPACE}/build/"
+                        sh "export NODE_OPTIONS=--max_old_space_size=4096"
+                        sh "npm run build"
                     }
                 }
             }
         }
 
-        stage('Deploy to EC2') {
+        stage('Upload to EC2') {
             steps {
                 sh """
-                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_HOST} 'sudo rm -rf /usr/share/nginx/html/*'
-                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no -r ${BUILD_DIR}/* ${EC2_HOST}:/home/frontend-build/
-                ssh -i ${SSH_KEY} ${EC2_HOST} 'sudo cp -r /home/frontend-build/* /usr/share/nginx/html/'
-                ssh -i ${SSH_KEY} ${EC2_HOST} 'sudo systemctl restart nginx'
+                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_HOST} 'mkdir -p ${TARGET_DIR} && rm -rf ${TARGET_DIR}/*'
+                scp -i ${SSH_KEY} -o StrictHostKeyChecking=no -r ${BUILD_DIR}/* ${EC2_HOST}:${TARGET_DIR}/
                 """
             }
+        }
+
+        stage('Deploy to Nginx Container') {
+            steps {
+                sh """
+                ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_HOST} '
+                    docker exec ${CONTAINER_NAME} rm -rf /usr/share/nginx/html/* &&
+                    docker cp ${TARGET_DIR}/. ${CONTAINER_NAME}:/usr/share/nginx/html/ &&
+                    docker restart ${CONTAINER_NAME}
+                '
+                """
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ 배포 성공"
+        }
+        failure {
+            echo "❌ 배포 실패"
         }
     }
 }
