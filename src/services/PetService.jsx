@@ -28,6 +28,22 @@ export const fetchMemberPets = async () => {
   }
 };
 
+// 친구(특정 회원)의 반려동물 목록 조회
+export const fetchPetsByMemberId = async (memberId) => {
+  const token = localStorage.getItem("accessToken");
+
+  try {
+    const response = await axios.get(`${API_BASE_URL}/pets/${memberId}`, {
+      headers: { Authorization: `${token}` },
+    });
+
+    return response.data.content || [];
+  } catch (error) {
+    console.error("친구 반려동물 정보를 불러오는 중 오류:", error);
+    return [];
+  }
+};
+
 /* ---------------------- 종 / 품종 ---------------------- */
 
 // 종 목록 조회

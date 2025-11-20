@@ -11,45 +11,7 @@ import PersonAddAlt1RoundedIcon from "@mui/icons-material/PersonAddAlt1Rounded";
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 const isMobile = window.innerWidth <= 768;
 
-/* =========================================================
-   📡 전역 콜백 관리 (알림 카운트 동기화)
-========================================================= */
-
-// 알림 수 변경을 구독 중인 모든 콜백을 저장
-let globalUnreadCallbacks = new Set();
-
-// 등록된 모든 콜백에 새 알림 수 전달 (브로드캐스트)
-const broadcastUnread = (value) => {
-  globalUnreadCallbacks.forEach((cb) => {
-    try {
-      cb?.(value);
-    } catch (e) {
-      console.error("unread 콜백 에러", e);
-    }
-  });
-};
-
-// 개별 콜백 구독 해제 (연결은 유지)
-export const unsubscribeNotification = (cb) => {
-  if (cb) globalUnreadCallbacks.delete(cb);
-};
-
-// 완전 종료 (로그아웃 시 사용)
-export const closeNotificationStream = () => {
-  if (window.__eventSourceInstance) {
-    try {
-      window.__eventSourceInstance.close();
-    } catch {}
-  }
-  window.__eventSourceInstance = null;
-  window.__eventSourceHandlersReady = false;
-};
-
-/* =========================================================
-   🧩 Toast 알림 카드 컴포넌트
-========================================================= */
-
-const DURATION_MS = 20 * 60 * 1000; // 20분 유지
+const DURATION_MS = 20 * 60 * 1000; 
 
 // 알림 타입별 시각적 정보
 const TYPE_META = {
@@ -223,10 +185,6 @@ const toastOpts = (id) => ({
   toastId: id,
 });
 
-/* =========================================================
-   🔄 SSE 구독 (단일 인스턴스 유지)
-========================================================= */
-
 // 백오프 설정 (자동 재연결 지연시간)
 const backoff = {
   delay: 1000,
@@ -240,47 +198,32 @@ const backoff = {
   },
 };
 
-// 알림 SSE 구독 시작
-export const subscribeNotification = (onUnReadCount) => {
+// ✅ React Query용
+let eventSource = null;
+
+export const subscribeNotification = (queryClient) => {
+  if (eventSource) return;
+
   const raw = localStorage.getItem("accessToken");
   const token = raw?.startsWith("Bearer ") ? raw : `Bearer ${raw}`;
-  if (onUnReadCount) globalUnreadCallbacks.add(onUnReadCount);
 
-  // 이미 연결 중이면 재사용
-  if (
-    window.__eventSourceInstance &&
-    window.__eventSourceInstance.readyState !== 2
-  ) {
-    return window.__eventSourceInstance;
-  }
-
-  // 새로운 SSE 연결
   const es = new EventSource(
     `${API_BASE_URL}/notification/subscribe?token=${encodeURIComponent(token)}`
   );
-  window.__eventSourceInstance = es;
 
-  // 이벤트 핸들러 1회만 등록
+  eventSource = es;
+
   const bindHandlersOnce = (src) => {
     if (src.__bound) return;
     src.__bound = true;
 
-    const broadcastCount = (n) => {
-      if (!Number.isNaN(n)) broadcastUnread(n);
+    const refreshNotifications = () => {
+      queryClient.invalidateQueries(["notifications"]);
     };
 
-    // 실시간 읽지않은 알림 수
-    src.addEventListener("unReadCount", (e) => {
-      const n = parseInt(e.data, 10);
-      broadcastCount(n);
+    src.addEventListener("unReadCount", () => {
+      refreshNotifications();
     });
-
-    // 공통 카운트 업데이트 함수
-    const handleUnreadCount = (data) => {
-      if (data?.unReadCount !== undefined) broadcastUnread(data.unReadCount);
-    };
-
-    /* ---------- 개별 이벤트 핸들러 ---------- */
 
     src.addEventListener("FRIEND_REQUEST", (e) => {
       const d = JSON.parse(e.data);
@@ -292,7 +235,7 @@ export const subscribeNotification = (onUnReadCount) => {
         />,
         toastOpts(`friend-req-${d.sendMemberId || Date.now()}`)
       );
-      handleUnreadCount(d);
+      refreshNotifications();
     });
 
     src.addEventListener("FRIEND_ACCEPTED", (e) => {
@@ -305,7 +248,7 @@ export const subscribeNotification = (onUnReadCount) => {
         />,
         toastOpts(`friend-acc-${d.sendMemberId || Date.now()}`)
       );
-      handleUnreadCount(d);
+      refreshNotifications();
     });
 
     src.addEventListener("FRIEND_REJECTED", (e) => {
@@ -318,7 +261,7 @@ export const subscribeNotification = (onUnReadCount) => {
         />,
         toastOpts(`friend-rej-${d.sendMemberId || Date.now()}`)
       );
-      handleUnreadCount(d);
+      refreshNotifications();
     });
 
     src.addEventListener("SCHEDULE", (e) => {
@@ -331,59 +274,43 @@ export const subscribeNotification = (onUnReadCount) => {
         />,
         toastOpts(`schedule-${d.entityId || Date.now()}`)
       );
-      handleUnreadCount(d);
+      refreshNotifications();
     });
   };
 
-  // 연결 성공 시 백오프 초기화
   es.onopen = () => {
     backoff.reset();
     bindHandlersOnce(es);
   };
 
-  // 연결 오류 시 재시도 (지수 백오프)
   es.onerror = () => {
     if (es.readyState === 2) {
       const delay = backoff.next();
       setTimeout(() => {
-        window.__eventSourceInstance = null;
-        subscribeNotification(); // 콜백 유지
+        eventSource = null;
+        subscribeNotification(queryClient);
       }, delay);
     }
   };
 
-  // 연결 초기화 전에 미리 핸들러 바인딩
   bindHandlersOnce(es);
-
-  return es;
 };
-
-/* =========================================================
-   🧭 전역 수동 업데이트 (읽지 않은 수)
-========================================================= */
-export const updateGlobalUnreadCount = (count) => {
-  if (typeof count === "number") {
-    globalUnreadCallbacks.forEach((cb) => {
-      if (typeof cb === "function") cb(count);
-    });
-  }
-};
-
-/* =========================================================
-   🌐 REST API
-========================================================= */
 
 // 알림 목록 조회
 export const fetchNotifications = async () => {
   const raw = localStorage.getItem("accessToken");
   const token = raw?.startsWith("Bearer ") ? raw : `Bearer ${raw}`;
 
-  const response = await axios.get(`${API_BASE_URL}/notification`, {
+  const { data } = await axios.get(`${API_BASE_URL}/notification`, {
     headers: { Authorization: token },
-    params: { sort: "createdAt,desc", size: 50, page: 0 },
+    params: {
+      page: 0,
+      size: 50,
+      sort: "createdAt,desc",
+    },
   });
 
-  return response.data.content || [];
+  return data.content || [];
 };
 
 // 알림 읽음 처리

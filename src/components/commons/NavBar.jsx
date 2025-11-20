@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchCurrentMember } from "../../services/MemberService.jsx";
 import { subscribeNotification } from "../../services/NotificationService.jsx";
+import { fetchNotifications } from "../../services/NotificationService";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   useMediaQuery,
   Badge,
@@ -24,53 +26,31 @@ import { useTheme } from "../../utils/ThemeContext";
 
 export default function NavBar() {
   const [memberName, setMemberName] = useState("");
-  const [unreadCount, setUnreadCount] = useState(0);
   const [openSetting, setOpenSetting] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMediaQuery("(max-width:768px)");
   const { isDarkMode } = useTheme();
   const dark = isDarkMode;
+  const queryClient = useQueryClient();
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: fetchNotifications,
+  });
+
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
+
     fetchCurrentMember(token).then((memberData) => {
       if (memberData?.name) setMemberName(memberData.name);
     });
 
-    const fetchUnreadCount = async () => {
-      try {
-        const raw = localStorage.getItem("accessToken");
-        const bearer = raw?.startsWith("Bearer ") ? raw : `Bearer ${raw}`;
-        let page = 0;
-        const size = 50;
-        let total = 0;
-        let hasMore = true;
-
-        while (hasMore) {
-          const res = await fetch(
-            `${process.env.REACT_APP_API_URL}/notification?page=${page}&size=${size}&sort=createdAt,desc`,
-            { headers: { Authorization: bearer } }
-          );
-          const data = await res.json();
-          total += (data.content || []).filter((n) => !n.read).length;
-          hasMore = data && data.last === false;
-          page += 1;
-        }
-        setUnreadCount(total);
-      } catch (err) {
-        console.error("🔔 알림 수 불러오기 실패:", err);
-      }
-    };
-
-    fetchUnreadCount();
-    const sse = subscribeNotification((count) => setUnreadCount(count));
-    return () => {
-      sse.close();
-      window.__eventSourceInstance = null;
-    };
-  }, []);
+    subscribeNotification(queryClient);
+  }, [queryClient]);
 
   const navIcons = [
     { label: "마이페이지", icon: myIcon, path: "/myPage" },
@@ -232,7 +212,7 @@ export default function NavBar() {
     );
   }
 
-  // PC 모드 
+  // PC 모드
   return (
     <Box
       sx={{

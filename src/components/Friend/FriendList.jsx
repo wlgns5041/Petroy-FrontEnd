@@ -7,12 +7,14 @@ import FriendDetail from "./FriendDetail";
 import FriendDeleteModal from "./FriendDeleteModal";
 import { useTheme } from "../../utils/ThemeContext.jsx";
 import ProfileImage from "../../components/commons/ProfileImage.jsx";
+import { fetchPetsByMemberId } from "../../services/PetService";
 
 const FriendList = ({ friends, onAccept, onReject, onDeleted }) => {
   const [openDetailId, setOpenDetailId] = useState(null);
   const [openMenuId, setOpenMenuId] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(null);
   const [localFriends, setLocalFriends] = useState(friends);
+  const [friendPets, setFriendPets] = useState({});
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const openMenuRef = useRef(null);
   const isRequest = onAccept && onReject;
@@ -37,6 +39,25 @@ const FriendList = ({ friends, onAccept, onReject, onDeleted }) => {
   useEffect(() => {
     setLocalFriends(friends);
   }, [friends]);
+
+  useEffect(() => {
+    const loadFriendPets = async () => {
+      if (!localFriends?.length) return;
+
+      const petsMap = {};
+
+      await Promise.all(
+        localFriends.map(async (friend) => {
+          const pets = await fetchPetsByMemberId(friend.id);
+          petsMap[friend.id] = pets;
+        })
+      );
+
+      setFriendPets(petsMap);
+    };
+
+    loadFriendPets();
+  }, [localFriends]);
 
   const handleDeletedFriend = (friendId) => {
     setLocalFriends((prev) => prev.filter((f) => f.id !== friendId));
@@ -72,8 +93,8 @@ const FriendList = ({ friends, onAccept, onReject, onDeleted }) => {
                 <div className="friendlist-info-section">
                   <div className="friendlist-name">{friend.name}</div>
                   <div className="friendlist-pets">
-                    {friend.pets?.length > 0
-                      ? friend.pets.join(", ")
+                    {friendPets[friend.id]?.length > 0
+                      ? friendPets[friend.id].map((pet) => pet.name).join(", ")
                       : "등록된 펫 없음"}
                   </div>
                 </div>

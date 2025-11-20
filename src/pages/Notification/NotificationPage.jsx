@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from "react";
+import React, { useEffect, useRef, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/commons/NavBar.jsx";
 import "../../styles/Notification/NotificationPage.css";
@@ -12,10 +6,10 @@ import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import {
   subscribeNotification,
-  updateGlobalUnreadCount,
   fetchNotifications,
   markNotificationAsRead,
 } from "../../services/NotificationService.jsx";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import {
   FaUserPlus,
   FaCheckCircle,
@@ -38,29 +32,58 @@ const typeMap = {
 };
 
 function NotificationPage() {
-  const [notifications, setNotifications] = useState([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { isDarkMode } = useTheme();
+
+  const iconColor = isDarkMode ? "#ffffff" : "#1e293b";
+
+  const iconMap = {
+    FRIEND_REQUEST: <FaUserPlus size={24} color={iconColor} />,
+    FRIEND_ACCEPTED: <FaCheckCircle size={24} color={iconColor} />,
+    FRIEND_REJECTED: <FaTimesCircle size={24} color={iconColor} />,
+    SCHEDULE: <FaCalendarAlt size={24} color={iconColor} />,
+    POST: <FaComments size={24} color={iconColor} />,
+  };
 
   const [activeCategory, setActiveCategory] = useState("전체");
   const tabRefs = useRef([]);
   const [bgStyle, setBgStyle] = useState({ left: 0, width: 0 });
-  const { isDarkMode } = useTheme(); 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
-  const iconColor = isDarkMode ? "#ffffff" : "#1e293b";
+  /* -------------------- React Query: 알림 불러오기 -------------------- */
+  const { data: notifications = [], isError } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: fetchNotifications,
+  });
 
+  /* -------------------- React Query: SSE 구독 -------------------- */
+  useEffect(() => {
+    subscribeNotification(queryClient);
+  }, [queryClient]);
 
-  const iconMap = {
-  FRIEND_REQUEST: <FaUserPlus size={24} color={iconColor}/>,
-  FRIEND_ACCEPTED: <FaCheckCircle size={24} color={iconColor}/>,
-  FRIEND_REJECTED: <FaTimesCircle size={24} color={iconColor}/>,
-  SCHEDULE: <FaCalendarAlt size={24} color={iconColor}/>,
-  POST: <FaComments size={24} color={iconColor}/>,
-};
+  /* -------------------- 읽음 처리 -------------------- */
+  const readMutation = useMutation({
+    mutationFn: markNotificationAsRead,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["notifications"]);
+    },
+    onError: (err) => {
+      setAlertMessage(
+        err?.response?.data?.message || "읽음 처리 중 오류가 발생했습니다."
+      );
+      setShowAlert(true);
+    },
+  });
 
-  // 탭 애니메이션 효과
+  /* -------------------- 읽지 않은 알림 수 -------------------- */
+  const unreadCount = useMemo(
+    () => notifications.filter((n) => !n.read).length,
+    [notifications]
+  );
+
+  /* -------------------- 탭 애니메이션 -------------------- */
   useEffect(() => {
     const activeIndex = categories.indexOf(activeCategory);
     const activeTab = tabRefs.current[activeIndex];
@@ -70,92 +93,38 @@ function NotificationPage() {
     }
   }, [activeCategory]);
 
-  /** -------------------- 알림 초기 로딩 -------------------- */
-  const initNotifications = useCallback(async () => {
-    try {
-      const data = await fetchNotifications();
-      setNotifications(data);
-      const unread = data.filter((n) => !n.read).length;
-      setUnreadCount(unread);
-      updateGlobalUnreadCount(unread);
-    } catch (err) {
-      if (err._handledGlobally || err?.response?._handledGlobally) return;
-      console.error("❌ 알림 로딩 실패:", err);
-      setAlertMessage(
-        err?.response?.data?.message ||
-          (err.code === "ERR_NETWORK"
-            ? "네트워크 연결에 문제가 있습니다. 잠시 후 다시 시도해주세요."
-            : "알림을 불러오는 중 오류가 발생했습니다.")
-      );
-      setShowAlert(true);
-    }
-  }, []);
-
-  /** -------------------- SSE 구독 -------------------- */
-  useEffect(() => {
-    // 최초 한 번만 알림 불러오기
-    initNotifications();
-
-    // SSE 구독
-    const eventSource = subscribeNotification((count) => {
-      setUnreadCount(Number(count) || 0);
-    });
-
-    eventSource.addEventListener("unReadCount", (event) => {
-      const unreadCount = parseInt(event.data, 10);
-      setUnreadCount(isNaN(unreadCount) ? 0 : unreadCount);
-    });
-
-    return () => {
-      eventSource.close();
-      window.__eventSourceInstance = null;
-    };
-  }, [initNotifications]);
-
-  /** -------------------- 읽음 처리 -------------------- */
-  const markAsRead = async (noticeId) => {
-    try {
-      await markNotificationAsRead(noticeId);
-      setNotifications((prev) => {
-        const updated = prev.map((n) =>
-          n.noticeId === noticeId ? { ...n, read: true } : n
-        );
-        const newUnread = updated.filter((n) => !n.read).length;
-        setUnreadCount(newUnread);
-        updateGlobalUnreadCount(newUnread);
-        return updated;
-      });
-    } catch (err) {
-      console.error("❌ 읽음 처리 중 오류 발생:", err);
-      setAlertMessage(
-        err?.response?.data?.message || "읽음 처리 중 오류가 발생했습니다."
-      );
-      setShowAlert(true);
-    }
-  };
-
-  /** -------------------- 정렬 / 필터 -------------------- */
-  const sortedNotifications = [...notifications].sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  /* -------------------- 필터 -------------------- */
+  const sortedNotifications = useMemo(
+    () =>
+      [...notifications].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      ),
+    [notifications]
   );
 
-  const filteredNotifications =
-    activeCategory === "전체"
-      ? sortedNotifications
-      : sortedNotifications.filter((n) => {
-          if (activeCategory === "친구") {
-            return [
-              "FRIEND_REQUEST",
-              "FRIEND_ACCEPTED",
-              "FRIEND_REJECTED",
-            ].includes(n.noticeType);
-          }
-          if (activeCategory === "일정") return n.noticeType === "SCHEDULE";
-          if (activeCategory === "커뮤니티") return n.noticeType === "POST";
-          return false;
-        });
+  const filteredNotifications = useMemo(() => {
+    if (activeCategory === "전체") return sortedNotifications;
 
-  /** -------------------- 카테고리별 개수 -------------------- */
+    if (activeCategory === "친구") {
+      return sortedNotifications.filter((n) =>
+        ["FRIEND_REQUEST", "FRIEND_ACCEPTED", "FRIEND_REJECTED"].includes(
+          n.noticeType
+        )
+      );
+    }
+
+    if (activeCategory === "일정") {
+      return sortedNotifications.filter((n) => n.noticeType === "SCHEDULE");
+    }
+
+    if (activeCategory === "커뮤니티") {
+      return sortedNotifications.filter((n) => n.noticeType === "POST");
+    }
+
+    return sortedNotifications;
+  }, [sortedNotifications, activeCategory]);
+
+  /* -------------------- 카테고리별 개수 -------------------- */
   const categoryCounts = useMemo(
     () => ({
       전체: notifications.filter((n) => !n.read).length,
@@ -173,7 +142,7 @@ function NotificationPage() {
     [notifications]
   );
 
-  /** -------------------- 클릭 이동 -------------------- */
+  /* -------------------- 클릭 이동 -------------------- */
   const handleNotificationClick = (notice) => {
     if (notice.noticeType === "SCHEDULE") navigate("/mainPage");
     else if (
@@ -184,7 +153,16 @@ function NotificationPage() {
       navigate("/friendPage");
   };
 
-  /** -------------------- 렌더 -------------------- */
+  /* -------------------- UI -------------------- */
+  if (isError) {
+    return (
+      <AlertModal
+        message="알림을 불러오는 중 오류가 발생했습니다."
+        onConfirm={() => setShowAlert(false)}
+      />
+    );
+  }
+
   return (
     <div className="notification-viewport">
       <div className="notification-container">
@@ -260,7 +238,7 @@ function NotificationPage() {
                         className="notification-mark-read-button"
                         onClick={(e) => {
                           e.stopPropagation();
-                          markAsRead(notice.noticeId);
+                          readMutation.mutate(notice.noticeId);
                         }}
                       >
                         읽음

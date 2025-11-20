@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../../styles/Community/ProfileQuickModal.css";
 import AlertModal from "../../components/commons/AlertModal.jsx";
-import { fetchMemberPets } from "../../services/PetService";
+import {
+  fetchMemberPets,
+  fetchPetsByMemberId, // ✅ 추가
+} from "../../services/PetService";
 import {
   fetchMemberPosts,
   fetchCommunityPosts,
@@ -12,9 +15,11 @@ import {
   fetchPendingFriends,
   sendFriendRequest,
 } from "../../services/FriendService";
+
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import CheckIcon from "@mui/icons-material/Check";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+
 import ProfileImage from "../../components/commons/ProfileImage.jsx";
 import PetImage from "../../components/commons/PetImage.jsx";
 
@@ -23,14 +28,15 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
   const [target, setTarget] = useState(null);
   const [pets, setPets] = useState([]);
   const [posts, setPosts] = useState([]);
+
   const [isFriend, setIsFriend] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
-  /** 🔹 게시글 normalize */
   const normalizeFromCommunity = (p) => ({
     postId: p?.post?.postId,
     title: p?.post?.title,
@@ -45,11 +51,17 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
     postImageDtoList: p?.postImageDtoList || [],
   });
 
-  /** 🔹 품종명 추출 */
   const getBreedOnly = (pet) =>
     pet?.breed || pet?.breedLabel || pet?.breedName || "";
 
-  /** 🔹 친구 요청 */
+  const isMe = useMemo(
+    () => me && target && String(me.id) === String(target.id),
+    [me, target]
+  );
+
+  const myPosts = useMemo(() => posts || [], [posts]);
+
+  /** 친구 요청 */
   const handleAddFriend = async () => {
     if (!target?.id || isFriend || isPending || sending) return;
 
@@ -59,8 +71,7 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
       setIsPending(true);
       setAlertMessage("친구 요청을 보냈습니다.");
       setShowAlert(true);
-    } catch (e) {
-      console.error("친구 요청 실패:", e);
+    } catch {
       setAlertMessage("친구 요청에 실패했습니다.");
       setShowAlert(true);
     } finally {
@@ -68,7 +79,7 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
     }
   };
 
-  /** 🔹 초기 데이터 로딩 */
+  /** ✅ 기본 데이터 로딩 */
   useEffect(() => {
     (async () => {
       try {
@@ -80,53 +91,29 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
 
         const viewingMe =
           !user || (meResp && String(user?.id) === String(meResp?.id));
+
         const targetUser = viewingMe ? meResp : user;
         setTarget(targetUser);
 
-        /** 🔸 친구 관계 확인 */
+        /** 친구 관계 */
         if (!viewingMe && targetUser?.id) {
-          try {
-            const [accepted, pending] = await Promise.all([
-              fetchAcceptedFriends().catch(() => []),
-              fetchPendingFriends().catch(() => []),
-            ]);
-            const acceptedIds = new Set(
-              (accepted || []).map((f) => String(f.id))
-            );
-            const pendingIds = new Set(
-              (pending || []).map((r) => String(r.id))
-            );
-            setIsFriend(acceptedIds.has(String(targetUser.id)));
-            setIsPending(pendingIds.has(String(targetUser.id)));
-          } catch {
-            setIsFriend(false);
-            setIsPending(false);
-          }
-        }
-
-        /** 🔸 펫 정보 */
-        if (viewingMe) {
-          const myPets = await fetchMemberPets().catch(() => []);
-          setPets(Array.isArray(myPets) ? myPets : []);
-        } else {
-          // 비공개 사용자일 경우 더미 데이터 (실제 API 연동시 제거)
-          setPets([
-            {
-              petId: "dummy-1",
-              name: "코코",
-              breed: "포메라니안",
-              image: "https://place-puppy.com/100x100",
-            },
-            {
-              petId: "dummy-2",
-              name: "루비",
-              breed: "러시안블루",
-              image: "https://placekitten.com/100/100",
-            },
+          const [accepted, pending] = await Promise.all([
+            fetchAcceptedFriends().catch(() => []),
+            fetchPendingFriends().catch(() => []),
           ]);
+
+          const acceptedIds = new Set(
+            (accepted || []).map((f) => String(f.id))
+          );
+          const pendingIds = new Set(
+            (pending || []).map((r) => String(r.id))
+          );
+
+          setIsFriend(acceptedIds.has(String(targetUser.id)));
+          setIsPending(pendingIds.has(String(targetUser.id)));
         }
 
-        /** 🔸 게시글 정보 */
+        /** 게시글 */
         if (viewingMe) {
           const myPostsResp = await fetchMemberPosts(token);
           const raw = myPostsResp?.content ?? myPostsResp ?? [];
@@ -142,13 +129,18 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
               !!deletedAt
             );
           });
+
           setPosts(filtered.map(normalizeFromMine));
         } else {
           const allResp = await fetchCommunityPosts();
-          const all = Array.isArray(allResp) ? allResp : allResp?.content ?? [];
+          const all = Array.isArray(allResp)
+            ? allResp
+            : allResp?.content ?? [];
+
           const mine = all.filter(
             (p) => String(p?.member?.id) === String(targetUser?.id)
           );
+
           setPosts(mine.map(normalizeFromCommunity));
         }
       } catch (e) {
@@ -161,25 +153,53 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
     })();
   }, [user]);
 
-  /** 🔹 ESC 키 닫기 */
+  /** ✅ 펫 정보 로딩 (여기에 친구 로직 추가됨) */
+  useEffect(() => {
+    const loadPets = async () => {
+      if (!me || !target) return;
+
+      // ✅ 내 프로필
+      if (isMe) {
+        const myPets = await fetchMemberPets().catch(() => []);
+        setPets(Array.isArray(myPets) ? myPets : []);
+        return;
+      }
+
+      // ✅ 친구 프로필
+      if (isFriend && target?.id) {
+        const friendPets = await fetchPetsByMemberId(target.id).catch(
+          () => []
+        );
+
+        const filtered = (friendPets || []).filter(
+          (pet) =>
+            pet.deleted !== true &&
+            pet.deletedYn !== "Y" &&
+            pet.status !== "DELETED"
+        );
+
+        setPets(filtered);
+        return;
+      }
+
+      // ✅ 친구 아닌 경우
+      setPets([]);
+    };
+
+    loadPets();
+  }, [me, target, isFriend, isMe]);
+
+  /** ESC 닫기 */
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose?.();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const myPosts = useMemo(() => posts || [], [posts]);
-  const isMe = me && target && String(me.id) === String(target.id);
-
-
-  /** 🔹 로딩 화면 */
   if (loading) {
     return (
       <div className="communityprofile-overlay" onClick={onClose}>
-        <div
-          className="communityprofile-modal"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <div className="communityprofile-modal">
           <div className="communityprofile-loading">불러오는 중…</div>
         </div>
       </div>
@@ -192,15 +212,14 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
         <div
           className="communityprofile-modal"
           onClick={(e) => e.stopPropagation()}
-          role="dialog"
-          aria-modal="true"
         >
+          {/* 프로필 */}
           <div className="communityprofile-header">
             <ProfileImage
               src={target?.image || target?.profileImage}
-              alt="프로필 이미지"
               className="communityprofile-avatar"
             />
+
             <div className="communityprofile-meta">
               <div className="communityprofile-name">
                 {target?.name || "이름 없음"}
@@ -210,19 +229,11 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
             <div className="communityprofile-header-actions">
               {!isMe && target?.id && (
                 <button
-                  type="button"
                   className={`communityprofile-friend-btn ${
                     isFriend ? "is-friend" : isPending ? "is-pending" : ""
                   }`}
                   onClick={handleAddFriend}
                   disabled={isFriend || isPending || sending}
-                  title={
-                    isFriend
-                      ? "이미 친구입니다"
-                      : isPending
-                      ? "요청 대기중"
-                      : "친구 추가"
-                  }
                 >
                   {isFriend ? (
                     <CheckIcon />
@@ -235,25 +246,22 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
               )}
 
               <button
-                type="button"
                 className="communityprofile-close-btn"
                 onClick={onClose}
-                aria-label="닫기"
               >
                 ✕
               </button>
             </div>
           </div>
 
-          {/* 🔸 반려동물 목록 */}
+          {/* ✅ 반려동물 */}
           <section className="communityprofile-pet-section">
             <h3 className="communityprofile-pet-lable">반려동물 목록</h3>
+
             {isMe || isFriend ? (
               pets.length === 0 ? (
                 <div className="communityprofile-empty">
-                  {isMe
-                    ? "등록된 반려동물이 없습니다"
-                    : "공개된 반려동물이 없습니다"}
+                  등록된 반려동물이 없습니다
                 </div>
               ) : (
                 <ul className="communityprofile-pet-list">
@@ -264,6 +272,7 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
                         alt={pet.name}
                         className="communityprofile-pet-image"
                       />
+
                       <div className="communityprofile-pet-info">
                         <div className="communityprofile-pet-name">
                           {pet.name}
@@ -317,7 +326,6 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
         </div>
       </div>
 
-      {/* 🔹 AlertModal: overlay 밖에서 */}
       {showAlert && (
         <AlertModal
           message={alertMessage}
