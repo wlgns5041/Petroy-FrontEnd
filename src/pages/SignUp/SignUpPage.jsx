@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/SignUp/SignUpPage.css";
 import { FiEye, FiEyeOff, FiChevronDown, FiChevronUp } from "react-icons/fi";
@@ -16,24 +16,18 @@ import {
 import AlertModal from "../../components/commons/AlertModal.jsx";
 
 function SignUpPage() {
+  const containerRef = useRef(null);
+
   useEffect(() => {
     function setAppHeight() {
-      const vh = window.visualViewport?.height || window.innerHeight;
+      const vh = window.innerHeight; 
       document.documentElement.style.setProperty("--app-height", `${vh}px`);
     }
 
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", setAppHeight);
-      window.visualViewport.addEventListener("scroll", setAppHeight);
-    }
     window.addEventListener("resize", setAppHeight);
     setAppHeight();
 
     return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener("resize", setAppHeight);
-        window.visualViewport.removeEventListener("scroll", setAppHeight);
-      }
       window.removeEventListener("resize", setAppHeight);
     };
   }, []);
@@ -111,6 +105,7 @@ function SignUpPage() {
     nameChecked &&
     phoneValid &&
     allRequiredAgreed;
+  // ----------------------------------------------------------------------
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -271,35 +266,9 @@ function SignUpPage() {
     if (onConfirm) onConfirm();
   };
 
-  useEffect(() => {
-    // 모든 input 요소 가져오기
-    const inputs = document.querySelectorAll("input, textarea");
-
-    // 포커스 시 해당 input을 화면 중앙으로 스크롤
-    const handleFocus = (e) => {
-      setTimeout(() => {
-        e.target.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "nearest",
-        });
-      }, 0);
-    };
-
-    inputs.forEach((input) => {
-      input.addEventListener("focus", handleFocus);
-    });
-
-    return () => {
-      inputs.forEach((input) => {
-        input.removeEventListener("focus", handleFocus);
-      });
-    };
-  }, []);
-
   return (
     <div className="signuppage">
-      <div className="signuppage-container">
+      <div className="signuppage-container" ref={containerRef}>
         <div className="signuppage-section">
           <form onSubmit={handleSubmit}>
             <div className="signuppage-textarea">
@@ -310,6 +279,7 @@ function SignUpPage() {
               </h2>
               <p>일정을 기록하고 친구와 함께 반려동물을 돌볼 수 있어요</p>
             </div>
+
             <div className="signuppage-formgroup">
               <div className="signuppage-email">
                 <input
@@ -623,6 +593,7 @@ function SignUpPage() {
           </form>
         </div>
       </div>
+
       {alert.show && (
         <AlertModal message={alert.message} onConfirm={handleAlertConfirm} />
       )}
