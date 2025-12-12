@@ -91,9 +91,9 @@ export default function NavBar() {
             <Typography
               sx={{
                 fontWeight: 800,
-                fontSize: 13,
+                fontSize: 14,
                 color: textColor,
-                fontFamily: "Pretendard",
+                fontFamily: "'Baloo 2', sans-serif",
               }}
             >
               PETORY
@@ -236,8 +236,8 @@ export default function NavBar() {
         sx={{
           color: "#fff",
           fontWeight: 800,
-          fontSize: 20,
-          fontFamily: "Pretendard",
+          fontSize: 22,
+          fontFamily: "'Baloo 2', sans-serif",
           letterSpacing: "1px",
           mr: 3,
         }}

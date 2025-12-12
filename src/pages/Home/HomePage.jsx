@@ -7,6 +7,7 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import lottie1 from "../../assets/images/lottie1.json";
 import lottie2 from "../../assets/images/lottie2.json";
 import lottie3 from "../../assets/images/lottie3.json";
+import { loginGuest } from "../../services/MemberService";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -41,6 +42,19 @@ function HomePage() {
       });
     } else {
       console.error("Kakao SDK를 로드하지 못했습니다.");
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    try {
+      const { accessToken, refreshToken } = await loginGuest();
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      navigate("/mainPage");
+    } catch (e) {
+      alert(e.message);
     }
   };
 
@@ -175,7 +189,11 @@ function HomePage() {
                       <RiKakaoTalkFill size={18} color="#191919" />
                       <span>카카오 로그인</span>
                     </button>
-                    <button type="button" className="homepage-guest-button">
+                    <button
+                      type="button"
+                      className="homepage-guest-button"
+                      onClick={handleGuestLogin}
+                    >
                       <img
                         src={require("../../assets/icons/my-icon.png")}
                         alt="게스트 아이콘"
@@ -260,54 +278,54 @@ function HomePage() {
       </div>
 
       <div className="onboarding">
-         <div className="homepage-left">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeSlide}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="homepage-textarea"
-                >
-                  <h1 className="homepage-textarea-title">
-                    {slides[activeSlide].title}
-                  </h1>
-                  <h2 className="homepage-textarea-subtitle">
-                    {slides[activeSlide].subtitle}
-                  </h2>
-                </motion.div>
-              </AnimatePresence>
+        <div className="homepage-left">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSlide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="homepage-textarea"
+            >
+              <h1 className="homepage-textarea-title">
+                {slides[activeSlide].title}
+              </h1>
+              <h2 className="homepage-textarea-subtitle">
+                {slides[activeSlide].subtitle}
+              </h2>
+            </motion.div>
+          </AnimatePresence>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeSlide}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="homepage-slider"
-                >
-                  <Lottie
-                    animationData={slides[activeSlide].lottie}
-                    loop
-                    style={{ width: 400, height: 400 }}
-                  />
-                </motion.div>
-              </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSlide}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8 }}
+              className="homepage-slider"
+            >
+              <Lottie
+                animationData={slides[activeSlide].lottie}
+                loop
+                style={{ width: 400, height: 400 }}
+              />
+            </motion.div>
+          </AnimatePresence>
 
-              <div className="homepage-bullets-wrap">
-                {slides.map((slide, index) => (
-                  <span
-                    key={slide.id}
-                    className={`homepage-bullets ${
-                      activeSlide === index ? "homepage-bullets-on" : ""
-                    }`}
-                    onClick={() => handleBulletClick(index)}
-                  ></span>
-                ))}
-              </div>
-            </div>
+          <div className="homepage-bullets-wrap">
+            {slides.map((slide, index) => (
+              <span
+                key={slide.id}
+                className={`homepage-bullets ${
+                  activeSlide === index ? "homepage-bullets-on" : ""
+                }`}
+                onClick={() => handleBulletClick(index)}
+              ></span>
+            ))}
+          </div>
+        </div>
         <div className="onboarding-buttons">
           <div className="onboarding-row">
             <button className="btn-login" onClick={handleLoginClick}>
@@ -336,7 +354,11 @@ function HomePage() {
               <span>카카오 로그인</span>
             </button>
 
-            <button type="button" className="homepage-guest-button">
+            <button
+              type="button"
+              className="homepage-guest-button"
+              onClick={handleGuestLogin}
+            >
               <img
                 src={require("../../assets/icons/my-icon.png")}
                 alt="게스트 아이콘"

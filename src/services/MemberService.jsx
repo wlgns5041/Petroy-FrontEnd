@@ -128,3 +128,23 @@ export const deleteMember = async (token) => {
     throw new Error(errorText || "회원 탈퇴 실패");
   }
 };
+
+/* ---------------------- 게스트 로그인 ---------------------- */
+
+export const loginGuest = async () => {
+  try {
+    const res = await axios.post(`${API_BASE_URL}/api/members/guest`);
+
+    const { accessToken, refreshToken } = res.data;
+
+    return { accessToken, refreshToken };
+  } catch (error) {
+    const server = error?.response?.data;
+    const message =
+      server?.errorMessage ||
+      error?.message ||
+      "게스트 로그인 중 오류가 발생했습니다.";
+
+    throw new Error(message);
+  }
+};

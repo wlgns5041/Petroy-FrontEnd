@@ -102,6 +102,18 @@ body { overflow-y: scroll; }
   cursor: pointer;
 }
 
+.communitypage-header-profile-img.dark-mode {
+  filter: brightness(0) invert(1);
+  transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .communitypage-header-profile-img {
+  filter: none !important;
+}
+[data-theme="dark"] .communitypage-header-profile-img.dark-mode {
+  filter: brightness(0) invert(1) !important;
+}
+
 .communitypage-posts {
   display: flex;
   flex-direction: column;

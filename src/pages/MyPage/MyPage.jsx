@@ -218,19 +218,19 @@ const MyPage = () => {
   }, [loading]);
 
   // 이미지 변경 함수
-const handleSaveImage = async (formData, { file, preview }) => {
-  const token = localStorage.getItem("accessToken");
-  try {
-    await uploadMemberImage(token, formData); 
-    setAlertMessage("프로필 이미지가 성공적으로 변경되었습니다!");
-    setShowAlert(true);
-    setCurrentImage(preview || null);
-  } catch (error) {
-    console.error("이미지 업로드 중 오류:", error);
-    setAlertMessage("이미지 변경 중 오류가 발생했습니다.");
-    setShowAlert(true);
-  }
-};
+  const handleSaveImage = async (formData, { file, preview }) => {
+    const token = localStorage.getItem("accessToken");
+    try {
+      await uploadMemberImage(token, formData);
+      setAlertMessage("프로필 이미지가 성공적으로 변경되었습니다!");
+      setShowAlert(true);
+      setCurrentImage(preview || null);
+    } catch (error) {
+      console.error("이미지 업로드 중 오류:", error);
+      setAlertMessage("이미지 변경 중 오류가 발생했습니다.");
+      setShowAlert(true);
+    }
+  };
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
@@ -290,11 +290,19 @@ const handleSaveImage = async (formData, { file, preview }) => {
       <div className="mypage">
         <div className="mypage-profile">
           <div className="mypage-profile-card">
-            <ProfileImage
-              src={currentImage || userInfo.image}
-              alt="프로필 이미지"
-              className="mypage-profile-image"
-            />
+            {(() => {
+              const hasProfileImage = !!(currentImage || userInfo.image);
+
+              return (
+                <ProfileImage
+                  src={currentImage || userInfo.image}
+                  alt="프로필 이미지"
+                  className={`mypage-profile-image ${
+                    !hasProfileImage && dark ? "dark-mode" : ""
+                  }`}
+                />
+              );
+            })()}
 
             <div className="mypage-profile-info">
               <div className="mypage-profile-name">{userInfo.name}</div>
@@ -450,7 +458,7 @@ const handleSaveImage = async (formData, { file, preview }) => {
         )}
         {showImageModal && (
           <ImageEditModal
-            currentImage={currentImage}
+            currentImage={currentImage || userInfo.image || null}
             onClose={() => setShowImageModal(false)}
             onSave={handleSaveImage}
           />

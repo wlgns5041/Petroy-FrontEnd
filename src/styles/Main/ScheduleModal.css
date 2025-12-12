@@ -1013,6 +1013,10 @@
   gap: 2px;
 }
 
+.schedule-create-alert-select-wrapper {
+  position: relative;
+}
+
 .schedule-create-alert-select {
   padding: 10px 14px;
   font-size: 11px;
@@ -1022,14 +1026,71 @@
   border: none;
   background-color: var(--color-main2);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 14px;
   transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: left;             
+  padding-right: 36px;          
+  display: flex;                
+  align-items: center;
+  justify-content: flex-start;
+  color: var(--color-text);
 }
 
 .schedule-create-alert-select:focus { outline: none; }
+
+.schedule-create-alert-select.active,
+.schedule-create-alert-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-point2-hover);
+}
+
+.schedule-create-alert-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.schedule-create-alert-select.active .schedule-create-alert-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.schedule-create-alert-dropdown {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: var(--color-main2);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  z-index: 9999; 
+}
+
+.schedule-create-alert-option {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.schedule-create-alert-option:hover {
+  background-color: var(--color-main1-hover);
+}
+
+.schedule-create-alert-option.selected {
+  background-color: var(--color-main1);
+}
 
 /* ======== 하단 버튼 ======== */
 .schedule-create-bottom-btn {
@@ -2152,12 +2213,35 @@ input:checked + .schedule-create-slider:before {
   border: none;
   background-color: var(--color-main2);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='black' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 14px;
   transition: all 0.2s ease;
 }
+
+.schedule-create-alert-dropdown {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: -4px;
+  width: 100%;
+  background: var(--color-main2);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  list-style: none;
+  padding: 6px;
+  margin: 0;
+  z-index: 9999; 
+}
+
+.schedule-create-alert-option {
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
 
 .schedule-create-alert-select:focus { outline: none; }
 

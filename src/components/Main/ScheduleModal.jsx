@@ -50,6 +50,16 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertAction, setAlertAction] = useState(null);
 
+  const [alertOpen, setAlertOpen] = useState(false);
+
+const noticeOptions = [
+  { value: 0, label: "시작 시 알림" },
+  { value: 5, label: "5분 전" },
+  { value: 10, label: "10분 전" },
+  { value: 30, label: "30분 전" },
+  { value: 60, label: "1시간 전" },
+];
+
   useEffect(() => {
     if (calendarRef.current) {
       setSyncedHeight(calendarRef.current.offsetHeight);
@@ -95,6 +105,14 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
       },
     }));
   }, []);
+
+  useEffect(() => {
+  const onDown = (e) => {
+    if (!e.target.closest(".schedule-create-alert-select-wrapper")) setAlertOpen(false);
+  };
+  document.addEventListener("mousedown", onDown);
+  return () => document.removeEventListener("mousedown", onDown);
+}, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -1176,20 +1194,37 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
                         </div>
 
                         {formData.noticeYn && (
-                          <div className="schedule-create-alert-row">
-                            <select
-                              name="noticeAt"
-                              value={formData.noticeAt}
-                              onChange={handleChange}
-                              className="schedule-create-alert-select"
-                            >
-                              <option value={0}>시작 시 알림</option>
-                              <option value={5}>5분 전</option>
-                              <option value={10}>10분 전</option>
-                              <option value={30}>30분 전</option>
-                              <option value={60}>1시간 전</option>
-                            </select>
-                          </div>
+<div className="schedule-create-alert-row">
+  <div className="schedule-create-alert-select-wrapper">
+    <button
+      type="button"
+      className={`schedule-create-alert-select ${alertOpen ? "active" : ""}`}
+      onClick={() => setAlertOpen((p) => !p)}
+    >
+      {noticeOptions.find(o => Number(o.value) === Number(formData.noticeAt))?.label}
+      <span className="schedule-create-alert-arrow">▼</span>
+    </button>
+
+    {alertOpen && (
+      <ul className="schedule-create-alert-dropdown">
+        {noticeOptions.map((opt) => (
+          <li
+            key={opt.value}
+            className={`schedule-create-alert-option ${
+              Number(formData.noticeAt) === Number(opt.value) ? "selected" : ""
+            }`}
+            onClick={() => {
+              handleChange({ target: { name: "noticeAt", value: opt.value } });
+              setAlertOpen(false);
+            }}
+          >
+            {opt.label}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</div>
                         )}
                       </div>
                     </div>

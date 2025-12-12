@@ -600,13 +600,21 @@ const CommunityPage = () => {
                 <RestartAltIcon sx={{ fontSize: 20 }} />
               </IconButton>
 
-              <ProfileImage
-                src={me?.image || me?.profileImage}
-                alt="내 프로필"
-                title={me?.name}
-                className="communitypage-header-profile-img"
-                onClick={() => handleProfileClick(me)}
-              />
+{(() => {
+  const hasProfileImage = !!(me?.image || me?.profileImage);
+
+  return (
+    <ProfileImage
+      src={me?.image || me?.profileImage}
+      alt="내 프로필"
+      title={me?.name}
+      className={`communitypage-header-profile-img ${
+        !hasProfileImage && isDarkMode ? "dark-mode" : ""
+      }`}
+      onClick={() => handleProfileClick(me)}
+    />
+  );
+})()}
 
               <IconButton
                 className="communitypage-mobile-icon add"
@@ -788,13 +796,21 @@ const CommunityPage = () => {
                 {SORT_LABEL[sortKey]}
               </button>
 
-              <ProfileImage
-                src={me?.image || me?.profileImage}
-                alt="내 프로필"
-                title={me?.name}
-                className="communitypage-header-profile-img"
-                onClick={() => handleProfileClick(me)}
-              />
+{(() => {
+  const hasProfileImage = !!(me?.image || me?.profileImage);
+
+  return (
+    <ProfileImage
+      src={me?.image || me?.profileImage}
+      alt="내 프로필"
+      title={me?.name}
+      className={`communitypage-header-profile-img ${
+        !hasProfileImage && isDarkMode ? "dark-mode" : ""
+      }`}
+      onClick={() => handleProfileClick(me)}
+    />
+  );
+})()}
 
               <IconButton
                 aria-label="create-post"
@@ -854,28 +870,37 @@ const CommunityPage = () => {
                 <div className="communitypage-post-header">
                   <div className="communitypage-post-header-left">
                     <div className="communitypage-post-profile">
-                      <ProfileImage
-                        src={author.image}
-                        alt={author.name}
-                        title={author.name}
-                        className={`communitypage-post-profile-img ${
-                          isDarkMode ? "dark-mode" : ""
-                        }`}
-                        onClick={() =>
-                          handleProfileClick(
-                            isMyPost(post) ? me ?? author : author
-                          )
-                        }
-                        style={{ cursor: "pointer" }}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) =>
-                          (e.key === "Enter" || e.key === " ") &&
-                          handleProfileClick(
-                            isMyPost(post) ? me ?? author : author
-                          )
-                        }
-                      />
+                      {(() => {
+                        const hasProfileImage = !!author?.image;
+
+                        return (
+                          <ProfileImage
+                            src={author?.image}
+                            alt={author?.name}
+                            title={author?.name}
+                            className={`communitypage-post-profile-img ${
+                              hasProfileImage ? "is-photo" : "is-placeholder"
+                            } ${
+                              !hasProfileImage && isDarkMode ? "dark-mode" : ""
+                            }`}
+                            onClick={() =>
+                              handleProfileClick(
+                                isMyPost(post) ? me ?? author : author
+                              )
+                            }
+                            style={{ cursor: "pointer" }}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) =>
+                              (e.key === "Enter" || e.key === " ") &&
+                              handleProfileClick(
+                                isMyPost(post) ? me ?? author : author
+                              )
+                            }
+                          />
+                        );
+                      })()}
+
                       <div className="communitypage-post-profile-info">
                         <div className="communitypage-post-author">
                           {post.member?.name}

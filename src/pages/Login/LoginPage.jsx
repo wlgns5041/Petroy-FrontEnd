@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../../styles/Login/LoginPage.css";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { RiKakaoTalkFill } from "react-icons/ri";
-import { loginUser } from "../../services/MemberService";
+import { loginUser, loginGuest } from "../../services/MemberService";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 
 const KAKAO_KEY = process.env.REACT_APP_KAKAO_KEY;
@@ -25,19 +25,44 @@ function LoginPage() {
 
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("firstLogin", "true"); 
+      localStorage.setItem("firstLogin", "true");
       navigate("/mainPage");
     } catch (error) {
-  if (error._handledGlobally) return; 
+      if (error._handledGlobally) return;
 
-  const message =
-    error.response?.data?.message ||
-    error.response?.data?.errorMessage ||
-    "로그인 중 오류가 발생했습니다.";
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.errorMessage ||
+        "로그인 중 오류가 발생했습니다.";
 
-  setAlertMessage(message);
-  setShowAlert(true);
-}
+      setAlertMessage(message);
+      setShowAlert(true);
+    }
+  };
+
+  const handleGuestLogin = async () => {
+    try {
+      const data = await loginGuest();
+
+      if (data?._handledGlobally) return;
+
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+
+      navigate("/mainPage");
+    } catch (error) {
+      if (error._handledGlobally === true) {
+        return;
+      }
+
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.errorMessage ||
+        "로그인 중 오류가 발생했습니다.";
+
+      setAlertMessage(message);
+      setShowAlert(true);
+    }
   };
 
   useEffect(() => {
@@ -165,7 +190,11 @@ function LoginPage() {
               <RiKakaoTalkFill size={18} color="#191919" />
               <span> 카카오 로그인</span>
             </button>
-            <button type="button" className="loginpage-guest-button">
+            <button
+              type="button"
+              className="loginpage-guest-button"
+              onClick={handleGuestLogin}
+            >
               <img
                 src={require("../../assets/icons/my-icon.png")}
                 alt="게스트 아이콘"

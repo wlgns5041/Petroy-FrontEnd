@@ -3,7 +3,7 @@ import "../../styles/Community/ProfileQuickModal.css";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 import {
   fetchMemberPets,
-  fetchPetsByMemberId, // ✅ 추가
+  fetchPetsByMemberId, 
 } from "../../services/PetService";
 import {
   fetchMemberPosts,
@@ -22,6 +22,7 @@ import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 
 import ProfileImage from "../../components/commons/ProfileImage.jsx";
 import PetImage from "../../components/commons/PetImage.jsx";
+import { useTheme } from "../../utils/ThemeContext.jsx";
 
 const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
   const [me, setMe] = useState(null);
@@ -36,6 +37,8 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
 
   const [alertMessage, setAlertMessage] = useState("");
   const [showAlert, setShowAlert] = useState(false);
+
+  const { isDarkMode } = useTheme();
 
   const normalizeFromCommunity = (p) => ({
     postId: p?.post?.postId,
@@ -215,10 +218,20 @@ const ProfileQuickModal = ({ user, onClose, onJumpToPost }) => {
         >
           {/* 프로필 */}
           <div className="communityprofile-header">
-            <ProfileImage
-              src={target?.image || target?.profileImage}
-              className="communityprofile-avatar"
-            />
+{(() => {
+  const hasProfileImage = !!(target?.image || target?.profileImage);
+
+  return (
+    <ProfileImage
+      src={target?.image || target?.profileImage}
+      className={`communityprofile-avatar ${
+        !hasProfileImage && isDarkMode ? "dark-mode" : ""
+      }`}
+      alt={target?.name || "프로필 이미지"}
+      title={target?.name}
+    />
+  );
+})()}
 
             <div className="communityprofile-meta">
               <div className="communityprofile-name">

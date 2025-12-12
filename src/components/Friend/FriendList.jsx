@@ -92,10 +92,28 @@ const FriendList = ({ friends, onAccept, onReject, onDeleted }) => {
 
                 <div className="friendlist-info-section">
                   <div className="friendlist-name">{friend.name}</div>
-                  <div className="friendlist-pets">
-                    {friendPets[friend.id]?.length > 0
-                      ? friendPets[friend.id].map((pet) => pet.name).join(", ")
-                      : "등록된 펫 없음"}
+                  <div
+                    className="friendlist-pets"
+                    title={
+                      friendPets[friend.id]?.length > 0
+                        ? friendPets[friend.id]
+                            .map((pet) => pet.name)
+                            .join(", ")
+                        : "등록된 펫 없음"
+                    }
+                  >
+                    {(() => {
+                      const pets = friendPets[friend.id] || [];
+                      if (pets.length === 0) return "등록된 펫 없음";
+
+                      const names = pets.map((p) => p.name);
+                      const MAX_SHOW = 4;
+
+                      if (names.length <= MAX_SHOW) return names.join(", ");
+                      return `${names.slice(0, MAX_SHOW).join(", ")} 외 ${
+                        names.length - MAX_SHOW
+                      } 마리`;
+                    })()}
                   </div>
                 </div>
 

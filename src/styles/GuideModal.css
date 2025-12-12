@@ -217,9 +217,6 @@
 
 .guide-video {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); 
   max-width: 90%;
   height: 100%;
   max-height: 100% ;
@@ -292,7 +289,7 @@ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -303,8 +300,8 @@ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   background-color: var(--color-main2);
   width: 80%;
   max-width: 80%;
-  height: 65vh;
-  max-height: 65vh;
+  height: 75dvh;
+  max-height: 75dvh;
   padding: 12px;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -314,7 +311,6 @@ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-bottom: 110px;
 }
 
 .guide-header {
@@ -484,17 +480,19 @@ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
 .guide-video {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); 
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   max-width: 90%;
   height: 100%;
-  max-height: 100% ;
-  min-height: 100% ;
+  max-height: 100%;
   object-fit: contain;
   border-radius: 4px;
   background: var(--color-main1);
   transition: opacity 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .guide-video.fade-in {

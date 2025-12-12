@@ -38,6 +38,19 @@
   margin-right: 4px; 
 }
 
+.communityprofile-avatar.dark-mode {
+  filter: brightness(0) invert(1);
+  transition: filter 0.3s ease;
+}
+
+[data-theme="dark"] .communityprofile-avatar {
+  filter: none !important;
+}
+
+[data-theme="dark"] .communityprofile-avatar.dark-mode {
+  filter: brightness(0) invert(1) !important;
+}
+
 .communityprofile-meta {
   display: flex;
   flex-direction: column;
