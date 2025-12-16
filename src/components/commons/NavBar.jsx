@@ -23,6 +23,8 @@ import settingsIcon from "../../assets/icons/setting-icon.png";
 import icon from "../../assets/icons/icon.png";
 import SettingModal from "./SettingModal.jsx";
 import { useTheme } from "../../utils/ThemeContext";
+import AdminModal from "./AdminModal.jsx";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 export default function NavBar() {
   const [memberName, setMemberName] = useState("");
@@ -33,6 +35,8 @@ export default function NavBar() {
   const { isDarkMode } = useTheme();
   const dark = isDarkMode;
   const queryClient = useQueryClient();
+  const [me, setMe] = useState(null);
+  const [openAdmin, setOpenAdmin] = useState(false);
 
   const { data: notifications = [] } = useQuery({
     queryKey: ["notifications"],
@@ -41,12 +45,36 @@ export default function NavBar() {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
+  const getTokenRole = () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) return "";
+
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+      const payload = JSON.parse(atob(padded));
+      return String(payload?.role ?? "");
+    } catch {
+      return "";
+    }
+  };
+
+  const tokenRole = getTokenRole();
+
+  const meRole = String(
+    me?.role ?? me?.memberRole ?? me?.auth ?? me?.authority ?? ""
+  );
+
+  const isAdmin = (meRole || tokenRole).toUpperCase().includes("ADMIN");
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     if (!token) return;
 
     fetchCurrentMember(token).then((memberData) => {
       if (memberData?.name) setMemberName(memberData.name);
+      setMe(memberData ?? null);
     });
 
     subscribeNotification(queryClient);
@@ -101,6 +129,15 @@ export default function NavBar() {
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
+            {isAdmin && (
+              <IconButton
+                onClick={() => setOpenAdmin(true)}
+                aria-label="관리자"
+                title="관리자"
+              >
+                <AdminPanelSettingsIcon sx={{ width: 22, color: textColor }} />
+              </IconButton>
+            )}
             <IconButton onClick={() => setOpenSetting(true)}>
               <img
                 src={settingsIcon}
@@ -208,6 +245,8 @@ export default function NavBar() {
           open={openSetting}
           onClose={() => setOpenSetting(false)}
         />
+
+        <AdminModal open={openAdmin} onClose={() => setOpenAdmin(false)} />
       </>
     );
   }
@@ -326,6 +365,15 @@ export default function NavBar() {
           {memberName}
         </Typography>
 
+        {isAdmin && (
+          <IconButton
+            onClick={() => setOpenAdmin(true)}
+            aria-label="관리자"
+            title="관리자"
+          >
+            <AdminPanelSettingsIcon sx={{ fontSize: 26, color: "#fff" }} />
+          </IconButton>
+        )}
         <IconButton onClick={() => setOpenSetting(true)}>
           <img
             src={settingsIcon}
@@ -346,6 +394,8 @@ export default function NavBar() {
       </Box>
 
       <SettingModal open={openSetting} onClose={() => setOpenSetting(false)} />
+
+      <AdminModal open={openAdmin} onClose={() => setOpenAdmin(false)} />
     </Box>
   );
 }

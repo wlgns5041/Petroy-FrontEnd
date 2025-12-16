@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   fetchCommunityPosts,
   deletePost,
@@ -6,6 +6,7 @@ import {
   searchCommunityPosts,
   registerSympathy,
   deleteSympathy,
+  fetchPostSympathies,
 } from "../../services/CommunityService";
 import { fetchCurrentMember } from "../../services/MemberService";
 import { fetchAcceptedFriends } from "../../services/FriendService";
@@ -170,6 +171,14 @@ const CommunityPage = () => {
   const [bookmarkedMap, setBookmarkedMap] = useState({});
   const [isHeaderBookmarked, setIsHeaderBookmarked] = useState(false);
 
+  const [sympathyPopupId, setSympathyPopupId] = useState(null);
+  const [sympathyPopupList, setSympathyPopupList] = useState([]);
+  const longPressTimerRef = useRef(null);
+  const longPressTriggeredRef = useRef(false);
+  const preventNextClickRef = useRef(false);
+
+  const [commentCountMap, setCommentCountMap] = useState({});
+
   /* ---------- 검색 ---------- */
   const [searchKeyword, setSearchKeyword] = useState("");
   const [searchMode, setSearchMode] = useState(false);
@@ -287,21 +296,51 @@ const CommunityPage = () => {
      공감 및 반응 관련
      ============================================================ */
 
-  const REACTION_OPTIONS = [
-    { key: "LIKE", label: "좋아요", icon: <ThumbUpOutlined /> },
-    {
-      key: "AWESOME",
-      label: "멋져요",
-      icon: <SentimentVerySatisfiedRoundedIcon />,
-    },
-    { key: "FUNNY", label: "웃겨요", icon: <SentimentSatisfiedRoundedIcon /> },
-    { key: "SAD", label: "슬퍼요", icon: <SentimentDissatisfiedRoundedIcon /> },
-    { key: "USEFUL", label: "유용해요", icon: <LightbulbOutlinedIcon /> },
-  ];
+  // 공감 타입 -> 라벨/아이콘 매핑 (팝업에서 사용)
+  const SYMPATHY_META = {
+    LIKE: { label: "좋아요", icon: <ThumbUpOutlined /> },
+    AWESOME: { label: "멋져요", icon: <SentimentVerySatisfiedRoundedIcon /> },
+    FUNNY: { label: "웃겨요", icon: <SentimentSatisfiedRoundedIcon /> },
+    SAD: { label: "슬퍼요", icon: <SentimentDissatisfiedRoundedIcon /> },
+    USEFUL: { label: "유용해요", icon: <LightbulbOutlinedIcon /> },
+  };
+
+  // 팝업 열기(데이터 로딩 포함)
+  const openSympathyPopup = async (pid) => {
+    // ✅ picker랑 간섭 방지: 팝업 열면 picker 닫기
+    if (reactionPickerId != null) setReactionPickerId(null);
+
+    try {
+      const list = await fetchPostSympathies(pid);
+      setSympathyPopupList(Array.isArray(list) ? list : []);
+    } catch (e) {
+      console.error("공감 목록 불러오기 실패:", e);
+      setSympathyPopupList([]);
+    }
+
+    setSympathyPopupId(pid);
+  };
+
+  const closeSympathyPopup = () => {
+    setSympathyPopupId(null);
+    setSympathyPopupList([]);
+  };
 
   // 공감창 열기
-  const onHeartClick = (pid) =>
+  const onHeartClick = (pid) => {
+    // 🔥 롱프레스 이후 발생한 click은 완전히 무시
+    if (isMobile && preventNextClickRef.current) {
+      preventNextClickRef.current = false;
+      return;
+    }
+
+    // picker 열면 공감목록 닫기
+    if (sympathyPopupId != null) {
+      closeSympathyPopup();
+    }
+
     setReactionPickerId((prev) => (prev === pid ? null : pid));
+  };
 
   // 감정 선택
   const onSelectReaction = async (pid, key) => {
@@ -338,6 +377,49 @@ const CommunityPage = () => {
     setReactionPickerId(null);
   };
 
+  const handleMouseEnterSympathy = (pid) => {
+    if (isMobile) return;
+    if (reactionPickerId != null) return;
+    openSympathyPopup(pid);
+  };
+
+  const handleMouseLeaveSympathy = () => {
+    if (isMobile) return;
+    closeSympathyPopup();
+  };
+
+  const handleTouchStartSympathy = (pid) => {
+    if (!isMobile) return;
+    if (reactionPickerId != null) return;
+
+    longPressTriggeredRef.current = false;
+    preventNextClickRef.current = false;
+
+    longPressTimerRef.current = setTimeout(() => {
+      longPressTriggeredRef.current = true;
+      preventNextClickRef.current = true;
+      openSympathyPopup(pid);
+    }, 500);
+  };
+
+  const handleTouchEndSympathy = () => {
+    if (!isMobile) return;
+
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
+  const handleTouchCancelSympathy = () => {
+    if (!isMobile) return;
+
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
   // 북마크 토글
   const toggleBookmark = (postId) => {
     setBookmarkedMap((prev) => ({ ...prev, [postId]: !prev[postId] }));
@@ -360,11 +442,19 @@ const CommunityPage = () => {
         const id = getPostId(p);
         if (id == null) return;
         likeInit[id] = Boolean(p?.liked);
-        likeCntInit[id] = Number(p?.likeTotal) || 0;
+        likeCntInit[id] = Number(p?.sympathyTotal ?? p?.likeTotal) || 0;
       });
       setLikedMap(likeInit);
       setLikeCountMap(likeCntInit);
       setSearchMode(false);
+
+      const commentCntInit = {};
+      list.forEach((p) => {
+        const id = getPostId(p);
+        if (id == null) return;
+        commentCntInit[id] = Number(p?.commentTotal ?? 0);
+      });
+      setCommentCountMap(commentCntInit);
     } catch (error) {
       const message =
         error.response?.data?.message ||
@@ -446,10 +536,18 @@ const CommunityPage = () => {
           const id = getPostId(p);
           if (id == null) return;
           likeInit[id] = Boolean(p?.liked);
-          likeCntInit[id] = Number(p?.likeTotal) || 0;
+          likeCntInit[id] = Number(p?.sympathyTotal ?? p?.likeTotal) || 0;
         });
         setLikedMap(likeInit);
         setLikeCountMap(likeCntInit);
+
+        const commentCntInit = {};
+        list.forEach((p) => {
+          const id = getPostId(p);
+          if (id == null) return;
+          commentCntInit[id] = Number(p?.commentTotal ?? 0);
+        });
+        setCommentCountMap(commentCntInit);
 
         // 카테고리 맵 구성
         const map = Object.fromEntries(
@@ -498,6 +596,7 @@ const CommunityPage = () => {
   useEffect(() => {
     const onDocClick = (e) => {
       const target = e.target;
+
       if (reactionPickerId != null) {
         if (
           !target.closest?.(
@@ -507,6 +606,16 @@ const CommunityPage = () => {
           setReactionPickerId(null);
         }
       }
+
+      if (sympathyPopupId != null) {
+        // ✅ 팝업/like-area 내부 클릭은 유지, 그 외는 닫기
+        if (
+          !target.closest?.(`#post-${sympathyPopupId} .communitypage-like-area`)
+        ) {
+          closeSympathyPopup();
+        }
+      }
+
       if (menuOpenIndex != null) {
         if (!target.closest?.(".communitypage-post-menu")) {
           setMenuOpenIndex(null);
@@ -514,12 +623,16 @@ const CommunityPage = () => {
       }
     };
 
-    if (reactionPickerId != null || menuOpenIndex != null) {
+    if (
+      reactionPickerId != null ||
+      sympathyPopupId != null ||
+      menuOpenIndex != null
+    ) {
       document.addEventListener("click", onDocClick);
     }
 
     return () => document.removeEventListener("click", onDocClick);
-  }, [reactionPickerId, menuOpenIndex]);
+  }, [reactionPickerId, sympathyPopupId, menuOpenIndex]);
 
   /* ============================================================
      탭 필터링
@@ -600,21 +713,21 @@ const CommunityPage = () => {
                 <RestartAltIcon sx={{ fontSize: 20 }} />
               </IconButton>
 
-{(() => {
-  const hasProfileImage = !!(me?.image || me?.profileImage);
+              {(() => {
+                const hasProfileImage = !!(me?.image || me?.profileImage);
 
-  return (
-    <ProfileImage
-      src={me?.image || me?.profileImage}
-      alt="내 프로필"
-      title={me?.name}
-      className={`communitypage-header-profile-img ${
-        !hasProfileImage && isDarkMode ? "dark-mode" : ""
-      }`}
-      onClick={() => handleProfileClick(me)}
-    />
-  );
-})()}
+                return (
+                  <ProfileImage
+                    src={me?.image || me?.profileImage}
+                    alt="내 프로필"
+                    title={me?.name}
+                    className={`communitypage-header-profile-img ${
+                      !hasProfileImage && isDarkMode ? "dark-mode" : ""
+                    }`}
+                    onClick={() => handleProfileClick(me)}
+                  />
+                );
+              })()}
 
               <IconButton
                 className="communitypage-mobile-icon add"
@@ -796,21 +909,21 @@ const CommunityPage = () => {
                 {SORT_LABEL[sortKey]}
               </button>
 
-{(() => {
-  const hasProfileImage = !!(me?.image || me?.profileImage);
+              {(() => {
+                const hasProfileImage = !!(me?.image || me?.profileImage);
 
-  return (
-    <ProfileImage
-      src={me?.image || me?.profileImage}
-      alt="내 프로필"
-      title={me?.name}
-      className={`communitypage-header-profile-img ${
-        !hasProfileImage && isDarkMode ? "dark-mode" : ""
-      }`}
-      onClick={() => handleProfileClick(me)}
-    />
-  );
-})()}
+                return (
+                  <ProfileImage
+                    src={me?.image || me?.profileImage}
+                    alt="내 프로필"
+                    title={me?.name}
+                    className={`communitypage-header-profile-img ${
+                      !hasProfileImage && isDarkMode ? "dark-mode" : ""
+                    }`}
+                    onClick={() => handleProfileClick(me)}
+                  />
+                );
+              })()}
 
               <IconButton
                 aria-label="create-post"
@@ -972,6 +1085,11 @@ const CommunityPage = () => {
                     <div
                       className="communitypage-like-area"
                       style={{ position: "relative", display: "inline-flex" }}
+                      onMouseEnter={() => handleMouseEnterSympathy(pid)}
+                      onMouseLeave={handleMouseLeaveSympathy}
+                      onTouchStart={() => handleTouchStartSympathy(pid)}
+                      onTouchEnd={handleTouchEndSympathy}
+                      onTouchCancel={handleTouchCancelSympathy}
                     >
                       <button
                         type="button"
@@ -982,9 +1100,7 @@ const CommunityPage = () => {
                         onClick={() => onHeartClick(pid)}
                         title={
                           reactionMap[pid]
-                            ? REACTION_OPTIONS.find(
-                                (o) => o.key === reactionMap[pid]
-                              )?.label
+                            ? SYMPATHY_META[reactionMap[pid]]?.label
                             : "공감"
                         }
                       >
@@ -1004,25 +1120,70 @@ const CommunityPage = () => {
                           role="menu"
                           aria-label="감정 선택"
                         >
-                          {REACTION_OPTIONS.map((opt) => (
+                          {Object.entries(SYMPATHY_META).map(([key, meta]) => (
                             <button
-                              key={opt.key}
+                              key={key}
                               type="button"
                               className={`communitypage-reaction-item ${
-                                reactionMap[pid] === opt.key ? "active" : ""
+                                reactionMap[pid] === key ? "active" : ""
                               }`}
-                              onClick={() => onSelectReaction(pid, opt.key)}
-                              title={opt.label}
+                              onClick={() => onSelectReaction(pid, key)}
+                              title={meta.label}
                             >
                               <span className="communitypage-reaction-emoji">
-                                {opt.icon}
+                                {meta.icon}
                               </span>
                               <span className="communitypage-reaction-label">
-                                {opt.label}
+                                {meta.label}
                               </span>
                             </button>
                           ))}
                           <div className="communitypage-reaction-arrow" />
+                        </div>
+                      )}
+
+                      {/* ✅ 공감 목록 팝업 */}
+                      {sympathyPopupId === pid && reactionPickerId == null && (
+                        <div
+                          className="communitypage-sympathy-popup"
+                          role="dialog"
+                          aria-label="공감 목록"
+                        >
+                          {sympathyPopupList.length === 0 ? (
+                            <div className="communitypage-sympathy-popup-item">
+                              <span className="communitypage-sympathy-name">
+                                공감
+                              </span>
+                              <span className="communitypage-sympathy-type">
+                                없음
+                              </span>
+                            </div>
+                          ) : (
+                            sympathyPopupList.map((row, i) => {
+                              const key = String(row.sympathyType ?? "");
+                              const meta = SYMPATHY_META[key] ?? {
+                                label: key,
+                                icon: null,
+                              };
+                              return (
+                                <div
+                                  key={`${row.memberId}-${i}`}
+                                  className="communitypage-sympathy-popup-item"
+                                >
+                                  <span className="communitypage-sympathy-name">
+                                    {row.memberName}
+                                  </span>
+                                  <span className="communitypage-sympathy-type">
+                                    <span className="communitypage-sympathy-type-icon">
+                                      {meta.icon}
+                                    </span>
+                                    {meta.label}
+                                  </span>
+                                </div>
+                              );
+                            })
+                          )}
+                          <div className="communitypage-sympathy-popup-arrow" />
                         </div>
                       )}
                     </div>
@@ -1035,7 +1196,7 @@ const CommunityPage = () => {
                     >
                       <ChatBubbleOutlineIcon className="communitypage-action-icon" />
                       <span className="communitypage-action-count">
-                        {post.commentTotal ?? 0}
+                        {commentCountMap[pid] ?? post.commentTotal ?? 0}
                       </span>
                     </button>
                   </div>
@@ -1059,6 +1220,18 @@ const CommunityPage = () => {
                   postId={post.post.postId}
                   open={Boolean(openComments[post.post.postId])}
                   onClose={() => toggleComments(post.post.postId)}
+                  onCommentAdded={() => {
+                    setCommentCountMap((prev) => ({
+                      ...prev,
+                      [pid]: (prev[pid] ?? 0) + 1,
+                    }));
+                  }}
+                  onCommentDeleted={() => {
+                    setCommentCountMap((prev) => ({
+                      ...prev,
+                      [pid]: Math.max((prev[pid] ?? 1) - 1, 0),
+                    }));
+                  }}
                 />
               </div>
             );

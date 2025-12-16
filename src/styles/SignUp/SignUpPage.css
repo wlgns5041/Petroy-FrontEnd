@@ -189,6 +189,7 @@
     margin-left: 5px;
     margin-bottom: 12px;
     gap: 6px;
+    transition: none !important;
 }
 
 .signuppage-error-icon {
@@ -204,6 +205,7 @@
     margin-left: 5px;
     margin-bottom: 12px;
     gap: 6px;
+    transition: none !important;
 }
 
 .signuppage-success-icon {
@@ -456,32 +458,25 @@ input.signuppage-error:focus {
     .signuppage {
         display: flex;
         justify-content: center;
-        align-items: stretch;
+        align-items: center;
         box-sizing: border-box;
-
         height: var(--app-height);
         min-height: var(--app-height);
-
         overflow: hidden;
     }
 
     .signuppage-container {
         width: 100%;
         min-width: 310px;
-
-        height: 100%;
-        min-height: var(--app-height);
-
+        height: auto;
+        min-height: auto;
         border-radius: 0;
         box-shadow: none;
-
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
-
+        justify-content: center;
         overflow-y: auto; 
         -webkit-overflow-scrolling: touch; 
-
         padding: 40px 16px 0px 16px;
     }
 

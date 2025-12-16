@@ -411,6 +411,82 @@ body { overflow-y: scroll; }
   white-space: nowrap; 
 }
 
+.communitypage-sympathy-popup {
+  position: absolute;
+  left: 0;
+  bottom: 44px;
+  z-index: 50;
+  min-width: auto;
+  max-width: 240px;
+  background: var(--color-main2);
+  color: var(--color-text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+  backdrop-filter: blur(6px);
+}
+
+.communitypage-sympathy-popup-arrow {
+  position: absolute;
+  left: 18px;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--color-main2);
+  transform: rotate(45deg);
+  border-radius: 3px;
+}
+
+.communitypage-sympathy-popup-item {
+  display: flex;
+  align-items: center;            
+  justify-content: flex-start;
+  gap: 20px;                    
+  padding: 8px 12px;
+  font-size: 13px;
+  line-height: 1;                
+  white-space: nowrap;
+  border-radius: 6px;
+  position: relative;
+}
+
+/* 바로 뒤에 아이템이 있는 경우에만 구분선 */
+.communitypage-sympathy-popup-item + .communitypage-sympathy-popup-item::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: var(--color-disable);
+}
+
+.communitypage-sympathy-popup-item + .communitypage-sympathy-popup-item {
+  margin-top: 2px;
+}
+
+.communitypage-sympathy-name {
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.communitypage-sympathy-type {
+  display: inline-flex;
+  align-items: center;           
+  gap: 6px;
+  line-height: 1;
+}
+
+.communitypage-sympathy-type-icon {
+  display: flex;
+  align-items: center;
+}
+
+.communitypage-sympathy-type-icon svg {
+  font-size: 18px;              
+}
+
 @keyframes communitypage-pop-in {
   from { opacity: 0; transform: translateY(4px) scale(0.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -934,6 +1010,79 @@ body { overflow-y: scroll; }
 
 .communitypage-reaction-label { 
   white-space: nowrap; 
+}
+
+.communitypage-like-area,
+.communitypage-action-btn,
+.communitypage-action-count {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation; 
+}
+
+.communitypage-sympathy-popup {
+  position: absolute;
+  left: 0;
+  bottom: 44px;
+  z-index: 50;
+  min-width: auto;
+  max-width: 240px;
+  background: var(--color-main2);
+  color: var(--color-text);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+  backdrop-filter: blur(6px);
+}
+
+.communitypage-sympathy-popup-arrow {
+  position: absolute;
+  left: 18px;
+  bottom: -7px;
+  width: 14px;
+  height: 14px;
+  background: var(--color-main2);
+  transform: rotate(45deg);
+  border-radius: 3px;
+}
+
+.communitypage-sympathy-popup-item {
+  display: flex;
+  align-items: center;            
+  justify-content: flex-start;
+  gap: 20px;                    
+  padding: 8px 12px;
+  font-size: 11px;
+  line-height: 1;                
+  white-space: nowrap;
+  border-radius: 6px;
+}
+
+.communitypage-sympathy-popup-item + .communitypage-sympathy-popup-item {
+  margin-top: 2px;
+}
+
+.communitypage-sympathy-name {
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1; 
+}
+
+.communitypage-sympathy-type {
+  display: inline-flex;
+  align-items: center;           
+  gap: 6px;
+  line-height: 1;
+}
+
+.communitypage-sympathy-type-icon {
+  display: flex;
+  align-items: center;
+}
+
+.communitypage-sympathy-type-icon svg {
+  font-size: 14px;              
 }
 
 .communitypage-empty-state {

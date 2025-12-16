@@ -133,7 +133,7 @@ export const deleteMember = async (token) => {
 
 export const loginGuest = async () => {
   try {
-    const res = await axios.post(`${API_BASE_URL}/api/members/guest`);
+    const res = await axios.post(`${API_BASE_URL}/members/guest`);
 
     const { accessToken, refreshToken } = res.data;
 

@@ -144,6 +144,20 @@ export const fetchCommunityPostsSorted = async ({
 
 /* ---------------------- 댓글 ---------------------- */
 
+// 댓글 조회
+export const fetchCommentsByPost = async (postId, token) => {
+  try {
+    const res = await axios.get(`${API_BASE_URL}/community/comments/${postId}`, {
+      headers: { Authorization: token },
+    });
+
+    return Array.isArray(res.data) ? res.data : [];
+  } catch (error) {
+    console.error("댓글 조회 실패:", error);
+    return [];
+  }
+};
+
 // 댓글 작성
 export const createComment = async (postId, content, token) => {
   try {
@@ -199,6 +213,22 @@ export const deleteComment = async (commentId, token) => {
 };
 
 /* ---------------------- 공감 ---------------------- */
+
+// 게시글 공감 목록 조회
+export const fetchPostSympathies = async (postId) => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const response = await axios.get(
+      `${API_BASE_URL}/community/sympathy/${postId}`,
+      { headers: { Authorization: token } }
+    );
+
+    return Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error("공감 조회 실패:", error);
+    return [];
+  }
+};
 
 // 공감 등록 / 변경
 export const registerSympathy = async (postId, type, token) => {

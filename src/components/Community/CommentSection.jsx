@@ -1,19 +1,26 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
 import "../../styles/Community/CommentSection.css";
 import { useTheme } from "../../utils/ThemeContext.jsx";
-import ProfileImage from "../../components/commons/ProfileImage.jsx"; 
+import ProfileImage from "../../components/commons/ProfileImage.jsx";
 
 import {
   createComment,
   updateComment,
   deleteComment,
+  fetchCommentsByPost,
 } from "../../services/CommunityService";
 
-const CommentSection = ({ postId, open, onClose }) => {
+const CommentSection = ({
+  postId,
+  open,
+  onClose,
+  onCommentAdded,
+  onCommentDeleted,
+}) => {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState("");
   const [editingId, setEditingId] = useState(null);
@@ -38,6 +45,23 @@ const CommentSection = ({ postId, open, onClose }) => {
     }
   };
 
+  const loadComments = useCallback(async () => {
+    if (!postId) return;
+
+    const list = await fetchCommentsByPost(postId, token);
+
+    const normalized = (list || []).map((c, idx) => ({
+      commentId: c.commentId ?? `${c.memberId}-${c.createdAt}-${idx}`,
+      memberId: c.memberId ?? null,
+      memberName: c.memberName ?? "",
+      profileImage: c.memberImage ?? null,
+      content: c.content ?? "",
+      createdAt: c.createdAt ?? null,
+    }));
+
+    setComments(normalized);
+  }, [postId, token]);
+
   useEffect(() => {
     if (!open) return;
     const t = setTimeout(() => inputRef.current?.focus(), 120);
@@ -60,6 +84,12 @@ const CommentSection = ({ postId, open, onClose }) => {
     return () => document.removeEventListener("click", onDocClick);
   }, [menuOpenId]);
 
+  useEffect(() => {
+    if (!open) return;
+    if (!postId) return;
+    loadComments();
+  }, [open, postId, loadComments]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const val = content.trim();
@@ -68,35 +98,28 @@ const CommentSection = ({ postId, open, onClose }) => {
     if (editingId) {
       const ok = await updateComment(editingId, val, token);
       if (ok) {
-        setComments((prev) =>
-          prev.map((c) =>
-            c.commentId === editingId ? { ...c, content: val } : c
-          )
-        );
+        await loadComments();
         setEditingId(null);
         setContent("");
       }
-    } else {
-      const ok = await createComment(postId, val, token);
-      if (ok) {
-        const newComment = {
-          commentId: Date.now(),
-          memberName: "나",
-          profileImage: null,
-          content: val,
-          createdAt: new Date().toISOString(),
-        };
-        setComments((prev) => [...prev, newComment]);
+    }
+    else {
+      const created = await createComment(postId, val, token);
+      if (created) {
+        await loadComments();
         setContent("");
+        onCommentAdded?.();
       }
     }
+
     inputRef.current?.focus();
   };
 
   const handleDelete = async (commentId) => {
     const ok = await deleteComment(commentId, token);
     if (ok) {
-      setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+      await loadComments();
+      onCommentDeleted?.();
     }
     setMenuOpenId(null);
   };
@@ -115,7 +138,6 @@ const CommentSection = ({ postId, open, onClose }) => {
         onClick={onClose}
       />
 
-      {/* ✅ 다크모드 감지하여 클래스 추가 */}
       <aside
         className={`comment-sheet ${open ? "open" : ""} ${
           isDarkMode ? "dark" : ""
@@ -174,12 +196,20 @@ const CommentSection = ({ postId, open, onClose }) => {
                         )
                       }
                       aria-label="댓글 메뉴"
+                      type="button"
                     >
                       <MoreHorizIcon fontSize="small" />
                     </button>
 
                     {menuOpenId === c.commentId && (
-                      <div className="comment-menu-dropdown">
+                      <div
+                        className={`comment-menu-dropdown ${
+                          comments[comments.length - 1]?.commentId ===
+                          c.commentId
+                            ? "drop-up"
+                            : ""
+                        }`}
+                      >
                         {editingId === c.commentId ? (
                           <button onClick={() => setEditingId(null)}>
                             수정취소
