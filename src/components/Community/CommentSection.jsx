@@ -20,6 +20,7 @@ const CommentSection = ({
   onClose,
   onCommentAdded,
   onCommentDeleted,
+  myMemberName,
 }) => {
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState("");
@@ -64,31 +65,21 @@ const CommentSection = ({
 
   useEffect(() => {
     if (!open) return;
+    loadComments();
     const t = setTimeout(() => inputRef.current?.focus(), 120);
-    const onKey = (e) => e.key === "Escape" && onClose?.();
-    window.addEventListener("keydown", onKey);
-    return () => {
-      clearTimeout(t);
-      window.removeEventListener("keydown", onKey);
-    };
-  }, [open, postId, onClose]);
+    return () => clearTimeout(t);
+  }, [open, postId, loadComments]);
 
   useEffect(() => {
     if (menuOpenId == null) return;
     const onDocClick = (e) => {
       if (!e.target.closest(".comment-menu")) {
-        setTimeout(() => setMenuOpenId(null), 50);
+        setMenuOpenId(null);
       }
     };
     document.addEventListener("click", onDocClick);
     return () => document.removeEventListener("click", onDocClick);
   }, [menuOpenId]);
-
-  useEffect(() => {
-    if (!open) return;
-    if (!postId) return;
-    loadComments();
-  }, [open, postId, loadComments]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -102,8 +93,7 @@ const CommentSection = ({
         setEditingId(null);
         setContent("");
       }
-    }
-    else {
+    } else {
       const created = await createComment(postId, val, token);
       if (created) {
         await loadComments();
@@ -111,7 +101,6 @@ const CommentSection = ({
         onCommentAdded?.();
       }
     }
-
     inputRef.current?.focus();
   };
 
@@ -149,7 +138,6 @@ const CommentSection = ({
           <h3>댓글</h3>
           <button
             className="comment-sheet-close"
-            aria-label="닫기"
             onClick={onClose}
             type="button"
           >
@@ -164,69 +152,65 @@ const CommentSection = ({
             </div>
           ) : (
             <ul className="comment-sheet-list">
-              {comments.map((c) => (
-                <li
-                  key={c.commentId}
-                  className={`comment-sheet-item ${
-                    editingId === c.commentId ? "editing" : ""
-                  }`}
-                >
-                  <ProfileImage
-                    src={c.profileImage}
-                    alt={c.memberName}
-                    className="comment-sheet-avatar"
-                  />
+              {comments.map((c) => {
+                const isMyComment =
+                  myMemberName && c.memberName === myMemberName;
 
-                  <div className="comment-sheet-content">
-                    <div className="comment-sheet-meta">
-                      <span className="comment-sheet-name">{c.memberName}</span>
-                      <span className="comment-sheet-time">
-                        {timeAgo(getCreatedAt(c))}
-                      </span>
+                return (
+                  <li key={c.commentId} className="comment-sheet-item">
+                    <ProfileImage
+                      src={c.profileImage}
+                      alt={c.memberName}
+                      className="comment-sheet-avatar"
+                    />
+
+                    <div className="comment-sheet-content">
+                      <div className="comment-sheet-meta">
+                        <span className="comment-sheet-name">
+                          {c.memberName}
+                        </span>
+                        <span className="comment-sheet-time">
+                          {timeAgo(getCreatedAt(c))}
+                        </span>
+                      </div>
+                      <div className="comment-sheet-text">{c.content}</div>
                     </div>
-                    <div className="comment-sheet-text">{c.content}</div>
-                  </div>
 
-                  <div className="comment-menu">
-                    <button
-                      className="comment-menu-button"
-                      onClick={() =>
-                        setMenuOpenId((prev) =>
-                          prev === c.commentId ? null : c.commentId
-                        )
-                      }
-                      aria-label="댓글 메뉴"
-                      type="button"
-                    >
-                      <MoreHorizIcon fontSize="small" />
-                    </button>
-
-                    {menuOpenId === c.commentId && (
-                      <div
-                        className={`comment-menu-dropdown ${
-                          comments[comments.length - 1]?.commentId ===
-                          c.commentId
-                            ? "drop-up"
-                            : ""
-                        }`}
-                      >
-                        {editingId === c.commentId ? (
-                          <button onClick={() => setEditingId(null)}>
-                            수정취소
-                          </button>
-                        ) : (
-                          <button onClick={() => handleEditStart(c)}>
-                            수정
-                          </button>
-                        )}
-                        <button onClick={() => handleDelete(c.commentId)}>
-                          삭제
+                    {isMyComment && (
+                      <div className="comment-menu">
+                        <button
+                          className="comment-menu-button"
+                          onClick={() =>
+                            setMenuOpenId((prev) =>
+                              prev === c.commentId ? null : c.commentId
+                            )
+                          }
+                          type="button"
+                        >
+                          <MoreHorizIcon fontSize="small" />
                         </button>
+
+                        {menuOpenId === c.commentId && (
+                          <div className="comment-menu-dropdown">
+                            {editingId === c.commentId ? (
+                              <button onClick={() => setEditingId(null)}>
+                                수정취소
+                              </button>
+                            ) : (
+                              <button onClick={() => handleEditStart(c)}>
+                                수정
+                              </button>
+                            )}
+                            <button onClick={() => handleDelete(c.commentId)}>
+                              삭제
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </section>

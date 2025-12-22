@@ -141,6 +141,8 @@ const CommunityPage = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [categoryMap, setCategoryMap] = useState({});
   const [friendIds, setFriendIds] = useState([]);
+  const [myMemberName, setMyMemberName] = useState(null);
+
 
   /* ---------- 모달 및 UI 상태 ---------- */
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -326,15 +328,12 @@ const CommunityPage = () => {
     setSympathyPopupList([]);
   };
 
-  // 공감창 열기
   const onHeartClick = (pid) => {
-    // 🔥 롱프레스 이후 발생한 click은 완전히 무시
     if (isMobile && preventNextClickRef.current) {
       preventNextClickRef.current = false;
       return;
     }
 
-    // picker 열면 공감목록 닫기
     if (sympathyPopupId != null) {
       closeSympathyPopup();
     }
@@ -588,6 +587,16 @@ const CommunityPage = () => {
       }
     })();
   }, []);
+
+useEffect(() => {
+  const loadMe = async () => {
+    const me = await fetchCurrentMember();
+    if (me?.name) {
+      setMyMemberName(me.name);
+    }
+  };
+  loadMe();
+}, []);
 
   /* ============================================================
      외부 클릭 이벤트 (공감/메뉴 닫기)
@@ -1220,6 +1229,7 @@ const CommunityPage = () => {
                   postId={post.post.postId}
                   open={Boolean(openComments[post.post.postId])}
                   onClose={() => toggleComments(post.post.postId)}
+                  myMemberName={myMemberName}
                   onCommentAdded={() => {
                     setCommentCountMap((prev) => ({
                       ...prev,

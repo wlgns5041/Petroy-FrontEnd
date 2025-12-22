@@ -86,17 +86,18 @@ const AdminModal = ({ open, onClose }) => {
     setBreeds(Array.isArray(list) ? list : []);
   };
 
-  const updateSpeciesDropdownPos = () => {
-    const el = speciesSelectRef.current;
-    if (!el) return;
+const updateSpeciesDropdownPos = () => {
+  const el = speciesSelectRef.current;
+  if (!el) return;
 
-    const rect = el.getBoundingClientRect();
-    setSpeciesDropdownPos({
-      top: rect.bottom + 8,
-      left: rect.left,
-      width: rect.width,
-    });
-  };
+  const rect = el.getBoundingClientRect();
+  setSpeciesDropdownPos({
+    top: rect.bottom + 8,
+    right: window.innerWidth - rect.right,
+    width: rect.width,
+  });
+};
+
 
   const handleCreateCategory = async () => {
     const name = newCategoryName.trim();
@@ -589,7 +590,7 @@ const AdminModal = ({ open, onClose }) => {
             style={{
               position: "fixed",
               top: speciesDropdownPos.top,
-              left: speciesDropdownPos.left,
+              right: speciesDropdownPos.right,
               width: speciesDropdownPos.width,
               zIndex: 2200,
             }}

@@ -101,7 +101,7 @@
 
 .admin-label {
   font-size: 12px;
-  color: #374151;
+  color: var(--color-text);
   font-weight: 700;
   width: 56px;
 }
@@ -184,6 +184,7 @@
   top: calc(100% + 8px);
   right: 0;
   width: auto;
+  max-width: 120px;
   background: var(--color-main2);
   border-radius: 8px;
   box-shadow: 0 6px 16px rgba(0,0,0,0.12);
@@ -198,6 +199,8 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
+  text-align: center;
+  justify-content: center; 
   cursor: pointer;
 }
 
