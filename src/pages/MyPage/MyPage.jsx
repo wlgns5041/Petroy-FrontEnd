@@ -283,7 +283,20 @@ const MyPage = () => {
     setConfirmAction(null);
   };
 
-  if (loading) return <p>잠시만 기다려주세요...</p>;
+  if (loading) {
+    return (
+      <main className="mypage-viewport">
+        <div className="mypage">
+          <div className="mypage-loading-state">
+            <p className="mypage-loading-message-main">
+              마이페이지를 불러오고 있어요
+            </p>
+            <p className="mypage-loading-message-sub">잠시만 기다려주세요</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mypage-viewport">

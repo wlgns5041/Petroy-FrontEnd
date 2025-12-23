@@ -342,6 +342,23 @@
   color: var(--color-subtext);
 }
 
+.petpage-loading-state {
+  text-align: center;
+  margin-top: 140px;
+}
+
+.petpage-loading-message-main {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.petpage-loading-message-sub {
+  font-size: 12px;
+  color: var(--color-subtext);
+}
+
   /* --------------------  모바일  -------------------- */
   @media screen and (max-width: 768px) {
 
@@ -678,4 +695,22 @@
   font-weight: 400;
   color: var(--color-subtext);
 }
+
+.petpage-loading-state {
+  text-align: center;
+  margin-top: 140px;
+}
+
+.petpage-loading-message-main {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.petpage-loading-message-sub {
+  font-size: 10px;
+  color: var(--color-subtext);
+}
+
   }

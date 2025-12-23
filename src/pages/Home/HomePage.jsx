@@ -9,6 +9,8 @@ import lottie2 from "../../assets/images/lottie2.json";
 import lottie3 from "../../assets/images/lottie3.json";
 import { loginGuest } from "../../services/MemberService";
 
+const KAKAO_KEY = process.env.REACT_APP_KAKAO_KEY;
+
 function HomePage() {
   const navigate = useNavigate();
   const [activeSlide, setActiveSlide] = useState(0);
@@ -35,15 +37,15 @@ function HomePage() {
     },
   ];
 
-  const loginWithKakao = () => {
-    if (window.Kakao) {
-      window.Kakao.Auth.authorize({
-        redirectUri: `${process.env.REACT_APP_API_URL}/oauth/kakao/callback`,
-      });
-    } else {
-      console.error("Kakao SDK를 로드하지 못했습니다.");
-    }
-  };
+const loginWithKakao = () => {
+  if (window.Kakao) {
+    window.Kakao.Auth.authorize({
+      redirectUri: `${process.env.REACT_APP_API_URL}/oauth/kakao/callback`,
+    });
+  } else {
+    console.error("Kakao SDK를 로드하지 못했습니다.");
+  }
+};
 
   const handleGuestLogin = async () => {
     try {
@@ -96,6 +98,43 @@ function HomePage() {
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+  if (!KAKAO_KEY) {
+    console.error("KAKAO_KEY가 존재하지 않습니다.");
+    return;
+  }
+
+  if (window.Kakao) {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(KAKAO_KEY);
+    }
+    return;
+  }
+
+  const existing = document.querySelector(
+    'script[src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"]'
+  );
+  if (existing) return;
+
+  const script = document.createElement("script");
+  script.src = "https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js";
+  script.integrity =
+    "sha384-TiCUE00h649CAMonG018J2ujOgDKW/kVWlChEuu4jK2vxfAAD0eZxzCKakxg55G4";
+  script.crossOrigin = "anonymous";
+  script.async = true;
+
+  script.onload = () => {
+    if (window.Kakao && !window.Kakao.isInitialized()) {
+      window.Kakao.init(KAKAO_KEY);
+    }
+  };
+
+  document.body.appendChild(script);
+
+  return () => {
+  };
+}, []);
 
   return (
     <div className="homepage-container">

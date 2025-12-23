@@ -89,16 +89,16 @@ function LoginPage() {
     };
   }, []);
 
-  const loginWithKakao = () => {
-    if (window.Kakao) {
-      window.Kakao.Auth.authorize({
-        redirectUri: `${process.env.REACT_APP_API_URL}/oauth/kakao/callback`,
-      });
-    } else {
-      setAlertMessage("Kakao SDK를 로드하지 못했습니다.");
-      setShowAlert(true);
-    }
-  };
+const loginWithKakao = () => {
+  if (window.Kakao) {
+    window.Kakao.Auth.authorize({
+      redirectUri: `${process.env.REACT_APP_API_URL}/oauth/kakao/callback`,
+    });
+  } else {
+    setAlertMessage("Kakao SDK를 로드하지 못했습니다.");
+    setShowAlert(true);
+  }
+};
 
   return (
     <div className="loginpage">

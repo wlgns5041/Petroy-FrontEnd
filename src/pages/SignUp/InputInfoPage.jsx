@@ -1,60 +1,71 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { submitKakaoExtraInfo } from "../../services/MemberService";
 import "../../styles/SignUp/InputInfoPage.css";
-import { submitKakaoExtraInfo } from "../../services/MemberService.jsx";
 import AlertModal from "../../components/commons/AlertModal.jsx";
 
 function InputInfo() {
   const [userData, setUserData] = useState({ email: "", phone: "" });
-  const [accessToken, setAccessToken] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isFormValid =
     userData.email.trim() !== "" && userData.phone.trim() !== "";
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
+  const params = new URLSearchParams(location.search);
+  const status = params.get("status");
+  const registerId = params.get("registerId");
 
-    if (token) {
-      localStorage.setItem("accessToken", token);
-      setAccessToken(token);
-    } else {
-      const storedToken = localStorage.getItem("accessToken");
-      if (storedToken) setAccessToken(storedToken);
-      else console.error("로컬 스토리지에서 액세스 토큰을 찾을 수 없습니다.");
+  const onlyNumber = (value) => value.replace(/\D/g, "");
+
+  const formatPhone = (value) => {
+    const numbers = onlyNumber(value);
+
+    if (numbers.length < 4) return numbers;
+    if (numbers.length < 8) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(
+      7,
+      11
+    )}`;
+  };
+
+  useEffect(() => {
+    if (status !== "register" || !registerId) {
+      navigate("/", { replace: true });
     }
-  }, []);
+  }, [status, registerId, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!accessToken) {
-      console.error("액세스 토큰이 없습니다.");
-      return;
-    }
 
     try {
-      const data = await submitKakaoExtraInfo(
-        accessToken,
-        userData.email,
-        userData.phone
-      );
-
-      setAlertMessage("카카오 회원가입 성공");
-      setShowAlert(true);
+      const data = await submitKakaoExtraInfo({
+        registerId,
+        email: userData.email,
+        phone: userData.phone,
+      });
 
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
+
+      setAlertMessage("카카오 회원가입 성공");
+      setShowAlert(true);
     } catch (error) {
-      console.error("서버 전송 실패:", error);
+      const msg =
+        error?.response?.data?.errorMessage ||
+        error?.message ||
+        "추가 정보 등록 중 오류가 발생했습니다.";
+      setAlertMessage(msg);
+      setShowAlert(true);
     }
   };
 
   const handleAlertConfirm = () => {
     setShowAlert(false);
-    navigate("/mainPage");
+    navigate("/mainPage", { replace: true });
   };
 
   return (
@@ -65,6 +76,8 @@ function InputInfo() {
             카카오 로그인을 위한 추가 정보를 입력해주세요
           </div>
           <div className="inputinfopage-subtext">
+            기존에 입력 정보에 해당하는 ID가 존재하면,
+            <br />
             최초 1회 기존의 이메일 아이디와 연동됩니다
           </div>
 
@@ -96,11 +109,14 @@ function InputInfo() {
                 type="tel"
                 className="inputinfopage-input"
                 placeholder="휴대폰 번호"
-                value={userData.phone}
+                value={formatPhone(userData.phone)}
                 onChange={(e) =>
-                  setUserData((prev) => ({ ...prev, phone: e.target.value }))
+                  setUserData((prev) => ({
+                    ...prev,
+                    phone: onlyNumber(e.target.value),
+                  }))
                 }
-                inputMode="tel"
+                inputMode="numeric"
                 autoComplete="tel"
                 required
               />
@@ -125,6 +141,7 @@ function InputInfo() {
           </form>
         </div>
       </div>
+
       {showAlert && (
         <AlertModal message={alertMessage} onConfirm={handleAlertConfirm} />
       )}

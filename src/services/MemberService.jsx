@@ -67,19 +67,20 @@ export const checkNameDuplicate = async (name) => {
 
 /* ---------------------- 카카오 로그인 ---------------------- */
 
-// 카카오 추가 정보 입력
-export const submitKakaoExtraInfo = async (accessToken, email, phone) => {
-  const response = await axios.post(
-    `${API_BASE_URL}/oauth/kakao/extraInfo`,
-    { email, phone },
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${accessToken}`,
-      },
-    }
-  );
-  return response.data;
+// ✅ case1: code → 토큰 발급
+export const issueOauthToken = async (code) => {
+  const res = await axios.post(`${API_BASE_URL}/oauth/token/issue`, { code });
+  return res.data; 
+};
+
+// ✅ case2: registerId + extraInfo → 토큰 발급
+export const submitKakaoExtraInfo = async ({ registerId, email, phone }) => {
+  const res = await axios.post(`${API_BASE_URL}/oauth/kakao/extraInfo`, {
+    registerId,
+    email,
+    phone,
+  });
+  return res.data; 
 };
 
 /* ---------------------- 회원 수정 ---------------------- */

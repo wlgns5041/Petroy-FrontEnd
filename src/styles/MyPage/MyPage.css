@@ -97,6 +97,10 @@ html {
   font-weight: 400;
   color: var(--color-subtext);
   margin-top: 2px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: text;
+  user-select: text;
+  text-decoration: none;
 }
 
 .mypage-profile-friends {
@@ -460,6 +464,23 @@ html {
   margin-top: 8px;
 }
 
+.mypage-loading-state {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.mypage-loading-message-main {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.mypage-loading-message-sub {
+  font-size: 12px;
+  color: var(--color-subtext);
+}
+
 /* --------------------  모바일  -------------------- */
 @media screen and (max-width: 768px) {
 
@@ -541,6 +562,10 @@ html, body {
   font-weight: 400;
   color: var(--color-subtext);
   margin-top: 2px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: text;
+  user-select: text;
+  text-decoration: none;
 }
 
 .mypage-profile-friends {
@@ -897,5 +922,22 @@ html, body {
   font-weight: 400;
   color: var(--color-subtext);
   margin-top: 8px;
+}
+
+.mypage-loading-state {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.mypage-loading-message-main {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+.mypage-loading-message-sub {
+  font-size: 10px;
+  color: var(--color-subtext);
 }
 }

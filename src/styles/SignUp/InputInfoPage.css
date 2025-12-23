@@ -1,24 +1,24 @@
 /* ===== 전체 레이아웃 ===== */
 .inputinfopage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  min-height: calc(100svh - var(--mypage-navbar-h));
+  min-height: calc(100dvh - var(--mypage-navbar-h));
+  min-height: calc(100vh - var(--mypage-navbar-h));
+  display: grid;
+  place-items: center;
+  padding: 24px 12px;
   box-sizing: border-box;
-  background-color: #FFFFFF;
+  background-color: none;
+  width: 100vw
 }
 
 .inputinfopage-container {
-  display: flex;
-  width: 30vw;
-  height: 50vh;
-  background-color: #ffffff;
-  border-radius: 24px;
-  overflow: hidden;
-  padding: 12px;
-  opacity: 0;
-  animation: fadeIn 0.8s ease forwards;
-  gap: 24px;
+  max-width: 600px;
+  width: 100%;
+  padding: 24px;
+  background-color: var(--color-main1);
+  font-family: 'Pretendard', sans-serif;
+  margin: 0 auto;
+  border-radius: 6px;
 }
 
 .inputinfopage-section {
@@ -146,21 +146,26 @@
 
 /* ===== 반응형 ===== */
 @media screen and (max-width: 768px) {
-  .inputinfopage {
-    height: var(--app-height); /* 모바일 브라우저 주소창 고려 */
-    width: 100%;
-    padding: 0 12px;
-  }
+.inputinfopage {
+  width: 100%;
+  min-height: calc(100dvh - var(--mypage-navbar-h));
+  background-color: var(--color-main1);
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0 0 0 0;
+  overflow-x: hidden;
+}
 
-  .inputinfopage-container {
-    width: 100%;      
-    height: auto;
-    border-radius: 0;
-    box-shadow: none;
-    flex-direction: column;
-    max-height: 100%;
-    overflow-y: auto;
-  }
+.inputinfopage-container {
+  width: 100%;
+  max-width: 90vw;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 16px;
+  background-color: var(--color-main1);
+  font-family: 'Pretendard', sans-serif;
+}
 
   .inputinfopage-section {
     padding: 24px;       

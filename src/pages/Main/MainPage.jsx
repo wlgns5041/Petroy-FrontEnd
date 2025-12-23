@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { issueOauthToken } from "../../services/MemberService"; 
 import CalendarComponent from "../../components/Main/CalendarComponent.jsx";
 import CategoryModal from "../../components/Main/CategoryModal.jsx";
 import CategoryDeleteModal from "../../components/Main/CategoryDeleteModal.jsx";
@@ -56,6 +58,38 @@ function MainPage() {
   const [openSchedule, setOpenSchedule] = useState(true);
   const [openMyPets, setOpenMyPets] = useState(true);
   const [openCarePets, setOpenCarePets] = useState(true);
+
+  // 카카오 로그인
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const status = params.get("status");
+  const code = params.get("code");
+
+  // ✅ case1: 기존 회원 → code로 토큰 발급
+  if (status === "login" && code) {
+    (async () => {
+      try {
+        const { accessToken, refreshToken } = await issueOauthToken(code);
+
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        // ✅ 쿼리 제거 (깔끔하게)
+        navigate("/mainPage", { replace: true });
+      } catch (e) {
+        alert(
+          e?.response?.data?.errorMessage ||
+            e?.message ||
+            "카카오 로그인 처리 중 오류가 발생했습니다."
+        );
+        navigate("/", { replace: true });
+      }
+    })();
+  }
+}, [location.search, navigate]);
 
   // 화면 크기 감지
   useEffect(() => {

@@ -13,6 +13,7 @@ import FriendPage from "../pages/Friend/FriendPage.jsx";
 import CommunityPage from "../pages/Community/CommunityPage.jsx";
 import NotificationPage from "../pages/Notification/NotificationPage.jsx";
 import SplashScreen from "../pages/SplashScreen.jsx";
+import KakaoCallbackPage from "../pages/SignUp/KakaoCallbackPage.jsx";
 
 const MainPageWithAuth = withAuth(MainPage);
 const MyPageWithAuth = withAuth(MyPage);
@@ -32,6 +33,7 @@ const Routing = () => {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signUp" element={<SignUpPage />} />
       <Route path="/inputInfo" element={<InputInfoPage />} />
+      <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
 
       {/* NavBar 포함 라우트 + 인증 필요 라우트 */}
       <Route element={<AppLayout />}>

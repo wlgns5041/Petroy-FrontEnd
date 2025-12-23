@@ -6,6 +6,7 @@ import { ko } from "date-fns/locale";
 import "../../styles/Community/CommentSection.css";
 import { useTheme } from "../../utils/ThemeContext.jsx";
 import ProfileImage from "../../components/commons/ProfileImage.jsx";
+import MyPageConfirmModal from "../../components/MyPage/MyPageConfirmModal.jsx";
 
 import {
   createComment,
@@ -26,6 +27,10 @@ const CommentSection = ({
   const [content, setContent] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [menuOpenId, setMenuOpenId] = useState(null);
+
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+
   const inputRef = useRef(null);
   const { isDarkMode } = useTheme();
 
@@ -113,6 +118,24 @@ const CommentSection = ({
     setMenuOpenId(null);
   };
 
+  const openDeleteConfirm = (commentId) => {
+    setPendingDeleteId(commentId);
+    setConfirmOpen(true);
+    setMenuOpenId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    await handleDelete(pendingDeleteId);
+    setPendingDeleteId(null);
+    setConfirmOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setPendingDeleteId(null);
+    setConfirmOpen(false);
+  };
+
   const handleEditStart = (comment) => {
     setEditingId(comment.commentId);
     setContent(comment.content);
@@ -122,6 +145,14 @@ const CommentSection = ({
 
   return (
     <>
+      {confirmOpen && (
+        <MyPageConfirmModal
+          message={"댓글을 삭제하시겠습니까?"}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
+
       <div
         className={`comment-sheet-mask ${open ? "open" : ""}`}
         onClick={onClose}
@@ -201,7 +232,9 @@ const CommentSection = ({
                                 수정
                               </button>
                             )}
-                            <button onClick={() => handleDelete(c.commentId)}>
+                            <button
+                              onClick={() => openDeleteConfirm(c.commentId)}
+                            >
                               삭제
                             </button>
                           </div>

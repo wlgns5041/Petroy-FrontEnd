@@ -272,9 +272,11 @@ const PetPage = () => {
 
           {/* 로딩 상태 */}
           {loading ? (
-            <div className="petpage-loading">
-              <div className="spinner" />
-              <p>반려동물 정보를 불러오는 중...</p>
+            <div className="petpage-loading-state">
+              <p className="petpage-loading-message-main">
+                반려동물 정보를 불러오고 있어요
+              </p>
+              <p className="petpage-loading-message-sub">잠시만 기다려주세요</p>
             </div>
           ) : (
             <>
