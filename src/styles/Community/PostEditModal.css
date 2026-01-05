@@ -396,12 +396,12 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: var(--app-height);
     background-color: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -54px;
+    margin-top: 0px;
   }
 
   .post-edit-container {

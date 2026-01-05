@@ -45,8 +45,12 @@ function App() {
 
     setAppHeight();
     window.addEventListener("resize", setAppHeight);
+    window.addEventListener("orientationchange", setAppHeight);
 
-    return () => window.removeEventListener("resize", setAppHeight);
+    return () => {
+      window.removeEventListener("resize", setAppHeight);
+      window.removeEventListener("orientationchange", setAppHeight);
+    };
   }, []);
 
   /* 🚀 스플래시 처리 */

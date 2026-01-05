@@ -118,13 +118,13 @@ background-color: var(--color-main1-hover);
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: var(--app-height);
   background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  margin-top: -54px;
+  margin-top: 0px;
 }
 
 .schedule-detail-modal-wrapper {
