@@ -52,13 +52,13 @@ const ScheduleModal = ({ onClose, pets, onScheduleCreated }) => {
 
   const [alertOpen, setAlertOpen] = useState(false);
 
-const noticeOptions = [
-  { value: 0, label: "시작 시 알림" },
-  { value: 5, label: "5분 전" },
-  { value: 10, label: "10분 전" },
-  { value: 30, label: "30분 전" },
-  { value: 60, label: "1시간 전" },
-];
+  const noticeOptions = [
+    { value: 0, label: "시작 시 알림" },
+    { value: 5, label: "5분 전" },
+    { value: 10, label: "10분 전" },
+    { value: 30, label: "30분 전" },
+    { value: 60, label: "1시간 전" },
+  ];
 
   useEffect(() => {
     if (calendarRef.current) {
@@ -107,12 +107,13 @@ const noticeOptions = [
   }, []);
 
   useEffect(() => {
-  const onDown = (e) => {
-    if (!e.target.closest(".schedule-create-alert-select-wrapper")) setAlertOpen(false);
-  };
-  document.addEventListener("mousedown", onDown);
-  return () => document.removeEventListener("mousedown", onDown);
-}, []);
+    const onDown = (e) => {
+      if (!e.target.closest(".schedule-create-alert-select-wrapper"))
+        setAlertOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -172,8 +173,8 @@ const noticeOptions = [
           type === "checkbox"
             ? checked
             : name === "noticeAt"
-            ? Number(value)
-            : value,
+              ? Number(value)
+              : value,
       }));
     }
   };
@@ -196,7 +197,7 @@ const noticeOptions = [
 
   const handleDayClick = (day) => {
     const updatedDays = formData.repeatPattern.daysOfWeek.includes(
-      dayMapping[day]
+      dayMapping[day],
     )
       ? formData.repeatPattern.daysOfWeek.filter((d) => d !== dayMapping[day])
       : [...formData.repeatPattern.daysOfWeek, dayMapping[day]];
@@ -240,13 +241,13 @@ const noticeOptions = [
 
     setFormData((prevData) => {
       const existingDate = prevData.selectedDates.find(
-        (d) => d.date === formattedDate
+        (d) => d.date === formattedDate,
       );
       if (existingDate) {
         return {
           ...prevData,
           selectedDates: prevData.selectedDates.filter(
-            (d) => d.date !== formattedDate
+            (d) => d.date !== formattedDate,
           ),
         };
       } else {
@@ -289,12 +290,14 @@ const noticeOptions = [
         ) {
           if (
             selectedDays.includes(
-              new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(date)
+              new Intl.DateTimeFormat("en-US", { weekday: "long" }).format(
+                date,
+              ),
             )
           ) {
             generatedDates.push(convertToKST(date));
             date.setDate(
-              date.getDate() + (formData.repeatPattern.interval - 1) * 7
+              date.getDate() + (formData.repeatPattern.interval - 1) * 7,
             );
           }
         }
@@ -304,7 +307,7 @@ const noticeOptions = [
           let date = new Date(
             startDateTime.getFullYear(),
             startDateTime.getMonth(),
-            1
+            1,
           );
           date <= endDateTime;
           date.setMonth(date.getMonth() + 1)
@@ -313,7 +316,7 @@ const noticeOptions = [
             const monthlyDate = new Date(
               date.getFullYear(),
               date.getMonth(),
-              day
+              day,
             );
             if (monthlyDate >= startDateTime && monthlyDate <= endDateTime) {
               generatedDates.push(convertToKST(monthlyDate));
@@ -393,7 +396,7 @@ const noticeOptions = [
     } catch (error) {
       const { data } = error.response || {};
       setAlertMessage(
-        data?.errorMessage || "일정 생성 중 오류가 발생했습니다."
+        data?.errorMessage || "일정 생성 중 오류가 발생했습니다.",
       );
       setAlertAction(null);
       setShowAlert(true);
@@ -451,7 +454,7 @@ const noticeOptions = [
     const start = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth(),
-      1
+      1,
     );
     const day = start.getDay();
     start.setDate(start.getDate() - day); // 해당 월의 첫 주 일요일
@@ -462,7 +465,7 @@ const noticeOptions = [
     const end = new Date(
       currentDate.getFullYear(),
       currentDate.getMonth() + 1,
-      0
+      0,
     );
     const day = end.getDay();
     end.setDate(end.getDate() + (6 - day)); // 해당 월의 마지막 주 토요일
@@ -534,7 +537,7 @@ const noticeOptions = [
                                 {formData.categoryId
                                   ? categories.find(
                                       (c) =>
-                                        c.categoryId === formData.categoryId
+                                        c.categoryId === formData.categoryId,
                                     )?.name || "선택"
                                   : "선택"}
                                 <span className="schedule-create-inline-arrow">
@@ -652,6 +655,14 @@ const noticeOptions = [
                           }`}
                         >
                           <div className="schedule-create-tab-buttons">
+                                                      <div
+                            className="schedule-create-tab-background"
+                            style={{
+                              transform: formData.repeatYn
+                                ? "translateX(0%)"
+                                : "translateX(calc(100% + 12px))",
+                            }}
+                          />
                             <button
                               type="button"
                               className={`schedule-create-tab-button ${
@@ -722,12 +733,12 @@ const noticeOptions = [
                                     {formData.repeatPattern.frequency === "DAY"
                                       ? "일일"
                                       : formData.repeatPattern.frequency ===
-                                        "WEEK"
-                                      ? "주간"
-                                      : formData.repeatPattern.frequency ===
-                                        "MONTH"
-                                      ? "월간"
-                                      : "선택"}
+                                          "WEEK"
+                                        ? "주간"
+                                        : formData.repeatPattern.frequency ===
+                                            "MONTH"
+                                          ? "월간"
+                                          : "선택"}
                                     <span className="schedule-create-step3-select-arrow">
                                       ▼
                                     </span>
@@ -805,7 +816,7 @@ const noticeOptions = [
                                       type="button"
                                       className={`schedule-create-week-button ${
                                         formData.repeatPattern.daysOfWeek.includes(
-                                          dayMapping[day]
+                                          dayMapping[day],
                                         )
                                           ? "selected"
                                           : ""
@@ -814,7 +825,7 @@ const noticeOptions = [
                                     >
                                       {day}
                                     </button>
-                                  )
+                                  ),
                                 )}
                               </div>
                             )}
@@ -823,14 +834,14 @@ const noticeOptions = [
                               <div className="schedule-create-repeat-buttons-month">
                                 {Array.from(
                                   { length: 31 },
-                                  (_, i) => i + 1
+                                  (_, i) => i + 1,
                                 ).map((day) => (
                                   <button
                                     key={day}
                                     type="button"
                                     className={`schedule-create-month-button ${
                                       formData.repeatPattern.daysOfMonth.includes(
-                                        day
+                                        day,
                                       )
                                         ? "selected"
                                         : ""
@@ -899,8 +910,8 @@ const noticeOptions = [
                                         new Date(
                                           prev.getFullYear(),
                                           prev.getMonth() - 1,
-                                          1
-                                        )
+                                          1,
+                                        ),
                                     )
                                   }
                                 >
@@ -922,8 +933,8 @@ const noticeOptions = [
                                         new Date(
                                           prev.getFullYear(),
                                           prev.getMonth() + 1,
-                                          1
-                                        )
+                                          1,
+                                        ),
                                     )
                                   }
                                 >
@@ -935,7 +946,7 @@ const noticeOptions = [
 
                               {groupDatesByWeek(
                                 getStartOfMonth(),
-                                getEndOfMonth()
+                                getEndOfMonth(),
                               ).map((week, i) => (
                                 <div
                                   key={i}
@@ -943,14 +954,14 @@ const noticeOptions = [
                                 >
                                   {week.map((date, j) => {
                                     const formatted = new Date(
-                                      date.getTime() + 9 * 60 * 60 * 1000
+                                      date.getTime() + 9 * 60 * 60 * 1000,
                                     )
                                       .toISOString()
                                       .slice(0, 10);
 
                                     const isSelected =
                                       formData.selectedDates.some(
-                                        (d) => d.date === formatted
+                                        (d) => d.date === formatted,
                                       );
                                     const isToday =
                                       date.toLocaleDateString("sv-SE", {
@@ -1025,7 +1036,7 @@ const noticeOptions = [
                                         ...prev,
                                         selectedDates:
                                           prev.selectedDates.filter(
-                                            (d) => d.date !== item.date
+                                            (d) => d.date !== item.date,
                                           ),
                                       }))
                                     }
@@ -1194,37 +1205,53 @@ const noticeOptions = [
                         </div>
 
                         {formData.noticeYn && (
-<div className="schedule-create-alert-row">
-  <div className="schedule-create-alert-select-wrapper">
-    <button
-      type="button"
-      className={`schedule-create-alert-select ${alertOpen ? "active" : ""}`}
-      onClick={() => setAlertOpen((p) => !p)}
-    >
-      {noticeOptions.find(o => Number(o.value) === Number(formData.noticeAt))?.label}
-      <span className="schedule-create-alert-arrow">▼</span>
-    </button>
+                          <div className="schedule-create-alert-row">
+                            <div className="schedule-create-alert-select-wrapper">
+                              <button
+                                type="button"
+                                className={`schedule-create-alert-select ${alertOpen ? "active" : ""}`}
+                                onClick={() => setAlertOpen((p) => !p)}
+                              >
+                                {
+                                  noticeOptions.find(
+                                    (o) =>
+                                      Number(o.value) ===
+                                      Number(formData.noticeAt),
+                                  )?.label
+                                }
+                                <span className="schedule-create-alert-arrow">
+                                  ▼
+                                </span>
+                              </button>
 
-    {alertOpen && (
-      <ul className="schedule-create-alert-dropdown">
-        {noticeOptions.map((opt) => (
-          <li
-            key={opt.value}
-            className={`schedule-create-alert-option ${
-              Number(formData.noticeAt) === Number(opt.value) ? "selected" : ""
-            }`}
-            onClick={() => {
-              handleChange({ target: { name: "noticeAt", value: opt.value } });
-              setAlertOpen(false);
-            }}
-          >
-            {opt.label}
-          </li>
-        ))}
-      </ul>
-    )}
-  </div>
-</div>
+                              {alertOpen && (
+                                <ul className="schedule-create-alert-dropdown">
+                                  {noticeOptions.map((opt) => (
+                                    <li
+                                      key={opt.value}
+                                      className={`schedule-create-alert-option ${
+                                        Number(formData.noticeAt) ===
+                                        Number(opt.value)
+                                          ? "selected"
+                                          : ""
+                                      }`}
+                                      onClick={() => {
+                                        handleChange({
+                                          target: {
+                                            name: "noticeAt",
+                                            value: opt.value,
+                                          },
+                                        });
+                                        setAlertOpen(false);
+                                      }}
+                                    >
+                                      {opt.label}
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>

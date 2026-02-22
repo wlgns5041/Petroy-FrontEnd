@@ -360,50 +360,73 @@
 /* ======== STEP 3: 반복/날짜선택 탭 ======== */
 .schedule-create-tab-wrapper {
   width: 100%;
+  margin: 12px auto 32px auto;
+  padding: 8px;
   box-sizing: border-box;
-  background-color: var(--color-main1);
-  border-radius: 8px 8px 0 0;
-  padding: 12px;
-  margin-top: 32px;
-}
-
-.schedule-create-tab-wrapper.repeat-mode {
-  border-radius: 8px 8px 0 0; 
-}
-
-.schedule-create-tab-wrapper.direct-mode {
-  border-radius: 8px; 
+  display: flex;
+  position: relative;
+  overflow: visible;
+  background-color: var(--color-tab-background);
+  border-radius: 8px;
 }
 
 .schedule-create-tab-buttons {
   display: flex;
   width: 100%;
-  gap: 8px;
+  gap: 12px;
+  position: relative; 
+  z-index: 1;
+}
+
+.schedule-create-tab-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: calc((100% - 12px) / 2);
+  height: 100%;
+
+  background-color: var(--color-main2);
+  border-radius: 6px;
+
+  transition: transform 0.3s ease;
+  z-index: 0;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  pointer-events: none;
 }
 
 .schedule-create-tab-button {
   flex: 1;
+  position: relative;
+  z-index: 1;
+
   border: none;
-  background-color: var(--color-main2);
+  background-color: transparent;
+
+  padding: 12px 16px;
+  border-radius: 6px;
+
   font-size: 14px;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
+  font-weight: 600;
   color: var(--color-subtext);
-  transition: all 0.2s ease;
+
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .schedule-create-tab-button.active {
-  background-color: var(--color-main1);
   color: var(--color-text);
   font-weight: 700;
-  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
+}
+
+.schedule-create-tab-button {
+  box-shadow: none;
 }
 
 .schedule-create-tab-label-with-tooltip {
@@ -453,6 +476,7 @@
   width: auto;
   padding: 20px 52px;
   margin-bottom: 32px;
+  border-radius: 8px;
 }
 
 .schedule-create-form-row {
@@ -1542,54 +1566,81 @@ input:checked + .schedule-create-slider:before {
 
 .schedule-create-tab-wrapper {
   width: 100%;
-  box-sizing: border-box;
-  background-color: var(--color-main1);
+  margin: 24px auto 12px auto;
   padding: 6px;
-  margin-top: 32px;
-}
+  box-sizing: border-box;
 
-.schedule-create-tab-wrapper.repeat-mode {
-  border-radius: 8px 8px 0 0; 
-}
+  display: flex;
+  position: relative;
+  overflow: visible;
 
-.schedule-create-tab-wrapper.direct-mode {
-  border-radius: 8px; 
+  background-color: var(--color-tab-background);
+  border-radius: 8px;
 }
 
 .schedule-create-tab-buttons {
   display: flex;
   width: 100%;
   gap: 8px;
+  position: relative;
+  z-index: 1;
+
+  overflow: visible;
+  border-radius: 8px;
+}
+
+.schedule-create-tab-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: calc((100% - 12px) / 2); 
+  height: 100%;
+
+  background-color: var(--color-main2);
+  border-radius: 6px;
+
+  transition: transform 0.3s ease;
+  z-index: 0;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  pointer-events: none;
 }
 
 .schedule-create-tab-button {
   flex: 1;
+  position: relative;
+  z-index: 1;
+
   border: none;
-  background-color: var(--color-main2);
+  background: transparent;
+
   font-size: 12px;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 10px 12px;
+  border-radius: 6px;
+
   cursor: pointer;
   color: var(--color-subtext);
-  transition: all 0.2s ease;
+  font-weight: 600;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  gap: 4px;
+
+  transition: transform 0.3s ease;
+  box-shadow: none;
 }
 
 .schedule-create-tab-button.active {
-  background-color: var(--color-main1);
   color: var(--color-text);
   font-weight: 700;
-  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.08);
 }
 
 .schedule-create-tab-label-with-tooltip {
   display: flex;
   align-items: center;
-  gap: 0px;
+  gap: 2px;
 }
 
 .schedule-create-tooltip-container {
@@ -1597,24 +1648,33 @@ input:checked + .schedule-create-slider:before {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 5; 
 }
 
 .schedule-create-tooltip-text {
   visibility: hidden;
   opacity: 0;
+
   background-color: var(--color-point2);
   color: var(--color-main2);
+
   text-align: center;
   padding: 6px 8px;
   border-radius: 8px;
+
   position: absolute;
-  z-index: 100;
+  z-index: 9999;
+
   bottom: 140%;
-  left: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+
   font-size: 10px;
   line-height: 1.4;
   white-space: normal;
-  min-width: 180px;
+  min-width: 200px;
+  max-width: 240px;
+
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   transition: opacity 0.2s ease;
 }

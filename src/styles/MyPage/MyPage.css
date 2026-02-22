@@ -870,7 +870,7 @@ html, body {
 .mypage-pet-image {
   max-width: 32px;
   height: 32px;
-  margin-left: 12px;
+  margin-left: 0px;
   border-radius: 8px;
 }
 
